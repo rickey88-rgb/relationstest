@@ -484,7 +484,7 @@ export default function Page() {
             <button
               onClick={() => {
                 window.location.href =
-                  "https://buy.stripe.com/test_4gMdR85QW02d1MlcqT9AA00";
+                  "https://buy.stripe.com/3cI6oG0ut6EhfkXdfa0gw00";
               }}
               style={{
                 padding: "12px 14px",
