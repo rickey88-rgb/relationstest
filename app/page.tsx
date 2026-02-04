@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type Cluster =
   | "manipulation"
@@ -48,25 +48,69 @@ const answerLabels = ["Aldrig", "Sällan", "Ibland", "Ofta", "Mycket ofta"];
 // 30 frågor (6 kluster × 5)
 const questions: Question[] = [
   // Manipulation & skuldvändning
-  { id: 1, cluster: "manipulation", text: "Får dig att känna att problem alltid är ditt fel." },
-  { id: 2, cluster: "manipulation", text: "Vrider samtal tills du börjar tvivla på ditt minne." },
-  { id: 3, cluster: "manipulation", text: "Ber om ursäkt men ändrar inte beteende." },
+  {
+    id: 1,
+    cluster: "manipulation",
+    text: "Får dig att känna att problem alltid är ditt fel.",
+  },
+  {
+    id: 2,
+    cluster: "manipulation",
+    text: "Vrider samtal tills du börjar tvivla på ditt minne.",
+  },
+  {
+    id: 3,
+    cluster: "manipulation",
+    text: "Ber om ursäkt men ändrar inte beteende.",
+  },
   { id: 4, cluster: "manipulation", text: "Använder din empati mot dig." },
-  { id: 5, cluster: "manipulation", text: "Säger att du är “för känslig” när du reagerar." },
+  {
+    id: 5,
+    cluster: "manipulation",
+    text: "Säger att du är “för känslig” när du reagerar.",
+  },
 
   // Empatibrist & känslokyla
   { id: 6, cluster: "empathy", text: "Verkar oberörd när du mår dåligt." },
-  { id: 7, cluster: "empathy", text: "Blir irriterad när du behöver stöd." },
-  { id: 8, cluster: "empathy", text: "Visar värme offentligt men inte privat." },
-  { id: 9, cluster: "empathy", text: "Förstår inte varför vissa saker sårar dig." },
+  {
+    id: 7,
+    cluster: "empathy",
+    text: "Blir irriterad när du behöver stöd.",
+  },
+  {
+    id: 8,
+    cluster: "empathy",
+    text: "Visar värme offentligt men inte privat.",
+  },
+  {
+    id: 9,
+    cluster: "empathy",
+    text: "Förstår inte varför vissa saker sårar dig.",
+  },
   { id: 10, cluster: "empathy", text: "Blir kall efter konflikter." },
 
   // Kontroll & isolering
   { id: 11, cluster: "control", text: "Vill veta var du är och med vem." },
-  { id: 12, cluster: "control", text: "Ogillar att du träffar vissa personer." },
-  { id: 13, cluster: "control", text: "Blir missnöjd när du prioriterar annat än relationen." },
-  { id: 14, cluster: "control", text: "Kommenterar hur du klär dig eller beter dig." },
-  { id: 15, cluster: "control", text: "Får dig att anpassa dig för att undvika konflikt." },
+  {
+    id: 12,
+    cluster: "control",
+    text: "Ogillar att du träffar vissa personer.",
+  },
+  {
+    id: 13,
+    cluster: "control",
+    text: "Blir missnöjd när du prioriterar annat än relationen.",
+  },
+  {
+    id: 14,
+    cluster: "control",
+    text: "Kommenterar hur du klär dig eller beter dig.",
+  },
+  {
+    id: 15,
+    cluster: "control",
+    text: "Får dig att anpassa dig för att undvika konflikt.",
+  },
 
   // Ilska & hotfull dynamik
   { id: 16, cluster: "anger", text: "Har plötsliga vredesutbrott." },
@@ -78,14 +122,26 @@ const questions: Question[] = [
   // Idealiserar → nedvärderar
   { id: 21, cluster: "devalue", text: "Var extremt charmig i början." },
   { id: 22, cluster: "devalue", text: "Idealiserade dig tidigt." },
-  { id: 23, cluster: "devalue", text: "Har senare blivit kritisk eller nedvärderande." },
-  { id: 24, cluster: "devalue", text: "Säger att du förändrats (negativt)." },
+  {
+    id: 23,
+    cluster: "devalue",
+    text: "Har senare blivit kritisk eller nedvärderande.",
+  },
+  {
+    id: 24,
+    cluster: "devalue",
+    text: "Säger att du förändrats (negativt).",
+  },
   { id: 25, cluster: "devalue", text: "Relationens värme går i vågor." },
 
   // Dubbelspel & oärlighet
   { id: 26, cluster: "deceit", text: "Motsäger sig själv." },
   { id: 27, cluster: "deceit", text: "Undanhåller information." },
-  { id: 28, cluster: "deceit", text: "Har hemligheter kring pengar/telefon/socialt." },
+  {
+    id: 28,
+    cluster: "deceit",
+    text: "Har hemligheter kring pengar/telefon/socialt.",
+  },
   { id: 29, cluster: "deceit", text: "Känns som två olika personer." },
   { id: 30, cluster: "deceit", text: "Din magkänsla säger att något inte stämmer." },
 ];
@@ -148,6 +204,20 @@ export default function Page() {
     Array(totalQuestions).fill(-1)
   );
   const [unlocked, setUnlocked] = useState(false);
+
+  // ✅ NYTT: auto-unlock om man kommer tillbaka från Stripe med ?paid=true
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("paid") === "true") {
+      setUnlocked(true);
+
+      // Städar bort queryn så URL:en ser snygg ut
+      window.history.replaceState({}, "", window.location.pathname);
+
+      // Scrolla upp (valfritt men känns bra)
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, []);
 
   const current = questions[index];
 
@@ -238,7 +308,7 @@ export default function Page() {
     setUnlocked(false);
   }
 
-  // Enkel “paywall” för MVP (låser upp lokalt)
+  // Enkel “paywall” för MVP (låser upp lokalt) – lämnar kvar men används inte av köpknappen längre
   function unlock() {
     setUnlocked(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -455,7 +525,10 @@ export default function Page() {
             }}
           >
             <button
-              onClick={unlock}
+              onClick={() => {
+                window.location.href =
+                  "https://buy.stripe.com/test_4gMdR85QW02d1MlcqT9AA00";
+              }}
               style={{
                 padding: "12px 14px",
                 borderRadius: 12,
@@ -500,7 +573,9 @@ export default function Page() {
             padding: 20,
           }}
         >
-          <h2 style={{ marginTop: 0, fontSize: 22 }}>Din fullständiga riskanalys</h2>
+          <h2 style={{ marginTop: 0, fontSize: 22 }}>
+            Din fullständiga riskanalys
+          </h2>
 
           {/* 1) Sammanfattning */}
           <div
@@ -511,7 +586,9 @@ export default function Page() {
               background: "#fafafa",
             }}
           >
-            <p style={{ margin: 0, opacity: 0.8 }}>Total Risk Score (viktad)</p>
+            <p style={{ margin: 0, opacity: 0.8 }}>
+              Total Risk Score (viktad)
+            </p>
             <p style={{ margin: "6px 0 0", fontSize: 36, fontWeight: 900 }}>
               {fullSummary.score}
             </p>
@@ -520,19 +597,29 @@ export default function Page() {
             </p>
 
             <p style={{ margin: "10px 0 0", opacity: 0.9, lineHeight: 1.55 }}>
-              Dina svar visar ett mönster av <b>återkommande riskindikatorer</b> i
-              relationen. Det betyder inte att något enskilt beteende är avgörande – utan att{" "}
-              <b>kombinationen</b> av beteenden över tid kan skapa en relation som blir mentalt
-              påfrestande och svår att navigera.
+              Dina svar visar ett mönster av{" "}
+              <b>återkommande riskindikatorer</b> i relationen. Det betyder inte
+              att något enskilt beteende är avgörande – utan att{" "}
+              <b>kombinationen</b> av beteenden över tid kan skapa en relation
+              som blir mentalt påfrestande och svår att navigera.
             </p>
 
             <p style={{ margin: "10px 0 0", opacity: 0.9, lineHeight: 1.55 }}>
-              Det som särskilt sticker ut i ditt resultat är: <b>{fullSummary.topAreas}</b>.
-              {` `}{fullSummary.practical}
+              Det som särskilt sticker ut i ditt resultat är:{" "}
+              <b>{fullSummary.topAreas}</b>. {` `}
+              {fullSummary.practical}
             </p>
 
-            <p style={{ margin: "10px 0 0", fontSize: 12, opacity: 0.7, lineHeight: 1.5 }}>
-              Viktigt: detta är ingen diagnos av en person. Det är en <b>riskprofil baserad på beteendemönster</b>.
+            <p
+              style={{
+                margin: "10px 0 0",
+                fontSize: 12,
+                opacity: 0.7,
+                lineHeight: 1.5,
+              }}
+            >
+              Viktigt: detta är ingen diagnos av en person. Det är en{" "}
+              <b>riskprofil baserad på beteendemönster</b>.
             </p>
           </div>
 
@@ -541,28 +628,53 @@ export default function Page() {
 
           <div style={{ display: "grid", gap: 12 }}>
             {/* Område 1 */}
-            <div style={{ border: "1px solid #eee", borderRadius: 14, padding: 14 }}>
+            <div
+              style={{
+                border: "1px solid #eee",
+                borderRadius: 14,
+                padding: 14,
+              }}
+            >
               <h4 style={{ margin: 0 }}>{clusterLabels[top1]}</h4>
               <p style={{ marginTop: 10, lineHeight: 1.6, opacity: 0.92 }}>
                 <b>Hur detta ofta visar sig i vardagen:</b>
               </p>
               <ul style={{ lineHeight: 1.7, opacity: 0.92 }}>
-                <li>Reaktioner kan komma snabbt och oproportionerligt – eller kännas svåra att förutse.</li>
-                <li>Konflikter eskalerar fort eller blir laddade, även vid små ämnen.</li>
-                <li>Du märker att du väljer ord, timing eller tystnad för att “inte trigga”.</li>
+                <li>
+                  Reaktioner kan komma snabbt och oproportionerligt – eller
+                  kännas svåra att förutse.
+                </li>
+                <li>
+                  Konflikter eskalerar fort eller blir laddade, även vid små
+                  ämnen.
+                </li>
+                <li>
+                  Du märker att du väljer ord, timing eller tystnad för att
+                  “inte trigga”.
+                </li>
               </ul>
 
               <p style={{ marginTop: 10, lineHeight: 1.6, opacity: 0.92 }}>
                 <b>Vanlig effekt på dig:</b>
               </p>
               <ul style={{ lineHeight: 1.7, opacity: 0.92 }}>
-                <li>Du går på äggskal och börjar backa från det du egentligen vill säga.</li>
-                <li>Du tar ansvar för stämningen, även när den inte är ditt ansvar.</li>
-                <li>Du känner att konflikter aldrig riktigt blir lösta – bara “överlevda”.</li>
+                <li>
+                  Du går på äggskal och börjar backa från det du egentligen vill
+                  säga.
+                </li>
+                <li>
+                  Du tar ansvar för stämningen, även när den inte är ditt
+                  ansvar.
+                </li>
+                <li>
+                  Du känner att konflikter aldrig riktigt blir lösta – bara
+                  “överlevda”.
+                </li>
               </ul>
 
               <p style={{ marginTop: 10, lineHeight: 1.6, opacity: 0.92 }}>
-                <b>Vanlig fälla:</b> du försöker förklara mer, vara tydligare och lugnare – men det leder inte till lugnare samtal.
+                <b>Vanlig fälla:</b> du försöker förklara mer, vara tydligare
+                och lugnare – men det leder inte till lugnare samtal.
               </p>
 
               <p style={{ marginTop: 10, lineHeight: 1.6, opacity: 0.92 }}>
@@ -570,22 +682,39 @@ export default function Page() {
               </p>
               <ul style={{ lineHeight: 1.7, opacity: 0.92 }}>
                 <li>Korta, tydliga gränser utan argumentation.</li>
-                <li>Avsluta samtal som eskalerar istället för att försöka “vinna dem”.</li>
+                <li>
+                  Avsluta samtal som eskalerar istället för att försöka “vinna
+                  dem”.
+                </li>
                 <li>Upprepa samma gräns lugnt, utan nya förklaringar.</li>
               </ul>
             </div>
 
             {/* Område 2 */}
-            <div style={{ border: "1px solid #eee", borderRadius: 14, padding: 14 }}>
+            <div
+              style={{
+                border: "1px solid #eee",
+                borderRadius: 14,
+                padding: 14,
+              }}
+            >
               <h4 style={{ margin: 0 }}>{clusterLabels[top2]}</h4>
 
               <p style={{ marginTop: 10, lineHeight: 1.6, opacity: 0.92 }}>
                 <b>Hur detta ofta visar sig:</b>
               </p>
               <ul style={{ lineHeight: 1.7, opacity: 0.92 }}>
-                <li>Samtal vrids så att fokus hamnar på dina brister eller din ton.</li>
-                <li>Din upplevelse ifrågasätts, och du börjar tvivla på vad som “egentligen” hände.</li>
-                <li>Ursäkter ges, men beteendet förändras inte långsiktigt.</li>
+                <li>
+                  Samtal vrids så att fokus hamnar på dina brister eller din
+                  ton.
+                </li>
+                <li>
+                  Din upplevelse ifrågasätts, och du börjar tvivla på vad som
+                  “egentligen” hände.
+                </li>
+                <li>
+                  Ursäkter ges, men beteendet förändras inte långsiktigt.
+                </li>
               </ul>
 
               <p style={{ marginTop: 10, lineHeight: 1.6, opacity: 0.92 }}>
@@ -594,19 +723,28 @@ export default function Page() {
               <ul style={{ lineHeight: 1.7, opacity: 0.92 }}>
                 <li>Självtvivel: “överreagerar jag?”</li>
                 <li>Förvirring och mental trötthet efter diskussioner.</li>
-                <li>En känsla av att aldrig bli riktigt förstådd – bara hanterad.</li>
+                <li>
+                  En känsla av att aldrig bli riktigt förstådd – bara hanterad.
+                </li>
               </ul>
 
               <p style={{ marginTop: 10, lineHeight: 1.6, opacity: 0.92 }}>
-                <b>Vanlig fälla:</b> du försöker bevisa din poäng med fler exempel, men samtalet blir cirkulärt och dränerande.
+                <b>Vanlig fälla:</b> du försöker bevisa din poäng med fler
+                exempel, men samtalet blir cirkulärt och dränerande.
               </p>
 
               <p style={{ marginTop: 10, lineHeight: 1.6, opacity: 0.92 }}>
                 <b>Vad som brukar fungera bättre:</b>
               </p>
               <ul style={{ lineHeight: 1.7, opacity: 0.92 }}>
-                <li>Håll dig till din upplevelse – du behöver inte “vinna” en tolkning.</li>
-                <li>Acceptera att ni inte måste vara överens för att din gräns ska gälla.</li>
+                <li>
+                  Håll dig till din upplevelse – du behöver inte “vinna” en
+                  tolkning.
+                </li>
+                <li>
+                  Acceptera att ni inte måste vara överens för att din gräns ska
+                  gälla.
+                </li>
                 <li>Avsluta diskussioner som går i cirklar.</li>
               </ul>
             </div>
@@ -615,45 +753,103 @@ export default function Page() {
           {/* 3) Formuleringar */}
           <h3 style={{ marginTop: 18 }}>Konkreta formuleringar du kan använda</h3>
           <p style={{ marginTop: 8, lineHeight: 1.6, opacity: 0.92 }}>
-            Poängen är inte att övertyga – utan att sluta delta i mönstret. Du kan använda formuleringar som dessa:
+            Poängen är inte att övertyga – utan att sluta delta i mönstret. Du
+            kan använda formuleringar som dessa:
           </p>
           <ul style={{ lineHeight: 1.8, opacity: 0.92 }}>
-            <li><b>Vid eskalation:</b> “Jag fortsätter inte det här samtalet när tonen är så här.”</li>
-            <li><b>När din upplevelse ifrågasätts:</b> “Jag håller inte med. Jag går på det jag själv upplevde.”</li>
-            <li><b>När de kräver fler förklaringar:</b> “Jag har förklarat tillräckligt. Min gräns står kvar.”</li>
-            <li><b>När skuld läggs på dig:</b> “Du får tycka så. Jag ser det annorlunda.”</li>
-            <li><b>När de blir kalla eller tysta:</b> “Vi kan ta det här senare, när vi kan prata respektfullt.”</li>
-            <li><b>När det blir cirklar:</b> “Vi kommer inte vidare nu. Jag pausar här.”</li>
+            <li>
+              <b>Vid eskalation:</b> “Jag fortsätter inte det här samtalet när
+              tonen är så här.”
+            </li>
+            <li>
+              <b>När din upplevelse ifrågasätts:</b> “Jag håller inte med. Jag
+              går på det jag själv upplevde.”
+            </li>
+            <li>
+              <b>När de kräver fler förklaringar:</b> “Jag har förklarat
+              tillräckligt. Min gräns står kvar.”
+            </li>
+            <li>
+              <b>När skuld läggs på dig:</b> “Du får tycka så. Jag ser det
+              annorlunda.”
+            </li>
+            <li>
+              <b>När de blir kalla eller tysta:</b> “Vi kan ta det här senare,
+              när vi kan prata respektfullt.”
+            </li>
+            <li>
+              <b>När det blir cirklar:</b> “Vi kommer inte vidare nu. Jag pausar
+              här.”
+            </li>
           </ul>
 
           {/* 4) Handlingsplan */}
           <h3 style={{ marginTop: 18 }}>Handlingsplan – steg för steg</h3>
 
           <div style={{ display: "grid", gap: 12 }}>
-            <div style={{ border: "1px solid #eee", borderRadius: 14, padding: 14 }}>
+            <div
+              style={{
+                border: "1px solid #eee",
+                borderRadius: 14,
+                padding: 14,
+              }}
+            >
               <h4 style={{ margin: 0 }}>Nästa 24 timmar</h4>
               <ul style={{ lineHeight: 1.8, opacity: 0.92, marginTop: 10 }}>
-                <li>Skriv ner 2–3 situationer som nyligen varit jobbiga (vad hände, hur kändes det).</li>
-                <li>Identifiera <b>en gräns</b> du inte vill förhandla bort.</li>
-                <li>Välj <b>en person</b> du kan vara helt ärlig med om hur du har det.</li>
+                <li>
+                  Skriv ner 2–3 situationer som nyligen varit jobbiga (vad
+                  hände, hur kändes det).
+                </li>
+                <li>
+                  Identifiera <b>en gräns</b> du inte vill förhandla bort.
+                </li>
+                <li>
+                  Välj <b>en person</b> du kan vara helt ärlig med om hur du har
+                  det.
+                </li>
               </ul>
             </div>
 
-            <div style={{ border: "1px solid #eee", borderRadius: 14, padding: 14 }}>
+            <div
+              style={{
+                border: "1px solid #eee",
+                borderRadius: 14,
+                padding: 14,
+              }}
+            >
               <h4 style={{ margin: 0 }}>Nästa 7 dagar</h4>
               <ul style={{ lineHeight: 1.8, opacity: 0.92, marginTop: 10 }}>
-                <li>Testa “kort gräns + ingen förklaring” i minst en situation.</li>
-                <li>Lägg märke till hur personen reagerar när du inte argumenterar.</li>
-                <li>För en enkel logg: <i>situation → min reaktion → deras reaktion</i>.</li>
+                <li>
+                  Testa “kort gräns + ingen förklaring” i minst en situation.
+                </li>
+                <li>
+                  Lägg märke till hur personen reagerar när du inte argumenterar.
+                </li>
+                <li>
+                  För en enkel logg:{" "}
+                  <i>situation → min reaktion → deras reaktion</i>.
+                </li>
               </ul>
             </div>
 
-            <div style={{ border: "1px solid #eee", borderRadius: 14, padding: 14 }}>
+            <div
+              style={{
+                border: "1px solid #eee",
+                borderRadius: 14,
+                padding: 14,
+              }}
+            >
               <h4 style={{ margin: 0 }}>Nästa 30 dagar</h4>
               <ul style={{ lineHeight: 1.8, opacity: 0.92, marginTop: 10 }}>
                 <li>Utvärdera: förändras mönstret eller upprepas det?</li>
-                <li>Om inget förändras: börja förbereda alternativ, även om du inte bestämt dig.</li>
-                <li>Sätt en lugn “beslutspunkt”: <i>om det ser likadant ut om 30 dagar, vad gör jag då?</i></li>
+                <li>
+                  Om inget förändras: börja förbereda alternativ, även om du
+                  inte bestämt dig.
+                </li>
+                <li>
+                  Sätt en lugn “beslutspunkt”:{" "}
+                  <i>om det ser likadant ut om 30 dagar, vad gör jag då?</i>
+                </li>
               </ul>
             </div>
           </div>
@@ -661,18 +857,31 @@ export default function Page() {
           {/* 5) Om du överväger att lämna */}
           <h3 style={{ marginTop: 18 }}>Om du överväger att lämna relationen</h3>
           <p style={{ marginTop: 8, lineHeight: 1.6, opacity: 0.92 }}>
-            Det här är inte ett beslut man tar i affekt. Det är något man <b>förbereder lugnt</b>.
+            Det här är inte ett beslut man tar i affekt. Det är något man{" "}
+            <b>förbereder lugnt</b>.
           </p>
 
           <h4 style={{ marginTop: 10 }}>Praktiska förberedelser</h4>
           <ul style={{ lineHeight: 1.8, opacity: 0.92 }}>
-            <li><b>Ekonomi:</b> tillgång till egna pengar och kontroll över egna konton.</li>
-            <li><b>Boende:</b> alternativ eller backup (även tillfälligt).</li>
-            <li><b>Dokument:</b> ID, viktiga papper och lösenord (om relevant).</li>
-            <li><b>Stöd:</b> någon som vet vad du går igenom och kan vara nära om det behövs.</li>
+            <li>
+              <b>Ekonomi:</b> tillgång till egna pengar och kontroll över egna
+              konton.
+            </li>
+            <li>
+              <b>Boende:</b> alternativ eller backup (även tillfälligt).
+            </li>
+            <li>
+              <b>Dokument:</b> ID, viktiga papper och lösenord (om relevant).
+            </li>
+            <li>
+              <b>Stöd:</b> någon som vet vad du går igenom och kan vara nära om
+              det behövs.
+            </li>
           </ul>
 
-          <h4 style={{ marginTop: 10 }}>Vanliga reaktioner när man markerar eller distanserar sig</h4>
+          <h4 style={{ marginTop: 10 }}>
+            Vanliga reaktioner när man markerar eller distanserar sig
+          </h4>
           <ul style={{ lineHeight: 1.8, opacity: 0.92 }}>
             <li>Plötslig charm, ånger eller löften.</li>
             <li>Skuld och press: “du förstör allt”.</li>
@@ -681,7 +890,8 @@ export default function Page() {
           </ul>
 
           <p style={{ marginTop: 10, lineHeight: 1.6, opacity: 0.92 }}>
-            <b>Princip:</b> Planera först. Prata sen. Du behöver inte tillstånd för att ta hand om dig själv.
+            <b>Princip:</b> Planera först. Prata sen. Du behöver inte tillstånd
+            för att ta hand om dig själv.
           </p>
 
           {/* 6) När ta stöd */}
@@ -697,11 +907,19 @@ export default function Page() {
           </ul>
 
           <p style={{ marginTop: 14, fontSize: 12, opacity: 0.7, lineHeight: 1.5 }}>
-            Viktigt: Detta test ställer ingen diagnos och ersätter inte professionell rådgivning. Om du känner dig hotad
-            eller otrygg, prioritera din säkerhet och sök stöd.
+            Viktigt: Detta test ställer ingen diagnos och ersätter inte
+            professionell rådgivning. Om du känner dig hotad eller otrygg,
+            prioritera din säkerhet och sök stöd.
           </p>
 
-          <div style={{ display: "flex", gap: 12, marginTop: 14, flexWrap: "wrap" }}>
+          <div
+            style={{
+              display: "flex",
+              gap: 12,
+              marginTop: 14,
+              flexWrap: "wrap",
+            }}
+          >
             <button
               onClick={restart}
               style={{
