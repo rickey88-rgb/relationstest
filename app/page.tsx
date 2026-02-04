@@ -142,6 +142,261 @@ function formatTopAreas(top1: Cluster, top2: Cluster) {
 
 const LS_KEY = "relationstest_state_v1";
 
+// ✅ NYTT (endast för efter-betalning): djupare, mer relevanta analysblock per kluster
+const clusterDeep: Record<
+  Cluster,
+  {
+    everyday: string[];
+    impact: string[];
+    trap: string;
+    better: string[];
+    watch: string[];
+    boundary: string[];
+  }
+> = {
+  manipulation: {
+    everyday: [
+      "Samtal glider från sakfråga till att handla om din ton, din reaktion eller din personlighet.",
+      "Du märker att du börjar argumentera för att få din upplevelse erkänd (”men jag menade…”, ”så här hände det…”).",
+      "Det kommer ursäkter som låter rimliga i stunden, men samma mönster återkommer efter några dagar/veckor.",
+    ],
+    impact: [
+      "Självtvivel: du börjar ifrågasätta om du överreagerar eller minns fel.",
+      "Mental trötthet efter diskussioner – du känner dig förvirrad snarare än lättad.",
+      "Du tar ett oproportionerligt ansvar för att ”hålla fred” eller undvika reaktioner.",
+    ],
+    trap:
+      "Du tror att om du bara förklarar bättre, lugnare och mer logiskt så kommer det landa – men dynamiken är ofta byggd för att bli cirkulär.",
+    better: [
+      "Håll dig till en mening om din gräns: ”Jag accepterar inte att bli kallad X.”",
+      "Byt från bevisning till konsekvens: ”Om det fortsätter går jag härifrån/avslutar samtalet.”",
+      "Undvik att försvara din känsla – du behöver inte vinna en debatt för att en gräns ska gälla.",
+    ],
+    watch: [
+      "”Du är för känslig” eller ”du missförstår alltid” (flyttar fokus från beteende till din person).",
+      "”Jag skojade bara” efter att du blivit sårad (minimering).",
+      "Plötslig värme efter att du varit på väg att sätta gräns (återfångande).",
+    ],
+    boundary: [
+      "”Jag kan prata när vi båda kan hålla en respektfull ton.”",
+      "”Jag går inte in i en diskussion om huruvida min känsla är ’rätt’. Den är min.”",
+      "”Vi tar det här senare. Jag avslutar samtalet nu.”",
+    ],
+  },
+
+  empathy: {
+    everyday: [
+      "När du berättar att du mår dåligt blir responsen kort, irriterad eller praktisk på ett sätt som känns tomt.",
+      "Värme finns i början/utåt – men hemma blir det distans, kyla eller ointresse.",
+      "Efter konflikt blir det tystnad eller emotionell avstängning istället för reparation.",
+    ],
+    impact: [
+      "Du börjar sänka dina behov för att inte vara ”jobbig”.",
+      "Du känner dig ensam även när ni är tillsammans.",
+      "Du blir extra mottaglig för små doser värme (för att du svultit efter det).",
+    ],
+    trap:
+      "Du försöker få empati genom att formulera om, vara mer pedagogisk eller ”inte ställa krav” – men bristen på respons är ofta ett mönster, inte ett missförstånd.",
+    better: [
+      "Mät beteende, inte löften: ”När jag är ledsen behöver jag X. Om det inte finns, måste jag skydda mig själv.”",
+      "Skapa alternativt stöd utanför relationen (vän/familj/professionellt).",
+      "Sätt en standard: konsekvent kyla är i sig information, även utan bråk.",
+    ],
+    watch: [
+      "Ditt mående gör personen irriterad (inte bekymrad).",
+      "Du får tröst först när du ”slutar vara ledsen”.",
+      "Emotionell närhet används som belöning – dras tillbaka som straff.",
+    ],
+    boundary: [
+      "”Jag behöver stöd, inte kritik, när jag mår så här.”",
+      "”Om du inte kan möta mig i det här får jag ta det med någon annan.”",
+      "”Jag accepterar inte tystnad som straff.”",
+    ],
+  },
+
+  control: {
+    everyday: [
+      "Det börjar smått: frågor, kommentarer, ”oro” – som gradvis blir ett krav på insyn.",
+      "Din sociala frihet krymper: vissa personer/aktiviteter skapar konflikt så du undviker dem.",
+      "Du anpassar kläder, tider, berättelser och val för att slippa reaktioner.",
+    ],
+    impact: [
+      "Du tappar spontanitet och börjar planera livet runt personens humör.",
+      "Du isolerar dig stegvis (för det blir enklare så).",
+      "Du får skuld för normala behov: egen tid, vänner, integritet.",
+    ],
+    trap:
+      "Kontroll kan maskeras som kärlek: ”jag bryr mig”, ”jag blir bara orolig” – men effekten blir minskad frihet och ökad anpassning.",
+    better: [
+      "Sätt integritetsgränser: du behöver inte redovisa allt för att vara lojal.",
+      "Skilj på respekt och kontroll: respekt är frivillighet – kontroll kräver eftergift.",
+      "Återta små friheter först (en vän, en aktivitet) och observera reaktionen.",
+    ],
+    watch: [
+      "Frågor som känns som förhör (varför, exakt vem, exakt när, bevis).",
+      "Missnöje när du prioriterar något utanför relationen.",
+      "Nedvärdering av dina vänner/familj eller subtilt misstänkliggörande.",
+    ],
+    boundary: [
+      "”Jag berättar gärna – men jag redovisar inte som en skyldighet.”",
+      "”Jag träffar mina vänner. Det är inte förhandlingsbart.”",
+      "”Om vi inte kan lita på varandra utan kontroll behöver vi prata om det på riktigt.”",
+    ],
+  },
+
+  anger: {
+    everyday: [
+      "Konflikter får snabbt hög laddning: röstläge, anklagelser, hot om att lämna eller plötslig kyla.",
+      "Du går på äggskal: väljer ord, timing och tystnad för att inte trigga.",
+      "Efter bråk blir det inte reparation – bara ett ”vi släpper det” och sen upprepas mönstret.",
+    ],
+    impact: [
+      "Du blir hypervaksam och tappar kontakt med din egen vilja.",
+      "Du tar ansvar för stämningen och offrar det du egentligen behöver säga.",
+      "Du upplever rädsla/tryck – även om ingen fysisk gräns passerats.",
+    ],
+    trap:
+      "Du tror att om du håller dig lugn nog och säger rätt saker så lugnar det – men i hotfull dynamik är lugn ofta inte ”lösningen”, utan en överlevnadsstrategi.",
+    better: [
+      "Prioritera säkerhet i stunden: avbryt och lämna eskalerande samtal.",
+      "Sätt en regel: ingen diskussion vid höjt tonläge/hot/kränkningar.",
+      "Bygg en plan i förväg: vart du går, vem du ringer, hur du pausar utan att förhandla.",
+    ],
+    watch: [
+      "Hot, intimidation eller att du känner dig rädd för reaktionen.",
+      "Straff via kyla/tystnad efter att du sagt ifrån.",
+      "”Du får mig att göra så här” (ansvarsförskjutning).",
+    ],
+    boundary: [
+      "”Jag pratar inte när det blir hotfullt. Jag går nu.”",
+      "”Vi tar det här senare. Jag pausar.”",
+      "”Om du höjer rösten/kränker mig avslutar jag samtalet.”",
+    ],
+  },
+
+  devalue: {
+    everyday: [
+      "Det var intensivt i början: stark närhet, stora ord, snabb framtidsplanering.",
+      "Sen skiftar värmen: kritik, små pikar, jämförelser – samtidigt som du minns hur bra det var förut.",
+      "Du jobbar för att ”få tillbaka” den tidiga versionen av relationen.",
+    ],
+    impact: [
+      "Du blir beroende av toppar och krascher (växlande belöning).",
+      "Din självkänsla påverkas: du börjar tro att du är problemet som måste fixa allt.",
+      "Du tappar kompass: du mäter ditt värde i personens godkännande.",
+    ],
+    trap:
+      "Du jagar idealiseringen: eftersom det en gång fanns värme tänker du att det går att återställa – men mönstret kan vara själva motorn i relationen.",
+    better: [
+      "Skilj på känsla och fakta: mät nu-läget, inte minnena från början.",
+      "Notera vad som händer när du sätter gränser: kommer respekt eller mer kritik?",
+      "Återanknyt till dina standarder: hur ska kärlek kännas i vardagen?",
+    ],
+    watch: [
+      "Kritik maskerad som ”ärlighet” eller ”skämt”.",
+      "Du får känna att du måste förtjäna värme.",
+      "Du blir jämförd eller får höra att du förändrats negativt.",
+    ],
+    boundary: [
+      "”Jag accepterar inte nedvärderande kommentarer.”",
+      "”Om du vill ta upp något, gör det respektfullt och konkret.”",
+      "”Min standard är respekt även i konflikt.”",
+    ],
+  },
+
+  deceit: {
+    everyday: [
+      "Saker stämmer inte ihop: berättelser ändras, detaljer glider, du får en diffus känsla av att något saknas.",
+      "Transparens blir selektiv: du får delar, men inte helheten.",
+      "Du upplever två versioner av personen – charmig utåt, annan privat.",
+    ],
+    impact: [
+      "Du börjar göra ”detektivarbete” i huvudet, vilket dränerar dig.",
+      "Du tvivlar på din egen intuition (fast den ofta är korrekt om mönstret är stabilt).",
+      "Trygghet minskar: osäkerhet blir ett normaltillstånd.",
+    ],
+    trap:
+      "Du tänker att mer bevis kommer lösa det – men ibland är själva bristen på trygghet och konsekvens den viktigaste informationen.",
+    better: [
+      "Sätt tydliga krav på transparens i det som påverkar dig (ekonomi, relationer, respekt).",
+      "Undvik att jaga detaljer i affekt – skriv ner och ta upp vid lugn tidpunkt.",
+      "Om du konsekvent saknar trygghet: ta stöd utanför relationen och bedöm om den är hållbar.",
+    ],
+    watch: [
+      "Motsägelser + irritationsreaktion när du frågar.",
+      "”Du är paranoid” istället för att svara sakligt.",
+      "Hemlighetsmakeri som påverkar din trygghet.",
+    ],
+    boundary: [
+      "”Jag behöver konsekvens och tydlighet för att känna trygghet.”",
+      "”Om du inte vill vara transparent kan jag inte bygga det här vidare.”",
+      "”Jag accepterar inte att bli kallad paranoid för att jag ställer rimliga frågor.”",
+    ],
+  },
+};
+
+function levelGuidance(level: string) {
+  if (level === "Mycket hög risk") {
+    return {
+      title: "Tolkning av resultatet (mycket hög risk)",
+      bullets: [
+        "Det här är ett läge där du inte ska ”vänta och se” i månader – utan prioritera trygghet och tydliga åtgärder.",
+        "När flera riskområden är starka samtidigt tenderar det att bli både mer dränerande och mer svårnavigerat att sätta gränser.",
+        "Fokusera på vad som händer när du säger nej, tar plats eller försöker lämna en konflikt – reaktionen är ofta mer avslöjande än orden.",
+      ],
+    };
+  }
+  if (level === "Hög risk") {
+    return {
+      title: "Tolkning av resultatet (hög risk)",
+      bullets: [
+        "Mönstret är tydligt nog för att du ska ta det på allvar, även om allt inte är ”katastrof” varje dag.",
+        "Det viktiga är inte enskilda händelser, utan att du återkommande behöver anpassa dig för att hålla frid.",
+        "Sätt gränser och observera: blir det respekt – eller blir det mer tryck, kyla eller manipulation?",
+      ],
+    };
+  }
+  if (level === "Förhöjd risk") {
+    return {
+      title: "Tolkning av resultatet (förhöjd risk)",
+      bullets: [
+        "Här är risken ofta att man normaliserar små saker som över tid blir stora (anpassning, självtvivel, minskad frihet).",
+        "Du tjänar mest på att börja mäta mönster: vad triggar, hur ofta, och vad blir effekten på dig?",
+        "Sätt små gränser först och se om relationen klarar respektfull friktion.",
+      ],
+    };
+  }
+  return {
+    title: "Tolkning av resultatet (låg risk)",
+    bullets: [
+      "Låg risk betyder inte ”allt är perfekt” – det betyder att dina svar inte visar ett tydligt stabilt riskmönster över många områden.",
+      "Om du ändå känner obehag: följ det över tid. Intuition + upprepning slår en enstaka testpoäng.",
+      "Det viktigaste är hur du mår i relationen och om du känner dig fri att vara dig själv utan rädsla för reaktioner.",
+    ],
+  };
+}
+
+function safetySignals(level: string) {
+  const common = [
+    "Du känner rädsla för reaktionen (inte bara obehag).",
+    "Hot, intimidation, att blockera utgång/telefon, eller att hindra dig från att lämna en konflikt.",
+    "Upprepade kränkningar, kontroll eller isolering som ökar när du sätter gränser.",
+    "”Straff” efter att du sagt ifrån: kyla, tystnad, skuld, eller att personen vänder andra emot dig.",
+  ];
+
+  if (level === "Mycket hög risk" || level === "Hög risk") {
+    return [
+      ...common,
+      "Plötsliga humörsvängningar där du känner att du måste anpassa dig för att inte trigga.",
+      "Du börjar planera ditt liv runt personens humör (tid, ordval, vilka du träffar).",
+    ];
+  }
+
+  return common;
+}
+
+const LS_KEY = "relationstest_state_v1";
+
 export default function Page() {
   const totalQuestions = questions.length;
 
@@ -280,6 +535,66 @@ export default function Page() {
     } catch {
       // ignore
     }
+  }
+
+  const lvlGuide = useMemo(() => levelGuidance(level.level), [level.level]);
+
+  function AreaCard({ c }: { c: Cluster }) {
+    const d = clusterDeep[c];
+    return (
+      <div style={{ border: "1px solid #eee", borderRadius: 14, padding: 14 }}>
+        <h4 style={{ margin: 0 }}>{clusterLabels[c]}</h4>
+
+        <p style={{ marginTop: 10, lineHeight: 1.6, opacity: 0.92 }}>
+          <b>Hur detta ofta visar sig i vardagen:</b>
+        </p>
+        <ul style={{ lineHeight: 1.7, opacity: 0.92 }}>
+          {d.everyday.map((x, i) => (
+            <li key={i}>{x}</li>
+          ))}
+        </ul>
+
+        <p style={{ marginTop: 10, lineHeight: 1.6, opacity: 0.92 }}>
+          <b>Vanlig effekt på dig:</b>
+        </p>
+        <ul style={{ lineHeight: 1.7, opacity: 0.92 }}>
+          {d.impact.map((x, i) => (
+            <li key={i}>{x}</li>
+          ))}
+        </ul>
+
+        <p style={{ marginTop: 10, lineHeight: 1.6, opacity: 0.92 }}>
+          <b>Vanlig fälla:</b> {d.trap}
+        </p>
+
+        <p style={{ marginTop: 10, lineHeight: 1.6, opacity: 0.92 }}>
+          <b>Vad som brukar fungera bättre:</b>
+        </p>
+        <ul style={{ lineHeight: 1.7, opacity: 0.92 }}>
+          {d.better.map((x, i) => (
+            <li key={i}>{x}</li>
+          ))}
+        </ul>
+
+        <p style={{ marginTop: 10, lineHeight: 1.6, opacity: 0.92 }}>
+          <b>Var extra uppmärksam på:</b>
+        </p>
+        <ul style={{ lineHeight: 1.7, opacity: 0.92 }}>
+          {d.watch.map((x, i) => (
+            <li key={i}>{x}</li>
+          ))}
+        </ul>
+
+        <p style={{ marginTop: 10, lineHeight: 1.6, opacity: 0.92 }}>
+          <b>Exempel på gränssättningsfraser (kort & tydligt):</b>
+        </p>
+        <ul style={{ lineHeight: 1.7, opacity: 0.92 }}>
+          {d.boundary.map((x, i) => (
+            <li key={i}>{x}</li>
+          ))}
+        </ul>
+      </div>
+    );
   }
 
   return (
@@ -514,10 +829,7 @@ export default function Page() {
             </button>
           </div>
 
-          <p style={{ marginTop: 14, fontSize: 12, opacity: 0.75 }}>
-            (MVP) Detta är en temporär låsning lokalt i din webbläsare. Nästa
-            steg är riktig betalning.
-          </p>
+          {/* ✅ BORTTAGEN: MVP-texten under betalrutan */}
         </section>
       )}
 
@@ -549,10 +861,10 @@ export default function Page() {
             </p>
 
             <p style={{ margin: "10px 0 0", opacity: 0.9, lineHeight: 1.55 }}>
-              Dina svar visar ett mönster av <b>återkommande riskindikatorer</b> i
-              relationen. Det betyder inte att något enskilt beteende är avgörande – utan att{" "}
-              <b>kombinationen</b> av beteenden över tid kan skapa en relation som blir mentalt
-              påfrestande och svår att navigera.
+              Det här testet ställer ingen diagnos. Det sammanställer{" "}
+              <b>riskindikatorer baserat på beteendemönster</b> och hur de påverkar dig över tid.
+              Poängen är inte att ”sätta en etikett” – utan att hjälpa dig se{" "}
+              <b>mönster, konsekvenser och nästa steg</b> med ett klarare perspektiv.
             </p>
 
             <p style={{ margin: "10px 0 0", opacity: 0.9, lineHeight: 1.55 }}>
@@ -560,90 +872,141 @@ export default function Page() {
               {` `}{fullSummary.practical}
             </p>
 
+            <p style={{ margin: "10px 0 0", opacity: 0.9, lineHeight: 1.55 }}>
+              En sak som ofta lurar människor i destruktiva relationer är att man letar efter ett
+              enskilt ”bevis”. I verkligheten är det{" "}
+              <b>kombinationen</b> av små saker som blir ett klimat: du anpassar dig, tappar mark,
+              och börjar tvivla på dig själv. Den här analysen fokuserar därför på{" "}
+              <b>hur mönster fungerar</b> – och vad du kan göra konkret.
+            </p>
+
             <p style={{ margin: "10px 0 0", fontSize: 12, opacity: 0.7, lineHeight: 1.5 }}>
-              Viktigt: detta är ingen diagnos av en person. Det är en <b>riskprofil baserad på beteendemönster</b>.
+              Viktigt: detta är ingen diagnos av en person. Det är en{" "}
+              <b>riskprofil baserad på mönster</b>. Om du känner dig rädd eller otrygg i relationen
+              ska du prioritera säkerhet och söka stöd.
             </p>
           </div>
 
-          {/* RESTEN AV DIN ANALYS ÄR OFÖRÄNDRAD */}
-          {/* ... (allt under är identiskt med din nuvarande fil) ... */}
+          {/* 1) Tolkning (nivåspecifik men enkel) */}
+          <h3 style={{ marginTop: 18 }}>{lvlGuide.title}</h3>
+          <ul style={{ lineHeight: 1.8, opacity: 0.92 }}>
+            {lvlGuide.bullets.map((x, i) => (
+              <li key={i}>{x}</li>
+            ))}
+          </ul>
 
-          {/* 2) Toppområden - konkret */}
+          {/* 2) Varför det kan kännas "bra ibland" men ändå vara farligt */}
+          <h3 style={{ marginTop: 18 }}>Varför du kan känna dig förvirrad (även när allt inte är dåligt)</h3>
+          <p style={{ lineHeight: 1.7, opacity: 0.92 }}>
+            Många som hamnar i en svår relation beskriver samma sak:{" "}
+            <b>det finns perioder som känns fina</b>, och det gör det svårare att lita på sin egen bedömning.
+            Förvirringen ökar särskilt när värme blandas med kyla, eller när konflikt följs av en kort fas av
+            närhet. Det är inte ett tecken på att du är svag – det är ofta{" "}
+            <b>en helt normal effekt</b> av en relation där reparation saknas och mönster upprepas.
+          </p>
+          <p style={{ lineHeight: 1.7, opacity: 0.92 }}>
+            Ett bra ankare är detta:{" "}
+            <b>Vad händer med dig över tid?</b> Blir du friare, tryggare och mer dig själv – eller mer
+            försiktig, trött och självtvivlande?
+          </p>
+
+          {/* 3) Toppområden - nu relevanta per kluster */}
           <h3 style={{ marginTop: 18 }}>Dina starkaste riskområden</h3>
-
           <div style={{ display: "grid", gap: 12 }}>
-            {/* Område 1 */}
-            <div style={{ border: "1px solid #eee", borderRadius: 14, padding: 14 }}>
-              <h4 style={{ margin: 0 }}>{clusterLabels[top1]}</h4>
-              <p style={{ marginTop: 10, lineHeight: 1.6, opacity: 0.92 }}>
-                <b>Hur detta ofta visar sig i vardagen:</b>
-              </p>
-              <ul style={{ lineHeight: 1.7, opacity: 0.92 }}>
-                <li>Reaktioner kan komma snabbt och oproportionerligt – eller kännas svåra att förutse.</li>
-                <li>Konflikter eskalerar fort eller blir laddade, även vid små ämnen.</li>
-                <li>Du märker att du väljer ord, timing eller tystnad för att “inte trigga”.</li>
-              </ul>
-
-              <p style={{ marginTop: 10, lineHeight: 1.6, opacity: 0.92 }}>
-                <b>Vanlig effekt på dig:</b>
-              </p>
-              <ul style={{ lineHeight: 1.7, opacity: 0.92 }}>
-                <li>Du går på äggskal och börjar backa från det du egentligen vill säga.</li>
-                <li>Du tar ansvar för stämningen, även när den inte är ditt ansvar.</li>
-                <li>Du känner att konflikter aldrig riktigt blir lösta – bara “överlevda”.</li>
-              </ul>
-
-              <p style={{ marginTop: 10, lineHeight: 1.6, opacity: 0.92 }}>
-                <b>Vanlig fälla:</b> du försöker förklara mer, vara tydligare och lugnare – men det leder inte till lugnare samtal.
-              </p>
-
-              <p style={{ marginTop: 10, lineHeight: 1.6, opacity: 0.92 }}>
-                <b>Vad som brukar fungera bättre:</b>
-              </p>
-              <ul style={{ lineHeight: 1.7, opacity: 0.92 }}>
-                <li>Korta, tydliga gränser utan argumentation.</li>
-                <li>Avsluta samtal som eskalerar istället för att försöka “vinna dem”.</li>
-                <li>Upprepa samma gräns lugnt, utan nya förklaringar.</li>
-              </ul>
-            </div>
-
-            {/* Område 2 */}
-            <div style={{ border: "1px solid #eee", borderRadius: 14, padding: 14 }}>
-              <h4 style={{ margin: 0 }}>{clusterLabels[top2]}</h4>
-              <p style={{ marginTop: 10, lineHeight: 1.6, opacity: 0.92 }}>
-                <b>Hur detta ofta visar sig:</b>
-              </p>
-              <ul style={{ lineHeight: 1.7, opacity: 0.92 }}>
-                <li>Samtal vrids så att fokus hamnar på dina brister eller din ton.</li>
-                <li>Din upplevelse ifrågasätts, och du börjar tvivla på vad som “egentligen” hände.</li>
-                <li>Ursäkter ges, men beteendet förändras inte långsiktigt.</li>
-              </ul>
-
-              <p style={{ marginTop: 10, lineHeight: 1.6, opacity: 0.92 }}>
-                <b>Vanlig effekt på dig:</b>
-              </p>
-              <ul style={{ lineHeight: 1.7, opacity: 0.92 }}>
-                <li>Självtvivel: “överreagerar jag?”</li>
-                <li>Förvirring och mental trötthet efter diskussioner.</li>
-                <li>En känsla av att aldrig bli riktigt förstådd – bara hanterad.</li>
-              </ul>
-
-              <p style={{ marginTop: 10, lineHeight: 1.6, opacity: 0.92 }}>
-                <b>Vanlig fälla:</b> du försöker bevisa din poäng med fler exempel, men samtalet blir cirkulärt och dränerande.
-              </p>
-
-              <p style={{ marginTop: 10, lineHeight: 1.6, opacity: 0.92 }}>
-                <b>Vad som brukar fungera bättre:</b>
-              </p>
-              <ul style={{ lineHeight: 1.7, opacity: 0.92 }}>
-                <li>Håll dig till din upplevelse – du behöver inte “vinna” en tolkning.</li>
-                <li>Acceptera att ni inte måste vara överens för att din gräns ska gälla.</li>
-                <li>Avsluta diskussioner som går i cirklar.</li>
-              </ul>
-            </div>
+            <AreaCard c={top1} />
+            <AreaCard c={top2} />
           </div>
 
-          {/* resten av din analys fortsätter oförändrat */}
+          {/* 4) Konkreta steg (oavsett nivå) */}
+          <h3 style={{ marginTop: 18 }}>Konkreta steg (som ger klarhet snabbt)</h3>
+          <p style={{ lineHeight: 1.7, opacity: 0.92 }}>
+            Om du vill veta om detta är ett stabilt mönster eller ”bara en tuff period” så är målet att
+            samla <b>tydlig signal</b> utan att hamna i ändlösa diskussioner. Här är en enkel metod som
+            många upplever ger klarhet:
+          </p>
+          <ol style={{ lineHeight: 1.8, opacity: 0.92 }}>
+            <li>
+              <b>Logga 7 dagar:</b> skriv ner 3 saker: (1) vad som hände, (2) hur personen reagerade,
+              (3) hur du kände dig efteråt. Kort, faktabaserat.
+            </li>
+            <li>
+              <b>Sätt en liten gräns:</b> något rimligt men tydligt (t.ex. integritet, tonläge, social frihet).
+              Observera inte orden – observera reaktionen.
+            </li>
+            <li>
+              <b>Notera reparation:</b> blir det ansvar, förändring och respekt över tid – eller ursäkt + samma mönster?
+            </li>
+            <li>
+              <b>Ta in en extern spegel:</b> prata med någon du litar på och återge 2–3 konkreta händelser.
+              Om du skäms för att berätta, är det ofta information i sig.
+            </li>
+          </ol>
+
+          {/* 5) Hur man pratar utan att fastna i fällan */}
+          <h3 style={{ marginTop: 18 }}>Hur du tar upp saker utan att fastna i en fälla</h3>
+          <p style={{ lineHeight: 1.7, opacity: 0.92 }}>
+            I destruktiva dynamiker är det vanligt att samtalet förflyttas från{" "}
+            <b>beteende</b> → <b>din reaktion</b> → <b>din person</b>. Om du märker det mönstret,
+            är en bra strategi att hålla dig till:
+          </p>
+          <ul style={{ lineHeight: 1.8, opacity: 0.92 }}>
+            <li><b>En sak i taget:</b> välj ett beteende, inte hela relationen.</li>
+            <li><b>En konsekvens:</b> vad du gör om det upprepas (pausar, lämnar rummet, avslutar samtalet).</li>
+            <li><b>Ingen bevisning:</b> du behöver inte övertyga någon för att en gräns ska gälla.</li>
+          </ul>
+          <p style={{ lineHeight: 1.7, opacity: 0.92 }}>
+            Ett konkret format kan vara:{" "}
+            <b>”När X händer, påverkar det mig Y. Jag behöver Z. Om det fortsätter gör jag A.”</b>
+            (Kort. Sakligt. Utan nya förklaringar.)
+          </p>
+
+          {/* 6) Om du överväger att lämna */}
+          <h3 style={{ marginTop: 18 }}>Om du överväger att lämna (förberedelse, inte drama)</h3>
+          <p style={{ lineHeight: 1.7, opacity: 0.92 }}>
+            Den här delen handlar inte om att skrämmas – utan om att hjälpa dig planera smart om du redan
+            lutar åt att relationen inte är bra för dig. I vissa mönster blir det mer tryck just när du
+            återtar kontroll: du sätter gränser, söker stöd, eller signalerar att du är på väg bort.
+          </p>
+          <ul style={{ lineHeight: 1.8, opacity: 0.92 }}>
+            <li>
+              <b>Planera stöd i förväg:</b> välj 1–2 personer som vet läget och kan vara ”ankare”.
+            </li>
+            <li>
+              <b>Separera viktiga saker:</b> dokument, nycklar, ekonomi, lösenord – så du slipper panik i stunden.
+            </li>
+            <li>
+              <b>Undvik att förhandla i affekt:</b> många destruktiva dynamiker blir värre av långa ”avsluts-samtal”.
+            </li>
+            <li>
+              <b>Välj timing:</b> om du misstänker eskalationsrisk, prioritera säkerhet framför idealbilden av ett lugnt uppbrott.
+            </li>
+          </ul>
+
+          {/* 7) Varningssignaler (alltid relevant, men extra för hög nivå) */}
+          <h3 style={{ marginTop: 18 }}>Varningssignaler att ta på särskilt stort allvar</h3>
+          <p style={{ lineHeight: 1.7, opacity: 0.92 }}>
+            Om något av detta stämmer återkommande är det rimligt att du prioriterar trygghet och söker stöd.
+          </p>
+          <ul style={{ lineHeight: 1.8, opacity: 0.92 }}>
+            {safetySignals(level.level).map((x, i) => (
+              <li key={i}>{x}</li>
+            ))}
+          </ul>
+
+          {/* 8) Sammanfattning (kännas som premium) */}
+          <h3 style={{ marginTop: 18 }}>Sammanfattning du kan ta med dig</h3>
+          <p style={{ lineHeight: 1.7, opacity: 0.92 }}>
+            Det avgörande är inte om relationen kan vara bra ibland – utan om du{" "}
+            <b>över tid</b> känner dig trygg, fri och respekterad. Din toppprofil här pekar på{" "}
+            <b>{clusterLabels[top1]}</b> och <b>{clusterLabels[top2]}</b>. Om du vill få klarhet snabbt:
+            sätt en liten gräns, mät reaktionen och notera om det sker{" "}
+            <b>reparation</b> (ansvar + förändring) eller om mönstret återkommer.
+          </p>
+          <p style={{ lineHeight: 1.7, opacity: 0.92 }}>
+            Och viktigast: om du känner rädsla eller att du måste ”krympa” för att relationen ska fungera,
+            är det alltid värt att ta på allvar.
+          </p>
+
           <div style={{ display: "flex", gap: 12, marginTop: 14, flexWrap: "wrap" }}>
             <button
               onClick={restart}
