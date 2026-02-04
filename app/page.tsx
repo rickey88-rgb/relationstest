@@ -140,7 +140,7 @@ function formatTopAreas(top1: Cluster, top2: Cluster) {
   return `${clusterLabels[top1]} och ${clusterLabels[top2]}`;
 }
 
-const LS_KEY = "relationstest_state_v1";
+
 
 // ✅ NYTT (endast för efter-betalning): djupare, mer relevanta analysblock per kluster
 const clusterDeep: Record<
