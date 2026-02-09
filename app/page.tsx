@@ -726,7 +726,7 @@ export default function Page() {
             Tips: svara utifrån hur personen brukar bete sig över tid — inte
             enstaka dagar.
           </p>
-        <section>
+        </section>
 
       )}
 
