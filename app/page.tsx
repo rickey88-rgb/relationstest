@@ -647,6 +647,7 @@ export default function Page() {
 
       {!isFinished && (
         <section
+          className="question-box"
           style={{
             background: "#fff",
             border: "1px solid #eee",
@@ -725,7 +726,7 @@ export default function Page() {
             Tips: svara utifrån hur personen brukar bete sig över tid — inte
             enstaka dagar.
           </p>
-        <section className="question-box">
+        <section>
 
       )}
 
