@@ -67,7 +67,7 @@ export default function VillkorPage() {
       <h2 style={{ marginTop: 22, fontSize: 18 }}>6. Kontakt</h2>
       <p style={{ opacity: 0.9 }}>
         Support och frågor:{" "}
-        <a href="mailto:support@relationstest.se">support@relationstest.se</a>
+        <a href="mailto:support@relationsvarning.se">support@relationsvarning.se</a>
       </p>
 
       <p style={{ marginTop: 26, fontSize: 12, opacity: 0.7 }}>
