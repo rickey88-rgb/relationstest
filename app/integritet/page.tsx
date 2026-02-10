@@ -51,7 +51,7 @@ export default function IntegritetPage() {
       <h2 style={{ marginTop: 22, fontSize: 18 }}>5. Kontakt</h2>
       <p style={{ opacity: 0.9 }}>
         Frågor om integritet:{" "}
-        <a href="mailto:support@relationstest.se">support@relationstest.se</a>
+        <a href="mailto:support@relationstest.se">support@relationsvarning.se</a>
       </p>
 
       <p style={{ marginTop: 26, fontSize: 12, opacity: 0.7 }}>
