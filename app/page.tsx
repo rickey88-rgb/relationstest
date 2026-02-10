@@ -1039,7 +1039,7 @@ export default function Page() {
 >
   <div>
     Kontakt:{" "}
-    <a href="mailto:support@relationsvarning.se">support@relationstest.se</a>
+    <a href="mailto:support@relationsvarning.se">support@relationsvarning.se</a>
   </div>
 
   <div style={{ marginTop: 6 }}>
