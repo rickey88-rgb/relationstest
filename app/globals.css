@@ -32,3 +32,7 @@ body {
   -webkit-text-fill-color: #111111 !important;
   opacity: 1 !important;
 }
+/* Force readable text inside the app container regardless of dark mode */
+main {
+  color: #111111;
+}
