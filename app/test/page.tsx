@@ -800,7 +800,7 @@ export default function Page() {
             <button
               onClick={() => {
                 window.location.href =
-                  "https://buy.stripe.com/3cI6oG0ut6EhfkXdfa0gw00";
+                  "https://buy.stripe.com/14A3cu1yxbYB7Sv3EA0gw01";
               }}
               style={{
                 padding: "12px 14px",
@@ -812,7 +812,7 @@ export default function Page() {
                 fontWeight: 700,
               }}
             >
-              Lås upp analys – 79 kr
+              Lås upp analys – 39 kr
             </button>
 
             <button
