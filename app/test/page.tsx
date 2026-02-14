@@ -607,8 +607,8 @@ export default function Page() {
       }}
     >
       <header style={{ marginBottom: 16, textAlign: "center" }}>
-        <h1 style={{ margin: 0, fontSize: 40, fontWeight: 900 }}>
-          Lever du med en psykopat? Gör testet
+        <h1 style={{ margin: 0, fontSize: 30, fontWeight: 900 }}>
+          Besvara frågorna nedan så ärligt du kan
         </h1>
 
         <p style={{ marginTop: 10, opacity: 0.8, lineHeight: 1.4 }}>
