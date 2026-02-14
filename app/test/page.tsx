@@ -612,8 +612,7 @@ export default function Page() {
         </h1>
 
         <p style={{ marginTop: 10, opacity: 0.8, lineHeight: 1.4 }}>
-          Detta test ställer ingen diagnos. Det sammanställer{" "}
-          <b>riskindikatorer</b> baserat på upplevda beteenden i din relation.
+          Tips: svara utifrån hur personen brukar bete sig över tid — inte enstaka dagar.
         </p>
 
         <div style={{ marginTop: 16, textAlign: "left" }}>
@@ -723,8 +722,8 @@ export default function Page() {
               textAlign: "center",
             }}
           >
-            Tips: svara utifrån hur personen brukar bete sig över tid — inte
-            enstaka dagar.
+             Detta test ställer ingen diagnos. Det sammanställer{" "}
+          <b>riskindikatorer</b> baserat på upplevda beteenden i din relation.
           </p>
         </section>
 
