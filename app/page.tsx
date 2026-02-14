@@ -54,8 +54,7 @@ export default function Landing() {
               </Link>
 
               <div className="text-xs text-neutral-600">
-                Efter testet får du en indikation. Fördjupad analys kan låsas upp
-                efteråt.
+                Efter testet får du en indikation. Och kanske svar du länge sökt.
               </div>
             </div>
 
@@ -143,11 +142,10 @@ export default function Landing() {
                   </p>
                   <p className="mt-1 text-sm leading-relaxed text-neutral-700">
                     Du får en sammanfattning och en indikation baserad på dina
-                    svar. Vill du se en mer detaljerad analys kan du låsa upp
-                    fördjupningen efteråt.
+                    svar. Och en möjlighet till en mer fördjupad analys.
                   </p>
                   <p className="mt-3 text-xs text-neutral-600">
-                    Fördjupning: <span className="font-semibold">49 kr</span>
+                    Fördjupning: <span className="font-semibold">Kan fås baserat på dina svar</span>
                   </p>
                 </div>
               </div>
