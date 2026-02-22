@@ -166,31 +166,48 @@ export default function Landing() {
             Läs mer
           </h3>
 
-          <ul className="mt-3 grid gap-2 text-sm text-neutral-700 sm:grid-cols-2">
-            <li>
-              <Link href="/tecken-pa-psykopat" className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700">
-                Tecken på att du lever med en psykopat
-              </Link>
-            </li>
-            <li>
-              <Link href="/manipulativ-partner" className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700">
-                Hur vet man om någon är manipulativ?
-              </Link>
-            </li>
-            <li>
-              <Link href="/kontrollerande-relation" className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700">
-                Varför känner jag mig kontrollerad i min relation?
-              </Link>
-            </li>
-            <li>
-              <Link href="/psykopatiska-drag-relation" className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700">
-                Psykopatiska drag i relation — tidiga signaler
-              </Link>
-            </li>
-          </ul>
-        </div>
-      </section>
-
+          <ul className="mt-3 space-y-2 text-sm text-neutral-700">
+  <li>
+    <Link
+      href="/tecken-pa-psykopat"
+      className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
+    >
+      Tecken på att du lever med en psykopat
+    </Link>
+  </li>
+  <li>
+    <Link
+      href="/manipulativ-partner"
+      className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
+    >
+      Hur vet man om någon är manipulativ?
+    </Link>
+  </li>
+  <li>
+    <Link
+      href="/kontrollerande-relation"
+      className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
+    >
+      Varför känner jag mig kontrollerad i min relation?
+    </Link>
+  </li>
+  <li>
+    <Link
+      href="/psykopatiska-drag-relation"
+      className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
+    >
+      Psykopatiska drag i relation — tidiga signaler
+    </Link>
+  </li>
+  <li>
+    <Link
+      href="/skillnad-psykopat-narcissist"
+      className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
+    >
+      Skillnad på psykopat och narcissist
+    </Link>
+  </li>
+</ul>
       {/* Footer */}
       <footer className="border-t border-neutral-200/70">
         <div className="mx-auto flex max-w-5xl flex-col gap-2 px-6 py-6 text-xs text-neutral-500 sm:flex-row sm:items-center sm:justify-between">
