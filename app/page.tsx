@@ -209,6 +209,14 @@ export default function Landing() {
                 Skillnad på psykopat och narcissist
               </Link>
             </li>
+            <li>
+              <Link
+                href="/psykisk-misshandel-relation"
+                className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
+              >
+                Psykisk misshandel i relation — tecken, mönster och konsekvenser
+              </Link>
+            </li>
           </ul>
         </div>
       </section>
