@@ -60,9 +60,7 @@ export default function Landing() {
             <div className="mt-8 border-t border-neutral-200/70 pt-6">
               <dl className="grid gap-4 sm:grid-cols-3">
                 <div>
-                  <dt className="text-xs font-semibold text-neutral-900">
-                    Ton
-                  </dt>
+                  <dt className="text-xs font-semibold text-neutral-900">Ton</dt>
                   <dd className="mt-1 text-sm text-neutral-700">
                     Saklig, trygg, vuxen
                   </dd>
@@ -215,6 +213,14 @@ export default function Landing() {
                 className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
               >
                 Psykisk misshandel i relation — tecken, mönster och konsekvenser
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/vald-i-nara-relation"
+                className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
+              >
+                Våld i nära relation — tecken och var du kan få hjälp
               </Link>
             </li>
           </ul>
