@@ -1148,26 +1148,7 @@ export default function Page() {
                 </p>
               </div>
 
-              <div className="rounded-2xl bg-neutral-50 p-6">
-                <p className="text-sm font-semibold tracking-tight text-neutral-900">
-                  Tips för SEO (internt)
-                </p>
-                <ul className="mt-3 space-y-2 text-sm text-neutral-700">
-                  <li className="flex gap-3">
-                    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-neutral-900" />
-                    Inkludera “psykiskt våld”, “kontroll”, “hot”, “ekonomiskt våld”
-                    i rubriker/FAQ (du gör det redan här).
-                  </li>
-                  <li className="flex gap-3">
-                    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-neutral-900" />
-                    Länka tillbaka till den här sidan från relaterade artiklar.
-                  </li>
-                  <li className="flex gap-3">
-                    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-neutral-900" />
-                    Håll “Stöd”-sektionen uppdaterad om nummer ändras.
-                  </li>
-                </ul>
-              </div>
+              
             </div>
           </div>
         </article>
