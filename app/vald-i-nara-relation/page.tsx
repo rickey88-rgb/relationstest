@@ -227,7 +227,7 @@ export default function Page() {
 
               <div className="mt-5 rounded-xl bg-neutral-50 p-4">
                 <p className="text-sm font-semibold text-neutral-900">
-                  Relaterat (SEO-kluster)
+                  Relaterat 
                 </p>
                 <p className="mt-1 text-sm leading-relaxed text-neutral-700">
                   Om du vill läsa mer om närliggande mönster:
