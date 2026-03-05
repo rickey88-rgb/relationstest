@@ -223,6 +223,14 @@ export default function Landing() {
                 Våld i nära relation — tecken och var du kan få hjälp
               </Link>
             </li>
+            <li>
+  <Link
+    href="/jag-ar-radd-att-min-partner-ska-sla-mig"
+    className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
+  >
+    Jag är rädd att min partner ska slå mig — vad kan jag göra?
+  </Link>
+</li>
           </ul>
         </div>
       </section>
