@@ -682,16 +682,16 @@ export default function Page() {
               <button
                 key={v}
                 onClick={() => pickAnswer(v)}
-                style={{
-                  textAlign: "left",
-                  padding: "12px 14px",
-                  borderRadius: 12,
-                  border: "1px solid #ddd",
-                  background: answers[index] === v ? "#111" : "#fff",
-                  color: answers[index] === v ? "#fff" : "#111",
-                  cursor: "pointer",
-                  fontSize: 16,
-                }}
+style={{
+  textAlign: "left",
+  padding: "12px 14px",
+  borderRadius: 12,
+  border: answers[index] === v ? "1px solid #bdbdbd" : "1px solid #ddd",
+  background: answers[index] === v ? "#ececec" : "#fff",
+  color: "#111",
+  cursor: "pointer",
+  fontSize: 16,
+}}
               >
                 {answerLabels[v]}
               </button>
