@@ -176,7 +176,6 @@ export default function Landing() {
               </Link>
             </li>
 
-            {/* ✅ NY: Gaslighting */}
             <li>
               <Link
                 href="/gaslighting-relation"
@@ -194,6 +193,7 @@ export default function Landing() {
                 Hur vet man om någon är manipulativ?
               </Link>
             </li>
+
             <li>
               <Link
                 href="/kontrollerande-relation"
@@ -202,6 +202,7 @@ export default function Landing() {
                 Varför känner jag mig kontrollerad i min relation?
               </Link>
             </li>
+
             <li>
               <Link
                 href="/psykopatiska-drag-relation"
@@ -210,6 +211,7 @@ export default function Landing() {
                 Psykopatiska drag i relation — tidiga signaler
               </Link>
             </li>
+
             <li>
               <Link
                 href="/skillnad-psykopat-narcissist"
@@ -218,6 +220,7 @@ export default function Landing() {
                 Skillnad på psykopat och narcissist
               </Link>
             </li>
+
             <li>
               <Link
                 href="/psykisk-misshandel-relation"
@@ -226,6 +229,7 @@ export default function Landing() {
                 Psykisk misshandel i relation — tecken, mönster och konsekvenser
               </Link>
             </li>
+
             <li>
               <Link
                 href="/vald-i-nara-relation"
@@ -234,12 +238,23 @@ export default function Landing() {
                 Våld i nära relation — tecken och var du kan få hjälp
               </Link>
             </li>
+
             <li>
               <Link
                 href="/jag-ar-radd-att-min-partner-ska-sla-mig"
                 className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
               >
                 Jag är rädd att min partner ska slå mig — vad kan jag göra?
+              </Link>
+            </li>
+
+            <li>
+              <Link
+                href="/traumabindning-i-relation"
+                className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
+              >
+                Traumabindning i en relation — tecken, varför det händer och
+                varför det är så svårt att lämna
               </Link>
             </li>
           </ul>
