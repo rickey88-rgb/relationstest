@@ -1,6 +1,6 @@
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-  siteUrl: 'https://relationsvarning.se',
+  siteUrl: 'https://www.relationsvarning.se',
   generateRobotsTxt: true,
   sitemapSize: 5000,
 };
