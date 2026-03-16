@@ -36,13 +36,14 @@ export default function Landing() {
             </h1>
 
             <p className="mt-5 text-base leading-relaxed text-neutral-700">
-              Det här testet hjälper dig att få klarhet i{" "}
-              <span className="font-medium text-neutral-900">
-                kontrollerande, manipulativa och emotionellt pressande beteenden
-              </span>{" "}
-              i en nära relation. Du svarar utifrån den andra personens beteenden
-              i vardagen — inte diagnoser och etiketter.
-            </p>
+  Det svåraste är ofta inte att något känns fel – utan att det är svårt att
+  förklara varför. När skuld, förvirring och återkommande obehag blir vardag
+  kan det vara hjälpsamt att se mönstret tydligare. Det här testet är framtaget
+  av experter för att fånga upp återkommande beteenden och signaler som ofta
+  förekommer i manipulativa, kontrollerande och toxiska relationer. Syftet är
+  att ge dig en tydligare och mer strukturerad bild av det du kanske redan anat
+  – men ännu inte kunnat sätta ord på.
+</p>
 
             <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
               <Link
