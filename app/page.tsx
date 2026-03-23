@@ -187,6 +187,15 @@ export default function Landing() {
             </li>
 
             <li>
+  <Link
+    href="/narcissist-i-en-relation"
+    className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
+  >
+    Narcissist i en relation — tecken, beteenden och varningssignaler
+  </Link>
+</li>
+
+            <li>
               <Link
                 href="/manipulativ-partner"
                 className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
