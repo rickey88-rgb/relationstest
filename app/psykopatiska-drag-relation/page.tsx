@@ -160,6 +160,33 @@ export default function Page() {
           .
         </p>
 
+        <section className="rounded-3xl border border-neutral-200 bg-white p-7 shadow-sm md:p-8">
+          <h2 className="text-2xl font-semibold tracking-tight text-neutral-950">
+            Läs också
+          </h2>
+
+          <div className="mt-4 space-y-4 text-[1.02rem] leading-8 text-neutral-700">
+            <p>
+              I vissa relationer börjar mönstret med stark intensitet och snabb
+              idealisering. Läs mer om{" "}
+              <Link href="/love-bombing-relation" className="underline">
+                love bombing i relation
+              </Link>{" "}
+              och hur det som först känns ovanligt starkt senare kan följas av kyla,
+              skuld eller förvirring.
+            </p>
+
+            <p>
+              Ett annat vanligt mönster är att kontakt plötsligt dras tillbaka efter
+              konflikt eller gränssättning. Läs mer om{" "}
+              <Link href="/silent-treatment-relation" className="underline">
+                silent treatment i relation
+              </Link>{" "}
+              och hur tystnad ibland används som maktmedel.
+            </p>
+          </div>
+        </section>
+
         <hr className="my-8" />
 
         <p className="text-sm text-neutral-600">

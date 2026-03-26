@@ -311,6 +311,38 @@ export default function GaslightingRelationPage() {
           </p>
         </section>
 
+        <section className="rounded-3xl border border-neutral-200 bg-white p-7 shadow-sm md:p-8">
+  <h2 className="text-2xl font-semibold tracking-tight text-neutral-950">
+    Läs också
+  </h2>
+
+  <div className="mt-4 space-y-4 text-[1.02rem] leading-8 text-neutral-700">
+    <p>
+      Förvirring i en relation skapas inte alltid bara genom ord. Den kan också byggas
+      genom kyla, avstånd och utebliven kontakt. Läs mer om{" "}
+      <Link
+        href="/silent-treatment-relation"
+        className="font-medium text-neutral-950 underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
+      >
+        silent treatment i relation
+      </Link>
+      .
+    </p>
+
+    <p>
+      I vissa relationer börjar förvirringen långt tidigare, under en mycket intensiv
+      och idealiserande start. Läs mer om{" "}
+      <Link
+        href="/love-bombing-relation"
+        className="font-medium text-neutral-950 underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
+      >
+        love bombing i relation
+      </Link>
+      .
+    </p>
+  </div>
+</section>
+
         <section className="space-y-4">
           <h2 className="text-2xl font-semibold tracking-tight">Läs mer i samma ämneskluster</h2>
           <p className="leading-7">

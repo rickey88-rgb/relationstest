@@ -463,6 +463,37 @@ export default function Page() {
           </Link>
           .
         </p>
+        <section className="rounded-3xl border border-neutral-200 bg-white p-7 shadow-sm md:p-8">
+  <h2 className="text-2xl font-semibold tracking-tight text-neutral-950">
+    Läs också
+  </h2>
+
+  <div className="mt-4 space-y-4 text-[1.02rem] leading-8 text-neutral-700">
+    <p>
+      Manipulation i en relation börjar inte alltid med kontroll. I vissa fall börjar
+      det i stället med stark uppmärksamhet, snabb idealisering och intensiv närhet.
+      Läs mer om{" "}
+      <Link
+        href="/love-bombing-relation"
+        className="font-medium text-neutral-950 underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
+      >
+        love bombing i relation
+      </Link>
+      .
+    </p>
+
+    <p>
+      Manipulation kan också ske genom kyla, avstånd och utebliven kontakt. Läs mer om{" "}
+      <Link
+        href="/silent-treatment-relation"
+        className="font-medium text-neutral-950 underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
+      >
+        silent treatment i relation
+      </Link>{" "}
+      och hur tystnad ibland används för att skapa skuld och osäkerhet.
+    </p>
+  </div>
+</section>
 
         <h3 className="text-xl font-semibold">
           Kan någon vara manipulativ utan att vara psykopat eller narcissist?

@@ -221,6 +221,23 @@ export default function Landing() {
                 Psykopatiska drag i relation — tidiga signaler
               </Link>
             </li>
+            <li>
+  <Link
+    href="/silent-treatment-relation"
+    className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
+  >
+    Silent treatment i relation — när tystnad blir makt
+  </Link>
+</li>
+
+<li>
+  <Link
+    href="/love-bombing-relation"
+    className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
+  >
+    Love bombing i relation — när intensitet blir manipulation
+  </Link>
+</li>
 
             <li>
               <Link

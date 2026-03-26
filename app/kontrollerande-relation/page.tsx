@@ -99,6 +99,39 @@ export default function Page() {
           .
         </p>
 
+        <section className="rounded-3xl border border-neutral-200 bg-white p-7 shadow-sm md:p-8">
+  <h2 className="text-2xl font-semibold tracking-tight text-neutral-950">
+    Läs också
+  </h2>
+
+  <div className="mt-4 space-y-4 text-[1.02rem] leading-8 text-neutral-700">
+    <p>
+      Kontroll i en relation ser inte alltid hård ut från början. Den kan börja med
+      stark intensitet, mycket bekräftelse och ett tempo som gör det svårt att hinna
+      känna efter. Läs mer om{" "}
+      <Link
+        href="/love-bombing-relation"
+        className="font-medium text-neutral-950 underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
+      >
+        love bombing i relation
+      </Link>
+      .
+    </p>
+
+    <p>
+      Kontroll kan också utövas genom kyla, undandragen kontakt och återkommande
+      tystnadsperioder. Läs mer om{" "}
+      <Link
+        href="/silent-treatment-relation"
+        className="font-medium text-neutral-950 underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
+      >
+        silent treatment i relation
+      </Link>
+      .
+    </p>
+  </div>
+</section>
+
         <p>
           För begreppsförståelse kan du även läsa{" "}
           <Link href="/skillnad-psykopat-narcissist" className="underline">

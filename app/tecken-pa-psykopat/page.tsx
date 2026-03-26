@@ -261,6 +261,38 @@ export default function Page() {
               </ul>
             </div>
 
+            <section className="rounded-3xl border border-neutral-200 bg-white p-7 shadow-sm md:p-8">
+  <h2 className="text-2xl font-semibold tracking-tight text-neutral-950">
+    Läs också
+  </h2>
+
+  <div className="mt-4 space-y-4 text-[1.02rem] leading-8 text-neutral-700">
+    <p>
+      Om du känner igen mönster där någon blir kall, avstängd eller plötsligt drar
+      undan kontakt efter konflikt kan du läsa vidare om{" "}
+      <Link
+        href="/silent-treatment-relation"
+        className="font-medium text-neutral-950 underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
+      >
+        silent treatment i relation
+      </Link>
+      .
+    </p>
+
+    <p>
+      Om relationen i stället började med ovanligt stark intensitet, mycket bekräftelse
+      och ett tempo som kändes nästan overkligt kan du också läsa om{" "}
+      <Link
+        href="/love-bombing-relation"
+        className="font-medium text-neutral-950 underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
+      >
+        love bombing i relation
+      </Link>
+      .
+    </p>
+  </div>
+</section>
+
             {/* Disclaimer */}
             <p className="mt-8 text-xs leading-relaxed text-neutral-500">
               Den här texten är ett reflektionsstöd och allmän information. Den

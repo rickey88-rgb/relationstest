@@ -785,15 +785,14 @@ style={{
 
           <p style={{ marginTop: 14, opacity: 0.9, lineHeight: 1.5 }}>
             <i>
-              “Ibland är det inte svar man söker, utan en förklaring till en
-              känsla som funnits där länge.”
+              "Vissa relationer bryter inte ner dig på en dag. De gör det långsamt, tills du nästan glömmer hur lugn brukade kännas."
             </i>
           </p>
 
           <p style={{ opacity: 0.9, lineHeight: 1.5 }}>
             Lås upp din fullständiga riskanalys och vägledning: hur personer med
             dessa mönster ofta reagerar vid gränser, konfrontation och om man
-            försöker lämna.
+            försöker lämna. Analysen bygger på omfattande forskning kring ämnet och är anpassad efter dina svar.
           </p>
 
           <div style={{ display: "flex", gap: 12, marginTop: 16, flexWrap: "wrap" }}>
