@@ -489,6 +489,47 @@ export default function Page() {
     >
       Bevis och dokumentation vid psykiskt våld →
     </Link>
+    <Link
+  href="/psykiskt-vald/polisanmalan"
+  style={{
+    padding: 16,
+    border: "1px solid #ddd",
+    borderRadius: 14,
+    color: "#111",
+    textDecoration: "none",
+    fontWeight: 800,
+  }}
+>
+  Polisanmäla psykiskt våld →
+</Link>
+
+<Link
+  href="/psykiskt-vald/hjalp"
+  style={{
+    padding: 16,
+    border: "1px solid #ddd",
+    borderRadius: 14,
+    color: "#111",
+    textDecoration: "none",
+    fontWeight: 800,
+  }}
+>
+  Hjälp vid psykiskt våld →
+</Link>
+
+<Link
+  href="/psykisk-misshandel"
+  style={{
+    padding: 16,
+    border: "1px solid #ddd",
+    borderRadius: 14,
+    color: "#111",
+    textDecoration: "none",
+    fontWeight: 800,
+  }}
+>
+  Psykisk misshandel – tecken och guide →
+</Link>
   </div>
 </section>
 
