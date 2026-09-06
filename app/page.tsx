@@ -29,6 +29,13 @@ const tests = [
     description:
       "Utforska hur du reagerar på närhet, osäkerhet och känslomässigt avstånd i romantiska relationer.",
   },
+   {
+    href: "/medberoendetest/test",
+    title: "Medberoendetest",
+    category: "Fördjupningstest",
+    description:
+      "Undersök mönster av självuppoffring, överansvar, svårigheter med gränser och starkt fokus på partnerns behov.",
+  },
 ];
 
 export default function Landing() {

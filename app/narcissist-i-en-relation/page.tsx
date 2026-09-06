@@ -391,6 +391,9 @@ export default function NarcissistRelationPage() {
             upptagen av att minimera reaktioner.
           </p>
           <p className="leading-8 text-neutral-700">
+            Om mycket av din energi går åt till att anpassa dig efter partnern kan vår sida om <Link href="/medberoendetest" className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700">medberoende och utrymmet för egna behov</Link> hjälpa dig att reflektera över din situation. Partnerns beteende är fortfarande partnerns ansvar.
+          </p>
+          <p className="leading-8 text-neutral-700">
             Det är också därför gränsen mellan narcissistiska drag, manipulation och
             kontroll ofta flyter ihop. För att få en tydligare bild kan du också läsa
             om{" "}

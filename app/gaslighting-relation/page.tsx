@@ -202,6 +202,9 @@ export default function GaslightingRelationPage() {
             att du vill vara “en bra partner”. Med tiden kan du börja kompensera mer och mer,
             medan den andra tar mindre och mindre ansvar.
           </p>
+          <p className="leading-7">
+            Om du känner igen att du kompenserar och tar ett allt större ansvar kan du också utforska <Link href="/medberoendetest" className="underline underline-offset-4">mönster av medberoende</Link>. Att reflektera över dina egna mönster innebär inte att du orsakar eller ansvarar för någon annans manipulation.
+          </p>
         </section>
 
         <section className="space-y-4">
