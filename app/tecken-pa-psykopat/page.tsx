@@ -216,6 +216,12 @@ export default function Page() {
               triggar det mest.
             </p>
 
+            <p className="mt-3 text-sm leading-relaxed text-neutral-700">
+              För en fördjupning med fokus på beteenden och mönster, läs om{" "}
+              <Link href="/psykopatiska-drag-relation" className="underline underline-offset-4">psykopatiska drag i en relation</Link>
+              .
+            </p>
+
             <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
               <Link
                 href="/test"

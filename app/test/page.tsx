@@ -606,6 +606,17 @@ export default function Page() {
         fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, Arial",
       }}
     >
+      <nav aria-label="Test och startsida" style={{ marginBottom: 20, fontSize: 13, lineHeight: 1.7 }}>
+        <a href="/" style={{ textDecoration: "underline" }}>Till startsidan</a>
+        <p style={{ margin: "6px 0 0" }}>
+          Du gör det generella relationstestet. Söker du ett mer specifikt test finns även vårt{" "}
+          <a href="/psykisk-misshandel-relation/test" style={{ textDecoration: "underline" }}>
+            test om psykisk misshandel och psykiskt våld
+          </a>
+          .
+        </p>
+      </nav>
+
       <header style={{ marginBottom: 16, textAlign: "center" }}>
         <h1 style={{ margin: 0, fontSize: 30, fontWeight: 900 }}>
           Besvara frågorna nedan så ärligt du kan
@@ -992,6 +1003,14 @@ style={{
               <li key={i}>{x}</li>
             ))}
           </ul>
+
+          <p style={{ lineHeight: 1.7, opacity: 0.92 }}>
+            För mer vägledning om återkommande kontroll och nedbrytande beteenden, läs vår{" "}
+            <a href="/psykisk-misshandel-relation" style={{ textDecoration: "underline" }}>
+              guide om psykisk misshandel i relation
+            </a>
+            .
+          </p>
 
           {/* 8) Sammanfattning (kännas som premium) */}
           <h3 style={{ marginTop: 18 }}>Sammanfattning du kan ta med dig</h3>

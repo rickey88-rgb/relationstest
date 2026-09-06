@@ -170,6 +170,12 @@ export default function GaslightingRelationPage() {
             titta på mönstret.
           </p>
 
+          <p className="leading-7">
+            För att förstå hur återkommande nedbrytning kan ingå i en större helhet, läs om{" "}
+            <Link href="/psykisk-misshandel-relation" className="underline underline-offset-4">psykisk misshandel i nära relationer</Link>
+            .
+          </p>
+
           {/* ✅ NY: Diskreta interna länkar mitt i innehållet */}
           <p className="leading-7">
             Gaslighting förekommer också ofta tillsammans med andra mönster, som{" "}

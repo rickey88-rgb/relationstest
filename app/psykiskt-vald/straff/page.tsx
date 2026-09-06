@@ -297,6 +297,12 @@ export default function Page() {
         </p>
 
         <p style={{ fontSize: 17, lineHeight: 1.75 }}>
+          Läs mer om bakgrunden och ikraftträdandet i genomgången av{" "}
+          <Link href="/psykiskt-vald/ny-lag-2026" className="underline underline-offset-4">den nya lagen om psykiskt våld 2026</Link>
+          .
+        </p>
+
+        <p style={{ fontSize: 17, lineHeight: 1.75 }}>
           Det betyder inte att handlingar före den 1 juli automatiskt varit
           tillåtna. Vissa beteenden kan ha varit straffbara enligt andra
           bestämmelser redan tidigare.
@@ -316,6 +322,14 @@ export default function Page() {
         <p style={{ fontSize: 17, lineHeight: 1.75 }}>
           Du kan också söka stöd och rådgivning och vid behov kontakta polis
           eller juridisk rådgivare för en bedömning av just din situation.
+        </p>
+
+        <p style={{ fontSize: 17, lineHeight: 1.75 }}>
+          Läs vidare om{" "}
+          <Link href="/psykiskt-vald/polisanmalan" className="underline underline-offset-4">att polisanmäla psykiskt våld</Link>
+          {" "}eller om{" "}
+          <Link href="/psykiskt-vald/hjalp" className="underline underline-offset-4">hjälp och stöd när du är osäker på nästa steg</Link>
+          .
         </p>
 
         <p style={{ fontSize: 17, lineHeight: 1.75 }}>

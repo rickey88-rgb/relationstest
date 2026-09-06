@@ -50,12 +50,28 @@ export default function Landing() {
                 href="/test"
                 className="inline-flex w-full items-center justify-center rounded-xl bg-neutral-900 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-2 sm:w-auto"
               >
-                Påbörja testet
+                Påbörja det generella relationstestet
               </Link>
 
               <div className="text-xs text-neutral-600">
                 Efter testet får du en indikation. Och kanske svar du länge sökt.
               </div>
+            </div>
+
+            <div className="mt-6 rounded-xl bg-neutral-50 p-4">
+              <h2 className="text-sm font-semibold text-neutral-900">
+                Söker du ett test om psykisk misshandel eller psykiskt våld?
+              </h2>
+              <p className="mt-2 text-sm leading-relaxed text-neutral-700">
+                Utöver vårt breda relationstest finns ett separat specialtest
+                med fokus på psykisk misshandel och psykiskt våld.
+              </p>
+              <Link
+                href="/psykisk-misshandel-relation/test"
+                className="mt-3 inline-block text-sm font-semibold underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
+              >
+                Gör testet om psykisk misshandel och psykiskt våld
+              </Link>
             </div>
 
             <div className="mt-8 border-t border-neutral-200/70 pt-6">
@@ -168,6 +184,22 @@ export default function Landing() {
           </h3>
 
           <ul className="mt-3 space-y-2 text-sm text-neutral-700">
+            <li>
+              <Link
+                href="/psykisk-misshandel"
+                className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
+              >
+                Psykisk misshandel — tecken, exempel och hjälp
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/psykiskt-vald"
+                className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
+              >
+                Psykiskt våld — guide till beteenden, lagen och stöd
+              </Link>
+            </li>
             <li>
               <Link
                 href="/tecken-pa-psykopat"

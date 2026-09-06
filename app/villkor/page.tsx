@@ -70,6 +70,12 @@ export default function VillkorPage() {
         <a href="mailto:support@relationsvarning.se">support@relationsvarning.se</a>
       </p>
 
+      <nav aria-label="Sidnavigation" style={{ marginTop: 24, fontSize: 13 }}>
+        <a href="/" style={{ textDecoration: "underline" }}>Till startsidan</a>
+        {" · "}
+        <a href="/integritet" style={{ textDecoration: "underline" }}>Integritetspolicy</a>
+      </nav>
+
       <p style={{ marginTop: 26, fontSize: 12, opacity: 0.7 }}>
         Senast uppdaterad: {new Date().toISOString().slice(0, 10)}
       </p>

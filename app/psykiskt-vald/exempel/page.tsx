@@ -103,6 +103,12 @@ export default function Page() {
             automatiskt fundera på vad du själv gjort fel, även när du från
             början var säker på situationen.
           </p>
+
+          <p style={{ fontSize: 17, lineHeight: 1.75 }}>
+            Läs mer om skuldvändning och andra mönster hos en{" "}
+            <Link href="/manipulativ-partner" className="underline underline-offset-4">manipulativ partner</Link>
+            .
+          </p>
         </div>
       </section>
 
@@ -201,6 +207,12 @@ export default function Page() {
           <p style={{ fontSize: 17, lineHeight: 1.75 }}>
             Du kanske förväntas ha platsdelning aktiverad och om du stänger av
             den uppstår anklagelser eller konflikt.
+          </p>
+
+          <p style={{ fontSize: 17, lineHeight: 1.75 }}>
+            För en bredare bild av hur kontroll kan begränsa vardagen, läs om{" "}
+            <Link href="/kontrollerande-relation" className="underline underline-offset-4">tecken på en kontrollerande relation</Link>
+            .
           </p>
 
           <p style={{ fontSize: 17, lineHeight: 1.75, marginBottom: 0 }}>
@@ -441,6 +453,18 @@ export default function Page() {
           Skriv gärna ner konkreta händelser med datum och sammanhang. Det gör
           det lättare att se om samma typer av beteenden fortsätter att
           återkomma.
+        </p>
+
+        <p style={{ fontSize: 17, lineHeight: 1.75 }}>
+          I guiden om{" "}
+          <Link href="/psykiskt-vald/bevis" className="underline underline-offset-4">bevis och dokumentation</Link>
+          {" "}kan du läsa mer om att spara konkreta händelser.
+        </p>
+
+        <p style={{ fontSize: 17, lineHeight: 1.75 }}>
+          Behöver du stöd med situationen kan du läsa om{" "}
+          <Link href="/psykiskt-vald/hjalp" className="underline underline-offset-4">hjälp vid psykiskt våld</Link>
+          .
         </p>
 
         <p style={{ fontSize: 17, lineHeight: 1.75 }}>

@@ -296,6 +296,12 @@ export default function Page() {
         </p>
 
         <p style={{ fontSize: 17, lineHeight: 1.75 }}>
+          För en närmare förklaring av beteenden och gränsdragningar, läs om{" "}
+          <Link href="/psykiskt-vald/vad-raknas-som" className="underline underline-offset-4">vad som räknas som psykiskt våld</Link>
+          .
+        </p>
+
+        <p style={{ fontSize: 17, lineHeight: 1.75 }}>
           Samtidigt kunde flera handlingar som förekommer inom psykiskt våld
           vara brottsliga redan före den nya bestämmelsen, exempelvis genom
           andra regler i brottsbalken. Den stora förändringen är att det nu
@@ -357,6 +363,14 @@ export default function Page() {
           Om beteendet återkommer kan det vara värdefullt att dokumentera
           konkreta händelser och sammanhang. Spara relevanta meddelanden och
           andra digitala spår om du kan göra det på ett säkert sätt.
+        </p>
+
+        <p style={{ fontSize: 17, lineHeight: 1.75 }}>
+          Du kan läsa mer om{" "}
+          <Link href="/psykiskt-vald/bevis" className="underline underline-offset-4">bevis och dokumentation vid psykiskt våld</Link>
+          {" "}och{" "}
+          <Link href="/psykiskt-vald/hjalp" className="underline underline-offset-4">var du kan få hjälp</Link>
+          .
         </p>
 
         <p style={{ fontSize: 17, lineHeight: 1.75 }}>

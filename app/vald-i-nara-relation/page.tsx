@@ -370,6 +370,17 @@ export default function Page() {
                 .
               </p>
 
+              <p className="mt-3 text-base leading-relaxed text-neutral-700">
+                I vår{" "}
+                <Link
+                  href="/psykiskt-vald"
+                  className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
+                >
+                  guide om psykiskt våld
+                </Link>{" "}
+                kan du också läsa om konkreta beteenden, lagen och var du kan få stöd.
+              </p>
+
               <h3 className="mt-8 text-base font-semibold tracking-tight">
                 Fysiskt våld
               </h3>
@@ -629,6 +640,12 @@ export default function Page() {
                 bedömning.
               </p>
 
+              <p className="mt-4 text-base leading-relaxed text-neutral-700">
+                En del av de känslomässiga banden beskrivs närmare i artikeln om{" "}
+                <Link href="/traumabindning-i-relation" className="underline underline-offset-4">traumabindning i en relation</Link>
+                .
+              </p>
+
               <h3 className="mt-8 text-base font-semibold tracking-tight">
                 Hopp och minnesbilden av “när det var bra”
               </h3>
@@ -648,6 +665,12 @@ export default function Page() {
                 skam, manipulation eller bestraffning när du sätter gränser, kan
                 uppbrottet kännas som den farligaste punkten. Många beskriver att
                 de blir kvar just för att “hålla situationen stabil”.
+              </p>
+
+              <p className="mt-2 text-base leading-relaxed text-neutral-700">
+                Om du oroar dig för att partnern ska bli fysiskt våldsam kan du läsa{" "}
+                <Link href="/jag-ar-radd-att-min-partner-ska-sla-mig" className="underline underline-offset-4">Jag är rädd att min partner ska slå mig</Link>
+                {" "}för vidare vägledning.
               </p>
 
               <h3 className="mt-8 text-base font-semibold tracking-tight">

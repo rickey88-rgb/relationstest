@@ -230,6 +230,12 @@ export default function NarcissistRelationPage() {
             trygghet eller stark kemi kan det kännas som att något äntligen
             fallit på plats.
           </p>
+
+          <p className="leading-8 text-neutral-700">
+            Läs mer om{" "}
+            <Link href="/love-bombing-relation" className="underline underline-offset-4">love bombing och en intensiv början</Link>
+            , och hur det kan skilja sig från trygg förälskelse.
+          </p>
           <p className="leading-8 text-neutral-700">
             Problemet är att intensitet inte alltid är samma sak som trygghet.
             Det som känns som en sällsynt förbindelse kan i vissa fall snarare
@@ -409,6 +415,12 @@ export default function NarcissistRelationPage() {
             att man överdriver. Och ovanpå det kan det finnas skuld, ekonomi, barn,
             vana, ensamhet eller ren utmattning.
           </p>
+
+          <p className="leading-8 text-neutral-700">
+            En fördjupning om{" "}
+            <Link href="/traumabindning-i-relation" className="underline underline-offset-4">traumabindning i relationer</Link>
+            {" "}kan hjälpa dig förstå varför starka band kan finnas kvar trots att du mår dåligt.
+          </p>
           <p className="leading-8 text-neutral-700">
             En annan stark faktor är den intermittenta värmen. Små stunder av närhet
             efter kyla kan kännas enorma. Ett mjukt samtal efter flera dagar av
@@ -511,6 +523,12 @@ export default function NarcissistRelationPage() {
             inte vänta tills du kan bevisa varje detalj. Det räcker långt att du ser
             ett mönster där du blir mindre och den andra tar mer plats på din
             bekostnad.
+          </p>
+
+          <p className="leading-8 text-neutral-700">
+            För att förstå återkommande nedbrytning utan att fastna i personens etikett, läs om{" "}
+            <Link href="/psykisk-misshandel-relation" className="underline underline-offset-4">tecken och konsekvenser av psykisk misshandel i en relation</Link>
+            .
           </p>
           <p className="leading-8 text-neutral-700">
             Varningssignaler blir särskilt allvarliga när flera av följande saker

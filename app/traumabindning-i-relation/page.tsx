@@ -42,11 +42,11 @@ export default function TraumabindningIRelationPage() {
             kan kännas, vilka tecken som är vanliga och varför det ofta är så
             svårt att bryta upp – även när man förstår att något är fel. Om du
             redan anar att det finns{" "}
-            <Link href="/psykisk-misshandel-i-relation" className="text-neutral-900 underline underline-offset-4">
+            <Link href="/psykisk-misshandel-relation" className="text-neutral-900 underline underline-offset-4">
               psykisk misshandel i relationen
             </Link>{" "}
             eller om du upplever tydliga mönster av{" "}
-            <Link href="/gaslighting-i-relationer" className="text-neutral-900 underline underline-offset-4">
+            <Link href="/gaslighting-relation" className="text-neutral-900 underline underline-offset-4">
               gaslighting i relationer
             </Link>
             , kan den här sidan hjälpa dig sätta ord på varför det känns så
@@ -89,7 +89,7 @@ export default function TraumabindningIRelationPage() {
             snarare att relationens mönster har blivit så starka att ditt
             känsloliv, din självbild och din förmåga att fatta fria beslut kan
             ha påverkats. Om du redan funderar på{" "}
-            <Link href="/hur-vet-man-om-nagon-ar-manipulativ" className="text-neutral-900 underline underline-offset-4">
+            <Link href="/manipulativ-partner" className="text-neutral-900 underline underline-offset-4">
               hur man vet om någon är manipulativ
             </Link>
             , kan traumabindning vara den del som förklarar varför insikten inte
@@ -191,7 +191,7 @@ export default function TraumabindningIRelationPage() {
             att du gång på gång undrar om du överdriver, missförstår eller är
             ”för känslig”, kan det vara ett viktigt tecken. Det gäller särskilt
             om det finns inslag av{" "}
-            <Link href="/gaslighting-i-relationer" className="text-neutral-900 underline underline-offset-4">
+            <Link href="/gaslighting-relation" className="text-neutral-900 underline underline-offset-4">
               gaslighting
             </Link>{" "}
             där dina minnen, känslor eller gränser förminskas eller vrids.
@@ -302,6 +302,14 @@ export default function TraumabindningIRelationPage() {
             relationens grundton förändrats utan att det alltid märks tydligt i
             stunden.
           </p>
+
+          <p>
+            Du kan fördjupa dig i{" "}
+            <Link href="/love-bombing-relation" className="underline underline-offset-4">love bombing i relationens början</Link>
+            {" "}och{" "}
+            <Link href="/silent-treatment-relation" className="underline underline-offset-4">silent treatment när närhet ersätts av tystnad</Link>
+            {" "}för att förstå olika delar av en sådan växling.
+          </p>
           <p>
             Många beskriver att de gradvis slutat lita på sina spontana reaktioner.
             De började förklara bort sådant som kändes fel. De tog på sig mer
@@ -318,7 +326,7 @@ export default function TraumabindningIRelationPage() {
               Psykopatiska drag i relation – tidiga signaler
             </Link>{" "}
             eller{" "}
-            <Link href="/varfor-kanner-jag-mig-kontrollerad-i-min-relation" className="text-neutral-900 underline underline-offset-4">
+            <Link href="/kontrollerande-relation" className="text-neutral-900 underline underline-offset-4">
               Varför känner jag mig kontrollerad i min relation?
             </Link>
             .
@@ -496,22 +504,22 @@ export default function TraumabindningIRelationPage() {
             Läs också
           </h2>
           <div className="mt-6 grid gap-3 text-[17px] leading-7">
-            <Link href="/gaslighting-i-relationer" className="underline underline-offset-4">
+            <Link href="/gaslighting-relation" className="underline underline-offset-4">
               Gaslighting i relationer — tecken, exempel och vad du kan göra
             </Link>
-            <Link href="/hur-vet-man-om-nagon-ar-manipulativ" className="underline underline-offset-4">
+            <Link href="/manipulativ-partner" className="underline underline-offset-4">
               Hur vet man om någon är manipulativ?
             </Link>
-            <Link href="/varfor-kanner-jag-mig-kontrollerad-i-min-relation" className="underline underline-offset-4">
+            <Link href="/kontrollerande-relation" className="underline underline-offset-4">
               Varför känner jag mig kontrollerad i min relation?
             </Link>
-            <Link href="/psykisk-misshandel-i-relation" className="underline underline-offset-4">
+            <Link href="/psykisk-misshandel-relation" className="underline underline-offset-4">
               Psykisk misshandel i relation — tecken, mönster och konsekvenser
             </Link>
             <Link href="/vald-i-nara-relation" className="underline underline-offset-4">
               Våld i nära relation — tecken och var du kan få hjälp
             </Link>
-            <Link href="/tecken-pa-att-du-lever-med-en-psykopat" className="underline underline-offset-4">
+            <Link href="/tecken-pa-psykopat" className="underline underline-offset-4">
               Tecken på att du lever med en psykopat
             </Link>
           </div>

@@ -68,6 +68,12 @@ export default function Page() {
         </p>
 
         <p>
+          När begränsningarna blir ett nedbrytande mönster kan du läsa vidare om{" "}
+          <Link href="/psykisk-misshandel-relation" className="underline underline-offset-4">kontroll som del av psykisk misshandel</Link>
+          .
+        </p>
+
+        <p>
           När gränser flyttas lite i taget kan det vara svårt att se förändringen
           förrän du tittar bakåt.
         </p>
@@ -96,6 +102,12 @@ export default function Page() {
           <Link href="/psykopatiska-drag-relation" className="underline">
             psykopatiska drag i relation
           </Link>
+          .
+        </p>
+
+        <p>
+          Om kontrollen också får dig att tvivla på dina egna minnen och upplevelser, läs om{" "}
+          <Link href="/gaslighting-relation" className="underline underline-offset-4">gaslighting i relationer</Link>
           .
         </p>
 

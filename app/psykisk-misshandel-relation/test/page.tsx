@@ -694,6 +694,18 @@ export default function Page() {
         color: "#111",
       }}
     >
+      <nav aria-label="Vidare läsning och stöd" style={{ marginBottom: 20, fontSize: 13, lineHeight: 1.7 }}>
+        <a href="/psykisk-misshandel-relation" style={{ textDecoration: "underline" }}>
+          Till guiden om psykisk misshandel i relation
+        </a>
+        <p style={{ margin: "6px 0 0" }}>
+          Behöver du stöd?{" "}
+          <a href="/psykiskt-vald/hjalp" style={{ textDecoration: "underline" }}>
+            Hjälp vid psykiskt våld
+          </a>
+        </p>
+      </nav>
+
       <header
         style={{
           marginBottom: 20,
@@ -1854,6 +1866,18 @@ export default function Page() {
           </div>
         </section>
       )}
+
+      <nav aria-label="Fördjupning om psykiskt våld" style={{ marginTop: 28, fontSize: 13, lineHeight: 1.7 }}>
+        Läs vidare om{" "}
+        <a href="/psykiskt-vald" style={{ textDecoration: "underline" }}>
+          psykiskt våld
+        </a>{" "}
+        och{" "}
+        <a href="/psykiskt-vald/bevis" style={{ textDecoration: "underline" }}>
+          bevis och dokumentation
+        </a>
+        .
+      </nav>
 
       <footer
         style={{

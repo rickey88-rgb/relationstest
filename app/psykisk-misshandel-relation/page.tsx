@@ -76,6 +76,14 @@ export default function PsykiskMisshandelRelationPage() {
           maktbalansen över tid.
         </p>
 
+        <p className="mb-8 leading-relaxed text-neutral-700">
+          För en övergripande förklaring av begreppet, läs vår{" "}
+          <Link href="/psykisk-misshandel" className="underline">
+            guide om psykisk misshandel
+          </Link>
+          .
+        </p>
+
         {/* Lagsektion */}
         <div className="my-12 rounded-2xl border border-neutral-200 bg-neutral-50 p-6 sm:p-8">
           <p className="mb-2 text-sm font-semibold uppercase tracking-wide text-neutral-500">
@@ -110,6 +118,18 @@ export default function PsykiskMisshandelRelationPage() {
           </p>
         </div>
 
+        <p className="mb-8 leading-relaxed text-neutral-700">
+          Läs mer i vår{" "}
+          <Link href="/psykiskt-vald" className="underline">
+            guide om psykiskt våld
+          </Link>{" "}
+          eller fördjupa dig i{" "}
+          <Link href="/psykiskt-vald/ny-lag-2026" className="underline">
+            vad den nya lagen om psykiskt våld 2026 innebär
+          </Link>
+          .
+        </p>
+
         {/* SEO / konkret laginnehåll */}
         <h2 className="mt-12 mb-4 text-2xl font-semibold">
           Vad räknas som psykiskt våld?
@@ -135,6 +155,14 @@ export default function PsykiskMisshandelRelationPage() {
           Kontroll kan också ske digitalt eller ekonomiskt, exempelvis genom
           att en partner försöker styra tillgången till pengar, telefon,
           konton eller kommunikation.
+        </p>
+
+        <p className="mb-8 leading-relaxed text-neutral-700">
+          För fler förklaringar och gränsdragningar, läs om{" "}
+          <Link href="/psykiskt-vald/vad-raknas-som" className="underline">
+            vad som räknas som psykiskt våld
+          </Link>
+          .
         </p>
 
         {/* Befintliga tecken */}
@@ -219,6 +247,12 @@ export default function PsykiskMisshandelRelationPage() {
         <p className="mb-8 leading-relaxed text-neutral-700">
           Normalisering, hopp om förändring och rädsla för reaktioner gör att
           många stannar längre än de egentligen vill.
+        </p>
+
+        <p className="mb-8 leading-relaxed text-neutral-700">
+          Läs mer om{" "}
+          <Link href="/traumabindning-i-relation" className="underline underline-offset-4">traumabindning och varför det kan vara svårt att lämna en skadlig relation</Link>
+          .
         </p>
 
         {/* FAQ */}

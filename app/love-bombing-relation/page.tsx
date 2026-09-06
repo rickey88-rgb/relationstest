@@ -431,6 +431,12 @@ export default function LoveBombingRelationPage() {
               </p>
 
               <p>
+                Om värmen ersätts av tystnad som används för att styra dig kan du läsa vidare om{" "}
+                <Link href="/silent-treatment-relation" className="underline underline-offset-4">silent treatment i relationer</Link>
+                .
+              </p>
+
+              <p>
                 Personen som nyss ville höra av sig hela tiden kan bli plötsligt svår
                 att nå. Personen som nyss såg dig som exceptionell kan börja kritisera,
                 jämföra, misstolka eller få dig att känna att du inte längre räcker
@@ -498,6 +504,12 @@ export default function LoveBombingRelationPage() {
               </p>
 
               <p>
+                Den här kontrasten är också relevant för att förstå{" "}
+                <Link href="/traumabindning-i-relation" className="underline underline-offset-4">traumabindning och svårigheten att lämna</Link>
+                .
+              </p>
+
+              <p>
                 Det betyder att du lätt börjar arbeta för att få tillbaka början.
                 Du anpassar tonen. Du tänker mer strategiskt. Du hoppas att det bara
                 är stress, missförstånd eller en tillfällig period. I stället för att
@@ -545,6 +557,12 @@ export default function LoveBombingRelationPage() {
                 missnöje, små kommentarer, tystnad, tillbakadragen värme och en
                 känsla av att du hela tiden måste kalibrera dig efter någon annans
                 humör.
+              </p>
+
+              <p>
+                När kontrollen blir ett återkommande nedbrytande mönster finns en bredare förklaring i vår{" "}
+                <Link href="/psykisk-misshandel-relation" className="underline underline-offset-4">guide om psykisk misshandel i relationer</Link>
+                .
               </p>
 
               <p>

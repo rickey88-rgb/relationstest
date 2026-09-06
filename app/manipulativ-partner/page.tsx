@@ -283,6 +283,12 @@ export default function Page() {
         </p>
 
         <p>
+          Läs vidare om{" "}
+          <Link href="/traumabindning-i-relation" className="underline underline-offset-4">hur traumabindning kan göra det svårt att bryta upp</Link>
+          {" "}när närhet och obehag blandas.
+        </p>
+
+        <p>
           Många stannar länge inte för att de inte märker något alls, utan för att det
           som märks är splittrat. Ena dagen känns relationen varm, nästa dag
           nedbrytande. Ena stunden känner du dig förstådd, nästa stund reducerad till
@@ -319,6 +325,12 @@ export default function Page() {
           sällan längre bara om “dålig kommunikation”. Särskilt viktigt är det att ta
           det på allvar om du märker att relationen påverkar din frihet, din kontakt
           med andra eller din känsla av säkerhet.
+        </p>
+
+        <p>
+          För en bredare förståelse av systematisk nedbrytning, läs om{" "}
+          <Link href="/psykisk-misshandel-relation" className="underline underline-offset-4">psykisk misshandel och hur den påverkar relationen</Link>
+          .
         </p>
 
         <p>

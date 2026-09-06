@@ -558,6 +558,12 @@ export default function SilentTreatmentRelationPage() {
                 gör det lätt att förklara för andra. Det finns bara den där tryckande
                 känslan av att du hela tiden behöver återfå tillträde till någon.
               </p>
+
+              <p>
+                För mer om hur hoppet om närhet kan hålla en kvar, läs om{" "}
+                <Link href="/traumabindning-i-relation" className="underline underline-offset-4">traumabindning och starka känsloband</Link>
+                .
+              </p>
               <p>
                 Dessutom kan den som använder tystnad ibland vara varm igen efteråt.
                 Nästan som om ingenting hänt. Det gör att du får två verkligheter att
@@ -589,6 +595,12 @@ export default function SilentTreatmentRelationPage() {
                 ifrån lika tydligt. Du ställer inte samma frågor. Du orkar inte ta upp
                 vissa saker. Du väljer ibland fel mot dig själv för att det känns enklare
                 än att hamna ute i kylan igen.
+              </p>
+
+              <p>
+                Du kan sätta styrningen i ett större sammanhang genom att läsa om{" "}
+                <Link href="/psykisk-misshandel-relation" className="underline underline-offset-4">psykisk misshandel som återkommande relationsmönster</Link>
+                .
               </p>
 
               <p>

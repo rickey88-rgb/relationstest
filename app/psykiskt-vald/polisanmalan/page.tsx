@@ -361,6 +361,12 @@ export default function Page() {
         </p>
 
         <p style={{ fontSize: 17, lineHeight: 1.75 }}>
+          I guiden om{" "}
+          <Link href="/psykiskt-vald/hjalp" className="underline underline-offset-4">hjälp vid psykiskt våld</Link>
+          {" "}hittar du olika vägar till stöd.
+        </p>
+
+        <p style={{ fontSize: 17, lineHeight: 1.75 }}>
           Om du känner dig rädd, kontrollerad eller nedbruten kan du söka stöd
           även om du ännu inte har bestämt dig för om du vill göra en
           polisanmälan.

@@ -374,6 +374,14 @@ export default function Page() {
         </p>
 
         <p style={{ fontSize: 17, lineHeight: 1.75 }}>
+          Om du vill gå vidare kan du läsa om{" "}
+          <Link href="/psykiskt-vald/polisanmalan" className="underline underline-offset-4">hur en polisanmälan om psykiskt våld går till</Link>
+          {" "}eller{" "}
+          <Link href="/psykiskt-vald/hjalp" className="underline underline-offset-4">var du kan få stöd</Link>
+          .
+        </p>
+
+        <p style={{ fontSize: 17, lineHeight: 1.75 }}>
           Om du vill göra en polisanmälan kan du berätta vad som hänt och
           lämna det material du har. Polis och åklagare ansvarar sedan för
           brottsutredningen.

@@ -91,6 +91,12 @@ export default function Page() {
           kontrollerande beteenden som successivt påverkar din självkänsla,
           trygghet och frihet.
         </p>
+
+        <p style={{ fontSize: 17, lineHeight: 1.75 }}>
+          Se även{" "}
+          <Link href="/psykiskt-vald/exempel" className="underline underline-offset-4">konkreta exempel på psykiskt våld i vardagen</Link>
+          {" "}för att förstå hur beteendena kan ta sig uttryck.
+        </p>
       </section>
 
       <section style={{ marginTop: 42 }}>
@@ -169,6 +175,12 @@ export default function Page() {
           Psykiskt våld kan också handla om att din frihet gradvis begränsas.
           Personen kanske försöker styra vilka du träffar, vad du gör, hur du
           klär dig, hur du använder pengar eller vilka beslut du får fatta.
+        </p>
+
+        <p style={{ fontSize: 17, lineHeight: 1.75 }}>
+          Läs mer om hur friheten kan minska stegvis i en{" "}
+          <Link href="/kontrollerande-relation" className="underline underline-offset-4">kontrollerande relation</Link>
+          .
         </p>
 
         <p style={{ fontSize: 17, lineHeight: 1.75 }}>
@@ -387,6 +399,12 @@ export default function Page() {
           Det kan vara svårt att se ett mönster när varje enskild händelse
           känns liten. Ett sätt att få bättre överblick är att skriva ner
           konkreta situationer med datum, vad som hände och hur du reagerade.
+        </p>
+
+        <p style={{ fontSize: 17, lineHeight: 1.75 }}>
+          Om du behöver prata med någon finns flera vägar till{" "}
+          <Link href="/psykiskt-vald/hjalp" className="underline underline-offset-4">hjälp vid psykiskt våld</Link>
+          .
         </p>
 
         <p style={{ fontSize: 17, lineHeight: 1.75 }}>
