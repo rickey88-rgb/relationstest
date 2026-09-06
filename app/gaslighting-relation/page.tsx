@@ -385,9 +385,7 @@ export default function GaslightingRelationPage() {
           </div>
         </section>
 
-        <footer className="pt-2">
-          <p className="text-sm leading-6 text-neutral-500">Senast uppdaterad: 2026-03-13</p>
-        </footer>
+        <p className="pt-2 text-sm leading-6 text-neutral-500">Senast uppdaterad: 2026-03-13</p>
       </article>
     </main>
   );

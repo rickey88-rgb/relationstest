@@ -1043,31 +1043,10 @@ style={{
           </div>
         </section>
       )}
-      <footer
-  style={{
-    marginTop: 40,
-    paddingTop: 16,
-    borderTop: "1px solid #eee",
-    fontSize: 13,
-    opacity: 0.8,
-    textAlign: "center",
-    lineHeight: 1.6,
-  }}
->
-  <div>
-    Kontakt:{" "}
-    <a href="mailto:support@relationsvarning.se">support@relationsvarning.se</a>
-  </div>
-
-  <div style={{ marginTop: 6 }}>
-    <a href="/villkor">Villkor</a> · <a href="/integritet">Integritet</a>
-  </div>
-
-  <div style={{ marginTop: 10, fontSize: 12, opacity: 0.75 }}>
-    Testet ställer ingen diagnos. Resultatet är en informationsbaserad riskprofil
-    baserad på dina svar.
-  </div>
-</footer>
+      <p style={{ marginTop: 40, fontSize: 12, color: "#666", textAlign: "center", lineHeight: 1.6 }}>
+        Testet ställer ingen diagnos. Resultatet är en informationsbaserad riskprofil
+        baserad på dina svar.
+      </p>
 
     </main>
   );

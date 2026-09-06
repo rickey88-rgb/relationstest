@@ -1337,39 +1337,11 @@ export default function Page() {
         </section>
       )}
 
-      <footer
-        style={{
-          marginTop: 26,
-          paddingTop: 18,
-          borderTop: "1px solid #eee",
-          fontSize: 12,
-          lineHeight: 1.6,
-          color: "#777",
-        }}
-      >
-        <p style={{ margin: 0 }}>
-          Testet är ett orienteringsverktyg och kan inte avgöra om en person
-          har narcissistiskt personlighetssyndrom eller annan psykiatrisk
-          diagnos.
-        </p>
-
-        <div
-          style={{
-            display: "flex",
-            gap: 14,
-            flexWrap: "wrap",
-            marginTop: 10,
-          }}
-        >
-          <Link href="/integritet" style={{ color: "#666" }}>
-            Integritet
-          </Link>
-
-          <Link href="/villkor" style={{ color: "#666" }}>
-            Villkor
-          </Link>
-        </div>
-      </footer>
+      <p style={{ marginTop: 26, fontSize: 12, lineHeight: 1.6, color: "#777" }}>
+        Testet är ett orienteringsverktyg och kan inte avgöra om en person
+        har narcissistiskt personlighetssyndrom eller annan psykiatrisk
+        diagnos.
+      </p>
     </main>
   );
 }

@@ -531,29 +531,6 @@ export default function Page() {
         </div>
       </section>
 
-      <footer
-        style={{
-          marginTop: 54,
-          paddingTop: 18,
-          borderTop: "1px solid #e5e5e5",
-          fontSize: 13,
-          opacity: 0.72,
-          lineHeight: 1.7,
-          textAlign: "center",
-        }}
-      >
-        <div>
-          Kontakt:{" "}
-          <a href="mailto:support@relationsvarning.se">
-            support@relationsvarning.se
-          </a>
-        </div>
-
-        <div style={{ marginTop: 6 }}>
-          <Link href="/villkor">Villkor</Link> ·{" "}
-          <Link href="/integritet">Integritet</Link>
-        </div>
-      </footer>
     </main>
   );
 }
