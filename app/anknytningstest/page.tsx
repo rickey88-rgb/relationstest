@@ -27,6 +27,9 @@ export default function AnknytningPage() {
             i nära relationer. Begreppen kan hjälpa dig att sätta ord på dina
             reaktioner, utan att låsa fast dig i en viss typ.
           </p>
+          <p className="mt-4 leading-7 text-neutral-700">
+            Vill du först fördjupa dig i begreppen? I vår <Link href="/anknytning" className="underline underline-offset-4">huvudguide om anknytning i relationer</Link> finns utförligare förklaringar och separata guider till de olika mönstren.
+          </p>
           <div className="mt-6 rounded-2xl border border-neutral-200 bg-neutral-50 p-5 sm:p-6">
             <h2 className="text-xl font-semibold">Utforska din anknytningsprofil</h2>
             <p className="mt-3 leading-7 text-neutral-700">

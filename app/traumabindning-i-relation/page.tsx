@@ -364,7 +364,7 @@ export default function TraumabindningIRelationPage() {
           </p>
 
           <p>
-            Anknytning och traumabindning beskriver olika saker. I vår <Link href="/anknytningstest" className="underline underline-offset-4">guide om anknytning i romantiska relationer</Link> kan du läsa om närhet, oro och avstånd utan att förväxla dessa mönster med hur någon behandlar dig.
+            Anknytning och traumabindning beskriver olika saker. I vår <Link href="/anknytning" className="underline underline-offset-4">guide om anknytning i romantiska relationer</Link> kan du läsa om närhet, oro och avstånd utan att förväxla dessa mönster med hur någon behandlar dig.
           </p>
           <p>
             Kärlek i en trygg relation brukar över tid ge mer klarhet, mer

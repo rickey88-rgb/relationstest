@@ -170,6 +170,9 @@ export default function Page() {
           någon gradvis börjar anpassa allt mer av sitt beteende efter
           partnern.
         </p>
+        <p style={paragraphStyle}>
+          Om du också vill förstå hur du reagerar på närhet och osäkerhet kan du läsa vår <Link href="/anknytning" className="underline underline-offset-4">guide om anknytning i vuxna relationer</Link>. Anknytningsmönster och medberoende beskriver olika frågor; oro för kontakten är inte samma sak som att ta över partnerns ansvar.
+        </p>
 
         <p style={paragraphStyle}>
           Om du känner igen sådana mönster kan det därför vara relevant att
