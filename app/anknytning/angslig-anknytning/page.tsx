@@ -58,7 +58,7 @@ export default function Page() {
         <section className="mt-10 space-y-4 leading-7 text-neutral-700">
           <h2 className="text-2xl font-semibold tracking-tight text-neutral-900">När oron handlar om hur du faktiskt blir behandlad</h2>
           <p>En partner som är varm ena dagen, försvinner nästa och sedan hånar dina frågor skapar något annat än vanlig väntan. Frågan är då inte bara hur du kan lugna dig, utan om relationen erbjuder rimlig pålitlighet. Att kalla dig ängslig får inte bli ett sätt att slippa ansvar för återkommande svek eller kränkningar.</p>
-          <p>Om den andra systematiskt förnekar händelser och får dig att tvivla på minnet kan du läsa om <Link href="/gaslighting-relation" className="underline underline-offset-4">gaslighting i relationer</Link>. Om du märker att du överger egna behov för att hålla kontakten kan också <Link href="/medberoendetest" className="underline underline-offset-4">medberoende och överansvar</Link> vara relevant. Det är olika frågor som kan behöva undersökas var för sig.</p>
+          <p>Om den andra systematiskt förnekar händelser och får dig att tvivla på minnet kan du läsa om <Link href="/gaslighting-relation" className="underline underline-offset-4">gaslighting i relationer</Link>. Om du märker att du överger egna behov för att hålla kontakten kan också <Link href="/medberoende" className="underline underline-offset-4">medberoende och överansvar</Link> vara relevant. Det är olika frågor som kan behöva undersökas var för sig.</p>
         </section>
         <section className="mt-10 space-y-4 leading-7 text-neutral-700">
           <h2 className="text-2xl font-semibold tracking-tight text-neutral-900">Att arbeta mot större trygghet</h2>

@@ -56,6 +56,9 @@ export default function Page() {
         personen kan bli så starkt att det egna välbefinnandet och den egna
         självständigheten får mindre utrymme.
       </p>
+      <p style={paragraphStyle}>
+        Vill du läsa mer innan du gör testet? Vår <Link href="/medberoende" className="underline underline-offset-4">huvudguide om medberoende</Link> förklarar skillnaden mellan omtanke och överansvar och leder vidare till tecken, vardagsexempel och gränssättning.
+      </p>
 
       <Link
         href="/medberoendetest/test"

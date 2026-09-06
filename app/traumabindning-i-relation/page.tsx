@@ -234,7 +234,7 @@ export default function TraumabindningIRelationPage() {
             hårdhet.
           </p>
           <p>
-            Om du ofta försöker rädda partnern medan dina egna behov får stå tillbaka kan du också läsa om <Link href="/medberoendetest" className="underline underline-offset-4">medberoende och överansvar i relationer</Link>. Det är ett annat perspektiv än traumabindning och innebär inte att du bär ansvar för hur partnern behandlar dig.
+            Om du ofta försöker rädda partnern medan dina egna behov får stå tillbaka kan du också läsa om <Link href="/medberoende-i-relation" className="underline underline-offset-4">medberoende och överansvar i relationer</Link>. Det är ett annat perspektiv än traumabindning och innebär inte att du bär ansvar för hur partnern behandlar dig.
           </p>
 
           <h3 className="pt-3 text-xl font-semibold text-neutral-900">
