@@ -474,6 +474,7 @@ export default function Page() {
             gaslighting i relation
           </Link>
           .
+          Om du känner igen just sådana mönster kan du också <Link href="/gaslightingtest/test" className="underline">göra gaslightingtestet</Link> för att reflektera över dina erfarenheter.
         </p>
         <section className="rounded-3xl border border-neutral-200 bg-white p-7 shadow-sm md:p-8">
   <h2 className="text-2xl font-semibold tracking-tight text-neutral-950">

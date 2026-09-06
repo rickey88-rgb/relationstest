@@ -53,6 +53,53 @@ export default function GaslightingRelationPage() {
           </p>
         </section>
 
+        <div
+  style={{
+    margin: "24px 0",
+    padding: 18,
+    borderRadius: 16,
+    background: "#f7f7f7",
+    border: "1px solid #e5e5e5",
+  }}
+>
+  <h2
+    style={{
+      margin: "0 0 8px",
+      fontSize: 22,
+      lineHeight: 1.3,
+    }}
+  >
+    Känner du igen gaslighting i din relation?
+  </h2>
+
+  <p
+    style={{
+      margin: 0,
+      lineHeight: 1.7,
+      color: "#444",
+    }}
+  >
+    Gör vårt gaslightingtest med 30 frågor om förnekande, skuldvändning,
+    minne, känslor och tillit till det egna omdömet.
+  </p>
+
+  <Link
+    href="/gaslightingtest/test"
+    style={{
+      display: "inline-block",
+      marginTop: 14,
+      padding: "12px 16px",
+      borderRadius: 12,
+      background: "#111",
+      color: "#fff",
+      textDecoration: "none",
+      fontWeight: 700,
+    }}
+  >
+    Gör gaslightingtestet →
+  </Link>
+</div>
+
         <section className="space-y-4">
           <h2 className="text-2xl font-semibold tracking-tight">Hur gaslighting brukar kännas</h2>
           <p className="leading-7">

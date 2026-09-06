@@ -195,6 +195,7 @@ export default function PsykiskMisshandelRelationPage() {
             gaslighting i en relation
           </Link>
           .
+          Vill du undersöka hur ofta du upplever dessa mönster kan du <Link href="/gaslightingtest/test" className="underline">utforska dem i vårt gaslightingtest</Link>.
         </p>
 
         <h3 className="mt-8 mb-3 text-xl font-semibold">

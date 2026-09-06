@@ -36,6 +36,13 @@ const tests = [
     description:
       "Undersök mönster av självuppoffring, överansvar, svårigheter med gränser och starkt fokus på partnerns behov.",
   },
+  {
+  href: "/gaslightingtest/test",
+  title: "Gaslightingtest",
+  category: "Fördjupningstest",
+  description:
+    "Undersök återkommande mönster av förnekande, skuldvändning och ifrågasättande som kan få dig att tvivla på din egen upplevelse.",
+},
 ];
 
 export default function Landing() {
