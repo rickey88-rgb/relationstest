@@ -15,6 +15,13 @@ const tests = [
     description:
       "Undersök återkommande mönster av kontroll, hot, förnedring och psykisk nedbrytning.",
   },
+  {
+    href: "/narcissist-i-en-relation/test",
+    title: "Lever du med en narcissist?",
+    category: "Fördjupningstest",
+    description:
+      "Undersök narcissistiska relationsmönster som manipulation, empatibrist, nedvärdering och starka reaktioner på kritik.",
+  },
 ];
 
 export default function Landing() {

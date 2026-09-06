@@ -46,6 +46,14 @@ export default function NarcissistRelationPage() {
           <h1 className="mt-4 text-4xl font-semibold tracking-tight text-neutral-950 md:text-5xl">
             Narcissist i en relation – tecken, beteenden och varningssignaler
           </h1>
+          <div className="mt-6">
+            <Link
+              href="/narcissist-i-en-relation/test"
+              className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-neutral-900 px-5 py-3 text-center text-sm font-medium text-white transition hover:bg-neutral-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 sm:w-auto"
+            >
+              Gör narcissisttestet
+            </Link>
+          </div>
           <p className="mt-6 text-lg leading-8 text-neutral-700">
             Vissa relationer gör inte bara ont när ni bråkar. De börjar långsamt
             förändra hur du tänker, hur du tolkar dig själv och vad du tror att
@@ -572,6 +580,18 @@ export default function NarcissistRelationPage() {
             ignorera den inre signal som redan försökt fånga din uppmärksamhet länge.
             Ibland är obehaget inte överdrivet. Ibland är det information.
           </p>
+          <div className="rounded-2xl border border-neutral-200 bg-neutral-50 p-6">
+            <p className="mb-4 leading-7 text-neutral-700">
+              Vill du undersöka mönstren mer strukturerat? Narcissisttestet hjälper
+              dig att reflektera över beteenden i relationen utan att ställa en diagnos.
+            </p>
+            <Link
+              href="/narcissist-i-en-relation/test"
+              className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-neutral-900 px-5 py-3 text-center text-sm font-medium text-white transition hover:bg-neutral-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 sm:w-auto"
+            >
+              Gör narcissisttestet
+            </Link>
+          </div>
         </section>
 
         <section className="mt-12 space-y-5">
