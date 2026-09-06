@@ -54,6 +54,21 @@ export default function TraumabindningIRelationPage() {
           </p>
         </header>
 
+        <section className="mb-10 rounded-2xl border border-neutral-200 bg-neutral-50 p-6">
+          <h2 className="text-xl font-semibold tracking-tight">Känner du igen mönstren?</h2>
+          <p className="mt-3 leading-7 text-neutral-700">
+            Traumabindningstestet innehåller 30 frågor om starka känsloband trots
+            smärta, hopp om förändring och egna gränser. Använd det för att
+            reflektera över din situation; resultatet är inte en diagnos.
+          </p>
+          <Link
+            href="/traumabindningtest/test"
+            className="mt-4 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-neutral-900 px-5 py-3 text-center text-sm font-semibold text-white hover:bg-neutral-800 sm:w-auto"
+          >
+            Gör traumabindningstestet
+          </Link>
+        </section>
+
         <section className="space-y-5 text-[17px] leading-8 text-neutral-800">
           <h2 className="text-2xl font-bold text-neutral-900">
             Vad betyder traumabindning?

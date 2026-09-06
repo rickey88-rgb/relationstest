@@ -567,6 +567,7 @@ export default function SilentTreatmentRelationPage() {
                 För mer om hur hoppet om närhet kan hålla en kvar, läs om{" "}
                 <Link href="/traumabindning-i-relation" className="underline underline-offset-4">traumabindning och starka känsloband</Link>
                 .
+                Du kan också <Link href="/traumabindningtest/test" className="underline underline-offset-4">utforska dessa känsloband i traumabindningstestet</Link> om du känner igen att hoppet om närhet gör det svårt att skapa avstånd.
               </p>
               <p>
                 Dessutom kan den som använder tystnad ibland vara varm igen efteråt.

@@ -43,6 +43,13 @@ const tests = [
   description:
     "Undersök återkommande mönster av förnekande, skuldvändning och ifrågasättande som kan få dig att tvivla på din egen upplevelse.",
 },
+  {
+    href: "/traumabindningtest/test",
+    title: "Traumabindningstest",
+    category: "Fördjupningstest",
+    description:
+      "Utforska starka känsloband trots smärta, hopp om förändring och svårigheter att skapa avstånd i en relation.",
+  },
 ];
 
 export default function Landing() {

@@ -511,6 +511,7 @@ export default function LoveBombingRelationPage() {
                 Den här kontrasten är också relevant för att förstå{" "}
                 <Link href="/traumabindning-i-relation" className="underline underline-offset-4">traumabindning och svårigheten att lämna</Link>
                 .
+                Om du känner igen växlingen mellan närhet och smärta kan du också <Link href="/traumabindningtest/test" className="underline underline-offset-4">göra traumabindningstestet</Link> för att reflektera över mönstret i din relation.
               </p>
 
               <p>
