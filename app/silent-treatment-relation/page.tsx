@@ -361,6 +361,10 @@ export default function SilentTreatmentRelationPage() {
               på <em>reglering</em> och <em>bestraffning</em>.
             </p>
 
+            <p className="text-[1.05rem] leading-8 text-neutral-700">
+              Behov av avstånd kan också förstås i relation till <Link href="/anknytningstest" className="underline underline-offset-4">anknytning och känslomässig närhet</Link>. Det gör inte avståndstagande och bestraffande tystnad till samma sak.
+            </p>
+
             <div className="grid gap-4 md:grid-cols-2">
               {healthyVsUnhealthy.map((item, index) => (
                 <div

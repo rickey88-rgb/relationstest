@@ -22,6 +22,13 @@ const tests = [
     description:
       "Undersök narcissistiska relationsmönster som manipulation, empatibrist, nedvärdering och starka reaktioner på kritik.",
   },
+  {
+    href: "/anknytningstest/test",
+    title: "Anknytningstest",
+    category: "Fördjupningstest",
+    description:
+      "Utforska hur du reagerar på närhet, osäkerhet och känslomässigt avstånd i romantiska relationer.",
+  },
 ];
 
 export default function Landing() {
