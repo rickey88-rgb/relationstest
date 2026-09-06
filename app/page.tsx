@@ -1,5 +1,22 @@
 import Link from "next/link";
 
+const tests = [
+  {
+    href: "/test",
+    title: "Generellt relationstest",
+    category: "Bred överblick",
+    description:
+      "Få en första överblick över varningssignaler och destruktiva mönster i din relation.",
+  },
+  {
+    href: "/psykisk-misshandel-relation/test",
+    title: "Psykisk misshandel / psykiskt våld",
+    category: "Fördjupningstest",
+    description:
+      "Undersök återkommande mönster av kontroll, hot, förnedring och psykisk nedbrytning.",
+  },
+];
+
 export default function Landing() {
   return (
     <main className="min-h-screen bg-white text-neutral-900">
@@ -23,10 +40,10 @@ export default function Landing() {
       </header>
 
       {/* Content */}
-      <section className="mx-auto max-w-5xl px-6 py-10 sm:py-14">
+      <section className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-14">
         <div className="grid gap-10 lg:grid-cols-12 lg:gap-12">
           {/* Left: Editorial copy */}
-          <div className="lg:col-span-7">
+          <div className="min-w-0 max-w-3xl lg:col-span-12">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-neutral-500">
               Självreflektion • beteenden • mönster
             </p>
@@ -36,74 +53,50 @@ export default function Landing() {
             </h1>
 
             <p className="mt-5 text-base leading-relaxed text-neutral-700">
-  Det svåraste är ofta inte att något känns fel – utan att det är svårt att
-  förklara varför. När skuld, förvirring och återkommande obehag blir vardag
-  kan det vara hjälpsamt att se mönstret tydligare. Det här testet är framtaget
-  av experter för att fånga upp återkommande beteenden och signaler som ofta
-  förekommer i manipulativa, kontrollerande och toxiska relationer. Syftet är
-  att ge dig en tydligare och mer strukturerad bild av det du kanske redan anat
-  – men ännu inte kunnat sätta ord på.
-</p>
+              När skuld, förvirring och återkommande obehag blir vardag kan det
+              vara svårt att se helheten. Våra anonyma tester hjälper dig att
+              reflektera över beteenden och mönster i din relation.
+            </p>
 
-            <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
-              <Link
-                href="/test"
-                className="inline-flex w-full items-center justify-center rounded-xl bg-neutral-900 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-2 sm:w-auto"
-              >
-                Påbörja det generella relationstestet
-              </Link>
 
-              <div className="text-xs text-neutral-600">
-                Efter testet får du en indikation. Och kanske svar du länge sökt.
-              </div>
-            </div>
-
-            <div className="mt-6 rounded-xl bg-neutral-50 p-4">
-              <h2 className="text-sm font-semibold text-neutral-900">
-                Söker du ett test om psykisk misshandel eller psykiskt våld?
-              </h2>
-              <p className="mt-2 text-sm leading-relaxed text-neutral-700">
-                Utöver vårt breda relationstest finns ett separat specialtest
-                med fokus på psykisk misshandel och psykiskt våld.
-              </p>
-              <Link
-                href="/psykisk-misshandel-relation/test"
-                className="mt-3 inline-block text-sm font-semibold underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
-              >
-                Gör testet om psykisk misshandel och psykiskt våld
-              </Link>
-            </div>
-
-            <div className="mt-8 border-t border-neutral-200/70 pt-6">
-              <dl className="grid gap-4 sm:grid-cols-3">
-                <div>
-                  <dt className="text-xs font-semibold text-neutral-900">Ton</dt>
-                  <dd className="mt-1 text-sm text-neutral-700">
-                    Saklig, trygg, vuxen
-                  </dd>
-                </div>
-                <div>
-                  <dt className="text-xs font-semibold text-neutral-900">
-                    Fokus
-                  </dt>
-                  <dd className="mt-1 text-sm text-neutral-700">
-                    Beteenden & mönster
-                  </dd>
-                </div>
-                <div>
-                  <dt className="text-xs font-semibold text-neutral-900">
-                    Integritet
-                  </dt>
-                  <dd className="mt-1 text-sm text-neutral-700">
-                    Ingen registrering krävs
-                  </dd>
-                </div>
-              </dl>
-            </div>
           </div>
 
+          <section aria-labelledby="tests-heading" className="order-2 min-w-0 lg:col-span-12">
+            <h2 id="tests-heading" className="text-2xl font-semibold tracking-tight">
+              Våra relationstester
+            </h2>
+            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-neutral-700 sm:text-base">
+              Börja med det generella testet för en bred överblick, eller välj
+              ett fördjupningstest som passar det du vill förstå bättre.
+            </p>
+            <ul className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5">
+              {tests.map((test) => (
+                <li key={test.href} className="flex min-w-0 flex-col rounded-2xl border border-neutral-200/70 bg-neutral-50 p-4 sm:p-5">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
+                    {test.category}
+                  </p>
+                  <h3 className="mt-2 text-lg font-semibold leading-snug tracking-tight text-neutral-900">
+                    {test.title}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-neutral-700">
+                    {test.description}
+                  </p>
+                  <div className="mt-auto pt-4">
+                    <Link
+                      href={test.href}
+                      aria-label={`Starta testet: ${test.title}`}
+                      className="inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-neutral-900 px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-neutral-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
+                    >
+                      Starta testet
+                    </Link>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </section>
+
           {/* Right: Minimal, serious “frame” */}
-          <aside className="lg:col-span-5">
+          <aside className="order-3 min-w-0 max-w-3xl lg:col-span-12">
             <div className="rounded-2xl border border-neutral-200/70 p-6 shadow-[0_1px_0_rgba(0,0,0,0.02)]">
               <h2 className="text-sm font-semibold tracking-tight">
                 Vad testet är — och inte är
@@ -172,6 +165,32 @@ export default function Landing() {
               Om du känner dig akut hotad eller i fara: ring 112 eller kontakta
               någon du litar på. Det här testet är ett reflektionsstöd.
             </p>
+            <div className="mt-8 border-t border-neutral-200/70 pt-6">
+              <dl className="grid gap-4 sm:grid-cols-3">
+                <div>
+                  <dt className="text-xs font-semibold text-neutral-900">Ton</dt>
+                  <dd className="mt-1 text-sm text-neutral-700">
+                    Saklig, trygg, vuxen
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-xs font-semibold text-neutral-900">
+                    Fokus
+                  </dt>
+                  <dd className="mt-1 text-sm text-neutral-700">
+                    Beteenden & mönster
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-xs font-semibold text-neutral-900">
+                    Integritet
+                  </dt>
+                  <dd className="mt-1 text-sm text-neutral-700">
+                    Ingen registrering krävs
+                  </dd>
+                </div>
+              </dl>
+            </div>
           </aside>
         </div>
       </section>
