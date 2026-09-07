@@ -1,0 +1,642 @@
+[
+  {
+    "slug": "partner-kontrollerar-min-mobil",
+    "group": "digital",
+    "seoTitle": "Min partner kontrollerar min mobil – gränser och stöd",
+    "metaDescription": "Kontrollerar din partner din mobil? Läs om skillnaden mellan frivillig öppenhet och kontroll, konkreta varningssignaler och trygga nästa steg.",
+    "h1": "Min partner kontrollerar min mobil",
+    "intro": "Telefonen kan rymma både privata samtal och din kontakt med andra. När partnern vill granska allt kan det bli svårt att känna att något utrymme är ditt.",
+    "directAnswer": "Att vara tillsammans innebär inte att partnern behöver fri tillgång till din mobil. Lägg märke till om du kan tacka nej till granskning utan anklagelser, press eller rädsla.",
+    "sections": [
+      {
+        "heading": "När mobilen blir ett sätt att styra vardagen",
+        "paragraphs": [
+          "Kontrollen kan gälla mer än meddelanden: vilka appar du använder, vilka bilder du sparar och när du senast var aktiv. Du kanske börjar radera ofarliga saker för att slippa ett förhör, eller undviker att ringa en vän.",
+          "Ett enstaka missförstånd behöver inte beskriva hela relationen. Återkommande inspektioner och konsekvenser när du vill ha privatliv är däremot ett mönster att ta på allvar."
+        ]
+      }
+    ],
+    "examples": [
+      "Partnern tar telefonen ur din hand och går igenom appar utan att fråga.",
+      "Du förväntas lämna ifrån dig mobilen varje kväll som bevis på att du inte döljer något."
+    ],
+    "normalVsProblematic": {
+      "normal": "Du lånar frivilligt ut mobilen för ett ärende och bestämmer själv när du vill ha tillbaka den.",
+      "problematic": "Ett nej tolkas som skuld och leder till krav, ilska eller nya kontroller."
+    },
+    "whyItMatters": "När telefonen inte längre känns privat kan det också bli svårare att söka stöd eller hålla kontakt med andra.",
+    "whatYouCanDo": [
+      "Fundera på vilka funktioner och konton partnern faktiskt har tillgång till.",
+      "Om du misstänker övervakning, sök stöd från en enhet partnern inte har tillgång till. Planera förändringar med hänsyn till din säkerhet.",
+      "Prata med någon du litar på om vad som händer när du vill behålla mobilen för dig själv."
+    ],
+    "relatedBehaviors": [
+      "partner-kraver-mitt-losenord",
+      "partner-laser-mina-meddelanden"
+    ],
+    "relatedGuides": [
+      "/digitalt-vald",
+      "/kontrollerande-relation",
+      "/psykiskt-vald"
+    ],
+    "sources": [
+      "digital",
+      "violence"
+    ]
+  },
+  {
+    "slug": "partner-vill-veta-var-jag-ar",
+    "group": "control",
+    "seoTitle": "Min partner vill alltid veta var jag är – omtanke eller kontroll?",
+    "metaDescription": "Måste du redovisa var du är och med vem? Läs om platsdelning, ständiga avstämningar och när frågor om din vardag blir kontroll.",
+    "h1": "Min partner vill alltid veta var jag är",
+    "intro": "En fråga om när du kommer hem kan vara praktisk. Det blir något annat när varje förflyttning måste förklaras och du är rädd för att svara för sent.",
+    "directAnswer": "Skillnaden ligger i frivillighet och utrymme. Kan du ändra planer utan att behöva bevisa var du varit, eller kräver partnern ständig rapportering?",
+    "sections": [
+      {
+        "heading": "Att redovisa dagen i stället för att berätta om den",
+        "paragraphs": [
+          "Du kanske måste skicka en bild från jobbet, förklara ett stopp på vägen eller hålla platsdelning påslagen. Även utan en spårningsapp kan täta samtal göra att du känner dig övervakad.",
+          "Fråga dig vad som händer när en uppgift saknas. Ett bekymrat samtal efter en försening skiljer sig från återkommande anklagelser och krav på detaljer."
+        ]
+      }
+    ],
+    "examples": [
+      "Partnern jämför din plats med vad du sagt och kräver förklaring till varje avvikelse.",
+      "En urladdad mobil leder till flera timmars utfrågning."
+    ],
+    "normalVsProblematic": {
+      "normal": "Ni kommer överens om att höra av er vid ändrade planer, och överenskommelsen går att ompröva.",
+      "problematic": "Du måste vara spårbar hela tiden och får inte stänga av delningen utan konsekvenser."
+    },
+    "whatYouCanDo": [
+      "Beskriv för dig själv vad du behöver rapportera under en vanlig dag.",
+      "Om det känns tryggt, prata om en begränsad överenskommelse som båda kan säga nej till.",
+      "Om ändrad platsdelning kan utlösa hot, planera nästa steg med en stödverksamhet innan du ändrar inställningar."
+    ],
+    "relatedBehaviors": [
+      "partner-kontrollerar-min-mobil",
+      "svartsjuk-kontrollerande-partner"
+    ],
+    "relatedGuides": [
+      "/digitalt-vald",
+      "/kontrollerande-relation",
+      "/psykiskt-vald"
+    ],
+    "sources": [
+      "digital"
+    ]
+  },
+  {
+    "slug": "partner-kontrollerar-min-ekonomi",
+    "group": "money",
+    "seoTitle": "Min partner kontrollerar min ekonomi – tecken och hjälp",
+    "metaDescription": "Måste du be om pengar eller redovisa varje inköp? Läs om ekonomisk kontroll, skillnaden mot gemensam budget och vägar till stöd.",
+    "h1": "Min partner kontrollerar min ekonomi",
+    "intro": "Du kan ha en inkomst men ändå sakna tillgång till pengar. Ekonomisk kontroll handlar också om vem som får insyn och vem som bestämmer.",
+    "directAnswer": "Gemensam ekonomi ska inte betyda att en person ensam kan begränsa den andras vardag. Krav på tillstånd för nödvändiga inköp eller press att lämna över inkomsten kan vara tecken på ekonomiskt våld.",
+    "sections": [
+      {
+        "heading": "Vem har faktiskt möjlighet att välja?",
+        "paragraphs": [
+          "Kontrollen kan märkas när du inte kan köpa medicin, resa till en vän eller se vad som händer på ett konto. Det är skillnad på att ni har ont om pengar och att bara du måste försvara varje utgift.",
+          "Ibland sköter en person ekonomin av praktiska skäl. Frågan är om du kan få information, vara delaktig och ändra upplägget utan att bli hotad eller skuldbelagd."
+        ]
+      }
+    ],
+    "examples": [
+      "Lönen ska föras över till partnern och du får en summa som partnern kan dra in.",
+      "Du pressas att godkänna ett lån utan att få läsa vad det gäller."
+    ],
+    "normalVsProblematic": {
+      "normal": "Ni prioriterar utgifter tillsammans och båda har begriplig insyn.",
+      "problematic": "Partnern styr tillgången till pengar och använder den för att få dig att rätta dig efter krav."
+    },
+    "whatYouCanDo": [
+      "Om det är säkert, skaffa en egen överblick över inkomster, konton och skulder.",
+      "Kontakta banken via en officiell kontaktväg om du misstänker att någon använder ditt konto eller BankID.",
+      "Kommunens budget- och skuldrådgivning kan hjälpa dig att sortera ekonomin; socialtjänsten kan ge information om stöd vid våld."
+    ],
+    "relatedBehaviors": [
+      "partner-kraver-mitt-losenord",
+      "partner-isolerar-mig"
+    ],
+    "relatedGuides": [
+      "/ekonomiskt-vald",
+      "/psykiskt-vald"
+    ],
+    "sources": [
+      "economic",
+      "bankid",
+      "budget"
+    ]
+  },
+  {
+    "slug": "partner-isolerar-mig",
+    "group": "limits",
+    "seoTitle": "Min partner isolerar mig från vänner och familj – vad kan jag göra?",
+    "metaDescription": "Har kontakten med vänner och familj minskat på grund av partnerns krav? Läs om gradvis isolering, varningssignaler och sätt att söka stöd.",
+    "h1": "Min partner isolerar mig från vänner och familj",
+    "intro": "Isolering behöver inte börja med ett förbud. Det kan vara återkommande kritik, konflikter inför varje träff eller en känsla av att du måste välja sida.",
+    "directAnswer": "Om du avstår från människor du vill träffa för att undvika partnerns reaktion kan ditt sociala utrymme ha blivit begränsat. Du ska kunna ha relationer utanför parrelationen.",
+    "sections": [
+      {
+        "heading": "När det blir enklare att tacka nej",
+        "paragraphs": [
+          "Partnern kanske kallar dina vänner dåliga för dig, skapar bråk när du ska gå eller kräver att följa med överallt. Till slut kan det kännas mindre ansträngande att stanna hemma.",
+          "Att någon inte trivs med en viss vän är inte samma sak som isolering. Se om du fortfarande kan göra egna val och om kritiken successivt omfattar fler personer."
+        ]
+      }
+    ],
+    "examples": [
+      "Inför varje familjebesök kommer anklagelser om att du prioriterar bort relationen.",
+      "Partnern lägger beslag på tiden när du planerat att träffa någon ensam."
+    ],
+    "whyItMatters": "När färre personer får höra hur du har det kan det bli svårare att få perspektiv och praktisk hjälp.",
+    "whatYouCanDo": [
+      "Tänk på en person du tidigare kände dig trygg med och om det finns ett säkert sätt att återta kontakt.",
+      "Berätta konkret vad som gör det svårt att ses, utan att behöva försvara hela relationen.",
+      "Sök stöd på ett sätt som inte utsätter dig för ytterligare kontroll om partnern övervakar kontakterna."
+    ],
+    "normalVsProblematic": {
+      "normal": "Ni kan sakna varandra och ändå respektera egna vänner och familjeband.",
+      "problematic": "Kontakt med andra leder återkommande till skuld, kontroll eller hot."
+    },
+    "relatedBehaviors": [
+      "partner-bestammer-vad-jag-far-ha-pa-mig",
+      "partner-vill-veta-var-jag-ar"
+    ],
+    "relatedGuides": [
+      "/kontrollerande-relation",
+      "/psykiskt-vald"
+    ],
+    "sources": [
+      "violence"
+    ]
+  },
+  {
+    "slug": "svartsjuk-kontrollerande-partner",
+    "group": "control",
+    "seoTitle": "Svartsjuk och kontrollerande partner – känsla eller begränsning?",
+    "metaDescription": "När blir svartsjuka kontroll? Läs om krav, begränsningar och skillnaden mellan att prata om oro och att styra sin partner.",
+    "h1": "När en svartsjuk partner blir kontrollerande",
+    "intro": "Svartsjuka kan kännas starkt. Men en känsla och vad personen gör med den är två olika saker.",
+    "directAnswer": "Oro för att förlora dig ger inte partnern rätt att styra ditt umgänge, dina kläder eller dina konton. Bedöm beteendet utifrån hur mycket frihet du får behålla.",
+    "sections": [
+      {
+        "heading": "Från oro till regler för dig",
+        "paragraphs": [
+          "Ett samtal kan handla om osäkerhet och behov av bekräftelse. Kontroll märks när lösningen alltid blir att du ska avstå: sluta träffa någon, byta kläder eller lämna ifrån dig mobilen.",
+          "Försäkringar kan ge kortvarigt lugn utan att kraven upphör. Du behöver inte kunna bevisa att misstankarna är orimliga för att få sätta ord på hur begränsad du känner dig."
+        ]
+      }
+    ],
+    "examples": [
+      "Du förväntas sluta prata med kollegor som partnern uppfattar som ett hot.",
+      "Ett vanligt socialt möte följs av krav på att få se hela din chatthistorik."
+    ],
+    "normalVsProblematic": {
+      "normal": "Partnern tar ansvar för sin oro och lyssnar på dina gränser.",
+      "problematic": "Svartsjukan används som skäl för regler som du inte får avböja."
+    },
+    "whatYouCanDo": [
+      "Skilj på vilken känsla partnern uttrycker och vilket krav som riktas mot dig.",
+      "Om samtal är trygga, var konkret med vilka begränsningar du inte vill leva med.",
+      "Ta stöd utifrån om reglerna växer eller du blir rädd när partnern är svartsjuk."
+    ],
+    "relatedBehaviors": [
+      "partner-anklagar-mig-for-otrohet",
+      "partner-vill-veta-var-jag-ar"
+    ],
+    "relatedGuides": [
+      "/kontrollerande-relation",
+      "/psykiskt-vald"
+    ],
+    "sources": [
+      "violence"
+    ]
+  },
+  {
+    "slug": "partner-anklagar-mig-for-otrohet",
+    "group": "control",
+    "seoTitle": "Min partner anklagar mig för otrohet hela tiden – råd och gränser",
+    "metaDescription": "Återkommer anklagelser om otrohet trots dina svar? Läs om förhör, beviskrav och när misstankar börjar begränsa vardagen.",
+    "h1": "Min partner anklagar mig för otrohet hela tiden",
+    "intro": "Att gång på gång behöva försvara en vanlig arbetsdag eller ett meddelande kan göra relationen till ett ständigt förhör.",
+    "directAnswer": "Frågor om tillit kan behöva diskuteras, men upprepade anklagelser rättfärdigar inte övervakning eller förnedring. Lägg märke till om dina svar får avsluta samtalet eller bara leder till nya krav.",
+    "sections": [
+      {
+        "heading": "När inget svar räcker",
+        "paragraphs": [
+          "En sen buss kan tolkas som en lögn och ett meddelande från en kollega som ett bevis. Du kanske börjar begränsa helt vardagliga kontakter för att förebygga misstankar.",
+          "Även om tilliten tidigare har skadats behöver eventuella överenskommelser vara frivilliga och gå att diskutera. Tidigare otrohet gör inte obegränsad kontroll eller hot acceptabla."
+        ]
+      }
+    ],
+    "examples": [
+      "Partnern kräver bilder på vilka du är med för att tro på dig.",
+      "Du får höra att ett nej till telefonkontroll bevisar otrohet."
+    ],
+    "warningSigns": [
+      "Anklagelserna återkommer oavsett vad du visar eller förklarar.",
+      "Du undviker arbete, vänner eller aktiviteter för att slippa nya misstankar."
+    ],
+    "whatYouCanDo": [
+      "Se om samtalen leder till en gemensam lösning eller om beviskraven hela tiden flyttas.",
+      "Om du känner dig trygg, föreslå att prata om tillit utan att lämna över privat information som villkor.",
+      "Vid hot eller rädsla: sök individuellt stöd innan du försöker lösa frågan tillsammans."
+    ],
+    "relatedBehaviors": [
+      "svartsjuk-kontrollerande-partner",
+      "partner-laser-mina-meddelanden"
+    ],
+    "relatedGuides": [
+      "/kontrollerande-relation",
+      "/psykiskt-vald"
+    ],
+    "sources": [
+      "violence"
+    ]
+  },
+  {
+    "slug": "partner-ignorerar-mig-som-straff",
+    "group": "pressure",
+    "seoTitle": "Min partner ignorerar mig som straff – paus eller silent treatment?",
+    "metaDescription": "Blir din partner tyst tills du ger efter? Läs om skillnaden mellan en paus och bestraffande tystnad och vad du kan göra.",
+    "h1": "Min partner ignorerar mig som straff",
+    "intro": "Tystnad kan ge utrymme att lugna sig. Den kan också lämna dig i ovisshet om när du får kontakt igen och vad du måste göra för att få den.",
+    "directAnswer": "En paus i ett svårt samtal är inte automatiskt bestraffning. Ett återkommande mönster där kontakt bara återkommer när du ber om ursäkt eller ger efter kan däremot bli ett sätt att pressa dig.",
+    "sections": [
+      {
+        "heading": "Finns det en väg tillbaka till samtalet?",
+        "paragraphs": [
+          "Efter en konflikt kan människor behöva olika lång tid. Det går ändå att säga att man behöver en paus och försöka komma överens om när frågan tas upp igen.",
+          "Vid bestraffande tystnad kan vanliga frågor lämnas obesvarade medan du förväntas lista ut vad du gjort fel. Du behöver inte veta om det är planerat för att beskriva effekten på dig."
+        ]
+      }
+    ],
+    "examples": [
+      "Partnern svarar andra men vägrar bemöta dig i flera dagar efter att du sagt nej.",
+      "Kontakten återkommer först när du går med på ett krav ni varit oense om."
+    ],
+    "normalVsProblematic": {
+      "normal": "Ni tar en uttalad paus och återkommer till frågan utan att någon behöver ge upp sin ståndpunkt.",
+      "problematic": "Ovissheten upprepas och gör att du slutar ta upp sådant som är viktigt för dig."
+    },
+    "whatYouCanDo": [
+      "Om det känns tryggt, be om en konkret tid för att fortsätta samtalet.",
+      "Notera om tystnaden löser konflikter eller bara gör att du ger efter.",
+      "Prata med någon utanför relationen om du börjar gå på tå för att undvika nästa period."
+    ],
+    "relatedBehaviors": [
+      "partner-hotar-att-gora-slut",
+      "partner-skyller-allt-pa-mig"
+    ],
+    "relatedGuides": [
+      "/silent-treatment-relation",
+      "/psykiskt-vald"
+    ],
+    "sources": [
+      "violence"
+    ]
+  },
+  {
+    "slug": "partner-skyller-allt-pa-mig",
+    "group": "gaslighting",
+    "seoTitle": "Min partner skyller allt på mig – ansvar eller skuldbeläggning?",
+    "metaDescription": "Får du skulden även för partnerns handlingar? Läs om ansvarsförskjutning, konkreta exempel och hur du kan sortera vad som är ditt ansvar.",
+    "h1": "Min partner skyller allt på mig",
+    "intro": "Ett samtal som började med något som sårat dig kan sluta med att du försvarar hela din person och ber om ursäkt.",
+    "directAnswer": "Du kan ta ansvar för dina egna handlingar utan att ta ansvar för allt partnern gör. Att skylla hot, förolämpningar eller kontroll på att du provocerade flyttar bort ansvaret från den som handlade.",
+    "sections": [
+      {
+        "heading": "När sakfrågan försvinner",
+        "paragraphs": [
+          "Ni kan båda ha bidragit till en konflikt. Men att diskutera det är något annat än att aldrig få prata om partnerns beteende. Lägg märke till om ett konkret exempel bemöts eller om samtalet alltid byter fokus till dina brister.",
+          "Skuldbeläggning kan förekomma tillsammans med gaslighting, men är inte samma sak. Gaslighting handlar om återkommande mönster som underminerar tilliten till den egna upplevelsen."
+        ]
+      }
+    ],
+    "examples": [
+      "När du tar upp en förolämpning får du svaret att partnern inte skulle behöva säga så om du skötte dig.",
+      "Partnern säger att du förstörde hela veckan genom att uttrycka ett behov."
+    ],
+    "whyItMatters": "Om ansvaret alltid hamnar på dig kan du börja lägga all kraft på att undvika reaktioner i stället för att se vad som behöver förändras.",
+    "whatYouCanDo": [
+      "Skilj mellan vad du gjorde, vad partnern gjorde och vad ni kan påverka tillsammans.",
+      "Om samtalet är tryggt, försök hålla kvar en konkret fråga i taget.",
+      "Sök stöd om varje försök att prata slutar i hot, förnedring eller att du tar tillbaka din upplevelse."
+    ],
+    "relatedBehaviors": [
+      "partner-sager-att-jag-ar-for-kanslig",
+      "partner-fornekar-saker-som-hant"
+    ],
+    "relatedGuides": [
+      "/gaslighting-relation",
+      "/psykiskt-vald"
+    ],
+    "sources": [
+      "violence"
+    ]
+  },
+  {
+    "slug": "partner-sager-att-jag-ar-for-kanslig",
+    "group": "gaslighting",
+    "seoTitle": "Min partner säger att jag är för känslig – när känslor avfärdas",
+    "metaDescription": "Blir du kallad för känslig när du berättar att något gör ont? Läs om återkommande avfärdanden, skillnader i reaktioner och nästa steg.",
+    "h1": "Min partner säger att jag är för känslig",
+    "intro": "Orden kan låta som en förklaring, men lämna dig utan svar på det du försökte berätta: att något gjorde ont.",
+    "directAnswer": "Människor reagerar olika starkt. Det gör inte din upplevelse oviktig. Om känslighet ständigt används för att slippa prata om sårande beteenden är det själva bemötandet som behöver uppmärksammas.",
+    "sections": [
+      {
+        "heading": "Olika reaktioner eller ett sätt att tysta samtalet?",
+        "paragraphs": [
+          "En partner behöver inte hålla med om varje tolkning för att lyssna på hur du påverkades. Ett respektfullt samtal kan rymma både avsikten och effekten.",
+          "När varje reaktion avfärdas som överdriven kan du börja tveka inför att säga ifrån. Ett enstaka klumpigt svar bevisar inte gaslighting; se om mönstret upprepas och om det finns utrymme för ditt perspektiv."
+        ]
+      }
+    ],
+    "examples": [
+      "Ett sårande skämt försvaras varje gång med att du inte tål någonting.",
+      "Du börjar ett samtal om en gräns men får bara höra att du måste bli mindre känslig."
+    ],
+    "normalVsProblematic": {
+      "normal": "Ni kan uppfatta en situation olika och ändå prata om vad som skulle kännas mer respektfullt.",
+      "problematic": "Din reaktion används som skäl för att fortsätta med samma beteende."
+    },
+    "whatYouCanDo": [
+      "Försök formulera det konkreta beteendet och vad du skulle vilja ändra, om det känns tryggt.",
+      "Lägg märke till om personen försöker förstå eller återigen bedömer din personlighet.",
+      "Prata med någon du litar på om du inte längre vågar uttrycka obehag."
+    ],
+    "relatedBehaviors": [
+      "partner-skyller-allt-pa-mig",
+      "partner-fornekar-saker-som-hant"
+    ],
+    "relatedGuides": [
+      "/gaslighting-relation"
+    ],
+    "primaryTest": {
+      "href": "/gaslightingtest/test",
+      "label": "Reflektera över mönstret i gaslightingtestet"
+    },
+    "sources": [
+      "violence"
+    ]
+  },
+  {
+    "slug": "partner-fornekar-saker-som-hant",
+    "group": "gaslighting",
+    "seoTitle": "Min partner förnekar saker som hänt – minnesskillnad eller mönster?",
+    "metaDescription": "Förnekar din partner återkommande det som sagts eller hänt? Läs om minnesskillnader, gaslightingmönster och stöd för din egen orientering.",
+    "h1": "Min partner förnekar saker som hänt",
+    "intro": "Det kan vara förvirrande att vara säker på vad du hört och sedan få veta att samtalet aldrig ägt rum.",
+    "directAnswer": "Olika minnen är vanliga och bevisar inte manipulation. Det blir mer oroande när förnekanden återkommer tillsammans med nedvärdering och du aldrig får utrymme att undersöka vad som hände.",
+    "sections": [
+      {
+        "heading": "Vad händer när ni minns olika?",
+        "paragraphs": [
+          "Ett öppet samtal kan innehålla osäkerhet: någon kan ha glömt, missförstått eller uttryckt sig otydligt. Ingen behöver alltid minnas rätt.",
+          "Ett problematiskt mönster kan vara att partnerns version alltid gäller, att din trovärdighet angrips och att även konkreta överenskommelser avfärdas. Det viktiga är inte att vinna varje ordväxling, utan om ni kan reda ut saker med respekt."
+        ]
+      }
+    ],
+    "examples": [
+      "En överenskommelse om pengar förnekas, och du kallas påhittig när du frågar igen.",
+      "Partnern säger först att inget hänt och sedan att du borde tåla det som hände."
+    ],
+    "whyItMatters": "Återkommande tvivel kan göra det svårt att fatta vardagliga beslut och berätta för andra hur du har det.",
+    "whatYouCanDo": [
+      "Om det är säkert, notera konkreta överenskommelser för din egen orientering. Du behöver inte samla bevis för att få söka stöd.",
+      "Undvik att göra varje samtal till en upprepning av samma argument om det bara ökar pressen.",
+      "Ta stöd av någon utanför relationen när du behöver sortera upplevelserna."
+    ],
+    "relatedBehaviors": [
+      "partner-sager-att-jag-ar-for-kanslig",
+      "partner-skyller-allt-pa-mig"
+    ],
+    "relatedGuides": [
+      "/gaslighting-relation"
+    ],
+    "primaryTest": {
+      "href": "/gaslightingtest/test",
+      "label": "Utforska återkommande mönster i gaslightingtestet"
+    },
+    "sources": [
+      "violence"
+    ]
+  },
+  {
+    "slug": "partner-hotar-att-gora-slut",
+    "group": "pressure",
+    "seoTitle": "Min partner hotar att göra slut för att få sin vilja igenom",
+    "metaDescription": "Återkommer hot om separation när du säger nej? Läs om skillnaden mellan ett ärligt relationssamtal och press att ge efter.",
+    "h1": "Min partner hotar att göra slut för att få sin vilja igenom",
+    "intro": "Du kan börja säga ja av rädsla för att relationen annars försvinner, även när frågan egentligen gäller ett litet vardagsval.",
+    "directAnswer": "Alla får avsluta en relation eller uttrycka verklig tvekan. Ett återkommande ultimatum som försvinner när du ger efter kan däremot skapa press och göra det svårt att välja fritt.",
+    "sections": [
+      {
+        "heading": "Ett svårt besked eller ett återkommande villkor?",
+        "paragraphs": [
+          "Ett ärligt samtal om oförenliga behov kan vara smärtsamt utan att vara ett kontrollmönster. Då finns utrymme att förstå att ni kanske vill olika saker.",
+          "Lägg märke till om separation tas upp vid varje oenighet, men aldrig diskuteras lugnt. Du kanske avbokar vänner, lämnar ut lösenord eller tar tillbaka gränser för att få hotet att upphöra."
+        ]
+      }
+    ],
+    "examples": [
+      "Partnern säger att det är slut om du går på en planerad träff och tar tillbaka det när du stannar hemma.",
+      "En diskussion om hushållet blir genast ett ultimatum om hela relationen."
+    ],
+    "normalVsProblematic": {
+      "normal": "Partnern berättar vad hen behöver och accepterar att ditt svar kan bli ett annat.",
+      "problematic": "Hotet återkommer som ett påtryckningsmedel tills du anpassar dig."
+    },
+    "whatYouCanDo": [
+      "Fundera på om du säger ja för att du vill eller för att få slut på hotet.",
+      "Om det är tryggt, be att få diskutera relationens framtid separat från det aktuella kravet.",
+      "Sök eget stöd om du känner dig ofri eller hoten blir alltmer skrämmande."
+    ],
+    "relatedBehaviors": [
+      "partner-ignorerar-mig-som-straff",
+      "partner-hotar-att-skada-sig-sjalv"
+    ],
+    "relatedGuides": [
+      "/psykiskt-vald",
+      "/psykiskt-vald/vad-raknas-som"
+    ],
+    "sources": [
+      "violence"
+    ]
+  },
+  {
+    "slug": "partner-hotar-att-skada-sig-sjalv",
+    "group": "pressure",
+    "seoTitle": "Min partner hotar att skada sig själv om jag lämnar – hjälp och stöd",
+    "metaDescription": "Hotar din partner att skada sig själv vid separation? Ta risken på allvar, få hjälp vid akut fara och läs om stöd för dig som närstående.",
+    "h1": "Min partner hotar att skada sig själv om jag lämnar",
+    "intro": "Det är en skrämmande situation att vilja lämna eller sätta en gräns och samtidigt vara rädd för partnerns liv. Du behöver inte hantera den ensam.",
+    "directAnswer": "Ta uttalanden om självmord och självskada på allvar. De kan uttrycka verkligt lidande. Att de upprepas i samband med krav gör inte risken mindre verklig och säger inte säkert vad personen avser.",
+    "urgent": {
+      "heading": "Om det kan vara akut",
+      "text": "Vid pågående skada, omedelbar fara eller konkreta självmordsplaner: ring 112 eller hjälp personen till psykiatrisk akutmottagning. Om det är säkert för dig, stanna hos personen tills hjälp finns. Om du själv är hotad, sätt dig i säkerhet och ring 112. Ring 1177 för råd om vård när läget inte är akut."
+    },
+    "sections": [
+      {
+        "heading": "Lidande och press kan finnas samtidigt",
+        "paragraphs": [
+          "Självmordstankar ska inte avfärdas som manipulation. Samtidigt kan återkommande uttalanden som kopplar personens säkerhet till att du stannar eller lyder skapa stark press på dig. Båda delarna behöver stöd.",
+          "Det är inte ditt uppdrag att ensam bedöma risken eller lova att fortsätta relationen för att hålla någon vid liv. Att kontakta vården är ett sätt att ta situationen på allvar, även om partnern motsätter sig det."
+        ]
+      }
+    ],
+    "examples": [
+      "När du försöker prata om separation säger partnern att du måste stanna för att inget ska hända.",
+      "Du avstår från att lämna hemmet eftersom du känner dig ensam ansvarig för att förhindra skada."
+    ],
+    "whatYouCanDo": [
+      "Berätta för vården vad personen sagt och vad du vet om situationen. Lova inte att hålla självmordsplaner hemliga.",
+      "Be en betrodd person eller professionell stödverksamhet om hjälp även för din egen del.",
+      "Planera en eventuell separation med stöd om du känner rädsla eller utsätts för kontroll."
+    ],
+    "importantContext": "Du kan visa omsorg och söka hjälp för partnern utan att ge upp dina egna gränser. Ett relationstest kan inte bedöma självmordsrisk och ska inte användas för att avgöra om du behöver ringa efter hjälp.",
+    "relatedBehaviors": [
+      "partner-hotar-att-gora-slut"
+    ],
+    "relatedGuides": [
+      "/psykiskt-vald",
+      "/psykiskt-vald/hjalp"
+    ],
+    "sources": [
+      "suicide",
+      "violence"
+    ]
+  },
+  {
+    "slug": "partner-bestammer-vad-jag-far-ha-pa-mig",
+    "group": "limits",
+    "seoTitle": "Min partner bestämmer vad jag får ha på mig – råd och gränser",
+    "metaDescription": "Styr din partner dina kläder eller ditt utseende? Läs om skillnaden mellan en åsikt och regler som begränsar dina egna val.",
+    "h1": "Min partner bestämmer vad jag får ha på mig",
+    "intro": "En kommentar om en tröja kan verka liten. Om den följs av krav på att byta om kan det bli en regel för hur du får synas och röra dig bland andra.",
+    "directAnswer": "Din partner kan ha smak och åsikter, men det är skillnad på att uttrycka en preferens och att bestämma över dina kläder. Frågan är om du får välja annorlunda utan press eller rädsla.",
+    "sections": [
+      {
+        "heading": "När utseendet blir något att få godkänt",
+        "paragraphs": [
+          "Reglerna kan gälla smink, frisyr, träningskläder eller bilder på sociala medier. De kan motiveras med svartsjuka, oro för andras blickar eller vad en bra partner borde göra.",
+          "Att ibland be om en åsikt är inte samma sak. Kontroll märks när godkännandet blir ett villkor för att få gå ut, slippa konflikt eller bli respektfullt bemött."
+        ]
+      }
+    ],
+    "examples": [
+      "Du blir anklagad för att söka uppmärksamhet om du inte byter kläder.",
+      "Partnern kräver en bild på din outfit innan du lämnar hemmet."
+    ],
+    "normalVsProblematic": {
+      "normal": "Du frågar vad partnern tycker men kan välja något annat.",
+      "problematic": "Partnerns preferens blir ett förbud och du får skulden för andras möjliga reaktioner."
+    },
+    "whatYouCanDo": [
+      "Lägg märke till vilka val du börjat undvika och varför.",
+      "Om det känns tryggt, skilj tydligt mellan att lyssna på en åsikt och att behöva tillstånd.",
+      "Prata med någon utanför relationen om klädreglerna ingår i fler begränsningar."
+    ],
+    "relatedBehaviors": [
+      "partner-isolerar-mig",
+      "svartsjuk-kontrollerande-partner"
+    ],
+    "relatedGuides": [
+      "/kontrollerande-relation",
+      "/psykiskt-vald"
+    ],
+    "sources": [
+      "violence"
+    ]
+  },
+  {
+    "slug": "partner-kraver-mitt-losenord",
+    "group": "digital",
+    "seoTitle": "Min partner kräver mitt lösenord – privatliv, tillit och säkerhet",
+    "metaDescription": "Måste du lämna ut lösenord som bevis på tillit? Läs om digitala gränser, kontotillgång och säkra vägar till stöd.",
+    "h1": "Min partner kräver mitt lösenord",
+    "intro": "Kravet kan beskrivas som ett enkelt test på tillit. Men ett lösenord kan ge tillgång långt utanför den tjänst ni pratar om.",
+    "directAnswer": "Du behöver inte lämna ut dina privata lösenord för att visa kärlek eller trohet. Ett krav där ett nej leder till anklagelser är något annat än frivilligt delad tillgång till en gemensam tjänst.",
+    "sections": [
+      {
+        "heading": "Ett lösenord kan öppna fler dörrar",
+        "paragraphs": [
+          "Tillgång till e-post kan också användas för återställning av andra konton. Därför handlar frågan inte bara om att partnern läser något, utan om vem som kan påverka din tillgång till tjänster.",
+          "BankID och säkerhetskoder ska inte behandlas som gemensamma hushållsuppgifter. Om du misstänker att ditt BankID används av någon annan, kontakta banken via en officiell kanal för hjälp att spärra det."
+        ]
+      }
+    ],
+    "examples": [
+      "Partnern säger att du bara får ha ett konto om hen också kan logga in.",
+      "Du pressas att dela kod när du försöker återställa åtkomsten till din egen e-post."
+    ],
+    "normalVsProblematic": {
+      "normal": "Ni delar frivilligt en avgränsad tjänst och har egna privata konton.",
+      "problematic": "Partnern kräver tillgång till allt och hindrar dig från att behålla kontrollen över dina inloggningar."
+    },
+    "whatYouCanDo": [
+      "Skilj mellan ett gemensamt abonnemang och dina personliga konton.",
+      "Vid misstänkt övervakning, sök råd från en enhet partnern inte kontrollerar.",
+      "Planera lösenordsbyten och återställning med hänsyn till säkerheten; ändringar kan märkas av den som har tillgång."
+    ],
+    "relatedBehaviors": [
+      "partner-kontrollerar-min-mobil",
+      "partner-laser-mina-meddelanden"
+    ],
+    "relatedGuides": [
+      "/digitalt-vald",
+      "/kontrollerande-relation"
+    ],
+    "sources": [
+      "digital",
+      "bankid"
+    ]
+  },
+  {
+    "slug": "partner-laser-mina-meddelanden",
+    "group": "digital",
+    "seoTitle": "Min partner läser mina meddelanden – gränser och digital kontroll",
+    "metaDescription": "Läser din partner SMS och chattar utan att du vill? Läs om privat kommunikation, samtycke och vad du kan göra om insynen blir kontroll.",
+    "h1": "Min partner läser mina meddelanden",
+    "intro": "Ett privat samtal tillhör inte bara dig. Vänner, kollegor och anhöriga kan också ha berättat saker de inte vill dela med din partner.",
+    "directAnswer": "Att visa ett meddelande frivilligt ger inte ett generellt tillstånd att läsa alla samtal. Upprepad läsning utan ditt medgivande, eller press att visa allt, är ett intrång i ditt privata utrymme.",
+    "sections": [
+      {
+        "heading": "Från nyfikenhet till granskning",
+        "paragraphs": [
+          "Partnern kan börja kommentera en chatt du inte visat eller fråga om sådant som bara står i dina meddelanden. Det går inte att veta tekniken bakom enbart av det; tillgång kan finnas via en olåst telefon eller en inloggad enhet.",
+          "Det som behöver bedömas i relationen är om du kan ha privata samtal. Om varje formulering granskas kanske du slutar skriva till personer som annars hade kunnat ge stöd."
+        ]
+      }
+    ],
+    "examples": [
+      "Partnern kräver att läsa hela samtalet när en avisering syns.",
+      "En gammal konversation tas upp i nya konflikter som bevis mot dig."
+    ],
+    "normalVsProblematic": {
+      "normal": "Du väljer att visa en viss konversation och ett nej till mer läsning respekteras.",
+      "problematic": "Din privata kommunikation granskas återkommande och används för att styra vem du får prata med."
+    },
+    "whatYouCanDo": [
+      "Undvik att skicka känsliga stödmeddelanden från ett konto du tror att partnern kan läsa.",
+      "Ta hjälp att gå igenom åtkomst och inloggade enheter när det kan göras säkert.",
+      "Berätta för en betrodd person om du behöver ett annat sätt att hålla kontakt."
+    ],
+    "relatedBehaviors": [
+      "partner-kontrollerar-min-mobil",
+      "partner-kraver-mitt-losenord",
+      "partner-anklagar-mig-for-otrohet"
+    ],
+    "relatedGuides": [
+      "/digitalt-vald",
+      "/kontrollerande-relation"
+    ],
+    "sources": [
+      "digital"
+    ]
+  }
+]
