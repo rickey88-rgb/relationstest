@@ -4,6 +4,9 @@ export const metadata = {
   title: "Manipulativ partner – tecken, mönster och varningssignaler",
   description:
     "Tecken på en manipulativ partner. Saklig genomgång av beteendemönster, varningssignaler och hur du kan orientera dig tryggt utan att fastna i diagnoser.",
+  alternates: {
+    canonical: "https://www.relationsvarning.se/manipulativ-partner",
+  },
 };
 
 export default function Page() {

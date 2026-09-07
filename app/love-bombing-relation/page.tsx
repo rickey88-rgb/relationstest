@@ -359,7 +359,7 @@ export default function LoveBombingRelationPage() {
             </p>
 
             <p className="text-[1.05rem] leading-8 text-neutral-700">
-              Om du vill förstå dina egna reaktioner på närhet och osäkerhet kan du läsa om <Link href="/anknytningstest" className="underline underline-offset-4">anknytningsångest och anknytningsundvikande</Link>. En anknytningsprofil avgör däremot inte om partnerns beteende är manipulativt.
+              Om du vill förstå dina egna reaktioner på närhet och osäkerhet kan du läsa om <Link href="/anknytning" className="underline underline-offset-4">anknytningsångest och anknytningsundvikande</Link>. En anknytningsprofil avgör däremot inte om partnerns beteende är manipulativt.
             </p>
 
             <div className="grid gap-4 md:grid-cols-2">

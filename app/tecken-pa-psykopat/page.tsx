@@ -5,6 +5,9 @@ export const metadata: Metadata = {
   title: "Tecken på att du lever med en psykopat | Relationsvarning",
   description:
     "Vanliga varningssignaler på manipulativa och kontrollerande mönster i en nära relation. Sakligt, tryggt och utan diagnoser. Gör testet anonymt.",
+  alternates: {
+    canonical: "https://www.relationsvarning.se/tecken-pa-psykopat",
+  },
 };
 
 export default function Page() {

@@ -28,7 +28,7 @@ function TestCta({
           href="/test"
           className="inline-flex rounded-full bg-neutral-900 px-5 py-3 text-sm font-medium text-white transition hover:bg-neutral-800"
         >
-          Gör vårt test här
+          Gör det generella relationstestet
         </Link>
       </div>
     </div>
@@ -78,10 +78,7 @@ export default function NarcissistRelationPage() {
           </p>
         </header>
 
-        <TestCta
-          title="Känner du igen delar av det här?"
-          text="Om du redan tidigt i texten får en obehaglig känsla av att mycket träffar rätt kan du göra vårt test. Det är ett diskret sätt att få en första struktur på sådant som annars lätt blir suddigt i huvudet."
-        />
+
 
         <section className="space-y-5">
           <h2 className="text-2xl font-semibold tracking-tight text-neutral-950">
@@ -300,10 +297,7 @@ export default function NarcissistRelationPage() {
           </p>
         </section>
 
-        <TestCta
-          title="Behöver du få mönstret i ord?"
-          text="När man levt länge i förvirring kan det vara svårt att avgöra vad som är enstaka konflikter och vad som blivit ett återkommande system. Testet är gjort för att hjälpa dig sortera signalerna utan att du behöver pressa fram ett perfekt svar direkt."
-        />
+
 
         <section className="space-y-5">
           <h2 className="text-2xl font-semibold tracking-tight text-neutral-950">
@@ -391,7 +385,7 @@ export default function NarcissistRelationPage() {
             upptagen av att minimera reaktioner.
           </p>
           <p className="leading-8 text-neutral-700">
-            Om mycket av din energi går åt till att anpassa dig efter partnern kan vår sida om <Link href="/medberoendetest" className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700">medberoende och utrymmet för egna behov</Link> hjälpa dig att reflektera över din situation. Partnerns beteende är fortfarande partnerns ansvar.
+            Om mycket av din energi går åt till att anpassa dig efter partnern kan vår sida om <Link href="/medberoende-i-relation" className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700">medberoende och utrymmet för egna behov</Link> hjälpa dig att reflektera över din situation. Partnerns beteende är fortfarande partnerns ansvar.
           </p>
           <p className="leading-8 text-neutral-700">
             Det är också därför gränsen mellan narcissistiska drag, manipulation och
@@ -431,6 +425,9 @@ export default function NarcissistRelationPage() {
             En fördjupning om{" "}
             <Link href="/traumabindning-i-relation" className="underline underline-offset-4">traumabindning i relationer</Link>
             {" "}kan hjälpa dig förstå varför starka band kan finnas kvar trots att du mår dåligt.
+          </p>
+          <p className="leading-8 text-neutral-700">
+            Om du känner igen starka band trots att relationen gör ont kan du också <Link href="/traumabindningtest/test" className="underline underline-offset-4">utforska dina erfarenheter i traumabindningstestet</Link>.
           </p>
           <p className="leading-8 text-neutral-700">
             En annan stark faktor är den intermittenta värmen. Små stunder av närhet
@@ -518,10 +515,7 @@ export default function NarcissistRelationPage() {
           </p>
         </section>
 
-        <TestCta
-          title="Behöver du en första verklighetskontroll?"
-          text="När man länge har fått sina känslor nedvärderade är det vanligt att man inte längre litar fullt på sin egen bedömning. Vårt test kan hjälpa dig att få en första överblick över signalerna, utan att du måste lösa allt i huvudet på en gång."
-        />
+
 
         <section className="space-y-5">
           <h2 className="text-2xl font-semibold tracking-tight text-neutral-950">
@@ -741,7 +735,7 @@ export default function NarcissistRelationPage() {
         </section>
 
         <TestCta
-          title="Gör vårt test här"
+          title="Generellt relationstest"
           text="Om du vill få en första bild av om det du lever i liknar ett destruktivt relationsmönster kan du göra vårt test här. Det är ett enkelt nästa steg när man behöver få tankarna ur dimman och ner i något mer konkret."
         />
 

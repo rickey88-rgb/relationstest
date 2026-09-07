@@ -4,6 +4,9 @@ export const metadata = {
   title: "Psykopatiska drag i relation – beteenden, mönster och varningssignaler",
   description:
     "Saklig genomgång av psykopatiska drag i relationer: vanliga beteendemönster, riskindikatorer och hur du kan orientera dig tryggt utan diagnoser.",
+  alternates: {
+    canonical: "https://www.relationsvarning.se/psykopatiska-drag-relation",
+  },
 };
 
 export default function Page() {

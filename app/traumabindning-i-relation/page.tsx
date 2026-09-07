@@ -5,6 +5,9 @@ export const metadata: Metadata = {
   title: "Traumabindning i en relation – tecken, varför det händer och varför det är så svårt att lämna",
   description:
     "Vad är traumabindning i en relation? Läs om vanliga tecken, varför starka band kan uppstå i destruktiva relationer och varför det kan kännas så svårt att lämna.",
+  alternates: {
+    canonical: "https://www.relationsvarning.se/traumabindning-i-relation",
+  },
 };
 
 export default function TraumabindningIRelationPage() {

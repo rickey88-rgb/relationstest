@@ -4,6 +4,9 @@ export const metadata = {
   title: "Skillnad mellan psykopat och narcissist – begrepp, överlapp och missförstånd",
   description:
     "Vad är skillnaden mellan psykopat och narcissist? Saklig genomgång av begreppen, överlapp, beteendemönster och hur de kan visa sig i relationer.",
+  alternates: {
+    canonical: "https://www.relationsvarning.se/skillnad-psykopat-narcissist",
+  },
 };
 
 export default function Page() {

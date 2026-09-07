@@ -67,7 +67,7 @@ export default function AnknytningPage() {
             beskriver en dimension av anknytning, inte i sig en ångestdiagnos.
           </p>
           <p>
-            Om oron också gör att du återkommande sätter egna behov åt sidan kan du läsa om <Link href="/medberoendetest" className="underline underline-offset-4">medberoende, självuppoffring och gränser</Link>. Det beskriver andra relationsmönster än anknytningsångest och är inte samma sak.
+            Om oron också gör att du återkommande sätter egna behov åt sidan kan du läsa om <Link href="/medberoende" className="underline underline-offset-4">medberoende, självuppoffring och gränser</Link>. Det beskriver andra relationsmönster än anknytningsångest och är inte samma sak.
           </p>
           <h3 className="text-xl font-semibold text-neutral-900">Anknytningsundvikande</h3>
           <p>

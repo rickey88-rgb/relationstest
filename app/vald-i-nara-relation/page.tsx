@@ -5,6 +5,9 @@ export const metadata = {
     "Våld i nära relation – tecken, mönster, kontroll och vad du kan göra | Relationsvarning",
   description:
     "En saklig, trygg och ingående guide om våld i nära relation: psykiskt, fysiskt, sexuellt, ekonomiskt och digitalt våld. Tecken, mönster, eftervåld, varför det är svårt att lämna – och stödresurser längst ner.",
+  alternates: {
+    canonical: "https://www.relationsvarning.se/vald-i-nara-relation",
+  },
 };
 
 function TocLink({
@@ -992,6 +995,9 @@ export default function Page() {
               <h2 className="text-xl font-semibold tracking-tight">
                 Stöd och viktiga nummer (längst ner)
               </h2>
+              <p className="mt-4 leading-7 text-neutral-700">
+                Läs också vår guide till <Link href="/psykiskt-vald/hjalp" className="underline underline-offset-4">stöd och hjälp vid psykiskt våld</Link> för information om säkerhet och möjliga nästa steg.
+              </p>
 
               <div className="mt-5 rounded-2xl border border-neutral-200/70 p-6">
                 <p className="text-sm font-semibold tracking-tight text-neutral-900">

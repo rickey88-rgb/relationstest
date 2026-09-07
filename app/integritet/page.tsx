@@ -1,3 +1,12 @@
+import type { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Integritetspolicy | Relationsvarning",
+  description: "Läs hur Relationsvarning hanterar uppgifter, testsvar och lokal lagring samt hur du kontaktar oss i integritetsfrågor.",
+  alternates: {
+    canonical: "https://www.relationsvarning.se/integritet",
+  },
+};
+
 export default function IntegritetPage() {
   return (
     <main

@@ -250,7 +250,7 @@ export default function GaslightingRelationPage() {
             medan den andra tar mindre och mindre ansvar.
           </p>
           <p className="leading-7">
-            Om du känner igen att du kompenserar och tar ett allt större ansvar kan du också utforska <Link href="/medberoendetest" className="underline underline-offset-4">mönster av medberoende</Link>. Att reflektera över dina egna mönster innebär inte att du orsakar eller ansvarar för någon annans manipulation.
+            Om du känner igen att du kompenserar och tar ett allt större ansvar kan du också utforska <Link href="/medberoende" className="underline underline-offset-4">mönster av medberoende</Link>. Att reflektera över dina egna mönster innebär inte att du orsakar eller ansvarar för någon annans manipulation.
           </p>
         </section>
 

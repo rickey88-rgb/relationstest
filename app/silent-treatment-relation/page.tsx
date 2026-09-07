@@ -362,7 +362,7 @@ export default function SilentTreatmentRelationPage() {
             </p>
 
             <p className="text-[1.05rem] leading-8 text-neutral-700">
-              Behov av avstånd kan också förstås i relation till <Link href="/anknytningstest" className="underline underline-offset-4">anknytning och känslomässig närhet</Link>. Det gör inte avståndstagande och bestraffande tystnad till samma sak.
+              Behov av avstånd kan också förstås i relation till <Link href="/anknytning/undvikande-anknytning" className="underline underline-offset-4">anknytning och känslomässig närhet</Link>. Det gör inte avståndstagande och bestraffande tystnad till samma sak.
             </p>
 
             <div className="grid gap-4 md:grid-cols-2">
@@ -529,6 +529,9 @@ export default function SilentTreatmentRelationPage() {
                 </Link>
                 : inte bara att något händer, utan att du dessutom får det att framstå
                 som om du tolkar allt fel.
+              </p>
+              <p>
+                Om du känner igen återkommande förnekanden och tvivel på din egen upplevelse kan du också <Link href="/gaslightingtest/test" className="underline underline-offset-4">göra gaslightingtestet</Link>.
               </p>
 
               <p>

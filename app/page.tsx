@@ -1,4 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: "https://www.relationsvarning.se/",
+  },
+};
 
 const tests = [
   {
@@ -238,6 +245,16 @@ export default function Landing() {
           </h3>
 
           <ul className="mt-3 space-y-2 text-sm text-neutral-700">
+            <li>
+              <Link href="/anknytning" className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700">
+                Anknytning i relationer
+              </Link>
+            </li>
+            <li>
+              <Link href="/medberoende" className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700">
+                Medberoende – överansvar och gränser
+              </Link>
+            </li>
             <li>
               <Link
                 href="/psykisk-misshandel"

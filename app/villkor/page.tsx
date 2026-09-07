@@ -1,3 +1,12 @@
+import type { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Villkor | Relationsvarning",
+  description: "Läs användarvillkoren för Relationsvarnings tester och analyser, inklusive tjänstens begränsningar, köp och återbetalning.",
+  alternates: {
+    canonical: "https://www.relationsvarning.se/villkor",
+  },
+};
+
 export default function VillkorPage() {
   return (
     <main

@@ -1,4 +1,13 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Rädd att din partner ska slå dig? Tecken och stöd",
+  description: "Är du rädd att din partner ska slå dig? Läs om varningssignaler, säkerhet och vart du kan vända dig för stöd.",
+  alternates: {
+    canonical: "https://www.relationsvarning.se/jag-ar-radd-att-min-partner-ska-sla-mig",
+  },
+};
 
 export default function Page() {
   return (
@@ -331,6 +340,9 @@ export default function Page() {
             <strong>Socialjour/socialtjänst</strong> – vid akuta behov (via kommunen).
           </li>
         </ul>
+        <p>
+          I vår guide till <Link href="/psykiskt-vald/hjalp" className="underline underline-offset-4">hjälp vid psykiskt våld</Link> finns fler vägar till stöd och information om säkerhet och nästa steg.
+        </p>
 
         <h2>En kort del om “psykopatiska drag” (utan att fastna i etiketter)</h2>
         <p>

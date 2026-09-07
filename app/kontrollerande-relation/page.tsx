@@ -4,6 +4,9 @@ export const metadata = {
   title: "Kontrollerande relation – tecken, mönster och varningssignaler",
   description:
     "Tecken på en kontrollerande relation. Saklig genomgång av kontrollbeteenden, isolering, gränsförskjutning och hur friheten kan minska steg för steg.",
+  alternates: {
+    canonical: "https://www.relationsvarning.se/kontrollerande-relation",
+  },
 };
 
 export default function Page() {
@@ -57,6 +60,9 @@ export default function Page() {
           <li>Din telefon, sociala medier eller meddelanden kontrolleras.</li>
           <li>Du anpassar ditt beteende för att undvika konflikt.</li>
         </ul>
+        <p>
+          Om kontroll och övervakning återkommer kan du <Link href="/psykisk-misshandel-relation/test" className="underline underline-offset-4">göra testet om psykisk misshandel och psykiskt våld</Link> för att reflektera över mönstret i din relation.
+        </p>
 
         <h2 className="text-2xl font-semibold">
           Gradvis gränsförskjutning
