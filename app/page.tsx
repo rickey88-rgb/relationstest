@@ -95,11 +95,15 @@ export default function Landing() {
             </h1>
 
             <p className="mt-5 text-base leading-relaxed text-neutral-700">
-              När skuld, förvirring och återkommande obehag blir vardag kan det
-              vara svårt att se helheten. Våra anonyma tester hjälper dig att
-              reflektera över beteenden och mönster i din relation.
+              Frågorna tar upp kontroll, manipulation och destruktiva relationsmönster
+              med bakgrund i forskning och etablerad kunskap. Testerna hjälper dig
+              att reflektera över återkommande beteenden – inte att ställa en diagnos.
             </p>
-
+            <p className="mt-3 flex flex-wrap items-center gap-x-2 text-sm text-neutral-600">
+              <Link href="/metodik" className="inline-flex min-h-11 items-center underline underline-offset-4">Forskning och metodik</Link>
+              <span aria-hidden="true">•</span><span>Anonymt</span>
+              <span aria-hidden="true">•</span><span>Ingen registrering</span>
+            </p>
 
           </div>
 

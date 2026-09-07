@@ -12,6 +12,7 @@ export default function SiteFooter() {
                 { href: "/integritet", label: "Integritet" },
                 { href: "/villkor", label: "Villkor" },
                 { href: "/kontakt", label: "Kontakt" },
+                { href: "/metodik", label: "Metodik" },
               ].map((link) => (
                 <li key={link.href}>
                   <Link
