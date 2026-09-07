@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
+  title: "Relationsvarning – tester för destruktiva relationer",
+  description:
+    "Forskningsbaserade relationstester om kontroll, manipulation, psykiskt våld, gaslighting och destruktiva relationsmönster. Anonymt och utan registrering.",
   alternates: {
     canonical: "https://www.relationsvarning.se/",
   },
