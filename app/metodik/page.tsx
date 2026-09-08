@@ -22,7 +22,7 @@ export default function MethodologyPage() {
     <GuideSection title="Så sammanställs svaren">
       <p>Testerna använder fasta frågor, svarsalternativ och beräkningsregler. Frågorna grupperas efter ämne. Beräkningen skiljer sig mellan testerna:</p>
       <ul className="list-disc space-y-3 pl-5">
-        <li><strong>Generella relationstestet:</strong> svarspoäng summeras inom sex områden och viktas till en totalpoäng.</li>
+        <li><strong>Screeningtestet för relationen:</strong> 42 frågor fördelas på åtta områden som räknas om till 0–100 internt. Fyra heuristiska nivåer används: 0–24 få signaler, 25–44 vissa signaler, 45–64 förhöjda signaler och 65–100 tydliga signaler. Det är inte validerade kliniska gränser. Enskilda svar om hot eller stark rädsla kan visa stöd oavsett områdets genomsnitt.</li>
         <li><strong>Psykisk misshandel och narcissistiska relationsmönster:</strong> områdespoäng räknas om till en skala 0–100 och vägs samman med olika områdesvikter.</li>
         <li><strong>Gaslighting och traumabindning:</strong> svarssumman jämförs med högsta möjliga poäng för både helheten och delområdena.</li>
         <li><strong>Medberoende:</strong> helhetsindexet är ett medelvärde av delområdenas poäng på skalan 0–100.</li>

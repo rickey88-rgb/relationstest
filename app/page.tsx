@@ -12,13 +12,6 @@ export const metadata: Metadata = {
 
 const tests = [
   {
-    href: "/test",
-    title: "Generellt relationstest",
-    category: "Bred överblick",
-    description:
-      "Få en första överblick över varningssignaler och destruktiva mönster i din relation.",
-  },
-  {
     href: "/psykisk-misshandel-relation/test",
     title: "Psykisk misshandel / psykiskt våld",
     category: "Fördjupningstest",
@@ -77,9 +70,9 @@ export default function Landing() {
               Anonymt
             </span>
             <span className="hidden sm:inline">•</span>
-            <span className="hidden sm:inline">5–7 minuter</span>
+            <span className="hidden sm:inline">Ingen registrering</span>
             <span className="hidden sm:inline">•</span>
-            <span className="hidden sm:inline">30 frågor</span>
+            <span className="hidden sm:inline">Direkt resultat</span>
           </div>
         </div>
       </header>
@@ -111,12 +104,16 @@ export default function Landing() {
           </div>
 
           <section aria-labelledby="tests-heading" className="order-2 min-w-0 lg:col-span-12">
+            <div className="mb-8 rounded-2xl border border-neutral-200 bg-neutral-50 p-5 sm:p-6">
+              <h2 className="text-2xl font-semibold tracking-tight">Vet du inte riktigt vad som är fel?</h2>
+              <p className="mt-3 max-w-3xl leading-relaxed text-neutral-700">Om något känns fel i relationen men du har svårt att sätta fingret på vad, börja med screeningtestet. Det går igenom flera typer av destruktiva beteenden och hjälper dig att identifiera vilka områden som kan vara relevanta att titta närmare på.</p>
+              <Link href="/test" className="mt-5 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[#7A1F1F] px-5 py-3 text-center font-semibold text-white hover:bg-[#5C1717] focus-visible:bg-[#5C1717] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#5C1717] sm:w-auto">Gör screeningtestet</Link>
+            </div>
             <h2 id="tests-heading" className="text-2xl font-semibold tracking-tight">
-              Våra relationstester
+              Vet du redan vad du vill undersöka?
             </h2>
             <p className="mt-3 max-w-2xl text-sm leading-relaxed text-neutral-700 sm:text-base">
-              Börja med det generella testet för en bred överblick, eller välj
-              ett fördjupningstest som passar det du vill förstå bättre.
+              Välj ett fördjupningstest nedan.
             </p>
             <ul className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5">
               {tests.map((test) => (
