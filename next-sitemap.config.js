@@ -4,6 +4,8 @@ const behaviorPaths = new Set([
   '/digitalt-vald',
   '/ekonomiskt-vald',
   '/metodik',
+  '/narcissism-sjalvtest',
+  '/narcissism-sjalvtest/test',
   ...behaviors.map(({ slug }) => `/beteenden/${slug}`),
 ]);
 

@@ -1,5 +1,7 @@
 "use client";
 
+import { useTestAnalytics } from "../../_analytics/useTestAnalytics";
+
 import { useEffect, useMemo, useState } from "react";
 
 type Area =
@@ -439,6 +441,7 @@ export default function Page() {
     Array(totalQuestions).fill(-1)
   );
   const [unlocked, setUnlocked] = useState(false);
+  const tracking = useTestAnalytics("psychological_abuse_test", questions.length);
 
   useEffect(() => {
     try {
@@ -479,6 +482,7 @@ export default function Page() {
     );
 
     if (params.get("paid") === "true") {
+      tracking.purchase();
       setUnlocked(true);
 
       try {
@@ -624,6 +628,7 @@ export default function Page() {
   );
 
   function pickAnswer(value: number) {
+    tracking.answer(answers.filter(answer => answer >= 0).length + (answers[index] < 0 ? 1 : 0), index + 1);
     const next = [...answers];
 
     next[index] = value;
@@ -647,6 +652,7 @@ export default function Page() {
   }
 
   function restart() {
+    tracking.restart();
     setIndex(0);
 
     setAnswers(
@@ -678,6 +684,8 @@ export default function Page() {
       );
       return;
     }
+
+    tracking.checkout();
 
     window.location.href =
       STRIPE_PAYMENT_LINK;
@@ -922,7 +930,7 @@ export default function Page() {
       )}
 
       {isFinished && !unlocked && (
-        <section
+        <section ref={tracking.paywallRef}
           style={{
             background: "#0b0b0b",
             color: "#fff",

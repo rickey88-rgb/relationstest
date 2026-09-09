@@ -1,5 +1,7 @@
 "use client";
 
+import { useTestAnalytics } from "../_analytics/useTestAnalytics";
+
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { answerLabels, band, calculate, domainCopy, domains, emptyAnswers, parseState, questions, recommendations, SCREENING_CHECKOUT_URL, SCREENING_PRICE_SEK, STATE_VERSION, STORAGE_KEY } from "./screening";
@@ -16,6 +18,7 @@ export default function ScreeningPage() {
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState<number[]>(emptyAnswers);
   const [unlocked, setUnlocked] = useState(false);
+  const tracking = useTestAnalytics("screening_test", questions.length);
   const [hydrated, setHydrated] = useState(false);
   const [editing, setEditing] = useState(false);
   const [storageUnavailable, setStorageUnavailable] = useState(false);
@@ -33,6 +36,7 @@ export default function ScreeningPage() {
     } catch { setStorageUnavailable(true); }
     const params = new URLSearchParams(window.location.search);
     if (params.get("paid") === "true") {
+      tracking.purchase();
       setUnlocked(true);
       window.history.replaceState({}, "", window.location.pathname);
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -59,6 +63,7 @@ export default function ScreeningPage() {
   function navigate(next: number) { moveFocus.current = true; setIndex(next); }
   function selectAnswer(value: number) {
     if (answerLock.current) return;
+    tracking.answer(answers.filter(answer => answer >= 0).length + (answers[index] < 0 ? 1 : 0), index + 1);
     answerLock.current = true;
     setTransitioning(true);
     const next = answers.map((answer, i) => i === index ? value : answer);
@@ -75,6 +80,7 @@ export default function ScreeningPage() {
     }, 220);
   }
   function restart() {
+    tracking.restart();
     setIndex(0); setAnswers(emptyAnswers()); setUnlocked(false); setEditing(false); moveFocus.current = true;
     try { localStorage.removeItem(STORAGE_KEY); } catch { setStorageUnavailable(true); }
   }
@@ -84,6 +90,7 @@ export default function ScreeningPage() {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({ version: STATE_VERSION, index, answers, unlocked }));
       if (!parseState(localStorage.getItem(STORAGE_KEY))) throw new Error("storage unavailable");
     } catch { setStorageUnavailable(true); return; }
+    tracking.checkout();
     window.location.href = SCREENING_CHECKOUT_URL;
   }
 
@@ -105,7 +112,7 @@ export default function ScreeningPage() {
       {profile.safety && <aside aria-label="Stöd och säkerhet" className="mt-6 rounded-xl border border-neutral-200 bg-neutral-50 p-4 text-sm leading-6">
         <p><strong>Känner du dig otrygg i relationen?</strong> Du kan läsa om <Link href="/psykiskt-vald/hjalp" className={link}>stöd och hjälp</Link> här. Vid akut fara, ring 112.</p>
       </aside>}
-      {!unlocked ? <section className={section} aria-labelledby="result-heading">
+      {!unlocked ? <section ref={tracking.paywallRef} className={section} aria-labelledby="result-heading">
         <h2 id="result-heading" ref={heading} tabIndex={-1} className="text-2xl font-semibold outline-none">{profile.elevated.length === 1 ? "Vi hittade en tydlig signal i dina svar" : profile.elevated.length > 1 ? "Vi hittade flera signaler i dina svar" : "Vi hittade få tydliga varningssignaler"}</h2>
         {profile.elevated.length > 0 ? <ul aria-label="Områden som sticker ut" className="space-y-3">{profile.elevated.slice(0,3).map(domain => <li key={domain} className="rounded-xl bg-neutral-50 p-4"><p className="font-semibold">{domainCopy[domain].label}</p><p className="mt-1 text-sm text-neutral-600">{band(profile.scores[domain])}</p></li>)}</ul> : <p>{analysis.zero ? "Du har inte rapporterat några av de beteenden eller upplevelser som screeningen frågar om." : `Det område som märks mest i dina svar är ${domainCopy[profile.ranked[0]].label.toLowerCase()}. Nivån är ${band(profile.scores[profile.ranked[0]]).toLowerCase()} och ligger under gränsen för förhöjda signaler.`}</p>}
         <p>{analysis.zero ? "Den fullständiga analysen hjälper dig att reflektera över vad som fick dig att göra testet och vilka behov eller fungerande delar du vill ge mer utrymme." : "Din screening visar vilka områden som sticker ut. Den fullständiga analysen går vidare och förklarar vad i dina svar som påverkat resultatet, hur mönstren kan hänga ihop och vad som kan vara relevant att uppmärksamma."}</p>

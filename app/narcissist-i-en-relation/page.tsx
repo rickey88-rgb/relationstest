@@ -76,6 +76,7 @@ export default function NarcissistRelationPage() {
             på beteenden och återkommande mönster, inte på att ställa någon
             diagnos.
           </p>
+          <p className="mt-4 text-sm leading-6 text-neutral-700">Undrar du istället över dina egna narcissistiska drag? <Link href="/narcissism-sjalvtest" className="underline underline-offset-4">Gör vårt narcissism självtest.</Link></p>
         </header>
 
 

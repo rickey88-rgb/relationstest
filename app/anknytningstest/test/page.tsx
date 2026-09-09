@@ -1,5 +1,7 @@
 "use client";
 
+import { useTestAnalytics } from "../../_analytics/useTestAnalytics";
+
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
@@ -391,6 +393,7 @@ export default function Page() {
     Array(totalQuestions).fill(-1)
   );
   const [unlocked, setUnlocked] = useState(false);
+  const tracking = useTestAnalytics("attachment_test", questions.length);
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
@@ -441,6 +444,7 @@ export default function Page() {
     const params = new URLSearchParams(window.location.search);
 
     if (params.get("paid") === "true") {
+      tracking.purchase();
       setUnlocked(true);
       window.history.replaceState({}, "", window.location.pathname);
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -540,6 +544,7 @@ export default function Page() {
   const strongestSubscales = sortedSubscales.slice(0, 3);
 
   function pickAnswer(value: number) {
+    tracking.answer(answers.filter(answer => answer >= 0).length + (answers[index] < 0 ? 1 : 0), index + 1);
     setAnswers((previous) => {
       const next = [...previous];
       next[index] = value;
@@ -556,6 +561,7 @@ export default function Page() {
   }
 
   function restart() {
+    tracking.restart();
     setAnswers(Array(totalQuestions).fill(-1));
     setIndex(0);
     setUnlocked(false);
@@ -576,6 +582,8 @@ export default function Page() {
       );
       return;
     }
+
+    tracking.checkout();
 
     window.location.href = CHECKOUT_URL;
   }
@@ -721,7 +729,7 @@ export default function Page() {
       )}
 
       {isFinished && !unlocked && (
-        <section
+        <section ref={tracking.paywallRef}
           style={{
             background: "#0d0d0d",
             color: "#fff",

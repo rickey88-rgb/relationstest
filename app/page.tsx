@@ -12,6 +12,13 @@ export const metadata: Metadata = {
 
 const tests = [
   {
+    href: "/narcissism-sjalvtest",
+    title: "Narcissism – självtest",
+    category: "Självtest om egna drag",
+    description: "Utforska dina egna narcissistiska drag och få en personlig profil inom sex områden.",
+    cta: "Gör självtestet",
+  },
+  {
     href: "/psykisk-misshandel-relation/test",
     title: "Psykisk misshandel / psykiskt våld",
     category: "Fördjupningstest",
@@ -130,10 +137,10 @@ export default function Landing() {
                   <div className="mt-auto pt-4">
                     <Link
                       href={test.href}
-                      aria-label={`Starta testet: ${test.title}`}
+                      aria-label={`${test.cta ?? "Starta testet"}: ${test.title}`}
                       className="inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-neutral-900 px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-neutral-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
                     >
-                      Starta testet
+                      {test.cta ?? "Starta testet"}
                     </Link>
                   </div>
                 </li>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { AnalyticsSettings } from "../_analytics/AnalyticsProvider";
 
 export default function SiteFooter() {
   return (
@@ -23,11 +24,12 @@ export default function SiteFooter() {
                   </Link>
                 </li>
               ))}
+              <li><AnalyticsSettings /></li>
             </ul>
           </nav>
         </div>
         <div className="mt-2 flex flex-col gap-2 text-xs sm:flex-row sm:items-center sm:justify-between sm:gap-6">
-          <p>Integritet först • Inga konton • Inga spårningsfält</p>
+          <p>Integritet först • Inga konton • Statistik endast med samtycke</p>
           <a
             href="mailto:support@relationsvarning.se"
             className="inline-flex min-h-11 items-center self-start rounded-sm underline decoration-neutral-300 underline-offset-4 hover:text-neutral-900 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900"

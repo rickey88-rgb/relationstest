@@ -51,6 +51,17 @@ export default function IntegritetPage() {
         status. Du kan rensa detta genom att rensa webbplatsdata i din webbläsare.
       </p>
 
+      <h3 style={{ marginTop: 18, fontSize: 16 }}>Valfri besöksstatistik med Google Analytics</h3>
+      <p style={{ opacity: 0.9 }}>
+        Om du godkänner statistik använder vi Google Analytics 4 för att förstå sidbesök
+        och hur test- och köpflöden används. Det omfattar testets namn, start, framsteg,
+        slutförande, tidsåtgång och köpbelopp. Testsvar, testpoäng och profiltyper skickas inte.
+        Google Analytics använder cookies efter ditt godkännande. Du kan avvisa statistik
+        och ändå använda testerna och köpa resultat. Ändra eller återkalla ditt val via
+        Statistikinställningar i sidfoten; då stoppas fortsatt mätning och sajtens
+        Google Analytics-cookies tas bort.
+      </p>
+
       <h2 style={{ marginTop: 22, fontSize: 18 }}>4. Betalningsleverantör (Stripe)</h2>
       <p style={{ opacity: 0.9 }}>
         Betalning hanteras av Stripe. Stripe behandlar betalningsuppgifter enligt sina
