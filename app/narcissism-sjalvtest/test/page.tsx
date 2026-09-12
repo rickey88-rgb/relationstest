@@ -7,7 +7,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { answerLabels, calculate, dimensionNames, dimensions, emptyAnswers, formatPercent, parseState, questions, PRICE_SEK, STATE_VERSION, STORAGE_KEY, dimensionLevel } from "./model";
 import { NARCISSISM_SELFTEST_STRIPE_URL } from "./payment";
 
-import { interpretation, profileAnalysis, teaser } from "./interpretation";
+import { interpretation, profileAnalysis } from "./interpretation";
 
 const button = "inline-flex min-h-12 items-center justify-center rounded-xl px-5 py-3 text-center font-semibold focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900";
 const secondary = button + " border border-neutral-300 bg-white text-neutral-900 hover:bg-neutral-100";
@@ -30,6 +30,15 @@ export default function NarcissismSelfTestPage() {
   useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
   const moveFocus = useRef(false);
   const heading = useRef<HTMLHeadingElement>(null);
+  const [analysisStep, setAnalysisStep] = useState<number | null>(null);
+  const analyzing = analysisStep !== null;
+  useEffect(() => {
+    if (!analyzing) return;
+    const second = setTimeout(() => setAnalysisStep(1), 1000);
+    const third = setTimeout(() => setAnalysisStep(2), 2000);
+    const finish = setTimeout(() => { moveFocus.current = true; setAnalysisStep(null); }, 3000);
+    return () => { clearTimeout(second); clearTimeout(third); clearTimeout(finish); };
+  }, [analyzing]);
 
   useEffect(() => {
     try {
@@ -56,9 +65,26 @@ export default function NarcissismSelfTestPage() {
   const showResult = complete && !editing;
   const answeredCount = answers.filter((answer) => answer >= 0).length;
   const result = useMemo(() => complete ? calculate(answers) : null, [complete, answers]);
+  // Presentation-only comparison of existing scores; no scoring changes.
+  const leadingGap = result ? result.scores[result.ranked[0]] - result.scores[result.ranked[1]] : 0;
+  const preview = leadingGap >= 15
+    ? {
+      title: "Något i dina svar sticker ut",
+      body: "Ett av områdena framträder tydligare än de andra och påverkar hur din samlade profil bör tolkas.",
+      next: "Vilket område det är – och hur starkt mönstret är – visas i din fullständiga analys.",
+      value: "Se ditt mest framträdande område, dina sex delresultat, din profiltyp och hur mönstret kan märkas i relationer.",
+      cta: "Visa vad som sticker ut i min profil",
+    }
+    : {
+      title: "Ett mönster i dina svar är särskilt intressant",
+      body: "Det är inte ett enda område som dominerar. I stället framträder en kombination mellan flera av de drag som testet mäter.",
+      next: "Hur de områdena samspelar påverkar hur din profil bör tolkas.",
+      value: "I din fullständiga analys ser du vilka områden som driver mönstret och hur de hänger ihop.",
+      cta: "Visa vad som sticker ut i mina svar",
+    };
   useEffect(() => {
     if (moveFocus.current) { heading.current?.focus({ preventScroll: true }); moveFocus.current = false; }
-  }, [index, showResult, hydrated]);
+  }, [index, showResult, hydrated, analyzing]);
 
   function navigate(next: number) { moveFocus.current = true; setIndex(next); }
   function selectAnswer(value: number) {
@@ -72,7 +98,7 @@ export default function NarcissismSelfTestPage() {
     timer.current = setTimeout(() => {
       moveFocus.current = true;
       if (index < questions.length - 1) setIndex(index + 1);
-      else if (next.every(answer => answer >= 0)) setEditing(false);
+      else if (next.every(answer => answer >= 0)) { if (!unlocked) setAnalysisStep(0); setEditing(false); }
       else setIndex(next.findIndex(answer => answer < 0));
       answerLock.current = false;
       setTransitioning(false);
@@ -81,6 +107,7 @@ export default function NarcissismSelfTestPage() {
   }
   function restart() {
     tracking.restart();
+    setAnalysisStep(null);
     setCheckoutUnavailable(false);
     setIndex(0); setAnswers(emptyAnswers()); setUnlocked(false); setEditing(false); moveFocus.current = true;
     try { localStorage.removeItem(STORAGE_KEY); } catch { setStorageUnavailable(true); }
@@ -110,12 +137,16 @@ export default function NarcissismSelfTestPage() {
       <div className="flex flex-wrap gap-3 pt-2"><button type="button" disabled={index === 0 || transitioning} onClick={() => navigate(index - 1)} className={secondary + " disabled:cursor-not-allowed disabled:opacity-40"}>Tillbaka</button></div>
       <p className="text-xs leading-5 text-neutral-500">Svaren sparas lokalt i den här webbläsaren. Du kan ändra tidigare svar med Tillbaka.</p>
     </section>}
-    {showResult && result && <div data-selftest-result>
+    {showResult && analyzing && !unlocked && <section className={section} aria-labelledby="analysis-heading" aria-busy="true">
+      <h2 id="analysis-heading" ref={heading} tabIndex={-1} className="text-xl font-semibold outline-none">Vi sammanställer din profil</h2>
+      <p role="status" aria-live="polite">{["Analyserar dina svar...", "Identifierar återkommande mönster...", "Sammanställer din profil..."][analysisStep ?? 0]}</p>
+    </section>}
+    {showResult && (!analyzing || unlocked) && result && <div data-selftest-result>
       <section ref={unlocked ? null : tracking.paywallRef} className={section} aria-labelledby="result-heading">
-        <h2 id="result-heading" ref={heading} tabIndex={-1} className="text-2xl font-semibold outline-none">Din övergripande profil</h2>
-        <p className="text-xl font-semibold">{result.level}</p><p className="text-4xl font-semibold tabular-nums">{formatPercent(result.percent)} %</p>
-        <p className="text-sm text-neutral-600">Andel av självtestets möjliga poäng, inte en sannolikhet.</p>
-        {!unlocked && <><p>{teaser(result)}</p><p>Din fullständiga profil visar sex delresultat, profiltyp och en personlig analys av hur dina svar kan hänga ihop och märkas i relationer.</p><button type="button" onClick={checkout} className={primary + " w-full"}>Se min fullständiga profil</button><p className="text-sm text-neutral-600">Engångsköp – {PRICE_SEK} kr.</p>{checkoutUnavailable && <p role="status" className="text-sm text-neutral-600">Köp av fullständig profil är inte tillgängligt just nu. Dina svar finns kvar i den här webbläsaren.</p>}</>}
+        <h2 id="result-heading" ref={heading} tabIndex={-1} className="text-2xl font-semibold outline-none">{unlocked ? "Din övergripande profil" : preview.title}</h2>
+        {unlocked && <><p className="text-xl font-semibold">{result.level}</p><p className="text-4xl font-semibold tabular-nums">{formatPercent(result.percent)} %</p>
+        <p className="text-sm text-neutral-600">Andel av självtestets möjliga poäng, inte en sannolikhet.</p></>}
+        {!unlocked && <><p>{preview.body}</p>{preview.next && <p>{preview.next}</p>}<p>{preview.value}</p><button type="button" onClick={checkout} className={primary + " w-full"}>{preview.cta}</button><p className="text-sm text-neutral-600">Engångsköp – {PRICE_SEK} kr</p>{checkoutUnavailable && <p role="status" className="text-sm text-neutral-600">Köp av fullständig profil är inte tillgängligt just nu. Dina svar finns kvar i den här webbläsaren.</p>}</>}
         {unlocked && <p className="rounded-xl bg-neutral-50 p-4"><span className="block text-sm text-neutral-600">Profiltyp</span><strong>{result.profileType}</strong></p>}
       </section>
       {unlocked && <>
