@@ -19,6 +19,16 @@ export default function ScreeningPage() {
   const [answers, setAnswers] = useState<number[]>(emptyAnswers);
   const [unlocked, setUnlocked] = useState(false);
   const tracking = useTestAnalytics("screening_test", questions.length);
+
+  const [analysisStep, setAnalysisStep] = useState<number | null>(null);
+  const analyzing = analysisStep !== null;
+  useEffect(() => {
+    if (!analyzing) return;
+    const second = setTimeout(() => setAnalysisStep(1), 1000);
+    const third = setTimeout(() => setAnalysisStep(2), 2000);
+    const finish = setTimeout(() => { moveFocus.current = true; setAnalysisStep(null); }, 3000);
+    return () => { clearTimeout(second); clearTimeout(third); clearTimeout(finish); };
+  }, [analyzing]);
   const [hydrated, setHydrated] = useState(false);
   const [editing, setEditing] = useState(false);
   const [storageUnavailable, setStorageUnavailable] = useState(false);
@@ -54,11 +64,12 @@ export default function ScreeningPage() {
   const showResult = complete && !editing;
   const answeredCount = answers.filter((answer) => answer >= 0).length;
   const profile = useMemo(() => calculate(answers), [answers]);
+  const teaserDistinct = profile.scores[profile.ranked[0]] - profile.scores[profile.ranked[1]] >= 15;
   const suggested = useMemo(() => recommendations(profile), [profile]);
   const analysis = useMemo(() => resultAnalysis(profile, answers), [profile, answers]);
   useEffect(() => {
     if (moveFocus.current) { heading.current?.focus({ preventScroll: true }); moveFocus.current = false; }
-  }, [index, showResult, hydrated]);
+  }, [index, showResult, hydrated, analyzing]);
 
   function navigate(next: number) { moveFocus.current = true; setIndex(next); }
   function selectAnswer(value: number) {
@@ -72,7 +83,7 @@ export default function ScreeningPage() {
     timer.current = setTimeout(() => {
       moveFocus.current = true;
       if (index < questions.length - 1) setIndex(index + 1);
-      else if (next.every(answer => answer >= 0)) setEditing(false);
+      else if (next.every(answer => answer >= 0)) { if (!unlocked) setAnalysisStep(0); setEditing(false); }
       else setIndex(next.findIndex(answer => answer < 0));
       answerLock.current = false;
       setTransitioning(false);
@@ -81,6 +92,7 @@ export default function ScreeningPage() {
   }
   function restart() {
     tracking.restart();
+    setAnalysisStep(null);
     setIndex(0); setAnswers(emptyAnswers()); setUnlocked(false); setEditing(false); moveFocus.current = true;
     try { localStorage.removeItem(STORAGE_KEY); } catch { setStorageUnavailable(true); }
   }
@@ -112,10 +124,11 @@ export default function ScreeningPage() {
       {profile.safety && <aside aria-label="Stöd och säkerhet" className="mt-6 rounded-xl border border-neutral-200 bg-neutral-50 p-4 text-sm leading-6">
         <p><strong>Känner du dig otrygg i relationen?</strong> Du kan läsa om <Link href="/psykiskt-vald/hjalp" className={link}>stöd och hjälp</Link> här. Vid akut fara, ring 112.</p>
       </aside>}
-      {!unlocked ? <section ref={tracking.paywallRef} className={section} aria-labelledby="result-heading">
-        <h2 id="result-heading" ref={heading} tabIndex={-1} className="text-2xl font-semibold outline-none">{profile.elevated.length === 1 ? "Vi hittade en tydlig signal i dina svar" : profile.elevated.length > 1 ? "Vi hittade flera signaler i dina svar" : "Vi hittade få tydliga varningssignaler"}</h2>
-        {profile.elevated.length > 0 ? <ul aria-label="Områden som sticker ut" className="space-y-3">{profile.elevated.slice(0,3).map(domain => <li key={domain} className="rounded-xl bg-neutral-50 p-4"><p className="font-semibold">{domainCopy[domain].label}</p><p className="mt-1 text-sm text-neutral-600">{band(profile.scores[domain])}</p></li>)}</ul> : <p>{analysis.zero ? "Du har inte rapporterat några av de beteenden eller upplevelser som screeningen frågar om." : `Det område som märks mest i dina svar är ${domainCopy[profile.ranked[0]].label.toLowerCase()}. Nivån är ${band(profile.scores[profile.ranked[0]]).toLowerCase()} och ligger under gränsen för förhöjda signaler.`}</p>}
-        <p>{analysis.zero ? "Den fullständiga analysen hjälper dig att reflektera över vad som fick dig att göra testet och vilka behov eller fungerande delar du vill ge mer utrymme." : "Din screening visar vilka områden som sticker ut. Den fullständiga analysen går vidare och förklarar vad i dina svar som påverkat resultatet, hur mönstren kan hänga ihop och vad som kan vara relevant att uppmärksamma."}</p>
+      {analyzing && !unlocked && <section className={section} aria-busy="true"><h2 className="text-2xl font-semibold">Vi sammanställer din analys</h2><p role="status" aria-live="polite">{["Analyserar dina svar...", "Identifierar återkommande mönster...", "Sammanställer din profil..."][analysisStep ?? 0]}</p></section>}
+      {(!analyzing || unlocked) && <>{!unlocked ? <section ref={tracking.paywallRef} className={section} aria-labelledby="result-heading">
+        <h2 id="result-heading" ref={heading} tabIndex={-1} className="text-2xl font-semibold outline-none">{teaserDistinct ? "Ett mönster i relationen sticker ut" : "En kombination av flera relationsmönster framträder"}</h2>
+        <p>{teaserDistinct ? "Ett område framträder tydligare än de andra och påverkar hur din samlade screening bör tolkas." : "Flera områden ligger nära varandra. Hur de samspelar är viktigt för att förstå dina svar."}</p>
+        <p>I din fullständiga analys ser du vilka områden som framträder, hur mönstren hänger ihop och vad som kan vara relevant att undersöka vidare.</p>
         <button type="button" onClick={checkout} className={primary + " w-full"}>Lås upp min analys – {SCREENING_PRICE_SEK} kr</button>
         <p className="text-sm text-neutral-600">Engångsköp – 79 kr för din fullständiga screeninganalys.</p>
       </section> : <>
@@ -130,7 +143,7 @@ export default function ScreeningPage() {
           const level = profile.scores[domain] >= 65 ? 4 : profile.scores[domain] >= 45 ? 3 : profile.scores[domain] >= 25 ? 2 : 1;
           return <div key={domain} className="min-w-0 rounded-xl bg-neutral-50 p-3"><h3 className="text-sm font-semibold">{domainCopy[domain].label}</h3><p className="mt-1 text-sm text-neutral-600">{band(profile.scores[domain])}</p><div className="mt-2 flex gap-1" aria-hidden="true">{[1,2,3,4].map(part => <span key={part} className={`h-1 flex-1 rounded ${part <= level ? "bg-neutral-500" : "bg-neutral-200"}`} />)}</div></div>;
         })}</div></section>
-      </>}
+      </>}</>}
       <section className="mt-8 space-y-2 text-sm leading-6 text-neutral-600"><h2 className="font-semibold text-neutral-900">Om resultatet</h2><p>Screeningen är ett reflektionsverktyg baserat på dina egna svar. Den ställer inte diagnoser och avgör inte juridiskt om ett brott har begåtts.</p><Link href="/metodik" className={link}>Läs om metodiken</Link></section>
       {unlocked && <section className={section}><h2 className="text-2xl font-semibold">Vill du förstå något område bättre?</h2>{suggested.length ? <div className="space-y-4">{suggested.map(item => <div key={item.href} className="space-y-3 rounded-xl bg-neutral-50 p-4"><h3 className="font-semibold">{item.title}</h3><p>{item.reason}</p><Link href={item.href} className={secondary + " w-full"}>{item.href === "/gaslightingtest/test" ? "Gör gaslightingtestet" : "Gör testet"}</Link></div>)}</div> : <p>Den här profilen pekar inte ut något särskilt fördjupningstest. Du kan börja med <Link href="/beteenden" className={link}>guiden om beteenden i relationer</Link> om du vill sätta ord på en egen fråga.</p>}</section>}
       <div className="mt-6 flex flex-wrap gap-3"><button type="button" onClick={() => { moveFocus.current = true; setEditing(true); setIndex(0); }} className={secondary}>Granska mina svar</button><button type="button" onClick={restart} className={secondary}>Börja om</button></div>

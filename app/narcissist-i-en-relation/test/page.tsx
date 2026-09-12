@@ -336,6 +336,16 @@ export default function Page() {
   );
   const [unlocked, setUnlocked] = useState(false);
   const tracking = useTestAnalytics("narcissist_partner", questions.length);
+
+  const [analysisStep, setAnalysisStep] = useState<number | null>(null);
+  const analyzing = analysisStep !== null;
+  useEffect(() => {
+    if (!analyzing) return;
+    const second = setTimeout(() => setAnalysisStep(1), 1000);
+    const third = setTimeout(() => setAnalysisStep(2), 2000);
+    const finish = setTimeout(() => setAnalysisStep(null), 3000);
+    return () => { clearTimeout(second); clearTimeout(third); clearTimeout(finish); };
+  }, [analyzing]);
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
@@ -465,7 +475,11 @@ export default function Page() {
 
   const strongestAreas = sortedAreas.slice(0, 3);
 
+  // Compare existing normalized scores only for teaser wording.
+  const teaserDistinct = sortedAreas[0].score - sortedAreas[1].score >= 15;
+
   function pickAnswer(value: number) {
+    if (!unlocked && !isFinished && answers.every((answer, i) => i === index || answer >= 0)) setAnalysisStep(0);
     tracking.answer(answers.filter(answer => answer >= 0).length + (answers[index] < 0 ? 1 : 0), index + 1);
     setAnswers((previous) => {
       const next = [...previous];
@@ -484,6 +498,7 @@ export default function Page() {
 
   function restart() {
     tracking.restart();
+    setAnalysisStep(null);
     const reset = Array(totalQuestions).fill(-1);
 
     setAnswers(reset);
@@ -661,7 +676,12 @@ export default function Page() {
         </section>
       )}
 
-      {isFinished && !unlocked && (
+      {isFinished && analyzing && !unlocked && <section style={{ border: "1px solid #ddd", borderRadius: 20, padding: "24px 18px" }} aria-busy="true">
+        <h2 style={{ margin: 0, fontSize: 24 }}>Vi sammanställer din analys</h2>
+        <p role="status" aria-live="polite" style={{ marginTop: 14, lineHeight: 1.7 }}>{["Analyserar dina svar...", "Identifierar återkommande mönster...", "Sammanställer din profil..."][analysisStep ?? 0]}</p>
+      </section>}
+
+      {isFinished && !unlocked && !analyzing && (
         <section ref={tracking.paywallRef}
           style={{
             background: "#0d0d0d",
@@ -670,134 +690,9 @@ export default function Page() {
             padding: "24px 18px",
           }}
         >
-          <p
-            style={{
-              margin: 0,
-              color: "#bbb",
-              fontSize: 14,
-              fontWeight: 600,
-            }}
-          >
-            Ditt resultat
-          </p>
-
-          <h2
-            style={{
-              margin: "8px 0 0",
-              fontSize: "clamp(25px, 7vw, 34px)",
-              lineHeight: 1.15,
-            }}
-          >
-            {overallLevel(scores.overall)}
-          </h2>
-
-          <div
-            style={{
-              marginTop: 18,
-              padding: 16,
-              borderRadius: 15,
-              background: "rgba(255,255,255,0.07)",
-              border: "1px solid rgba(255,255,255,0.12)",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "flex-end",
-                gap: 16,
-                flexWrap: "wrap",
-              }}
-            >
-              <div>
-                <div
-                  style={{
-                    fontSize: 12,
-                    color: "#bbb",
-                  }}
-                >
-                  Mönsterindex
-                </div>
-
-                <div
-                  style={{
-                    marginTop: 3,
-                    fontSize: 38,
-                    fontWeight: 900,
-                    letterSpacing: "-0.03em",
-                  }}
-                >
-                  {scores.overall}/100
-                </div>
-              </div>
-
-              <div
-                style={{
-                  fontSize: 12,
-                  color: "#aaa",
-                  maxWidth: 280,
-                  lineHeight: 1.45,
-                }}
-              >
-                Indexet beskriver hur starkt flera narcissistiska
-                relationsmönster framträder tillsammans. Det är inte
-                sannolikheten för en diagnos.
-              </div>
-            </div>
-          </div>
-
-          <p
-            style={{
-              marginTop: 18,
-              lineHeight: 1.7,
-              color: "#eee",
-            }}
-          >
-            {overallExplanation(scores.overall)}
-          </p>
-
-          <div
-            style={{
-              marginTop: 20,
-              display: "grid",
-              gap: 10,
-            }}
-          >
-            <p
-              style={{
-                margin: 0,
-                fontSize: 13,
-                color: "#aaa",
-              }}
-            >
-              Områden som sticker ut mest i dina svar:
-            </p>
-
-            {strongestAreas.map(({ area, score }) => (
-              <div
-                key={area}
-                style={{
-                  padding: 13,
-                  borderRadius: 13,
-                  background: "rgba(255,255,255,0.06)",
-                  border: "1px solid rgba(255,255,255,0.1)",
-                }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    gap: 10,
-                  }}
-                >
-                  <b>{areaLabels[area]}</b>
-                  <span style={{ color: "#ccc" }}>
-                    {areaLevel(score)}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
+          <h2 style={{ margin: "8px 0 0", fontSize: "clamp(24px, 7vw, 32px)", lineHeight: 1.2 }}>{teaserDistinct ? "Ett mönster i relationen sticker ut" : "En kombination av flera mönster framträder"}</h2>
+          <p style={{ marginTop: 14, lineHeight: 1.7 }}>Testet undersöker narcissistiska relationsmönster. {teaserDistinct ? "Ett område framträder tydligare än de andra och påverkar hur helheten bör tolkas." : "Flera områden ligger nära varandra. Hur de samspelar är viktigt för att förstå helheten."}</p>
+          <p style={{ marginTop: 14, lineHeight: 1.7 }}>I din fullständiga analys ser du vilka områden som framträder, hur starka mönstren är och hur dina svar hänger ihop.</p>
 
           <div
             style={{

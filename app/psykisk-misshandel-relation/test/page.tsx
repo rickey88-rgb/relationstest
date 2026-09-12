@@ -443,6 +443,16 @@ export default function Page() {
   const [unlocked, setUnlocked] = useState(false);
   const tracking = useTestAnalytics("psychological_abuse_test", questions.length);
 
+  const [analysisStep, setAnalysisStep] = useState<number | null>(null);
+  const analyzing = analysisStep !== null;
+  useEffect(() => {
+    if (!analyzing) return;
+    const second = setTimeout(() => setAnalysisStep(1), 1000);
+    const third = setTimeout(() => setAnalysisStep(2), 2000);
+    const finish = setTimeout(() => setAnalysisStep(null), 3000);
+    return () => { clearTimeout(second); clearTimeout(third); clearTimeout(finish); };
+  }, [analyzing]);
+
   useEffect(() => {
     try {
       const raw = localStorage.getItem(LS_KEY);
@@ -627,7 +637,11 @@ export default function Page() {
     ]
   );
 
+  // Compare existing normalized scores only for teaser wording.
+  const teaserDistinct = sortedAreas[0].score - sortedAreas[1].score >= 15;
+
   function pickAnswer(value: number) {
+    if (!unlocked && !isFinished && answers.every((answer, i) => i === index || answer >= 0)) setAnalysisStep(0);
     tracking.answer(answers.filter(answer => answer >= 0).length + (answers[index] < 0 ? 1 : 0), index + 1);
     const next = [...answers];
 
@@ -653,6 +667,7 @@ export default function Page() {
 
   function restart() {
     tracking.restart();
+    setAnalysisStep(null);
     setIndex(0);
 
     setAnswers(
@@ -929,7 +944,12 @@ export default function Page() {
         </section>
       )}
 
-      {isFinished && !unlocked && (
+      {isFinished && analyzing && !unlocked && <section style={{ border: "1px solid #ddd", borderRadius: 20, padding: "24px 18px" }} aria-busy="true">
+        <h2 style={{ margin: 0, fontSize: 24 }}>Vi sammanställer din analys</h2>
+        <p role="status" aria-live="polite" style={{ marginTop: 14, lineHeight: 1.7 }}>{["Analyserar dina svar...", "Identifierar återkommande mönster...", "Sammanställer din profil..."][analysisStep ?? 0]}</p>
+      </section>}
+
+      {isFinished && !unlocked && !analyzing && (
         <section ref={tracking.paywallRef}
           style={{
             background: "#0b0b0b",
@@ -938,159 +958,9 @@ export default function Page() {
             padding: 24,
           }}
         >
-          <p
-            style={{
-              margin: 0,
-              opacity: 0.65,
-              fontSize: 13,
-              fontWeight: 700,
-              textTransform: "uppercase",
-              letterSpacing: ".06em",
-            }}
-          >
-            Din första sammanställning
-          </p>
-
-          <h2
-            style={{
-              margin:
-                "7px 0 0",
-              fontSize: 26,
-            }}
-          >
-            Ditt resultat är klart
-          </h2>
-
-          <div
-            style={{
-              marginTop: 18,
-              padding: 17,
-              borderRadius: 15,
-              background:
-                "rgba(255,255,255,.07)",
-              border:
-                "1px solid rgba(255,255,255,.13)",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                justifyContent:
-                  "space-between",
-                gap: 18,
-                flexWrap: "wrap",
-              }}
-            >
-              <div>
-                <div
-                  style={{
-                    fontSize: 12,
-                    opacity: 0.68,
-                  }}
-                >
-                  Mönsterindex
-                </div>
-
-                <div
-                  style={{
-                    fontSize: 36,
-                    fontWeight: 900,
-                  }}
-                >
-                  {overallScore}/100
-                </div>
-              </div>
-
-              <div
-                style={{
-                  textAlign: "right",
-                }}
-              >
-                <div
-                  style={{
-                    fontSize: 12,
-                    opacity: 0.68,
-                  }}
-                >
-                  Övergripande nivå
-                </div>
-
-                <div
-                  style={{
-                    marginTop: 4,
-                    fontSize: 19,
-                    fontWeight: 850,
-                  }}
-                >
-                  {overall.label}
-                </div>
-              </div>
-            </div>
-
-            <p
-              style={{
-                lineHeight: 1.65,
-                marginBottom: 0,
-              }}
-            >
-              {overall.intro}
-            </p>
-          </div>
-
-          <div
-            style={{
-              marginTop: 18,
-            }}
-          >
-            <p
-              style={{
-                marginBottom: 8,
-                fontWeight: 800,
-              }}
-            >
-              De tre områden som sticker ut
-              mest:
-            </p>
-
-            {topAreas.map(
-              ({ area, score }) => (
-                <div
-                  key={area}
-                  style={{
-                    display: "flex",
-                    justifyContent:
-                      "space-between",
-                    gap: 14,
-                    padding:
-                      "10px 0",
-                    borderBottom:
-                      "1px solid rgba(255,255,255,.1)",
-                  }}
-                >
-                  <span>
-                    {
-                      areaInfo[area]
-                        .label
-                    }
-                  </span>
-
-                  <b>
-                    {areaLevel(score)}
-                  </b>
-                </div>
-              )
-            )}
-          </div>
-
-          <p
-            style={{
-              marginTop: 20,
-              lineHeight: 1.65,
-              opacity: 0.92,
-            }}
-          >
-            {legalOverlap}
-          </p>
+          <h2 style={{ margin: "8px 0 0", fontSize: "clamp(24px, 7vw, 32px)", lineHeight: 1.2 }}>{teaserDistinct ? "Ett beteendemönster framträder tydligare" : "En kombination av flera mönster framträder"}</h2>
+          <p style={{ marginTop: 14, lineHeight: 1.7 }}>Testet undersöker återkommande beteenden och deras påverkan på dig. {teaserDistinct ? "Ett område framträder tydligare än de andra och påverkar hur helheten bör tolkas." : "Flera områden ligger nära varandra. Hur de samspelar är viktigt för att förstå helheten."}</p>
+          <p style={{ marginTop: 14, lineHeight: 1.7 }}>I din fullständiga analys ser du vilka områden som framträder, hur starka mönstren är och hur dina svar hänger ihop.</p>
 
           <div
             style={{
