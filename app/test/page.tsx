@@ -130,7 +130,7 @@ export default function ScreeningPage() {
         <p>{teaserDistinct ? "Ett område framträder tydligare än de andra och påverkar hur din samlade screening bör tolkas." : "Flera områden ligger nära varandra. Hur de samspelar är viktigt för att förstå dina svar."}</p>
         <p>I din fullständiga analys ser du vilka områden som framträder, hur mönstren hänger ihop och vad som kan vara relevant att undersöka vidare.</p>
         <button type="button" onClick={checkout} className={primary + " w-full"}>Lås upp min analys – {SCREENING_PRICE_SEK} kr</button>
-        <p className="text-sm text-neutral-600">Engångsköp – 79 kr för din fullständiga screeninganalys.</p>
+        <p className="text-sm text-neutral-600">Engångsköp – 39 kr för din fullständiga screeninganalys.</p>
       </section> : <>
         <section className={section} aria-labelledby="result-heading"><h2 id="result-heading" ref={heading} tabIndex={-1} className="text-2xl font-semibold outline-none">Din analys</h2>{analysis.paragraphs.map((text,i) => <p key={i}>{text}</p>)}</section>
         <section className={section}><h2 className="text-2xl font-semibold">Så hänger dina svar ihop</h2>{analysis.connections.map(item => <p key={item.id} data-insight={item.id}>{item.text}</p>)}</section>

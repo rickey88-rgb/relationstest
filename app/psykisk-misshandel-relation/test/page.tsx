@@ -35,7 +35,7 @@ const LS_KEY = "psykiskt_vald_test_state_v1";
   I Stripe ska success redirect så småningom peka på:
   https://relationsvarning.se/psykisk-misshandel-relation/test?paid=true
 */
-const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/00w9ASa53bYB8Wz0so0gw06";
+const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/cNifZg0ut9Qt0q3grm0gw0i";
 
 const answerLabels = [
   "Aldrig",
@@ -1037,7 +1037,7 @@ export default function Page() {
                 fontSize: 15,
               }}
             >
-              Lås upp hela analysen – 79 kr
+              Lås upp hela analysen – 39 kr
             </button>
 
             <button

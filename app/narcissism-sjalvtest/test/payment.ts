@@ -1,2 +1,2 @@
 // Stripe return URL: https://www.relationsvarning.se/narcissism-sjalvtest/test?paid=true
-export const NARCISSISM_SELFTEST_STRIPE_URL: string = "https://buy.stripe.com/8x26oG3GF8Mpb4Ha2Y0gw0d";
+export const NARCISSISM_SELFTEST_STRIPE_URL: string = "https://buy.stripe.com/4gM00i7WV0fTgp17UQ0gw0e";

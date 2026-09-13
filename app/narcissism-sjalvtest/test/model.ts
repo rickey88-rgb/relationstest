@@ -189,7 +189,7 @@ export const dimensionNames: Record<Dimension, string> = {
   empathy: "Empati & ömsesidighet", criticism: "Kritikkänslighet & skam", influence: "Strategiskt inflytande",
 };
 export const answerLabels = ["Stämmer inte alls", "Stämmer lite", "Stämmer delvis", "Stämmer ganska bra", "Stämmer mycket väl"];
-export const PRICE_SEK = 79;
+export const PRICE_SEK = 39;
 export const STORAGE_KEY = "relationsvarning_narcissism_self_v1";
 export const STATE_VERSION = 1;
 export const emptyAnswers = () => Array<number>(questions.length).fill(-1);

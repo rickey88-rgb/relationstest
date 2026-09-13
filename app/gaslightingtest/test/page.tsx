@@ -3,7 +3,7 @@
 import { useTestAnalytics } from "../../_analytics/useTestAnalytics";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 type Area =
   | "denial"
@@ -191,7 +191,7 @@ const LS_KEY = "gaslightingtest_state_v1";
   Ersätt endast REPLACE_WITH_STRIPE_LINK nedan
   när Stripe Payment Link är skapad.
 */
-const CHECKOUT_URL: string = "https://buy.stripe.com/28E28q7WVaUxc8L2Aw0gw0a";
+const CHECKOUT_URL: string = "https://buy.stripe.com/14A4gyb97bYBfkX7UQ0gw0l";
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
@@ -269,6 +269,10 @@ export default function Page() {
   const [unlocked, setUnlocked] = useState(false);
   const tracking = useTestAnalytics("gaslighting_test", questions.length);
 
+  const [transitioning, setTransitioning] = useState(false);
+  const answerLock = useRef(false);
+  const answerTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => () => { if (answerTimer.current) clearTimeout(answerTimer.current); }, []);
   const [analysisStep, setAnalysisStep] = useState<number | null>(null);
   const analyzing = analysisStep !== null;
   useEffect(() => {
@@ -346,7 +350,7 @@ export default function Page() {
     100
   );
 
-  const isFinished = answers.every((answer) => answer >= 0);
+  const isFinished = !transitioning && answers.every((answer) => answer >= 0);
 
   const scores = useMemo(() => {
     const raw = {} as Record<Area, number>;
@@ -408,7 +412,9 @@ export default function Page() {
   const teaserDistinct = sortedAreas[0].score - sortedAreas[1].score >= 15;
 
   function selectAnswer(value: number) {
-    if (!unlocked && !isFinished && answers.every((answer, i) => i === index || answer >= 0)) setAnalysisStep(0);
+    if (answerLock.current) return;
+    answerLock.current = true;
+    setTransitioning(true);
     tracking.answer(answers.filter(answer => answer >= 0).length + (answers[index] < 0 ? 1 : 0), index + 1);
     setAnswers((previous) => {
       const next = [...previous];
@@ -416,9 +422,15 @@ export default function Page() {
       return next;
     });
 
-    if (index < totalQuestions - 1) {
-      setIndex((currentIndex) => currentIndex + 1);
-    }
+    answerTimer.current = setTimeout(() => {
+    if (!unlocked && !isFinished && answers.every((answer, i) => i === index || answer >= 0)) setAnalysisStep(0);
+      if (index < totalQuestions - 1) {
+        setIndex((currentIndex) => currentIndex + 1);
+      }
+      answerLock.current = false;
+      setTransitioning(false);
+      answerTimer.current = null;
+    }, 220);
   }
 
   function goBack() {
@@ -548,7 +560,10 @@ export default function Page() {
                 <button
                   key={value}
                   type="button"
-                  onClick={() => selectAnswer(value)}
+                  disabled={transitioning}
+                  aria-pressed={selected}
+                  onClick={(event) => { if (event.detail <= 1) selectAnswer(value); }}
+                  onKeyDown={(event) => { if (event.repeat) event.preventDefault(); }}
                   className={`answer-button ${
                     selected ? "selected" : ""
                   }`}
@@ -563,7 +578,7 @@ export default function Page() {
             <button
               type="button"
               onClick={goBack}
-              disabled={index === 0}
+              disabled={index === 0 || transitioning}
               style={{
                 minHeight: 44,
                 padding: "10px 14px",
@@ -639,7 +654,7 @@ export default function Page() {
                 fontWeight: 800,
               }}
             >
-              Lås upp fullständig analys – 79 kr
+              Lås upp fullständig analys – 39 kr
             </button>
           </div>
 
