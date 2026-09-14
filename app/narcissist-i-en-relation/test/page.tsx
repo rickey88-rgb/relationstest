@@ -1,5 +1,7 @@
 "use client";
 
+import { hasPaidReturn, usePaymentRecovery } from "../../_components/usePaymentRecovery";
+
 import { useTestAnalytics } from "../../_analytics/useTestAnalytics";
 
 import Link from "next/link";
@@ -420,6 +422,8 @@ export default function Page() {
     100
   );
 
+  const payment = usePaymentRecovery(LS_KEY, unlocked, setUnlocked);
+
   const isFinished = !transitioning && answers.every((answer) => answer >= 0);
 
   const scores = useMemo(() => {
@@ -515,7 +519,7 @@ export default function Page() {
 
     setAnswers(reset);
     setIndex(0);
-    setUnlocked(false);
+    setUnlocked(hasPaidReturn(LS_KEY));
 
     try {
       localStorage.removeItem(LS_KEY);
@@ -534,6 +538,7 @@ export default function Page() {
       return;
     }
 
+    if (!payment.prepareCheckout({ index, answers, unlocked })) return;
     tracking.checkout();
 
     window.location.href = CHECKOUT_URL;
@@ -549,6 +554,9 @@ export default function Page() {
 
   return (
     <>
+      {unlocked && <div role="status" style={{ margin: "20px 0", padding: 16, border: "1px solid #ddd", borderRadius: 12, lineHeight: 1.6 }}><strong>Ditt test är upplåst – du behöver inte betala igen.</strong>{answers.every(answer => answer >= 0) ? <p>Din fullständiga analys visas nedan.</p> : <p>Tidigare svar saknas eller är ofullständiga i den här webbläsaren. Öppna testet i samma webbläsare som före betalningen, eller svara på frågorna här utan att köpa igen. Behöver du hjälp? Kontakta <a href="mailto:support@relationsvarning.se">support@relationsvarning.se</a>.</p>}</div>}
+      {payment.checkoutError && <p role="alert" style={{ margin: "20px 0", lineHeight: 1.6 }}>{payment.checkoutError}</p>}
+
       <div style={{ marginBottom: 20 }}>
         {!isFinished && (
           <div style={{ marginTop: 20 }}>

@@ -1,5 +1,7 @@
 "use client";
 
+import { hasPaidReturn, usePaymentRecovery } from "../../_components/usePaymentRecovery";
+
 import { useTestAnalytics } from "../../_analytics/useTestAnalytics";
 
 import Link from "next/link";
@@ -61,6 +63,8 @@ export default function NarcissismSelfTestPage() {
     catch { setStorageUnavailable(true); }
   }, [index, answers, unlocked, hydrated]);
 
+  const payment = usePaymentRecovery(STORAGE_KEY, unlocked, setUnlocked);
+
   const complete = answers.every((answer) => answer >= 0);
   const showResult = complete && !editing;
   const answeredCount = answers.filter((answer) => answer >= 0).length;
@@ -109,7 +113,7 @@ export default function NarcissismSelfTestPage() {
     tracking.restart();
     setAnalysisStep(null);
     setCheckoutUnavailable(false);
-    setIndex(0); setAnswers(emptyAnswers()); setUnlocked(false); setEditing(false); moveFocus.current = true;
+    setIndex(0); setAnswers(emptyAnswers()); setUnlocked(hasPaidReturn(STORAGE_KEY)); setEditing(false); moveFocus.current = true;
     try { localStorage.removeItem(STORAGE_KEY); } catch { setStorageUnavailable(true); }
   }
   function checkout() {
@@ -119,12 +123,16 @@ export default function NarcissismSelfTestPage() {
       if (!parseState(localStorage.getItem(STORAGE_KEY))) throw new Error("storage unavailable");
     } catch { setStorageUnavailable(true); return; }
     if (!NARCISSISM_SELFTEST_STRIPE_URL.startsWith("https://buy.stripe.com/")) { setCheckoutUnavailable(true); return; }
+    if (!payment.prepareCheckout({ version: STATE_VERSION, index, answers, unlocked })) return;
     tracking.checkout();
     window.location.href = NARCISSISM_SELFTEST_STRIPE_URL;
   }
 
   if (!hydrated) return <p className="mt-6" role="status">Laddar testet...</p>;
   return <>
+      {unlocked && <div role="status" style={{ margin: "20px 0", padding: 16, border: "1px solid #ddd", borderRadius: 12, lineHeight: 1.6 }}><strong>Ditt test är upplåst – du behöver inte betala igen.</strong>{answers.every(answer => answer >= 0) ? <p>Din fullständiga analys visas nedan.</p> : <p>Tidigare svar saknas eller är ofullständiga i den här webbläsaren. Öppna testet i samma webbläsare som före betalningen, eller svara på frågorna här utan att köpa igen. Behöver du hjälp? Kontakta <a href="mailto:support@relationsvarning.se">support@relationsvarning.se</a>.</p>}</div>}
+      {payment.checkoutError && <p role="alert" style={{ margin: "20px 0", lineHeight: 1.6 }}>{payment.checkoutError}</p>}
+
     {storageUnavailable && <p role="status" className="mt-6 rounded-xl border border-neutral-300 bg-neutral-50 p-4 text-sm leading-6">Webbläsaren kan inte spara testet. Du kan svara här, men återupptagning och betalning behöver fungerande lokal lagring. Lämna inte sidan om du vill behålla svaren.</p>}
     {!showResult && <section data-nosnippet className={section} aria-labelledby="question-heading">
       <div className="flex flex-wrap justify-between gap-2 text-sm text-neutral-600"><span>Fråga {index + 1} av {questions.length}</span><span>{answeredCount} av {questions.length} besvarade</span></div>

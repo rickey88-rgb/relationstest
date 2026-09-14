@@ -1,5 +1,7 @@
 "use client";
 
+import { hasPaidReturn, usePaymentRecovery } from "../../_components/usePaymentRecovery";
+
 import { useTestAnalytics } from "../../_analytics/useTestAnalytics";
 
 import { useEffect, useMemo, useState } from "react";
@@ -441,6 +443,7 @@ export default function Page() {
     Array(totalQuestions).fill(-1)
   );
   const [unlocked, setUnlocked] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
   const tracking = useTestAnalytics("psychological_abuse_test", questions.length);
 
   const [analysisStep, setAnalysisStep] = useState<number | null>(null);
@@ -484,6 +487,7 @@ export default function Page() {
     } catch {
       // ignore
     }
+    finally { setHydrated(true); }
   }, [totalQuestions]);
 
   useEffect(() => {
@@ -524,6 +528,7 @@ export default function Page() {
   }, []);
 
   useEffect(() => {
+    if (!hydrated) return;
     try {
       localStorage.setItem(
         LS_KEY,
@@ -536,7 +541,7 @@ export default function Page() {
     } catch {
       // ignore
     }
-  }, [index, answers, unlocked]);
+  }, [index, answers, unlocked, hydrated]);
 
   const current = questions[index];
 
@@ -548,6 +553,8 @@ export default function Page() {
   const progress = Math.round(
     (answeredCount / totalQuestions) * 100
   );
+
+  const payment = usePaymentRecovery(LS_KEY, unlocked, setUnlocked);
 
   const isFinished = useMemo(
     () => answers.every((a) => a >= 0),
@@ -674,7 +681,7 @@ export default function Page() {
       Array(totalQuestions).fill(-1)
     );
 
-    setUnlocked(false);
+    setUnlocked(hasPaidReturn(LS_KEY));
 
     try {
       localStorage.removeItem(LS_KEY);
@@ -700,11 +707,14 @@ export default function Page() {
       return;
     }
 
+    if (!payment.prepareCheckout({ index, answers, unlocked })) return;
     tracking.checkout();
 
     window.location.href =
       STRIPE_PAYMENT_LINK;
   }
+
+  if (!hydrated) return <p role="status">Laddar testet...</p>;
 
   return (
     <main
@@ -717,6 +727,9 @@ export default function Page() {
         color: "#111",
       }}
     >
+      {unlocked && <div role="status" style={{ margin: "20px 0", padding: 16, border: "1px solid #ddd", borderRadius: 12, lineHeight: 1.6 }}><strong>Ditt test är upplåst – du behöver inte betala igen.</strong>{answers.every(answer => answer >= 0) ? <p>Din fullständiga analys visas nedan.</p> : <p>Tidigare svar saknas eller är ofullständiga i den här webbläsaren. Öppna testet i samma webbläsare som före betalningen, eller svara på frågorna här utan att köpa igen. Behöver du hjälp? Kontakta <a href="mailto:support@relationsvarning.se">support@relationsvarning.se</a>.</p>}</div>}
+      {payment.checkoutError && <p role="alert" style={{ margin: "20px 0", lineHeight: 1.6 }}>{payment.checkoutError}</p>}
+
       <nav aria-label="Vidare läsning och stöd" style={{ marginBottom: 20, fontSize: 13, lineHeight: 1.7 }}>
         <a href="/psykisk-misshandel-relation" style={{ textDecoration: "underline" }}>
           Till guiden om psykisk misshandel i relation
