@@ -12,6 +12,13 @@ export const metadata: Metadata = {
 
 const tests = [
   {
+    href: "/adhd-test",
+    title: "ADHD-test för vuxna",
+    category: "Självtest för vuxna",
+    description: "Utforska uppmärksamhet, organisation, impulsivitet, inre rastlöshet, tid och vardagspåverkan med 30 frågor.",
+    cta: "Gör självtestet",
+  },
+  {
     href: "/narcissism-sjalvtest",
     title: "Narcissism – självtest",
     category: "Självtest om egna drag",

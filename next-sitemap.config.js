@@ -1,5 +1,7 @@
 const behaviors = require('./content/behaviors.json');
 const behaviorPaths = new Set([
+  '/adhd-test',
+  '/adhd-test/test',
   '/beteenden',
   '/digitalt-vald',
   '/ekonomiskt-vald',
