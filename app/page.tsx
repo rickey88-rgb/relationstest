@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import adhdGuides from "../content/adhd-guides.json";
 
 export const metadata: Metadata = {
   title: "Relationsvarning – tester för destruktiva relationer",
@@ -263,6 +264,7 @@ export default function Landing() {
           </h3>
 
           <ul className="mt-3 space-y-2 text-sm text-neutral-700">
+            {adhdGuides.map((guide) => <li key={guide.slug}><Link href={`/${guide.slug}`} className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700">{guide.label}</Link></li>)}
             <li>
               <Link href="/anknytning" className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700">
                 Anknytning i relationer

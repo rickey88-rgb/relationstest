@@ -1,6 +1,8 @@
 const behaviors = require('./content/behaviors.json');
+const adhdGuides = require('./content/adhd-guides.json');
 const behaviorPaths = new Set([
   '/adhd-test',
+  ...adhdGuides.map(({ slug }) => `/${slug}`),
   '/adhd-test/test',
   '/beteenden',
   '/digitalt-vald',

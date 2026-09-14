@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { GuideSection, textLink } from "../_components/ContentGuide";
+import { GuideLinks, GuideSection, textLink } from "../_components/ContentGuide";
+import adhdGuides from "../../content/adhd-guides.json";
 export const metadata: Metadata = {
   title: "ADHD-test för vuxna – självtest med 30 frågor | Relationsvarning",
   description: "ADHD-test för vuxna med 30 frågor om fokus, organisation, impulsivitet, inre rastlöshet, tid och vardagspåverkan. Utforska hur dina svar hänger ihop.",
@@ -121,11 +122,12 @@ export default function ADHDLanding() {
     <GuideSection title="ADHD hos kvinnor upptäcks inte alltid på samma sätt">
       <p>ADHD behöver inte innebära att någon synligt går på högvarv. Svårigheterna kan också märkas som inre rastlöshet, glömska, överbelastning eller mycket arbete med att hålla struktur. Det gäller kvinnor såväl som andra vuxna.</p>
       <p>ADHD kan missas hos flickor och kvinnor, vilket också uppmärksammas i <a href="https://www.nice.org.uk/guidance/ng87/chapter/Recommendations" className={textLink}>NICE:s riktlinjer</a>. Testet bygger därför inte hela bilden kring synlig hyperaktivitet, och resultatet bedöms inte olika beroende på kön.</p>
-      {/* Add a contextual link here when the ADHD-women guide has a published route. */}
+      <p>Fördjupa dig i <Link href="/adhd-kvinnor" className={textLink}>guiden om ADHD hos kvinnor</Link>.</p>
     </GuideSection>
     <GuideSection title={sections[3].title}>{sections[3].paragraphs.map(p => <p key={p}>{p}</p>)}<p>Det är Relationsvarnings egen självskattningsmodell, inte ett kliniskt validerat instrument. Produktprofilerna är inte officiella ADHD-subtyper.</p></GuideSection>
     <GuideSection title="Vanliga frågor om ADHD-testet">{faq.map(([question,answer]) => <div key={question} className="space-y-2 border-t border-neutral-200 pt-4"><h3 className="text-lg font-semibold text-neutral-900">{question}</h3><p>{answer}</p></div>)}</GuideSection>
     <GuideSection title="Nyfiken på vad dina egna svar visar?"><p>30 frågor. Sex områden. En samlad analys av ditt svarsmönster.</p><Link href="/adhd-test/test" className={cta}>Starta ADHD-testet</Link></GuideSection>
+    <GuideSection title="Läs mer om ADHD"><p>Utforska symtom, olika uttryck och situationer i vuxenlivet.</p><GuideLinks links={adhdGuides.map((guide) => ({ href: `/${guide.slug}`, label: guide.label }))} /></GuideSection>
     </article>
   </main>;
 }
