@@ -341,7 +341,7 @@ export default function LoveBombingRelationPage() {
               <p>
                 När kontrollen blir ett återkommande nedbrytande mönster finns en bredare förklaring i vår{" "}
                 <Link href="/psykisk-misshandel-relation" className="underline underline-offset-4">guide om psykisk misshandel i relationer</Link>
-                .
+                . Läs också om <Link href="/destruktivt-forhallande" className="underline underline-offset-4">hur en relation kan bli destruktiv över tid</Link>.
               </p>
 
               <p>

@@ -508,6 +508,12 @@ export default function Page() {
       </Link>{" "}
       och hur tystnad ibland används för att skapa skuld och osäkerhet.
     </p>
+    <p>
+      Vill du sätta manipulation i ett bredare sammanhang kan du läsa om{" "}
+      <Link href="/destruktivt-forhallande" className="font-medium text-neutral-950 underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700">
+        återkommande destruktiva relationsmönster
+      </Link>.
+    </p>
   </div>
 </section>
 

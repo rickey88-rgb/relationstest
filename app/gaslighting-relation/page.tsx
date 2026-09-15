@@ -238,7 +238,7 @@ export default function GaslightingRelationPage() {
           <p className="leading-7">
             För att förstå hur återkommande nedbrytning kan ingå i en större helhet, läs om{" "}
             <Link href="/psykisk-misshandel-relation" className="underline underline-offset-4">psykisk misshandel i nära relationer</Link>
-            .
+            . Du kan också läsa om <Link href="/destruktivt-forhallande" className="underline underline-offset-4">andra tecken på en destruktiv relation</Link>.
           </p>
 
           <p className="leading-7">

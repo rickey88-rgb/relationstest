@@ -73,7 +73,8 @@ export default function PsykiskMisshandelRelationPage() {
         <p className="mb-8 leading-relaxed text-neutral-700">
           Det är skillnad på en konflikt och systematisk nedbrytning. I en sund
           relation finns respekt och ansvar. I en destruktiv relation förskjuts
-          maktbalansen över tid.
+          maktbalansen över tid. Läs mer om{" "}
+          <Link href="/destruktivt-forhallande" className="underline">skillnaden mellan relationsproblem och ett destruktivt mönster</Link>.
         </p>
 
         <p className="mb-8 leading-relaxed text-neutral-700">

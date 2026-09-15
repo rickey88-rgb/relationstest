@@ -86,7 +86,8 @@ export default function Page() {
         <p>
           När begränsningarna blir ett nedbrytande mönster kan du läsa vidare om{" "}
           <Link href="/psykisk-misshandel-relation" className="underline underline-offset-4">kontroll som del av psykisk misshandel</Link>
-          .
+          . För en bredare bild av flera mönster, se också{" "}
+          <Link href="/destruktivt-forhallande" className="underline underline-offset-4">tecken på ett destruktivt förhållande</Link>.
         </p>
 
         <h2 className="text-2xl font-semibold">
