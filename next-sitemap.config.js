@@ -1,6 +1,11 @@
 const behaviors = require('./content/behaviors.json');
 const adhdGuides = require('./content/adhd-guides.json');
+// eslint-disable-next-line @typescript-eslint/no-require-imports -- next-sitemap loads this existing CommonJS config.
+const autismGuides = require('./content/autism-guides.json');
 const behaviorPaths = new Set([
+  '/autism-test',
+  '/autism-test/test',
+  ...autismGuides.map(({ slug }) => `/${slug}`),
   '/adhd-test',
   ...adhdGuides.map(({ slug }) => `/${slug}`),
   '/adhd-test/test',

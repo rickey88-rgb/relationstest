@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import adhdGuides from "../content/adhd-guides.json";
+import autismGuides from "../content/autism-guides.json";
 
 export const metadata: Metadata = {
   title: "Relationsvarning – tester för destruktiva relationer",
@@ -12,6 +13,13 @@ export const metadata: Metadata = {
 };
 
 const tests = [
+  {
+    href: "/autism-test",
+    title: "Autismtest för vuxna",
+    category: "Självtest för vuxna",
+    description: "Utforska socialt samspel, kommunikation, sensorik, förutsägbarhet, intressen och vardagspåverkan med 30 frågor.",
+    cta: "Gör självtestet",
+  },
   {
     href: "/adhd-test",
     title: "ADHD-test för vuxna",
@@ -264,6 +272,7 @@ export default function Landing() {
           </h3>
 
           <ul className="mt-3 space-y-2 text-sm text-neutral-700">
+            {autismGuides.map((guide) => <li key={guide.slug}><Link href={`/${guide.slug}`} className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700">{guide.label}</Link></li>)}
             {adhdGuides.map((guide) => <li key={guide.slug}><Link href={`/${guide.slug}`} className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700">{guide.label}</Link></li>)}
             <li>
               <Link href="/anknytning" className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700">
