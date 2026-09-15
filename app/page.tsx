@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   },
 };
 
-const tests = [
+const selfTests = [
   {
     href: "/autism-test",
     title: "Autismtest för vuxna",
@@ -34,6 +34,9 @@ const tests = [
     description: "Utforska dina egna narcissistiska drag och få en personlig profil inom sex områden.",
     cta: "Gör självtestet",
   },
+];
+
+const relationTests = [
   {
     href: "/psykisk-misshandel-relation/test",
     title: "Psykisk misshandel / psykiskt våld",
@@ -42,21 +45,21 @@ const tests = [
       "Undersök återkommande mönster av kontroll, hot, förnedring och psykisk nedbrytning.",
   },
   {
-    href: "/narcissist-i-en-relation/test",
+    href: "/narcissist-i-en-relation",
     title: "Lever du med en narcissist?",
     category: "Fördjupningstest",
     description:
       "Undersök narcissistiska relationsmönster som manipulation, empatibrist, nedvärdering och starka reaktioner på kritik.",
   },
   {
-    href: "/anknytningstest/test",
+    href: "/anknytningstest",
     title: "Anknytningstest",
     category: "Fördjupningstest",
     description:
       "Utforska hur du reagerar på närhet, osäkerhet och känslomässigt avstånd i romantiska relationer.",
   },
    {
-    href: "/medberoendetest/test",
+    href: "/medberoendetest",
     title: "Medberoendetest",
     category: "Fördjupningstest",
     description:
@@ -114,9 +117,11 @@ export default function Landing() {
             </h1>
 
             <p className="mt-5 text-base leading-relaxed text-neutral-700">
-              Frågorna tar upp kontroll, manipulation och destruktiva relationsmönster
-              med bakgrund i forskning och etablerad kunskap. Testerna hjälper dig
-              att reflektera över återkommande beteenden – inte att ställa en diagnos.
+              Om du undrar om ditt förhållande har blivit destruktivt kan det
+              generella testet hjälpa dig att sortera återkommande relationsproblem:
+              kontroll, manipulation, psykisk misshandel och andra varningssignaler.
+              Frågorna har bakgrund i forskning och etablerad kunskap och hjälper
+              dig att reflektera över beteendemönster – inte att ställa en diagnos.
             </p>
             <p className="mt-3 flex flex-wrap items-center gap-x-2 text-sm text-neutral-600">
               <Link href="/metodik" className="inline-flex min-h-11 items-center underline underline-offset-4">Forskning och metodik</Link>
@@ -126,110 +131,16 @@ export default function Landing() {
 
           </div>
 
-          <section aria-labelledby="tests-heading" className="order-2 min-w-0 lg:col-span-12">
+          <section className="order-2 min-w-0 lg:col-span-12">
             <div className="mb-8 rounded-2xl border border-neutral-200 bg-neutral-50 p-5 sm:p-6">
               <h2 className="text-2xl font-semibold tracking-tight">Vet du inte riktigt vad som är fel?</h2>
               <p className="mt-3 max-w-3xl leading-relaxed text-neutral-700">Om något känns fel i relationen men du har svårt att sätta fingret på vad, börja med screeningtestet. Det går igenom flera typer av destruktiva beteenden och hjälper dig att identifiera vilka områden som kan vara relevanta att titta närmare på.</p>
               <Link href="/test" className="mt-5 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[#7A1F1F] px-5 py-3 text-center font-semibold text-white hover:bg-[#5C1717] focus-visible:bg-[#5C1717] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#5C1717] sm:w-auto">Gör screeningtestet</Link>
             </div>
-            <h2 id="tests-heading" className="text-2xl font-semibold tracking-tight">
-              Vet du redan vad du vill undersöka?
-            </h2>
-            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-neutral-700 sm:text-base">
-              Välj ett fördjupningstest nedan.
-            </p>
-            <ul className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5">
-              {tests.map((test) => (
-                <li key={test.href} className="flex min-w-0 flex-col rounded-2xl border border-neutral-200/70 bg-neutral-50 p-4 sm:p-5">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
-                    {test.category}
-                  </p>
-                  <h3 className="mt-2 text-lg font-semibold leading-snug tracking-tight text-neutral-900">
-                    {test.title}
-                  </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-neutral-700">
-                    {test.description}
-                  </p>
-                  <div className="mt-auto pt-4">
-                    <Link
-                      href={test.href}
-                      aria-label={`${test.cta ?? "Starta testet"}: ${test.title}`}
-                      className="inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-neutral-900 px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-neutral-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
-                    >
-                      {test.cta ?? "Starta testet"}
-                    </Link>
-                  </div>
-                </li>
-              ))}
-            </ul>
           </section>
 
-          {/* Right: Minimal, serious “frame” */}
+          {/* Safety note and site context beside the main test */}
           <aside className="order-3 min-w-0 max-w-3xl lg:col-span-12">
-            <div className="rounded-2xl border border-neutral-200/70 p-6 shadow-[0_1px_0_rgba(0,0,0,0.02)]">
-              <h2 className="text-sm font-semibold tracking-tight">
-                Vad testet är — och inte är
-              </h2>
-
-              <div className="mt-4 space-y-5">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-neutral-500">
-                    Testet är
-                  </p>
-                  <ul className="mt-2 space-y-2 text-sm text-neutral-700">
-                    <li className="flex gap-3">
-                      <span className="mt-1 h-1.5 w-1.5 rounded-full bg-neutral-900" />
-                      Ett stöd för att se mönster tydligare
-                    </li>
-                    <li className="flex gap-3">
-                      <span className="mt-1 h-1.5 w-1.5 rounded-full bg-neutral-900" />
-                      Byggt på vanliga beteendemarkörer i relationer
-                    </li>
-                    <li className="flex gap-3">
-                      <span className="mt-1 h-1.5 w-1.5 rounded-full bg-neutral-900" />
-                      Anonymt och snabbt att genomföra
-                    </li>
-                  </ul>
-                </div>
-
-                <div className="border-t border-neutral-200/70 pt-5">
-                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-neutral-500">
-                    Testet är inte
-                  </p>
-                  <ul className="mt-2 space-y-2 text-sm text-neutral-700">
-                    <li className="flex gap-3">
-                      <span className="mt-1 h-1.5 w-1.5 rounded-full bg-neutral-300" />
-                      En diagnos eller medicinsk bedömning
-                    </li>
-                    <li className="flex gap-3">
-                      <span className="mt-1 h-1.5 w-1.5 rounded-full bg-neutral-300" />
-                      Juridisk rådgivning
-                    </li>
-                    <li className="flex gap-3">
-                      <span className="mt-1 h-1.5 w-1.5 rounded-full bg-neutral-300" />
-                      Ett facit över vad du ska göra
-                    </li>
-                  </ul>
-                </div>
-
-                <div className="rounded-xl bg-neutral-50 p-4">
-                  <p className="text-sm font-semibold text-neutral-900">
-                    Efter testet
-                  </p>
-                  <p className="mt-1 text-sm leading-relaxed text-neutral-700">
-                    Du får en sammanfattning och en indikation baserad på dina
-                    svar. Och en möjlighet till en mer fördjupad analys.
-                  </p>
-                  <p className="mt-3 text-xs text-neutral-600">
-                    Fördjupning:{" "}
-                    <span className="font-semibold">
-                      Kan fås baserat på dina svar
-                    </span>
-                  </p>
-                </div>
-              </div>
-            </div>
-
             <p className="mt-4 text-xs leading-relaxed text-neutral-500">
               Om du känner dig akut hotad eller i fara: ring 112 eller kontakta
               någon du litar på. Det här testet är ett reflektionsstöd.
@@ -261,6 +172,100 @@ export default function Landing() {
               </dl>
             </div>
           </aside>
+        </div>
+      </section>
+
+      <section aria-labelledby="tests-heading" className="mx-auto max-w-5xl px-4 pb-12 sm:px-6">
+        <h2 id="tests-heading" className="text-2xl font-semibold tracking-tight">Relationstester</h2>
+        <p className="mt-3 max-w-3xl leading-relaxed text-neutral-700">
+          Vill du undersöka ett mer specifikt mönster i relationen? Välj ett av
+          våra fördjupade tester. Om du är osäker på var du ska börja finns det
+          generella screeningtestet ovan.
+        </p>
+        <TestCards items={relationTests} />
+      </section>
+
+      <section aria-labelledby="self-tests-heading" className="mx-auto max-w-5xl px-4 pb-14 sm:px-6">
+        <div className="border-t border-neutral-200/70 pt-10 sm:pt-12">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-neutral-500">
+            Fokus på dig själv
+          </p>
+          <h2 id="self-tests-heading" className="mt-3 text-2xl font-semibold tracking-tight">Självtester</h2>
+          <p className="mt-3 max-w-3xl leading-relaxed text-neutral-700">
+            Självtesterna handlar om dina egna drag, upplevelser och mönster,
+            snarare än om en partner eller relation.
+          </p>
+          <TestCards items={selfTests} />
+        </div>
+      </section>
+
+      <section aria-labelledby="about-tests-heading" className="mx-auto max-w-5xl px-4 pb-14 sm:px-6">
+        <div className="max-w-3xl">
+            <div className="rounded-2xl border border-neutral-200/70 p-6 shadow-[0_1px_0_rgba(0,0,0,0.02)]">
+              <h2 id="about-tests-heading" className="text-sm font-semibold tracking-tight">
+                Vad våra tester är — och inte är
+              </h2>
+
+              <div className="mt-4 space-y-5">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-neutral-500">
+                    Testerna är
+                  </p>
+                  <ul className="mt-2 space-y-2 text-sm text-neutral-700">
+                    <li className="flex gap-3">
+                      <span className="mt-1 h-1.5 w-1.5 rounded-full bg-neutral-900" />
+                      Ett stöd för att se mönster tydligare
+                    </li>
+                    <li className="flex gap-3">
+                      <span className="mt-1 h-1.5 w-1.5 rounded-full bg-neutral-900" />
+                      Byggda kring strukturerade frågor om beteenden, upplevelser eller drag
+                    </li>
+                    <li className="flex gap-3">
+                      <span className="mt-1 h-1.5 w-1.5 rounded-full bg-neutral-900" />
+                      Anonyma och enkla att genomföra
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="border-t border-neutral-200/70 pt-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-neutral-500">
+                    Testerna är inte
+                  </p>
+                  <ul className="mt-2 space-y-2 text-sm text-neutral-700">
+                    <li className="flex gap-3">
+                      <span className="mt-1 h-1.5 w-1.5 rounded-full bg-neutral-300" />
+                      Diagnoser eller medicinska bedömningar
+                    </li>
+                    <li className="flex gap-3">
+                      <span className="mt-1 h-1.5 w-1.5 rounded-full bg-neutral-300" />
+                      Juridisk rådgivning
+                    </li>
+                    <li className="flex gap-3">
+                      <span className="mt-1 h-1.5 w-1.5 rounded-full bg-neutral-300" />
+                      Ett facit över vad du måste göra
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="rounded-xl bg-neutral-50 p-4">
+                  <p className="text-sm font-semibold text-neutral-900">
+                    Efter testet
+                  </p>
+                  <p className="mt-1 text-sm leading-relaxed text-neutral-700">
+                    Du får en sammanställning baserad på dina svar. Beroende på
+                    test kan du också få en fördjupad analys av de mönster
+                    som framträder.
+                  </p>
+                  <p className="mt-3 text-xs text-neutral-600">
+                    Fördjupning:{" "}
+                    <span className="font-semibold">
+                      Kan finnas beroende på test och dina svar
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
         </div>
       </section>
 
@@ -421,5 +426,38 @@ export default function Landing() {
       </section>
 
     </main>
+  );
+}
+
+function TestCards({
+  items,
+}: {
+  items: { href: string; title: string; category: string; description: string; cta?: string }[];
+}) {
+  return (
+    <ul className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5">
+      {items.map((test) => (
+        <li key={test.href} className="flex min-w-0 flex-col rounded-2xl border border-neutral-200/70 bg-neutral-50 p-4 sm:p-5">
+          <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
+            {test.category}
+          </p>
+          <h3 className="mt-2 text-lg font-semibold leading-snug tracking-tight text-neutral-900">
+            {test.title}
+          </h3>
+          <p className="mt-2 text-sm leading-relaxed text-neutral-700">
+            {test.description}
+          </p>
+          <div className="mt-auto pt-4">
+            <Link
+              href={test.href}
+              aria-label={`${test.cta ?? "Starta testet"}: ${test.title}`}
+              className="inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-neutral-900 px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-neutral-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
+            >
+              {test.cta ?? "Starta testet"}
+            </Link>
+          </div>
+        </li>
+      ))}
+    </ul>
   );
 }
