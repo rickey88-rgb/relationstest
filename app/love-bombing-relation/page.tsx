@@ -153,8 +153,10 @@ export default function LoveBombingRelationPage() {
             Love bombing – tecken och skillnaden mot stark förälskelse
           </h1>
           <p id="vad-ar" className="mt-6 max-w-3xl text-lg leading-8 text-neutral-700 md:text-xl">
-            Love bombing beskriver ett mönster av överväldigande uppvaktning,
-            stora ord och intensiv kontakt som skapar press att snabbt knyta an.
+            Love bombing, ibland skrivet lovebombing och kallat kärleksbombning på
+            svenska, beskriver ett mönster av överväldigande uppvaktning: intensiv
+            kontakt, bekräftelse, gåvor eller framtidsplaner mycket tidigt. Tempot
+            kan skapa press att snabbt knyta an.
             Uppmärksamheten kan kombineras med krav eller senare följas av skuld,
             kyla och kontroll.
           </p>
@@ -203,7 +205,9 @@ export default function LoveBombingRelationPage() {
 
             <p className="text-[1.05rem] leading-8 text-neutral-700">
               Enstaka tecken bevisar inte love bombing. Se till helheten: skapar
-              intensiteten press, och respekteras dina gränser över tid?
+              intensiteten press, och respekteras dina gränser över tid? I vardagen
+              kan det märkas som täta meddelanden, stora löften efter några träffar
+              eller besvikelse när du vill tillbringa en kväll med vänner.
             </p>
 
             <div className="grid gap-4">
@@ -265,6 +269,12 @@ export default function LoveBombingRelationPage() {
 
             <div className="space-y-5 text-[1.05rem] leading-8 text-neutral-700">
               <p>
+                En intensiv början som blir lugnare när vardagen kommer är normalt
+                i många relationer. Det är först om närheten börjar villkoras eller
+                följs av återkommande kritik, distans eller kontroll som förändringen
+                kan vara ett varningstecken.
+              </p>
+              <p>
                 Det mest förvirrande med love bombing är ofta inte början – utan
                 förändringen som kommer efteråt. När du väl hunnit knyta an, börja
                 hoppas, börja investera och kanske anpassa ditt liv efter relationen,
@@ -310,7 +320,6 @@ export default function LoveBombingRelationPage() {
                 <Link href="/traumabindning-i-relation" className="underline underline-offset-4">traumabindning och svårigheten att lämna</Link>
                 .
                 Love bombing innebär inte automatiskt traumabindning.
-                Om du känner igen växlingen mellan närhet och smärta kan du också <Link href="/traumabindningtest/test" className="underline underline-offset-4">göra traumabindningstestet</Link> för att reflektera över mönstret i din relation.
               </p>
 
               <p>
@@ -425,6 +434,14 @@ export default function LoveBombingRelationPage() {
                 . Ju tidigare man ser helheten, desto lättare är det att skydda sin
                 egen verklighetsuppfattning.
               </p>
+              <p>
+                Om du är rädd för partnerns reaktion, hotas eller känner dig starkt
+                kontrollerad kan du läsa om{" "}
+                <Link href="/psykiskt-vald/hjalp" className="underline underline-offset-4">
+                  stöd och hjälp vid psykiskt våld
+                </Link>
+                . Vid akut fara, ring 112.
+              </p>
             </div>
           </section>
 
@@ -436,15 +453,16 @@ export default function LoveBombingRelationPage() {
               Vill du reflektera över relationens mönster?
             </h2>
             <p className="mt-4 text-[1.02rem] leading-8 text-neutral-700">
-              Om du vill få en första överblick över mönster i relationen kan du{" "}
-              <Link
-                href="/test"
-                className="font-medium text-neutral-950 underline decoration-rose-300 underline-offset-4 hover:decoration-rose-600"
-              >
-                göra det generella relationstestet
-              </Link>
-              . Det är ett bredare relationstest, inte ett diagnostiskt love bombing-test.
+              Känner du igen flera intensiva eller destruktiva mönster i relationen?
+              På Relationsvarnings startsida finns huvudtestet som hjälper dig att
+              reflektera över helheten. Det ger ingen diagnos.
             </p>
+            <Link
+              href="/"
+              className="mt-5 inline-flex min-h-12 items-center justify-center rounded-xl bg-[#7A1F1F] px-5 py-3 text-center font-semibold text-white hover:bg-[#5C1717] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#5C1717]"
+            >
+              Gör Relationsvarnings test
+            </Link>
           </section>
 
           <section className="border-t border-neutral-200 pt-14">

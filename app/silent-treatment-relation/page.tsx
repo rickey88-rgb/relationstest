@@ -39,7 +39,7 @@ const healthyVsUnhealthy = [
   {
     title: "Silent treatment",
     text:
-      "handlar ofta inte om reglering utan om makt. Tystnaden blir ett verktyg som skapar osäkerhet, skuld och jakt på försoning. Du lämnas att gissa vad som händer, hur länge det ska pågå och vad du måste göra för att det ska ta slut.",
+      "kan bli ett sätt att utöva makt när tystnaden återkommer utan förklaring eller plan för fortsatt samtal. Du lämnas att gissa vad som händer, hur länge det ska pågå och vad du måste göra för att få kontakt igen.",
   },
   {
     title: "Att ta space på ett moget sätt",
@@ -58,6 +58,7 @@ const whatToDo = [
   "Lägg märke till om personen faktiskt kommunicerar behov av space, eller om du bara lämnas i oro och ovisshet.",
   "Skriv ner episoderna. Hur länge varade tystnaden? Vad utlöste den? Vad hände när kontakten kom tillbaka?",
   "Sakta ner ditt eget reparationsbeteende. Se om personen tar något ansvar, eller om hela dynamiken bygger på att du ska jaga lugnet.",
+  "Säg gärna att du är villig att prata när ni båda kan göra det. Du behöver inte jaga fram ett svar i panik, och du kan sätta en gräns för återkommande straffande tystnad.",
   "Behåll kontakt med vänner, rutiner och ditt eget perspektiv. Silent treatment blir ofta starkare när du blir ensam i den.",
   "Titta på riktningen över tid: blir relationen tryggare, tydligare och mer respektfull – eller mer spänd och oförutsägbar?",
 ];
@@ -77,6 +78,11 @@ const faqs = [
     question: "Är silent treatment ett tecken på manipulation?",
     answer:
       "Det kan vara det, särskilt när det upprepas och fungerar som ett sätt att kontrollera stämning, skuld eller lydnad i relationen. Det viktiga är att titta på mönster och effekt, inte bara på en enstaka episod.",
+  },
+  {
+    question: "Är silent treatment en härskarteknik?",
+    answer:
+      "Det kan fungera som en härskarteknik när tystnad återkommande används för att straffa, få eftergifter eller styra den andras beteende. En enstaka paus efter en konflikt är däremot inte automatiskt en härskarteknik. Se på hur kontakten återupptas och om mönstret begränsar dig över tid.",
   },
   {
     question: "Kan silent treatment komma efter love bombing?",
@@ -169,23 +175,6 @@ export default function SilentTreatmentRelationPage() {
             inifrån. Just därför är den viktig att förstå.
           </p>
 
-          <div className="mt-8 rounded-2xl border border-neutral-300 bg-white p-5 shadow-sm">
-            <p className="text-sm font-medium uppercase tracking-[0.18em] text-neutral-700">
-              Känner du igen mönstret?
-            </p>
-            <p className="mt-2 text-base leading-7 text-neutral-700">
-              Om du vill få en första känsla för relationens dynamik kan du{" "}
-              <Link
-                href="/test"
-                className="font-medium text-neutral-950 underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
-              >
-                göra vårt test här
-              </Link>
-              . Det är ingen diagnos, men det kan hjälpa dig att se vissa mönster
-              tydligare när allt känns blandat.
-            </p>
-          </div>
-
           <div className="mt-8 grid gap-3 sm:grid-cols-2 md:grid-cols-4">
             <Link
               href="#vad-ar"
@@ -224,8 +213,9 @@ export default function SilentTreatmentRelationPage() {
 
             <div className="space-y-5 text-[1.05rem] leading-8 text-neutral-700">
               <p>
-                <strong>Silent treatment</strong> används ofta som ett namn på ett
-                relationsmönster där en person medvetet eller funktionellt drar undan
+                <strong>Silent treatment</strong> betyder ungefär <em>tyst behandling</em>
+                eller <em>straffande tystnad</em> på svenska. I ett förhållande används
+                det ofta som ett namn på ett återkommande mönster där en person drar undan
                 kontakt, respons, värme eller normal kommunikation på ett sätt som
                 lämnar den andra i osäkerhet. Det kan handla om att inte svara, att
                 frysa ut, att vara kall i samma rum, att svara med enstaka ord eller
@@ -242,8 +232,8 @@ export default function SilentTreatmentRelationPage() {
               </p>
 
               <p>
-                När silent treatment blir ett mönster börjar tystnaden ofta få en
-                funktion. Den skapar spänning. Den skapar skuld. Den skapar ett
+                När silent treatment blir ett mönster kan tystnaden få en
+                funktion. Den kan skapa spänning och skuld och ett
                 sug efter att få tillbaka det normala. Och när du hamnar där blir det
                 lätt att själva sakfrågan försvinner. Det som från början kanske var en
                 konflikt om något konkret förvandlas snabbt till en kamp för att få
@@ -292,7 +282,7 @@ export default function SilentTreatmentRelationPage() {
               Kort sagt
             </h2>
             <p className="mt-4 text-[1.02rem] leading-8 text-neutral-700">
-              Silent treatment är ofta inte bara frånvaro av ord. Det är frånvaro av
+              Silent treatment är ofta inte bara frånvaro av ord. Det kan innebära frånvaro av
               trygghet, förklaring och kontakt på ett sätt som gör att du börjar jaga
               lugnet. När tystnad får dig att krympa, gissa eller be om att bli
               insläppt igen, har den redan fått större makt än den borde ha i en sund
@@ -350,7 +340,7 @@ export default function SilentTreatmentRelationPage() {
 
           <section className="space-y-6">
             <h2 className="text-3xl font-semibold tracking-tight text-neutral-950">
-              Skillnaden mellan att behöva space och att använda tystnad som makt
+              Silent treatment eller behov av paus – vad är skillnaden?
             </h2>
 
             <p className="text-[1.05rem] leading-8 text-neutral-700">
@@ -358,7 +348,9 @@ export default function SilentTreatmentRelationPage() {
               för silent treatment börjar snabbt tvivla på sig själva eftersom de inte
               vill vara orimliga. De vill respektera att någon är arg, trött eller
               överväldigad. Det är sunt. Men just därför är det viktigt att se skillnad
-              på <em>reglering</em> och <em>bestraffning</em>.
+              på en kommunicerad paus och tystnad som återkommande lämnar den andra
+              i ovisshet. Motivet är inte alltid känt, men beteendet och dess följder
+              går att uppmärksamma.
             </p>
 
             <p className="text-[1.05rem] leading-8 text-neutral-700">
@@ -407,26 +399,27 @@ export default function SilentTreatmentRelationPage() {
               Om du behöver få syn på helheten
             </h2>
             <p className="mt-4 text-[1.02rem] leading-8 text-neutral-700">
-              Om du vill få ett första grepp om relationens dynamik kan du{" "}
-              <Link
-                href="/test"
-                className="font-medium text-neutral-950 underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
-              >
-                göra vårt test här
-              </Link>
-              . För många blir mönster tydligare när de ser dem formulerade svart på
-              vitt istället för att bara bära dem som en diffus känsla i kroppen.
+              Känner du igen flera destruktiva eller kontrollerande mönster i relationen?
+              På Relationsvarnings startsida finns huvudtestet som kan hjälpa dig att
+              reflektera över helheten. Ett test ger ingen diagnos och ersätter inte
+              ditt eget perspektiv på hur trygg du känner dig.
             </p>
+            <Link
+              href="/"
+              className="mt-5 inline-flex min-h-12 items-center justify-center rounded-xl bg-[#7A1F1F] px-5 py-3 text-center font-semibold text-white hover:bg-[#5C1717] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#5C1717]"
+            >
+              Gör Relationsvarnings test
+            </Link>
           </section>
 
           <section id="varfor" className="space-y-6">
             <h2 className="text-3xl font-semibold tracking-tight text-neutral-950">
-              Varför silent treatment gör så starkt avtryck
+              Vilka konsekvenser kan silent treatment få?
             </h2>
 
             <div className="space-y-5 text-[1.05rem] leading-8 text-neutral-700">
               <p>
-                Silent treatment är ofta psykiskt slitsamt just för att det inte finns
+                Silent treatment kan vara psykiskt slitsamt just för att det inte finns
                 något tydligt att möta. Om någon skriker eller säger något hårt vet du
                 åtminstone att något pågår. Men när en person bara drar bort kontakt
                 lämnas du ensam med tolkningen. Du måste själv gissa om personen är arg,
@@ -435,7 +428,7 @@ export default function SilentTreatmentRelationPage() {
               </p>
 
               <p>
-                Det gör att tystnaden ofta blir större än orden någonsin hade blivit.
+                För vissa blir tystnaden större än orden någonsin hade blivit.
                 Inte för att ingenting händer, utan för att väldigt mycket händer i dig.
                 Du börjar tänka. Du börjar känna skuld. Du försöker minnas exakt vad du
                 sa. Du testar olika sätt att nå fram. Du överväger om du ska backa,
@@ -530,9 +523,6 @@ export default function SilentTreatmentRelationPage() {
                 : inte bara att något händer, utan att du dessutom får det att framstå
                 som om du tolkar allt fel.
               </p>
-              <p>
-                Om du känner igen återkommande förnekanden och tvivel på din egen upplevelse kan du också <Link href="/gaslightingtest/test" className="underline underline-offset-4">göra gaslightingtestet</Link>.
-              </p>
 
               <p>
                 I andra fall blir tystnaden en del av ett större kontrollsystem. Du får
@@ -570,7 +560,6 @@ export default function SilentTreatmentRelationPage() {
                 För mer om hur hoppet om närhet kan hålla en kvar, läs om{" "}
                 <Link href="/traumabindning-i-relation" className="underline underline-offset-4">traumabindning och starka känsloband</Link>
                 .
-                Du kan också <Link href="/traumabindningtest/test" className="underline underline-offset-4">utforska dessa känsloband i traumabindningstestet</Link> om du känner igen att hoppet om närhet gör det svårt att skapa avstånd.
               </p>
               <p>
                 Dessutom kan den som använder tystnad ibland vara varm igen efteråt.
@@ -691,17 +680,6 @@ export default function SilentTreatmentRelationPage() {
                 konflikten.
               </p>
 
-              <p>
-                Om du vill få en första överblick över relationens mönster kan du också{" "}
-                <Link
-                  href="/test"
-                  className="font-medium text-neutral-950 underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
-                >
-                  göra vårt test här
-                </Link>
-                . Det kan vara ett sätt att få lite mer struktur när allt annars känns
-                diffust och svårt att sammanfatta.
-              </p>
             </div>
           </section>
 
@@ -744,6 +722,14 @@ export default function SilentTreatmentRelationPage() {
                 Blir du friare – eller mer styrd av någon annans tillgänglighet? När
                 svaren konsekvent går åt fel håll är det något att ta på allvar, även om
                 relationen utåt fortfarande ser lugn ut.
+              </p>
+              <p>
+                Om du är rädd för partnerns reaktion, utsätts för hot eller känner dig
+                kontrollerad behöver du inte försöka lösa det ensam. Läs om{" "}
+                <Link href="/psykiskt-vald/hjalp" className="underline underline-offset-4">
+                  stöd och hjälp vid psykiskt våld
+                </Link>
+                . Vid akut fara, ring 112.
               </p>
             </div>
           </section>
@@ -793,15 +779,7 @@ export default function SilentTreatmentRelationPage() {
               </p>
 
               <p>
-                Om du känner igen dig och vill få ett första grepp om relationens
-                dynamik kan du{" "}
-                <Link
-                  href="/test"
-                  className="font-medium text-neutral-950 underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
-                >
-                  göra vårt test här
-                </Link>
-                . Du kan också läsa vidare om{" "}
+                Om du känner igen dig kan du läsa vidare om{" "}
                 <Link
                   href="/love-bombing-relation"
                   className="font-medium text-neutral-950 underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"

@@ -39,17 +39,18 @@ export default function GaslightingRelationPage() {
         <section className="space-y-4">
           <h2 className="text-2xl font-semibold tracking-tight">Vad betyder gaslighting</h2>
           <p className="leading-7">
-            <strong>Gaslighting</strong> är en form av psykologisk manipulation där en person
-            systematiskt får en annan att tvivla på sin egen upplevelse, minne eller omdöme. Det kan
-            ske subtilt eller tydligt, men effekten blir ofta densamma: verkligheten känns plötsligt
-            osäker, och du börjar lägga mer vikt vid den andres version än din egen.
+            <strong>Gaslighting</strong> i en relation beskriver ett återkommande mönster där
+            någon förnekar eller förvränger det som hänt och undergräver den andres upplevelse.
+            Den som utsätts kan börja tvivla på sitt eget minne eller omdöme och lägga större
+            vikt vid partnerns version än sin egen.
           </p>
           <p className="leading-7">
-            Det viktiga är att förstå att gaslighting sällan handlar om ett enstaka bråk eller en
-            missuppfattning. Det handlar om ett <strong>mönster</strong> där den ena parten, medvetet
-            eller omedvetet, driver en berättelse som gör den andra parten mindre trygg i sin egen
-            perception. När det pågår länge kan det leda till stress, ångest, isolering, och en känsla
-            av att du behöver “bevis” för att få ha dina känslor.
+            Ett minnesfel, en lögn eller två olika minnen av ett bråk är inte automatiskt
+            gaslighting. Det viktiga är <strong>mönstret</strong>: om din upplevelse gång på
+            gång avfärdas och sakfrågan försvinner. När det pågår länge kan du känna stress
+            och börja tro att du behöver “bevis” för att få ta dina känslor på allvar.
+            Att bli <em>gaslightad</em> betyder i vardagligt språk att påverkas av ett sådant
+            mönster; en <em>gaslighter</em> är den som utövar beteendet, inte en diagnos.
           </p>
         </section>
 
@@ -79,8 +80,9 @@ export default function GaslightingRelationPage() {
       color: "#444",
     }}
   >
-    Gör vårt gaslightingtest med 30 frågor om förnekande, skuldvändning,
-    minne, känslor och tillit till det egna omdömet.
+    Känner du igen ett återkommande mönster? Gaslightingtestet har 30 frågor
+    om förnekande, skuldvändning, minne och tillit till ditt eget omdöme.
+    Det kan hjälpa dig att strukturera vad du upplever, utan att ställa diagnos.
   </p>
 
   <Link
@@ -121,7 +123,7 @@ export default function GaslightingRelationPage() {
         </section>
 
         <section className="space-y-4">
-          <h2 className="text-2xl font-semibold tracking-tight">Konkreta exempel på gaslighting</h2>
+          <h2 className="text-2xl font-semibold tracking-tight">Exempel på gaslighting i en relation</h2>
           <p className="leading-7">
             Gaslighting kan se olika ut beroende på personlighet, relationstyp och situation.
             Här är vanliga exempel, med fokus på <strong>mönster</strong> snarare än enskilda repliker:
@@ -148,6 +150,8 @@ export default function GaslightingRelationPage() {
             <p className="leading-7">
               Här flyttas fokus från <strong>ditt behov</strong> till en påstådd negativ intention.
               Resultatet blir att du får försvara dig istället för att prata om det som hände.
+              Om samma skuldvändning återkommer när du tar upp konkreta händelser kan den
+              få dig att tvivla på om du ens har rätt att säga ifrån.
             </p>
           </div>
 
@@ -159,7 +163,8 @@ export default function GaslightingRelationPage() {
             </p>
             <p className="leading-7">
               I en sund relation kan man vara oense, men man försöker ändå förstå varandras känslor.
-              Gaslighting bygger ofta på att göra känslor “ogiltiga”.
+              När dina reaktioner konsekvent används för att avfärda det som hänt kan du
+              börja misstro din egen bedömning.
             </p>
           </div>
 
@@ -182,7 +187,18 @@ export default function GaslightingRelationPage() {
               <em>“Min vän sa att du är manipulativ.”</em> Ofta utan att du kan verifiera det.
             </p>
             <p className="leading-7">
-              Syftet kan vara att få dig att känna dig ensam, osäker, och mindre trovärdig.
+              Om andra personers påstådda åsikter återkommande används för att avfärda
+              din upplevelse kan du känna dig ensam, osäker och mindre trovärdig.
+            </p>
+          </div>
+
+          <div className="space-y-4 rounded-2xl border border-neutral-200 p-6">
+            <h3 className="text-lg font-semibold">Samma händelse får en ny version</h3>
+            <p className="leading-7">
+              Din partner kritiserar dig inför vänner eller läser dina meddelanden utan lov.
+              När du senare tar upp det får du höra att du missförstod allt eller att det var
+              du som skapade scenen. Ett missförstånd kan redas ut; om sådana förnekanden
+              återkommer när du sätter gränser kan de undergräva din tillit till dig själv.
             </p>
           </div>
         </section>
@@ -193,7 +209,9 @@ export default function GaslightingRelationPage() {
           </h2>
           <p className="leading-7">
             I en vanlig konflikt kan båda minnas olika, bli defensiva, eller uttrycka sig klumpigt.
-            Skillnaden ligger ofta i <strong>viljan att förstå och reparera</strong>.
+            Båda kan erkänna osäkerhet och korrigera sig. Skillnaden ligger ofta i om
+            det går att återvända till sakfrågan, eller om din upplevelse konsekvent
+            avfärdas och ansvaret alltid flyttas över på dig.
           </p>
           <ul className="list-disc space-y-2 pl-5 leading-7">
             <li>
@@ -223,9 +241,8 @@ export default function GaslightingRelationPage() {
             .
           </p>
 
-          {/* ✅ NY: Diskreta interna länkar mitt i innehållet */}
           <p className="leading-7">
-            Gaslighting förekommer också ofta tillsammans med andra mönster, som{" "}
+            Om andra mönster också finns kan du läsa om{" "}
             <Link href="/manipulativ-partner" className="font-medium underline underline-offset-4">
               manipulation
             </Link>{" "}
@@ -233,7 +250,7 @@ export default function GaslightingRelationPage() {
             <Link href="/kontrollerande-relation" className="font-medium underline underline-offset-4">
               kontroll
             </Link>
-            . Att läsa om närliggande beteenden kan göra det lättare att se helheten.
+            . Gaslighting behöver inte förekomma tillsammans med dessa beteenden.
           </p>
         </section>
 
@@ -274,10 +291,11 @@ export default function GaslightingRelationPage() {
         </section>
 
         <section className="space-y-4">
-          <h2 className="text-2xl font-semibold tracking-tight">Praktiska sätt att skydda dig</h2>
+          <h2 className="text-2xl font-semibold tracking-tight">Hur kan du bemöta gaslighting?</h2>
           <p className="leading-7">
             Målet är inte att “vinna” diskussioner. Målet är att återfå <strong>klarhet</strong> och
-            <strong> självtillit</strong>. Här är strategier som ofta hjälper:
+            <strong> självtillit</strong>. Observera beteendet över tid snarare än att försöka
+            sätta en etikett på partnern. Här är strategier som kan hjälpa om det känns tryggt:
           </p>
 
           <div className="space-y-6">
@@ -322,7 +340,8 @@ export default function GaslightingRelationPage() {
               <p className="mt-2 leading-7">
                 En gräns är tydlig när den beskriver vad <strong>du</strong> gör: <em>“Om vi börjar
                 kalla varandra saker, så pausar jag samtalet.”</em> Du kan inte kontrollera den andres
-                reaktion, men du kan kontrollera din närvaro och dina val.
+                reaktion. Om du är rädd för den ska du prioritera stöd och säkerhet framför att
+                pröva en gräns på egen hand.
               </p>
             </div>
           </div>
@@ -338,7 +357,11 @@ export default function GaslightingRelationPage() {
           <p className="leading-7">
             Om du känner oro för reaktioner vid en separation, eller om du redan har sett tecken på
             kontroll, svartsjuka, hot eller ekonomisk styrning, kan det vara bra att prata med någon
-            som kan hjälpa dig planera tryggt. Du behöver inte “bevisa” något för att ta din oro på allvar.
+            som kan hjälpa dig planera tryggt. Läs om{" "}
+            <Link href="/psykiskt-vald/hjalp" className="underline underline-offset-4">
+              stöd och hjälp vid psykiskt våld
+            </Link>
+            . Du behöver inte “bevisa” något för att ta din oro på allvar.
           </p>
 
           <div className="rounded-2xl border border-neutral-200 bg-neutral-50 p-6">
@@ -423,16 +446,6 @@ export default function GaslightingRelationPage() {
             </InternalCard>
           </div>
 
-          <div className="mt-6 rounded-2xl border border-neutral-200 p-6">
-            <p className="leading-7">
-              Vill du få en överblick av flera möjliga varningssignaler på ett ställe kan du även titta på{" "}
-              <Link href="/test" className="font-medium underline underline-offset-4">
-                testet
-              </Link>
-              . Det är tänkt som en orientering, inte som en diagnos, och kan vara en startpunkt om du
-              försöker skapa klarhet.
-            </p>
-          </div>
         </section>
 
         <p className="pt-2 text-sm leading-6 text-neutral-500">Senast uppdaterad: 2026-03-13</p>

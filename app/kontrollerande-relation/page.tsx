@@ -25,8 +25,9 @@ export default function Page() {
 
         <p>
           Förändringen kan komma gradvis: små kommentarer och krav blir till regler
-          som minskar din frihet. Beteendet kan förekomma oavsett kön – hos en
-          pojkvän, flickvän eller annan partner. Det viktiga är hur du behandlas.
+          som minskar din frihet. En kontrollerande pojkvän, flickvän, man eller
+          kvinna kan uttrycka kontroll på olika sätt. Det viktiga är hur du behandlas,
+          inte partnerns kön.
         </p>
 
         <h2 className="text-2xl font-semibold">
@@ -41,7 +42,7 @@ export default function Page() {
         </p>
 
         <h2 className="text-2xl font-semibold">
-          Vanliga tecken på en kontrollerande partner
+          Tecken på att du lever med en kontrollerande partner
         </h2>
 
         <ul className="list-disc pl-6 space-y-2">
@@ -52,6 +53,24 @@ export default function Page() {
           <li><strong>Kläder och vardagsval:</strong> partnern bestämmer vad du får ha på dig eller pressar dig att ändra planer som du själv valt.</li>
           <li><strong>Konsekvenser när du säger nej:</strong> gränser möts med skuldbeläggning, ilska, hot eller bestraffande tystnad. Du anpassar dig för att undvika reaktionen.</li>
         </ul>
+
+        <h2 className="text-2xl font-semibold">
+          Kontrollbehov i en relation – när blir det ett problem?
+        </h2>
+
+        <p>
+          Att vilja känna sig trygg eller komma överens om gemensamma planer är
+          vanligt i ett förhållande. Ett kontrollbehov blir ett problem när önskemål
+          gång på gång övergår i krav som begränsar dina egna val. Om du måste
+          redovisa var du är, vem du träffar eller vad du gör på telefonen för att
+          undvika partnerns reaktion, handlar det inte längre bara om trygghet.
+        </p>
+
+        <p>
+          Lägg märke till om dina gränser respekteras och om du kan säga nej utan
+          rädsla. Återkommande övervakning eller press kan göra att du börjar
+          begränsa dig själv, även när partnern inte uttryckligen förbjuder något.
+        </p>
 
         <h2 className="text-2xl font-semibold">
           Gradvis gränsförskjutning
@@ -77,7 +96,8 @@ export default function Page() {
         <p>
           Omsorg respekterar ditt självbestämmande. Kontroll begränsar det.
           I en trygg relation kan man uttrycka oro utan att inskränka den andres
-          frihet.
+          frihet. Omtanke accepterar ett nej; kontroll försöker styra dina val och
+          kan få konsekvenser när du inte gör som partnern vill.
         </p>
 
         <ul className="list-disc pl-6 space-y-2">
@@ -94,7 +114,8 @@ export default function Page() {
           Uttrycket ”kontrollerande personlighet” beskriver ofta hur någon beter
           sig, men säger inte vilken diagnos personen har eller varför beteendet
           uppstår. Du kan inte avgöra det utifrån en lista med tecken eller ett
-          relationstest. Du behöver heller inte en diagnos på din partner för att
+          relationstest. Beteendet kan ha olika orsaker, men de går inte att fastställa
+          utifrån några relationshändelser. Du behöver heller inte en diagnos på din partner för att
           ta din egen rädsla eller begränsade frihet på allvar.
         </p>
 
@@ -137,18 +158,23 @@ export default function Page() {
           <strong> Vid akut fara, ring 112.</strong>
         </p>
 
-        <h2 className="text-2xl font-semibold">
-          Ett bredare relationstest som hjälp att reflektera
-        </h2>
-        <p>
-          Vill du undersöka fler varningssignaler kan du <Link href="/test" className="underline">göra det generella relationstestet</Link>.
-          Det ger en strukturerad överblick av relationsmönster, men är inte ett
-          diagnostiskt test för en kontrollerande partner. Utgå också från dina
-          egna erfarenheter och hur trygg du känner dig.
-        </p>
-        <p>
-          Om kontroll och övervakning återkommer finns även <Link href="/psykisk-misshandel-relation/test" className="underline underline-offset-4">testet om psykisk misshandel och psykiskt våld</Link> som en mer specifik väg till reflektion.
-        </p>
+        <section className="rounded-3xl border border-neutral-200 bg-white p-7 shadow-sm md:p-8">
+          <h2 className="text-2xl font-semibold tracking-tight text-neutral-950">
+            Vill du reflektera över fler mönster i relationen?
+          </h2>
+          <p className="mt-4 text-neutral-700">
+            Känner du igen flera kontrollerande eller destruktiva mönster? På
+            Relationsvarnings startsida hittar du huvudtestet som hjälper dig att
+            få en bredare överblick. Utgå också från dina egna erfarenheter och
+            hur trygg du känner dig.
+          </p>
+          <Link
+            href="/"
+            className="mt-5 inline-flex min-h-12 items-center justify-center rounded-xl bg-[#7A1F1F] px-5 py-3 text-center font-semibold text-white hover:bg-[#5C1717] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#5C1717]"
+          >
+            Gör Relationsvarnings test
+          </Link>
+        </section>
 
         <section className="rounded-3xl border border-neutral-200 bg-white p-7 shadow-sm md:p-8">
   <h2 className="text-2xl font-semibold tracking-tight text-neutral-950">
