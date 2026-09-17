@@ -41,6 +41,18 @@ export default function Page() {
           andra mindre frihet.
         </p>
 
+        <div className="flex flex-col items-start gap-3 border-l-2 border-neutral-200 pl-4 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-sm leading-6 text-neutral-700">
+            Känner du igen flera av de här mönstren i din relation?
+          </p>
+          <Link
+            href="/"
+            className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-xl border border-neutral-300 bg-white px-4 py-2 text-sm font-semibold text-neutral-900 hover:bg-neutral-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"
+          >
+            Gör relationstestet
+          </Link>
+        </div>
+
         <h2 className="text-2xl font-semibold">
           Tecken på att du lever med en kontrollerande partner
         </h2>
