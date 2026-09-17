@@ -128,7 +128,7 @@ export default function Landing() {
       </header>
 
       {/* Content */}
-      <section className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-14">
+      <section className="mx-auto max-w-5xl px-4 pb-4 pt-8 sm:px-6 sm:py-14">
         <div className="grid gap-10 lg:grid-cols-12 lg:gap-12">
           {/* Left: Editorial copy */}
           <div className="min-w-0 max-w-3xl lg:col-span-12">
@@ -163,38 +163,11 @@ export default function Landing() {
             </div>
           </section>
 
-          {/* Safety note and site context beside the main test */}
-          <aside className="order-3 min-w-0 max-w-3xl lg:col-span-12">
-            <p className="mt-4 text-xs leading-relaxed text-neutral-500">
-              Om du känner dig akut hotad eller i fara: ring 112 eller kontakta
-              någon du litar på. Det här testet är ett reflektionsstöd.
+          {/* Short safety note after the main test */}
+          <aside className="order-3 -mt-4 min-w-0 max-w-3xl lg:col-span-12 lg:mt-0">
+            <p className="text-xs leading-relaxed text-neutral-500">
+              Om du känner dig akut hotad eller i fara, ring 112 eller kontakta någon du litar på.
             </p>
-            <div className="mt-8 border-t border-neutral-200/70 pt-6">
-              <dl className="grid gap-4 sm:grid-cols-3">
-                <div>
-                  <dt className="text-xs font-semibold text-neutral-900">Ton</dt>
-                  <dd className="mt-1 text-sm text-neutral-700">
-                    Saklig, trygg, vuxen
-                  </dd>
-                </div>
-                <div>
-                  <dt className="text-xs font-semibold text-neutral-900">
-                    Fokus
-                  </dt>
-                  <dd className="mt-1 text-sm text-neutral-700">
-                    Beteenden & mönster
-                  </dd>
-                </div>
-                <div>
-                  <dt className="text-xs font-semibold text-neutral-900">
-                    Integritet
-                  </dt>
-                  <dd className="mt-1 text-sm text-neutral-700">
-                    Ingen registrering krävs
-                  </dd>
-                </div>
-              </dl>
-            </div>
           </aside>
         </div>
       </section>
@@ -202,9 +175,7 @@ export default function Landing() {
       <section aria-labelledby="tests-heading" className="mx-auto max-w-5xl px-4 pb-12 sm:px-6">
         <h2 id="tests-heading" className="text-2xl font-semibold tracking-tight">Relationstester</h2>
         <p className="mt-3 max-w-3xl leading-relaxed text-neutral-700">
-          Vill du undersöka ett mer specifikt mönster i relationen? Välj ett av
-          våra fördjupade tester. Om du är osäker på var du ska börja finns det
-          generella screeningtestet ovan.
+          Vill du undersöka ett specifikt mönster i relationen? Välj ett fördjupat test nedan.
         </p>
         <TestCards items={relationTests} />
       </section>
