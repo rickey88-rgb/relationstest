@@ -1,4 +1,5 @@
 "use client";
+import { buildPaywallTeaser } from "../../_lib/paywallTeaser";
 
 import { hasPaidReturn, usePaymentRecovery } from "../../_components/usePaymentRecovery";
 
@@ -559,18 +560,9 @@ export default function Page() {
       .sort((a, b) => b.score - a.score);
   }, [scores.subscales]);
 
-  const strongestSubscales = sortedSubscales.slice(0, 3);
 
   // Compare existing normalized scores only for teaser wording.
-  const teaserGap = sortedSubscales[0].score - sortedSubscales[1].score;
-  const teaserElevated = sortedSubscales.filter((item) => item.score >= 50).length;
-  const teaserCopy = sortedSubscales[0].score < 50 && teaserGap >= 10
-    ? { title: "Helhetsbilden är inte entydig", body: "Ett anknytningsområde avviker från resten av svaren. Det är skillnaden som gör resultatet intressant." }
-    : teaserGap >= 15
-      ? { title: "Ett anknytningsmönster sticker ut", body: "Ett område framträder tydligare än de andra och påverkar hur helheten bör tolkas." }
-      : teaserElevated >= 2
-        ? { title: "Flera anknytningsmönster samspelar", body: "Flera områden förstärker varandra. Kombinationen formar hur helheten bör förstås." }
-        : { title: "Dina svar bildar en jämn profil", body: "Inget enskilt anknytningsområde dominerar. Resultatet behöver tolkas som en helhet." };
+  const teaserCopy = buildPaywallTeaser(sortedSubscales.map((item) => item.score));
 
   function pickAnswer(value: number) {
     if (answerLock.current) return;
@@ -789,8 +781,8 @@ export default function Page() {
           }}
         >
           <h2 style={{ margin: "8px 0 0", fontSize: "clamp(24px, 7vw, 32px)", lineHeight: 1.2 }}>{teaserCopy.title}</h2>
-          <p style={{ marginTop: 14, lineHeight: 1.7 }}>Testet undersöker närhet och känslomässigt avstånd. {teaserCopy.body}</p>
-          <p style={{ marginTop: 14, lineHeight: 1.7 }}>I din fullständiga analys ser du vilka områden som framträder, hur starka mönstren är och hur dina svar hänger ihop.</p>
+          <p style={{ marginTop: 14, lineHeight: 1.7, color: "#e5e5e5" }}>{teaserCopy.body}</p>
+          <p style={{ marginTop: 14, lineHeight: 1.7, color: "#e5e5e5" }}>Det är samspelet mellan dina svar som påverkar hur helheten bör förstås.</p>
 
           <div
             style={{
@@ -805,7 +797,7 @@ export default function Page() {
                 fontSize: 21,
               }}
             >
-              Förstå vad din anknytningsprofil betyder i praktiken
+              Det här får du se i din fullständiga analys
             </h3>
 
             <p
@@ -815,14 +807,16 @@ export default function Page() {
                 color: "#ddd",
               }}
             >
-              Den fullständiga analysen bryter ner alla sex delområden,
-              typiska triggers, konfliktmönster och vad som kan hjälpa dig
-              utveckla tryggare relationsbeteenden.
+              ✓ vilket anknytningsmönster som väger tyngst<br />
+              ✓ vad som förstärker eller nyanserar helhetsbilden<br />
+              ✓ hur närhet, avstånd och trygghet hänger ihop i ditt resultat
             </p>
 
             <p style={{ margin: "14px 0 0", fontSize: 15, fontWeight: 700 }}>39 kr</p>
 
             <p style={{ margin: "4px 0 0", fontSize: 13, color: "#d4d4d4" }}>Engångsbetalning · Ingen prenumeration</p>
+
+            <p style={{ margin: "4px 0 0", fontSize: 13, color: "#d4d4d4" }}>Resultatet visas direkt efter betalning</p>
 
             <button
               type="button"
@@ -843,7 +837,7 @@ export default function Page() {
                 fontWeight: 800,
               }}
             >
-              Se min fullständiga analys – 39 kr
+              Visa min fullständiga analys – 39 kr
             </button>
 
 
@@ -860,15 +854,7 @@ export default function Page() {
             <button
               type="button"
               onClick={restart}
-              style={{
-                minHeight: 44,
-                padding: "10px 13px",
-                borderRadius: 11,
-                border: "1px solid #555",
-                background: "transparent",
-                color: "#fff",
-                cursor: "pointer",
-              }}
+              style={{ minHeight: 44, width: "100%", marginTop: 10, border: 0, background: "transparent", color: "#d4d4d4", cursor: "pointer", textDecoration: "underline", textUnderlineOffset: 4 }}
             >
               Gör om testet
             </button>

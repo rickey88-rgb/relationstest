@@ -1,4 +1,5 @@
 "use client";
+import { buildPaywallTeaser } from "../../_lib/paywallTeaser";
 
 import { hasPaidReturn, usePaymentRecovery } from "../../_components/usePaymentRecovery";
 
@@ -481,18 +482,9 @@ export default function Page() {
       .sort((a, b) => b.score - a.score);
   }, [scores.percentages]);
 
-  const strongestAreas = sortedAreas.slice(0, 3);
 
   // Compare existing normalized scores only for teaser wording.
-  const teaserGap = sortedAreas[0].score - sortedAreas[1].score;
-  const teaserElevated = sortedAreas.filter((item) => item.score >= 50).length;
-  const teaserCopy = sortedAreas[0].score < 50 && teaserGap >= 10
-    ? { title: "Helhetsbilden är inte entydig", body: "Ett område avviker från resten av svaren. Det är skillnaden mellan områdena som gör resultatet intressant." }
-    : teaserGap >= 15
-      ? { title: "Ett mönster i relationen sticker ut", body: "Ett område framträder tydligare än de andra och påverkar hur helheten bör tolkas." }
-      : teaserElevated >= 2
-        ? { title: "Flera mönster förstärker varandra", body: "Flera områden verkar samspela i relationen. Det är framför allt kombinationen mellan dem som formar resultatet." }
-        : { title: "Dina svar bildar en jämn profil", body: "Inget enskilt område dominerar. Resultatet behöver därför tolkas som en helhet." };
+  const teaserCopy = buildPaywallTeaser(sortedAreas.map((item) => item.score));
 
   function pickAnswer(value: number) {
     if (answerLock.current) return;
@@ -713,6 +705,7 @@ export default function Page() {
       </section>}
 
       {isFinished && !unlocked && !analyzing && (
+        <>
         <section ref={tracking.paywallRef}
           style={{
             background: "#0d0d0d",
@@ -722,8 +715,8 @@ export default function Page() {
           }}
         >
           <h2 style={{ margin: "8px 0 0", fontSize: "clamp(24px, 7vw, 32px)", lineHeight: 1.2 }}>{teaserCopy.title}</h2>
-          <p style={{ marginTop: 14, lineHeight: 1.7 }}>Testet undersöker narcissistiska relationsmönster. {teaserCopy.body}</p>
-          <p style={{ marginTop: 14, lineHeight: 1.7 }}>I din fullständiga analys ser du vilka områden som framträder, hur starka mönstren är och hur dina svar hänger ihop.</p>
+          <p style={{ marginTop: 14, lineHeight: 1.7, color: "#e5e5e5" }}>{teaserCopy.body}</p>
+          <p style={{ marginTop: 14, lineHeight: 1.7, color: "#e5e5e5" }}>Det är samspelet mellan dina svar som påverkar hur helheten bör förstås.</p>
 
           <div
             style={{
@@ -738,7 +731,7 @@ export default function Page() {
                 fontSize: 21,
               }}
             >
-              Förstå vad resultatet betyder för just din relation
+              Det här får du se i din fullständiga analys
             </h3>
 
             <p
@@ -748,14 +741,16 @@ export default function Page() {
                 color: "#ddd",
               }}
             >
-              Den fullständiga analysen bryter ner alla åtta områden, visar
-              vilka mönster som är starkast och hjälper dig skilja mellan
-              enstaka problem och ett mer genomgående relationsmönster.
+              ✓ vilket relationsmönster som väger tyngst i dina svar<br />
+              ✓ vad som förstärker eller nyanserar helhetsbilden<br />
+              ✓ hur de olika beteendena hänger ihop i just din relation
             </p>
 
             <p style={{ margin: "14px 0 0", fontSize: 15, fontWeight: 700 }}>39 kr</p>
 
             <p style={{ margin: "4px 0 0", fontSize: 13, color: "#d4d4d4" }}>Engångsbetalning · Ingen prenumeration</p>
+
+            <p style={{ margin: "4px 0 0", fontSize: 13, color: "#d4d4d4" }}>Resultatet visas direkt efter betalning</p>
 
             <button
               type="button"
@@ -776,7 +771,7 @@ export default function Page() {
                 fontWeight: 800,
               }}
             >
-              Se min fullständiga analys – 39 kr
+              Visa min fullständiga analys – 39 kr
             </button>
 
             
@@ -793,36 +788,17 @@ export default function Page() {
             <button
               type="button"
               onClick={restart}
-              style={{
-                minHeight: 44,
-                padding: "10px 13px",
-                borderRadius: 11,
-                border: "1px solid #555",
-                background: "transparent",
-                color: "#fff",
-                cursor: "pointer",
-              }}
+              style={{ minHeight: 44, width: "100%", marginTop: 10, border: 0, background: "transparent", color: "#d4d4d4", cursor: "pointer", textDecoration: "underline", textUnderlineOffset: 4 }}
             >
               Gör om testet
             </button>
 
-            <Link
-              href="/narcissist-i-en-relation"
-              style={{
-                minHeight: 44,
-                display: "inline-flex",
-                alignItems: "center",
-                padding: "10px 13px",
-                borderRadius: 11,
-                border: "1px solid #555",
-                color: "#fff",
-                textDecoration: "none",
-              }}
-            >
-              Läs mer om narcissistiska mönster
-            </Link>
           </div>
         </section>
+        <p style={{ margin: "14px 0 0", textAlign: "center", fontSize: 14, color: "#666" }}>
+          Vill du läsa mer först? <Link href="/narcissist-i-en-relation" style={{ color: "inherit", textDecoration: "underline", textUnderlineOffset: 4 }}>Läs om narcissistiska relationsmönster →</Link>
+        </p>
+        </>
       )}
 
       {isFinished && unlocked && (

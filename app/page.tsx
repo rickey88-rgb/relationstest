@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import adhdGuides from "../content/adhd-guides.json";
 import autismGuides from "../content/autism-guides.json";
+import HomeGuideDirectory, { type HomeGuide } from "./_components/HomeGuideDirectory";
 
 export const metadata: Metadata = {
   title: "Relationsvarning – tester för destruktiva relationer",
@@ -79,6 +80,29 @@ const relationTests = [
     description:
       "Utforska starka känsloband trots smärta, hopp om förändring och svårigheter att skapa avstånd i en relation.",
   },
+];
+
+const homeGuides: HomeGuide[] = [
+  ...autismGuides.map((guide) => ({ href: `/${guide.slug}`, label: guide.label, group: "NPF & självtest" })),
+  ...adhdGuides.map((guide) => ({ href: `/${guide.slug}`, label: guide.label, group: "NPF & självtest" })),
+  { href: "/anknytning", label: "Anknytning i relationer", group: "Relationer & mönster" },
+  { href: "/medberoende", label: "Medberoende – överansvar och gränser", group: "Relationer & mönster" },
+  { href: "/psykisk-misshandel", label: "Psykisk misshandel — tecken, exempel och hjälp", group: "Psykiskt våld & stöd" },
+  { href: "/psykiskt-vald", label: "Psykiskt våld — guide till beteenden, lagen och stöd", group: "Psykiskt våld & stöd" },
+  { href: "/tecken-pa-psykopat", label: "Tecken på att du lever med en psykopat", group: "Relationer & mönster" },
+  { href: "/gaslighting-relation", label: "Gaslighting i relationer — tecken, exempel och vad du kan göra", group: "Manipulation & påverkan" },
+  { href: "/narcissist-i-en-relation", label: "Narcissist i en relation — tecken, beteenden och varningssignaler", group: "Relationer & mönster" },
+  { href: "/manipulativ-partner", label: "Hur vet man om någon är manipulativ?", group: "Manipulation & påverkan" },
+  { href: "/kontrollerande-relation", label: "Varför känner jag mig kontrollerad i min relation?", group: "Relationer & mönster" },
+  { href: "/psykopatiska-drag-relation", label: "Psykopatiska drag i relation — tidiga signaler", group: "Relationer & mönster" },
+  { href: "/silent-treatment-relation", label: "Silent treatment i relation — när tystnad blir makt", group: "Manipulation & påverkan" },
+  { href: "/love-bombing-relation", label: "Love bombing i relation — när intensitet blir manipulation", group: "Manipulation & påverkan" },
+  { href: "/destruktivt-forhallande", label: "Destruktivt förhållande — tecken och mönster", group: "Relationer & mönster" },
+  { href: "/skillnad-psykopat-narcissist", label: "Skillnad på psykopat och narcissist", group: "Relationer & mönster" },
+  { href: "/psykisk-misshandel-relation", label: "Psykisk misshandel i relation — tecken, mönster och konsekvenser", group: "Psykiskt våld & stöd" },
+  { href: "/vald-i-nara-relation", label: "Våld i nära relation — tecken och var du kan få hjälp", group: "Psykiskt våld & stöd" },
+  { href: "/jag-ar-radd-att-min-partner-ska-sla-mig", label: "Jag är rädd att min partner ska slå mig — vad kan jag göra?", group: "Psykiskt våld & stöd" },
+  { href: "/traumabindning-i-relation", label: "Traumabindning i en relation — tecken och varför det är svårt att lämna", group: "Manipulation & påverkan" },
 ];
 
 export default function Landing() {
@@ -276,6 +300,10 @@ export default function Landing() {
             Läs mer
           </h3>
 
+          <div className="text-sm text-neutral-700">
+            <HomeGuideDirectory guides={homeGuides} />
+          </div>
+          {/*
           <ul className="mt-3 space-y-2 text-sm text-neutral-700">
             {autismGuides.map((guide) => <li key={guide.slug}><Link href={`/${guide.slug}`} className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700">{guide.label}</Link></li>)}
             {adhdGuides.map((guide) => <li key={guide.slug}><Link href={`/${guide.slug}`} className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700">{guide.label}</Link></li>)}
@@ -421,7 +449,7 @@ export default function Landing() {
                 varför det är så svårt att lämna
               </Link>
             </li>
-          </ul>
+          </ul> */}
         </div>
       </section>
 

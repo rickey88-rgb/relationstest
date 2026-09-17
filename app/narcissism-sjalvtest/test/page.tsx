@@ -1,4 +1,5 @@
 "use client";
+import { buildPaywallTeaser } from "../../_lib/paywallTeaser";
 
 import { hasPaidReturn, usePaymentRecovery } from "../../_components/usePaymentRecovery";
 
@@ -11,7 +12,7 @@ import { NARCISSISM_SELFTEST_STRIPE_URL } from "./payment";
 
 import { interpretation, profileAnalysis } from "./interpretation";
 
-const button = "inline-flex min-h-12 items-center justify-center rounded-xl px-5 py-3 text-center font-semibold focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900";
+const button = "inline-flex min-h-12 items-center justify-center rounded-xl px-5 py-3 text-center font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900";
 const secondary = button + " border border-neutral-300 bg-white text-neutral-900 hover:bg-neutral-100";
 const primary = button + " bg-[#2F6B4F] text-white hover:bg-[#285C44]";
 const link = "underline underline-offset-4 decoration-neutral-400 focus-visible:outline-2 focus-visible:outline-offset-4";
@@ -71,20 +72,8 @@ export default function NarcissismSelfTestPage() {
   const result = useMemo(() => complete ? calculate(answers) : null, [complete, answers]);
   // Presentation-only comparison of existing scores; no scoring changes.
   const previewScores = result ? result.ranked.map((dimension) => result.scores[dimension]) : [];
-  const previewGap = previewScores.length > 1 ? previewScores[0] - previewScores[1] : 0;
-  const previewElevated = previewScores.filter((score) => score >= 50).length;
-  const previewBase = previewScores[0] < 50 && previewGap >= 10
-    ? { title: "Helhetsbilden är inte entydig", body: "Ett område avviker från resten av dina svar. Det är den skillnaden som gör profilen intressant.", next: "Vilket område det gäller visas i din fullständiga analys." }
-    : previewGap >= 15
-      ? { title: "Något i dina svar sticker ut", body: "Ett område framträder tydligare än de andra och påverkar hur din samlade profil bör tolkas.", next: "Vilket område det är visas i din fullständiga analys." }
-      : previewElevated >= 2
-        ? { title: "Flera områden förstärker varandra", body: "Flera drag samspelar i dina svar. Kombinationen är mer intressant än någon enskild poäng.", next: "Den fullständiga analysen visar vilka områden det gäller och hur de hänger ihop." }
-        : { title: "Dina svar bildar en jämn profil", body: "Inget enskilt område dominerar. Resultatet behöver tolkas som en helhet.", next: "Den fullständiga analysen visar hur delarna bidrar till profilen." };
-  const preview = {
-    ...previewBase,
-    value: "Se dina sex delresultat, hur områdena samverkar och hur mönstret kan märkas i relationer.",
-    cta: "Se min fullständiga profil",
-  };
+  const previewBase = buildPaywallTeaser(previewScores);
+  const preview = { ...previewBase, cta: "Visa min fullständiga profil" };
   useEffect(() => {
     if (moveFocus.current) { heading.current?.focus({ preventScroll: true }); moveFocus.current = false; }
   }, [index, showResult, hydrated, analyzing]);
@@ -149,11 +138,11 @@ export default function NarcissismSelfTestPage() {
       <p role="status" aria-live="polite">{["Analyserar dina svar...", "Identifierar återkommande mönster...", "Sammanställer din profil..."][analysisStep ?? 0]}</p>
     </section>}
     {showResult && (!analyzing || unlocked) && result && <div data-selftest-result>
-      <section ref={unlocked ? null : tracking.paywallRef} className={section} aria-labelledby="result-heading">
+      <section ref={unlocked ? null : tracking.paywallRef} className={unlocked ? section : "mt-8 space-y-5 rounded-[20px] bg-[#0d0d0d] px-[18px] py-6 leading-7 text-white"} aria-labelledby="result-heading">
         <h2 id="result-heading" ref={heading} tabIndex={-1} className="text-2xl font-semibold outline-none">{unlocked ? "Din övergripande profil" : preview.title}</h2>
         {unlocked && <><p className="text-xl font-semibold">{result.level}</p><p className="text-4xl font-semibold tabular-nums">{formatPercent(result.percent)} %</p>
         <p className="text-sm text-neutral-600">Andel av självtestets möjliga poäng, inte en sannolikhet.</p></>}
-        {!unlocked && <><p>{preview.body}</p>{preview.next && <p>{preview.next}</p>}<p>{preview.value}</p><button type="button" onClick={checkout} className={primary + " w-full"}>{preview.cta} – {PRICE_SEK} kr</button><p className="text-sm text-neutral-600">{PRICE_SEK} kr · Engångsbetalning · Ingen prenumeration</p>{checkoutUnavailable && <p role="status" className="text-sm text-neutral-600">Köp av fullständig profil är inte tillgängligt just nu. Dina svar finns kvar i den här webbläsaren.</p>}</>}
+        {!unlocked && <><p className="text-neutral-200">{preview.body}</p><div className="space-y-4 border-t border-white/15 pt-5"><h3 className="text-xl font-semibold">Det här får du se i din fullständiga analys</h3><ul className="space-y-2 text-neutral-200"><li>✓ vilket drag som väger tyngst i dina svar</li><li>✓ vad som förstärker eller nyanserar helhetsbilden</li><li>✓ hur de olika delarna samverkar i din profil</li></ul><div><p className="font-semibold">{PRICE_SEK} kr</p><p className="text-sm text-neutral-300">Engångsbetalning · Ingen prenumeration</p><p className="text-sm text-neutral-300">Resultatet visas direkt efter betalning</p></div><button type="button" onClick={checkout} className={primary + " w-full"}>{preview.cta} – {PRICE_SEK} kr</button><button type="button" onClick={restart} className="min-h-11 w-full text-sm text-neutral-300 underline underline-offset-4 hover:text-white">Gör om testet</button>{checkoutUnavailable && <p role="status" className="text-sm text-neutral-300">Köp av fullständig profil är inte tillgängligt just nu. Dina svar finns kvar i den här webbläsaren.</p>}</div></>}
         {unlocked && <p className="rounded-xl bg-neutral-50 p-4"><span className="block text-sm text-neutral-600">Profiltyp</span><strong>{result.profileType}</strong></p>}
       </section>
       {unlocked && <>

@@ -1,4 +1,5 @@
 "use client";
+import { buildPaywallTeaser } from "../../_lib/paywallTeaser";
 
 import { hasPaidReturn, usePaymentRecovery } from "../../_components/usePaymentRecovery";
 
@@ -645,15 +646,7 @@ export default function Page() {
   );
 
   // Compare existing normalized scores only for teaser wording.
-  const teaserGap = sortedAreas[0].score - sortedAreas[1].score;
-  const teaserElevated = sortedAreas.filter((item) => item.score >= 50).length;
-  const teaserCopy = sortedAreas[0].score < 50 && teaserGap >= 10
-    ? { title: "Helhetsbilden är inte entydig", body: "Ett område avviker från resten av svaren. Det är skillnaden mellan områdena som gör resultatet intressant." }
-    : teaserGap >= 15
-      ? { title: "Ett mönster i relationen sticker ut", body: "Ett område framträder tydligare än de andra och påverkar hur helheten bör tolkas." }
-      : teaserElevated >= 2
-        ? { title: "Flera mönster förstärker varandra", body: "Flera områden verkar samspela i relationen. Det är framför allt kombinationen mellan dem som formar resultatet." }
-        : { title: "Dina svar bildar en jämn profil", body: "Inget enskilt område dominerar. Resultatet behöver därför tolkas som en helhet." };
+  const teaserCopy = buildPaywallTeaser(sortedAreas.map((item) => item.score));
 
   function pickAnswer(value: number) {
     if (!unlocked && !isFinished && answers.every((answer, i) => i === index || answer >= 0)) setAnalysisStep(0);
@@ -973,15 +966,15 @@ export default function Page() {
       {isFinished && !unlocked && !analyzing && (
         <section ref={tracking.paywallRef}
           style={{
-            background: "#0b0b0b",
+            background: "#0d0d0d",
             color: "#fff",
-            borderRadius: 18,
-            padding: 24,
+            borderRadius: 20,
+            padding: "24px 18px",
           }}
         >
           <h2 style={{ margin: "8px 0 0", fontSize: "clamp(24px, 7vw, 32px)", lineHeight: 1.2 }}>{teaserCopy.title}</h2>
-          <p style={{ marginTop: 14, lineHeight: 1.7 }}>Testet undersöker återkommande beteenden och deras påverkan på dig. {teaserCopy.body}</p>
-          <p style={{ marginTop: 14, lineHeight: 1.7 }}>I din fullständiga analys ser du vilka områden som framträder, hur starka mönstren är och hur dina svar hänger ihop.</p>
+          <p style={{ marginTop: 14, lineHeight: 1.7, color: "#e5e5e5" }}>{teaserCopy.body}</p>
+          <p style={{ marginTop: 14, lineHeight: 1.7, color: "#e5e5e5" }}>Det är samspelet mellan dina svar som påverkar hur helheten bör förstås.</p>
 
           <div
             style={{
@@ -997,7 +990,7 @@ export default function Page() {
                   "0 0 8px",
               }}
             >
-              Din fullständiga analys innehåller
+              Det här får du se i din fullständiga analys
             </h3>
 
             <ul
@@ -1007,32 +1000,9 @@ export default function Page() {
                 opacity: 0.92,
               }}
             >
-              <li>
-                Analys av samtliga 8
-                områden
-              </li>
-              <li>
-                Vilka mönster som är
-                starkast i just dina svar
-              </li>
-              <li>
-                Hur beteendena förhåller
-                sig till lagen om psykiskt
-                våld
-              </li>
-              <li>
-                Bedömning av upprepning
-                och varaktighet
-              </li>
-              <li>
-                Analys av hur relationen
-                påverkar din självkänsla
-                och frihet
-              </li>
-              <li>
-                Konkreta nästa steg och
-                dokumentation
-              </li>
+              <li>Vilket relationsmönster som väger tyngst i dina svar</li>
+              <li>Vad som förstärker eller nyanserar helhetsbilden</li>
+              <li>Hur beteenden, gränser och frihet hänger ihop i ditt resultat</li>
             </ul>
           </div>
 
@@ -1044,12 +1014,13 @@ export default function Page() {
               flexWrap: "wrap",
             }}
           >
-            <div style={{ width: "100%" }}><p style={{ margin: "0 0 2px", fontSize: 15, fontWeight: 700 }}>39 kr</p><p style={{ margin: 0, fontSize: 13, color: "#d4d4d4" }}>Engångsbetalning · Ingen prenumeration</p></div>
+            <div style={{ width: "100%" }}><p style={{ margin: "0 0 2px", fontSize: 15, fontWeight: 700 }}>39 kr</p><p style={{ margin: 0, fontSize: 13, color: "#d4d4d4" }}>Engångsbetalning · Ingen prenumeration</p><p style={{ margin: "4px 0 0", fontSize: 13, color: "#d4d4d4" }}>Resultatet visas direkt efter betalning</p></div>
             <button
               onClick={startPayment}
               onMouseEnter={(event) => { event.currentTarget.style.background = "#285C44"; }}
               onMouseLeave={(event) => { event.currentTarget.style.background = "#2F6B4F"; }}
               style={{
+                width: "100%",
                 padding:
                   "13px 17px",
                 borderRadius: 12,
@@ -1061,22 +1032,12 @@ export default function Page() {
                 fontSize: 15,
               }}
             >
-              Se min fullständiga analys – 39 kr
+              Visa min fullständiga analys – 39 kr
             </button>
 
             <button
               onClick={restart}
-              style={{
-                padding:
-                  "13px 17px",
-                borderRadius: 12,
-                border:
-                  "1px solid #444",
-                background:
-                  "transparent",
-                color: "#fff",
-                cursor: "pointer",
-              }}
+              style={{ minHeight: 44, width: "100%", marginTop: 10, border: 0, background: "transparent", color: "#d4d4d4", cursor: "pointer", textDecoration: "underline", textUnderlineOffset: 4 }}
             >
               Gör om testet
             </button>

@@ -1,4 +1,5 @@
 "use client";
+import { buildPaywallTeaser } from "../_lib/paywallTeaser";
 
 import { hasPaidReturn, usePaymentRecovery } from "../_components/usePaymentRecovery";
 
@@ -10,7 +11,7 @@ import { answerLabels, band, calculate, domainCopy, domains, emptyAnswers, parse
 
 import { resultAnalysis } from "./analysis";
 
-const button = "inline-flex min-h-12 items-center justify-center rounded-xl px-5 py-3 text-center font-semibold focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900";
+const button = "inline-flex min-h-12 items-center justify-center rounded-xl px-5 py-3 text-center font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900";
 const secondary = button + " border border-neutral-300 bg-white text-neutral-900 hover:bg-neutral-100";
 const primary = button + " bg-[#2F6B4F] text-white hover:bg-[#285C44]";
 const link = "underline underline-offset-4 decoration-neutral-400 focus-visible:outline-2 focus-visible:outline-offset-4";
@@ -69,15 +70,7 @@ export default function ScreeningPage() {
   const answeredCount = answers.filter((answer) => answer >= 0).length;
   const profile = useMemo(() => calculate(answers), [answers]);
   const teaserScores = profile.ranked.map((domain) => profile.scores[domain]);
-  const teaserGap = teaserScores[0] - teaserScores[1];
-  const teaserElevated = teaserScores.filter((score) => score >= 50).length;
-  const teaserCopy = teaserScores[0] < 50 && teaserGap >= 10
-    ? { title: "Helhetsbilden är inte entydig", body: "Ett område avviker från resten av svaren. Det är den skillnaden som gör resultatet intressant." }
-    : teaserGap >= 15
-      ? { title: "Ett mönster i relationen sticker ut", body: "Ett område framträder tydligare än de andra och påverkar hur helheten bör tolkas." }
-      : teaserElevated >= 2
-        ? { title: "Flera relationsmönster förstärker varandra", body: "Flera områden verkar samspela i relationen. Kombinationen formar den samlade bilden." }
-        : { title: "Dina svar bildar en jämn profil", body: "Inget enskilt område dominerar. Resultatet behöver tolkas som en helhet." };
+  const teaserCopy = buildPaywallTeaser(teaserScores);
   const suggested = useMemo(() => recommendations(profile), [profile]);
   const analysis = useMemo(() => resultAnalysis(profile, answers), [profile, answers]);
   useEffect(() => {
@@ -142,12 +135,16 @@ export default function ScreeningPage() {
         <p><strong>Känner du dig otrygg i relationen?</strong> Du kan läsa om <Link href="/psykiskt-vald/hjalp" className={link}>stöd och hjälp</Link> här. Vid akut fara, ring 112.</p>
       </aside>}
       {analyzing && !unlocked && <section className={section} aria-busy="true"><h2 className="text-2xl font-semibold">Vi sammanställer din analys</h2><p role="status" aria-live="polite">{["Analyserar dina svar...", "Identifierar återkommande mönster...", "Sammanställer din profil..."][analysisStep ?? 0]}</p></section>}
-      {(!analyzing || unlocked) && <>{!unlocked ? <section ref={tracking.paywallRef} className={section} aria-labelledby="result-heading">
+      {(!analyzing || unlocked) && <>{!unlocked ? <section ref={tracking.paywallRef} className="mt-8 space-y-5 rounded-[20px] bg-[#0d0d0d] px-[18px] py-6 leading-7 text-white" aria-labelledby="result-heading">
         <h2 id="result-heading" ref={heading} tabIndex={-1} className="text-2xl font-semibold outline-none">{teaserCopy.title}</h2>
-        <p>{teaserCopy.body}</p>
-        <p>I din fullständiga analys ser du vilka områden som framträder, hur mönstren hänger ihop och vad som kan vara relevant att undersöka vidare.</p>
-        <button type="button" onClick={checkout} className={primary + " w-full"}>Se min fullständiga analys – {SCREENING_PRICE_SEK} kr</button>
-        <p className="text-sm text-neutral-600">39 kr · Engångsbetalning · Ingen prenumeration</p>
+        <p className="text-neutral-200">{teaserCopy.body}</p>
+        <div className="space-y-4 border-t border-white/15 pt-5">
+          <h3 className="text-xl font-semibold">Det här får du se i din fullständiga analys</h3>
+          <ul className="space-y-2 text-neutral-200"><li>✓ vilket relationsmönster som väger tyngst i dina svar</li><li>✓ vad som förstärker eller nyanserar helhetsbilden</li><li>✓ hur beteenden, gränser och trygghet hänger ihop</li></ul>
+          <div><p className="font-semibold">39 kr</p><p className="text-sm text-neutral-300">Engångsbetalning · Ingen prenumeration</p><p className="text-sm text-neutral-300">Resultatet visas direkt efter betalning</p></div>
+          <button type="button" onClick={checkout} className={primary + " w-full"}>Visa min fullständiga analys – {SCREENING_PRICE_SEK} kr</button>
+          <button type="button" onClick={restart} className="min-h-11 w-full text-sm text-neutral-300 underline underline-offset-4 hover:text-white">Gör om testet</button>
+        </div>
       </section> : <>
         <section className={section} aria-labelledby="result-heading"><h2 id="result-heading" ref={heading} tabIndex={-1} className="text-2xl font-semibold outline-none">Din analys</h2>{analysis.paragraphs.map((text,i) => <p key={i}>{text}</p>)}</section>
         <section className={section}><h2 className="text-2xl font-semibold">Så hänger dina svar ihop</h2>{analysis.connections.map(item => <p key={item.id} data-insight={item.id}>{item.text}</p>)}</section>
