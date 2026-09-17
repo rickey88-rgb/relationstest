@@ -142,7 +142,7 @@ export default function ScreeningPage() {
           <h3 className="text-xl font-semibold">Det här får du se i din fullständiga analys</h3>
           <ul className="space-y-2 text-neutral-200"><li>✓ vilket relationsmönster som väger tyngst i dina svar</li><li>✓ vad som förstärker eller nyanserar helhetsbilden</li><li>✓ hur beteenden, gränser och trygghet hänger ihop</li></ul>
           <div><p className="font-semibold">39 kr</p><p className="text-sm text-neutral-300">Engångsbetalning · Ingen prenumeration</p><p className="text-sm text-neutral-300">Resultatet visas direkt efter betalning</p></div>
-          <button type="button" onClick={checkout} className={primary + " w-full"}>Visa min fullständiga analys – {SCREENING_PRICE_SEK} kr</button>
+          <button type="button" onClick={checkout} className={primary + " w-full !min-h-14 !px-4 !py-4 !text-[17px] !font-bold !leading-[1.2] whitespace-nowrap sm:!min-h-12 sm:!px-5 sm:!py-3 sm:!text-base"}>Visa min <span className="hidden sm:inline">fullständiga </span>analys – {SCREENING_PRICE_SEK} kr</button>
           <button type="button" onClick={restart} className="min-h-11 w-full text-sm text-neutral-300 underline underline-offset-4 hover:text-white">Gör om testet</button>
         </div>
       </section> : <>

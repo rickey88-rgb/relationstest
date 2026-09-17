@@ -1017,6 +1017,7 @@ export default function Page() {
             <div style={{ width: "100%" }}><p style={{ margin: "0 0 2px", fontSize: 15, fontWeight: 700 }}>39 kr</p><p style={{ margin: 0, fontSize: 13, color: "#d4d4d4" }}>Engångsbetalning · Ingen prenumeration</p><p style={{ margin: "4px 0 0", fontSize: 13, color: "#d4d4d4" }}>Resultatet visas direkt efter betalning</p></div>
             <button
               onClick={startPayment}
+              className="!min-h-14 w-full !px-4 !py-4 !text-[17px] !font-bold !leading-[1.2] whitespace-nowrap sm:!min-h-[52px] sm:!py-[13px] sm:!text-base"
               onMouseEnter={(event) => { event.currentTarget.style.background = "#285C44"; }}
               onMouseLeave={(event) => { event.currentTarget.style.background = "#2F6B4F"; }}
               style={{
@@ -1032,7 +1033,7 @@ export default function Page() {
                 fontSize: 15,
               }}
             >
-              Visa min fullständiga analys – 39 kr
+              Visa min <span className="hidden sm:inline">fullständiga </span>analys – 39 kr
             </button>
 
             <button

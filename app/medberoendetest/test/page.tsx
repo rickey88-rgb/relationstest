@@ -652,6 +652,7 @@ export default function Page() {
             <button
               type="button"
               onClick={goToCheckout}
+              className="!min-h-14 !px-4 !py-4 !text-[17px] !font-bold !leading-[1.2] whitespace-nowrap sm:!min-h-[52px] sm:!py-[13px] sm:!text-base"
               onMouseEnter={(event) => { event.currentTarget.style.background = "#285C44"; }}
               onMouseLeave={(event) => { event.currentTarget.style.background = "#2F6B4F"; }}
               style={{
@@ -668,7 +669,7 @@ export default function Page() {
                 fontWeight: 800,
               }}
             >
-              Visa min fullständiga analys – 39 kr
+              Visa min <span className="hidden sm:inline">fullständiga </span>analys – 39 kr
             </button>
           </div>
 

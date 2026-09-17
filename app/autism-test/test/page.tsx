@@ -142,7 +142,7 @@ export default function AutismSelfTestPage() {
           <h3 className="text-xl font-semibold">Det här får du se i din fullständiga analys</h3>
           <ul className="space-y-2 text-neutral-200"><li>✓ vad som väger tyngst i dina svar</li><li>✓ hur olika sociala och sensoriska erfarenheter samspelar</li><li>✓ vad som förstärker eller nyanserar bilden i vardagen</li></ul>
           <div><p className="font-semibold">{PRICE_SEK} kr</p><p className="text-sm text-neutral-300">Engångsbetalning · Ingen prenumeration</p><p className="text-sm text-neutral-300">Resultatet visas direkt efter betalning</p></div>
-          <button type="button" onClick={checkout} className={primary + " w-full"}>Visa min fullständiga analys – {PRICE_SEK} kr</button>
+          <button type="button" onClick={checkout} className={primary + " w-full !min-h-14 !px-4 !py-4 !text-[17px] !font-bold !leading-[1.2] whitespace-nowrap sm:!min-h-12 sm:!px-5 sm:!py-3 sm:!text-base"}>Visa min <span className="hidden sm:inline">fullständiga </span>analys – {PRICE_SEK} kr</button>
           <button type="button" onClick={restart} className="min-h-11 w-full text-sm text-neutral-300 underline underline-offset-4 hover:text-white">Gör om testet</button>
           {checkoutUnavailable && <p role="status" className="text-neutral-300">Köp är inte tillgängligt just nu. Dina svar finns kvar i den här webbläsaren.</p>}
         </div>
