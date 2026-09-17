@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Medberoende i relation – när du tar för mycket ansvar",
   description: "Läs hur medberoende kan märkas i en relation genom överansvar, anpassning, svaga gränser och starkt fokus på partnerns behov och mående.",
-  alternates: { canonical: "https://relationsvarning.se/medberoende-i-relation" },
+  alternates: { canonical: "https://www.relationsvarning.se/medberoende-i-relation" },
 };
 
 export default function Page() {

@@ -530,6 +530,34 @@ export default function Page() {
 >
   Psykisk misshandel – tecken och guide →
 </Link>
+
+<Link
+  href="/digitalt-vald"
+  style={{
+    padding: 16,
+    border: "1px solid #ddd",
+    borderRadius: 14,
+    color: "#111",
+    textDecoration: "none",
+    fontWeight: 800,
+  }}
+>
+  Digitalt våld – kontroll och övervakning →
+</Link>
+
+<Link
+  href="/ekonomiskt-vald"
+  style={{
+    padding: 16,
+    border: "1px solid #ddd",
+    borderRadius: 14,
+    color: "#111",
+    textDecoration: "none",
+    fontWeight: 800,
+  }}
+>
+  Ekonomiskt våld – kontroll över pengar →
+</Link>
   </div>
 </section>
 

@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://relationsvarning.se
+Host: https://www.relationsvarning.se
 
 # Sitemaps
-Sitemap: https://relationsvarning.se/sitemap.xml
+Sitemap: https://www.relationsvarning.se/sitemap.xml

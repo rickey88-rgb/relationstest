@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Bryta medberoende – börja sätta gränser och ta tillbaka ditt liv",
   description: "Läs hur du kan börja bryta medberoendemönster genom tydligare gränser, mindre överansvar och större fokus på egna behov och val.",
-  alternates: { canonical: "https://relationsvarning.se/medberoende/bryta-medberoende" },
+  alternates: { canonical: "https://www.relationsvarning.se/medberoende/bryta-medberoende" },
 };
 
 export default function Page() {

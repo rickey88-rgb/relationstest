@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description:
     "Gör ett medberoendetest med 30 frågor om självuppoffring, överansvar, gränser, känslor och fokus på partnern. Få en tydlig analys av dina relationsmönster.",
   alternates: {
-    canonical: "https://relationsvarning.se/medberoendetest",
+    canonical: "https://www.relationsvarning.se/medberoendetest",
   },
 };
 

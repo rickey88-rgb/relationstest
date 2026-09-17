@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Anknytning i relationer – trygg, ängslig och undvikande anknytning",
   description: "Lär dig hur anknytning påverkar vuxna relationer, närhet, konflikter och behov av trygghet. Läs om trygg, ängslig och undvikande anknytning.",
-  alternates: { canonical: "https://relationsvarning.se/anknytning" },
+  alternates: { canonical: "https://www.relationsvarning.se/anknytning" },
 };
 
 export default function Page() {

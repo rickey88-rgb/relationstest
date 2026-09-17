@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Tecken på medberoende – vanliga mönster att känna igen",
   description: "Lär dig känna igen vanliga tecken på medberoende som självuppoffring, överansvar, svåra gränser och starkt fokus på partnerns känslor.",
-  alternates: { canonical: "https://relationsvarning.se/medberoende/tecken" },
+  alternates: { canonical: "https://www.relationsvarning.se/medberoende/tecken" },
 };
 
 export default function Page() {

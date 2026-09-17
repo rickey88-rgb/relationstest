@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Ängslig anknytning – tecken och mönster i relationer",
   description: "Läs om ängslig och otrygg ambivalent anknytning, rädsla för avvisande, behov av bekräftelse och hur mönstret kan påverka en relation.",
-  alternates: { canonical: "https://relationsvarning.se/anknytning/angslig-anknytning" },
+  alternates: { canonical: "https://www.relationsvarning.se/anknytning/angslig-anknytning" },
 };
 
 export default function Page() {

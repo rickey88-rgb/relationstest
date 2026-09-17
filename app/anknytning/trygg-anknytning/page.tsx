@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Trygg anknytning – så kan den se ut i en relation",
   description: "Läs vad trygg anknytning innebär i vuxna relationer och hur tillit, närhet, självständighet och konflikthantering kan fungera.",
-  alternates: { canonical: "https://relationsvarning.se/anknytning/trygg-anknytning" },
+  alternates: { canonical: "https://www.relationsvarning.se/anknytning/trygg-anknytning" },
 };
 
 export default function Page() {

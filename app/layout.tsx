@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://relationsvarning.se"),
+  metadataBase: new URL("https://www.relationsvarning.se"),
   title: "Relationsvarning – anonymt test om varningssignaler i relationer",
   description:
     "Gör ett anonymt relationsbaserat test och få en tydlig riskindikator. Ingen registrering.",

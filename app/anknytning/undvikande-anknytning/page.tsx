@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Undvikande anknytning – tecken i vuxna relationer",
   description: "Läs om undvikande anknytning, känslomässig distans, stark självtillräcklighet och svårigheter med närhet och sårbarhet i relationer.",
-  alternates: { canonical: "https://relationsvarning.se/anknytning/undvikande-anknytning" },
+  alternates: { canonical: "https://www.relationsvarning.se/anknytning/undvikande-anknytning" },
 };
 
 export default function Page() {

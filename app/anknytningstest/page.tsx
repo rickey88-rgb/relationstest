@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description:
     "Lär dig om trygg, ängslig och undvikande anknytning i romantiska relationer. Förstå anknytningsångest och anknytningsundvikande och gör vårt anknytningstest.",
   alternates: {
-    canonical: "https://relationsvarning.se/anknytningstest",
+    canonical: "https://www.relationsvarning.se/anknytningstest",
   },
 };
 

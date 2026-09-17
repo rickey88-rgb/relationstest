@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Medberoende – tecken, orsaker och mönster i relationer",
   description: "Läs vad medberoende innebär, vanliga tecken och hur överansvar, självuppoffring och svaga gränser kan påverka en relation.",
-  alternates: { canonical: "https://relationsvarning.se/medberoende" },
+  alternates: { canonical: "https://www.relationsvarning.se/medberoende" },
 };
 
 export default function Page() {

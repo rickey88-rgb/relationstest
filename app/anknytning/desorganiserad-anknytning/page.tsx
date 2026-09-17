@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Desorganiserad anknytning i vuxna relationer",
   description: "Läs om desorganiserade anknytningsmönster, samtidig längtan efter och rädsla för närhet och hur anknytningsångest och undvikande kan samverka.",
-  alternates: { canonical: "https://relationsvarning.se/anknytning/desorganiserad-anknytning" },
+  alternates: { canonical: "https://www.relationsvarning.se/anknytning/desorganiserad-anknytning" },
 };
 
 export default function Page() {
