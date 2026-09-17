@@ -416,7 +416,15 @@ export default function Page() {
   const currentQuestion = questions[index];
 
   // Compare existing normalized scores only for teaser wording.
-  const teaserDistinct = sortedAreas[0].score - sortedAreas[1].score >= 15;
+  const teaserGap = sortedAreas[0].score - sortedAreas[1].score;
+  const teaserElevated = sortedAreas.filter((item) => item.score >= 50).length;
+  const teaserCopy = sortedAreas[0].score < 50 && teaserGap >= 10
+    ? { title: "Helhetsbilden är inte entydig", body: "Ett område avviker från resten av svaren. Det är skillnaden mellan områdena som gör resultatet intressant." }
+    : teaserGap >= 15
+      ? { title: "Ett mönster i relationen sticker ut", body: "Ett område framträder tydligare än de andra och påverkar hur helheten bör tolkas." }
+      : teaserElevated >= 2
+        ? { title: "Flera mönster förstärker varandra", body: "Flera områden verkar samspela i relationen. Det är framför allt kombinationen mellan dem som formar resultatet." }
+        : { title: "Dina svar bildar en jämn profil", body: "Inget enskilt område dominerar. Resultatet behöver därför tolkas som en helhet." };
 
   function selectAnswer(value: number) {
     if (answerLock.current) return;
@@ -620,8 +628,8 @@ export default function Page() {
             padding: "24px 18px",
           }}
         >
-          <h2 style={{ margin: "8px 0 0", fontSize: "clamp(24px, 7vw, 32px)", lineHeight: 1.2 }}>{teaserDistinct ? "Ett relationsmönster sticker ut" : "En kombination av flera mönster framträder"}</h2>
-          <p style={{ marginTop: 14, lineHeight: 1.7 }}>Testet undersöker närhet, otrygghet och svårigheter att släppa relationen. {teaserDistinct ? "Ett område framträder tydligare än de andra och påverkar hur helheten bör tolkas." : "Flera områden ligger nära varandra. Hur de samspelar är viktigt för att förstå helheten."}</p>
+          <h2 style={{ margin: "8px 0 0", fontSize: "clamp(24px, 7vw, 32px)", lineHeight: 1.2 }}>{teaserCopy.title}</h2>
+          <p style={{ marginTop: 14, lineHeight: 1.7 }}>Testet undersöker närhet, otrygghet och svårigheter att släppa relationen. {teaserCopy.body}</p>
           <p style={{ marginTop: 14, lineHeight: 1.7 }}>I din fullständiga analys ser du vilka områden som framträder, hur starka mönstren är och hur dina svar hänger ihop.</p>
 
           <div
@@ -648,24 +656,30 @@ export default function Page() {
               observera.
             </p>
 
+            <p style={{ margin: "14px 0 0", fontSize: 15, fontWeight: 700 }}>39 kr</p>
+
+            <p style={{ margin: "4px 0 0", fontSize: 13, color: "#d4d4d4" }}>Engångsbetalning · Ingen prenumeration</p>
+
             <button
               type="button"
               onClick={goToCheckout}
+              onMouseEnter={(event) => { event.currentTarget.style.background = "#285C44"; }}
+              onMouseLeave={(event) => { event.currentTarget.style.background = "#2F6B4F"; }}
               style={{
                 marginTop: 16,
                 width: "100%",
                 minHeight: 52,
                 padding: "13px 16px",
                 borderRadius: 13,
-                border: "1px solid #fff",
-                background: "#fff",
-                color: "#111",
+                border: "1px solid #2F6B4F",
+                background: "#2F6B4F",
+                color: "#fff",
                 cursor: "pointer",
                 fontSize: 16,
                 fontWeight: 800,
               }}
             >
-              Lås upp fullständig analys – 39 kr
+              Se min fullständiga analys – 39 kr
             </button>
           </div>
 

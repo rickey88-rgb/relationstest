@@ -539,7 +539,7 @@ export default function Page() {
                 fontWeight: 700,
               }}
             >
-              Lås upp analys – 79 kr
+              Se min fullständiga analys – 39 kr
             </button>
 
             <button

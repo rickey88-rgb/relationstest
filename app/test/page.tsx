@@ -12,7 +12,7 @@ import { resultAnalysis } from "./analysis";
 
 const button = "inline-flex min-h-12 items-center justify-center rounded-xl px-5 py-3 text-center font-semibold focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900";
 const secondary = button + " border border-neutral-300 bg-white text-neutral-900 hover:bg-neutral-100";
-const primary = button + " bg-neutral-900 text-white hover:bg-neutral-800";
+const primary = button + " bg-[#2F6B4F] text-white hover:bg-[#285C44]";
 const link = "underline underline-offset-4 decoration-neutral-400 focus-visible:outline-2 focus-visible:outline-offset-4";
 const section = "mt-8 space-y-4 rounded-2xl border border-neutral-200 p-5 leading-7 sm:p-6";
 
@@ -68,7 +68,16 @@ export default function ScreeningPage() {
   const showResult = complete && !editing;
   const answeredCount = answers.filter((answer) => answer >= 0).length;
   const profile = useMemo(() => calculate(answers), [answers]);
-  const teaserDistinct = profile.scores[profile.ranked[0]] - profile.scores[profile.ranked[1]] >= 15;
+  const teaserScores = profile.ranked.map((domain) => profile.scores[domain]);
+  const teaserGap = teaserScores[0] - teaserScores[1];
+  const teaserElevated = teaserScores.filter((score) => score >= 50).length;
+  const teaserCopy = teaserScores[0] < 50 && teaserGap >= 10
+    ? { title: "Helhetsbilden är inte entydig", body: "Ett område avviker från resten av svaren. Det är den skillnaden som gör resultatet intressant." }
+    : teaserGap >= 15
+      ? { title: "Ett mönster i relationen sticker ut", body: "Ett område framträder tydligare än de andra och påverkar hur helheten bör tolkas." }
+      : teaserElevated >= 2
+        ? { title: "Flera relationsmönster förstärker varandra", body: "Flera områden verkar samspela i relationen. Kombinationen formar den samlade bilden." }
+        : { title: "Dina svar bildar en jämn profil", body: "Inget enskilt område dominerar. Resultatet behöver tolkas som en helhet." };
   const suggested = useMemo(() => recommendations(profile), [profile]);
   const analysis = useMemo(() => resultAnalysis(profile, answers), [profile, answers]);
   useEffect(() => {
@@ -134,11 +143,11 @@ export default function ScreeningPage() {
       </aside>}
       {analyzing && !unlocked && <section className={section} aria-busy="true"><h2 className="text-2xl font-semibold">Vi sammanställer din analys</h2><p role="status" aria-live="polite">{["Analyserar dina svar...", "Identifierar återkommande mönster...", "Sammanställer din profil..."][analysisStep ?? 0]}</p></section>}
       {(!analyzing || unlocked) && <>{!unlocked ? <section ref={tracking.paywallRef} className={section} aria-labelledby="result-heading">
-        <h2 id="result-heading" ref={heading} tabIndex={-1} className="text-2xl font-semibold outline-none">{teaserDistinct ? "Ett mönster i relationen sticker ut" : "En kombination av flera relationsmönster framträder"}</h2>
-        <p>{teaserDistinct ? "Ett område framträder tydligare än de andra och påverkar hur din samlade screening bör tolkas." : "Flera områden ligger nära varandra. Hur de samspelar är viktigt för att förstå dina svar."}</p>
+        <h2 id="result-heading" ref={heading} tabIndex={-1} className="text-2xl font-semibold outline-none">{teaserCopy.title}</h2>
+        <p>{teaserCopy.body}</p>
         <p>I din fullständiga analys ser du vilka områden som framträder, hur mönstren hänger ihop och vad som kan vara relevant att undersöka vidare.</p>
-        <button type="button" onClick={checkout} className={primary + " w-full"}>Lås upp min analys – {SCREENING_PRICE_SEK} kr</button>
-        <p className="text-sm text-neutral-600">Engångsköp – 39 kr för din fullständiga screeninganalys.</p>
+        <button type="button" onClick={checkout} className={primary + " w-full"}>Se min fullständiga analys – {SCREENING_PRICE_SEK} kr</button>
+        <p className="text-sm text-neutral-600">39 kr · Engångsbetalning · Ingen prenumeration</p>
       </section> : <>
         <section className={section} aria-labelledby="result-heading"><h2 id="result-heading" ref={heading} tabIndex={-1} className="text-2xl font-semibold outline-none">Din analys</h2>{analysis.paragraphs.map((text,i) => <p key={i}>{text}</p>)}</section>
         <section className={section}><h2 className="text-2xl font-semibold">Så hänger dina svar ihop</h2>{analysis.connections.map(item => <p key={item.id} data-insight={item.id}>{item.text}</p>)}</section>

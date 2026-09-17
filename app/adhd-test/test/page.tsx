@@ -13,7 +13,7 @@ import { levelTexts, profileTexts } from "./copy";
 
 const button = "inline-flex min-h-12 items-center justify-center rounded-xl px-5 py-3 text-center font-semibold focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900";
 const secondary = button + " border border-neutral-300 bg-white text-neutral-900 hover:bg-neutral-100";
-const primary = button + " bg-neutral-900 text-white hover:bg-neutral-800";
+const primary = button + " bg-[#2F6B4F] text-white hover:bg-[#285C44]";
 const link = "underline underline-offset-4 decoration-neutral-400 focus-visible:outline-2 focus-visible:outline-offset-4";
 const section = "mt-8 space-y-4 rounded-2xl border border-neutral-200 p-5 leading-7 sm:p-6";
 
@@ -69,9 +69,16 @@ export default function ADHDSelfTestPage() {
   const showResult = complete && !editing;
   const answeredCount = answers.filter((answer) => answer >= 0).length;
   const result = useMemo(() => complete ? calculate(answers) : null, [complete, answers]);
-  const preview = result && result.leadingGap >= 15
-    ? { title: "Ett mönster i dina svar sticker ut", body: "Ett av symptomområdena framträder tydligare än de andra och påverkar hur din samlade profil bör tolkas.", next: "Vilket område det gäller visas i din fullständiga analys." }
-    : { title: "En kombination i dina svar sticker ut", body: "Det är inte ett enda område som dominerar. I stället framträder en kombination mellan flera av de mönster testet mäter.", next: "Din fullständiga analys visar vilka områden det gäller och hur de hänger ihop." };
+  const previewScores = result ? Object.values(result.scores).sort((a, b) => b - a) : [];
+  const previewGap = previewScores.length > 1 ? previewScores[0] - previewScores[1] : 0;
+  const previewElevated = previewScores.filter((score) => score >= 50).length;
+  const preview = previewScores[0] < 50 && previewGap >= 10
+    ? { title: "Helhetsbilden är inte entydig", body: "Ett område avviker från resten av dina svar. Det är den skillnaden som gör profilen intressant.", next: "Vilket område det gäller visas i din fullständiga analys." }
+    : previewGap >= 15
+      ? { title: "Ett mönster i dina svar sticker ut", body: "Ett område framträder tydligare än de andra och påverkar hur din samlade profil bör tolkas.", next: "Vilket område det gäller visas i din fullständiga analys." }
+      : previewElevated >= 2
+        ? { title: "Flera områden förstärker varandra", body: "Det är inte ett enskilt område som förklarar profilen. Flera mönster samspelar i dina svar.", next: "Den fullständiga analysen visar vilka områden det gäller och hur de hänger ihop." }
+        : { title: "Dina svar bildar en jämn profil", body: "Inget enskilt område dominerar. Resultatet behöver tolkas som en helhet.", next: "Den fullständiga analysen visar hur delarna bidrar till din ADHDprofil." };
   useEffect(() => {
     if (moveFocus.current) { heading.current?.focus({ preventScroll: true }); moveFocus.current = false; }
   }, [index, showResult, hydrated, analyzing]);
@@ -142,9 +149,9 @@ export default function ADHDSelfTestPage() {
         <div className="space-y-4 border-t border-neutral-200 pt-5">
           <h3 className="text-xl font-semibold">Se din fullständiga ADHD-profil</h3>
           <p>Du får:</p><ul className="list-disc space-y-2 pl-5"><li>dina sex delresultat</li><li>vilket mönster som sticker ut mest</li><li>hur starkt det samlade ADHD-relaterade mönstret är</li><li>hur vardagspåverkan förändrar tolkningen</li><li>en personlig analys av hur dina svar hänger ihop</li></ul>
-          <p className="font-semibold">Introduktionspris {PRICE_SEK} kr</p>
-          <p className="text-sm text-neutral-600">Engångsköp. Ingen prenumeration.</p>
-          <button type="button" onClick={checkout} className={primary + " w-full"}>Visa min fullständiga analys</button>
+          <p className="text-lg font-semibold">{PRICE_SEK} kr</p>
+          <p className="text-sm text-neutral-600">Engångsbetalning · Ingen prenumeration</p>
+          <button type="button" onClick={checkout} className={primary + " w-full"}>Se min fullständiga analys – {PRICE_SEK} kr</button>
           {checkoutUnavailable && <p role="status">Köp är inte tillgängligt just nu. Dina svar finns kvar i den här webbläsaren.</p>}
         </div>
       </section> : <>

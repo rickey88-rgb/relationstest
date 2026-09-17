@@ -13,7 +13,7 @@ import { interpretation, profileAnalysis } from "./interpretation";
 
 const button = "inline-flex min-h-12 items-center justify-center rounded-xl px-5 py-3 text-center font-semibold focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900";
 const secondary = button + " border border-neutral-300 bg-white text-neutral-900 hover:bg-neutral-100";
-const primary = button + " bg-neutral-900 text-white hover:bg-neutral-800";
+const primary = button + " bg-[#2F6B4F] text-white hover:bg-[#285C44]";
 const link = "underline underline-offset-4 decoration-neutral-400 focus-visible:outline-2 focus-visible:outline-offset-4";
 const section = "mt-8 space-y-4 rounded-2xl border border-neutral-200 p-5 leading-7 sm:p-6";
 
@@ -70,22 +70,21 @@ export default function NarcissismSelfTestPage() {
   const answeredCount = answers.filter((answer) => answer >= 0).length;
   const result = useMemo(() => complete ? calculate(answers) : null, [complete, answers]);
   // Presentation-only comparison of existing scores; no scoring changes.
-  const leadingGap = result ? result.scores[result.ranked[0]] - result.scores[result.ranked[1]] : 0;
-  const preview = leadingGap >= 15
-    ? {
-      title: "Något i dina svar sticker ut",
-      body: "Ett av områdena framträder tydligare än de andra och påverkar hur din samlade profil bör tolkas.",
-      next: "Vilket område det är – och hur starkt mönstret är – visas i din fullständiga analys.",
-      value: "Se ditt mest framträdande område, dina sex delresultat, din profiltyp och hur mönstret kan märkas i relationer.",
-      cta: "Visa vad som sticker ut i min profil",
-    }
-    : {
-      title: "Ett mönster i dina svar är särskilt intressant",
-      body: "Det är inte ett enda område som dominerar. I stället framträder en kombination mellan flera av de drag som testet mäter.",
-      next: "Hur de områdena samspelar påverkar hur din profil bör tolkas.",
-      value: "I din fullständiga analys ser du vilka områden som driver mönstret och hur de hänger ihop.",
-      cta: "Visa vad som sticker ut i mina svar",
-    };
+  const previewScores = result ? result.ranked.map((dimension) => result.scores[dimension]) : [];
+  const previewGap = previewScores.length > 1 ? previewScores[0] - previewScores[1] : 0;
+  const previewElevated = previewScores.filter((score) => score >= 50).length;
+  const previewBase = previewScores[0] < 50 && previewGap >= 10
+    ? { title: "Helhetsbilden är inte entydig", body: "Ett område avviker från resten av dina svar. Det är den skillnaden som gör profilen intressant.", next: "Vilket område det gäller visas i din fullständiga analys." }
+    : previewGap >= 15
+      ? { title: "Något i dina svar sticker ut", body: "Ett område framträder tydligare än de andra och påverkar hur din samlade profil bör tolkas.", next: "Vilket område det är visas i din fullständiga analys." }
+      : previewElevated >= 2
+        ? { title: "Flera områden förstärker varandra", body: "Flera drag samspelar i dina svar. Kombinationen är mer intressant än någon enskild poäng.", next: "Den fullständiga analysen visar vilka områden det gäller och hur de hänger ihop." }
+        : { title: "Dina svar bildar en jämn profil", body: "Inget enskilt område dominerar. Resultatet behöver tolkas som en helhet.", next: "Den fullständiga analysen visar hur delarna bidrar till profilen." };
+  const preview = {
+    ...previewBase,
+    value: "Se dina sex delresultat, hur områdena samverkar och hur mönstret kan märkas i relationer.",
+    cta: "Se min fullständiga profil",
+  };
   useEffect(() => {
     if (moveFocus.current) { heading.current?.focus({ preventScroll: true }); moveFocus.current = false; }
   }, [index, showResult, hydrated, analyzing]);
@@ -154,7 +153,7 @@ export default function NarcissismSelfTestPage() {
         <h2 id="result-heading" ref={heading} tabIndex={-1} className="text-2xl font-semibold outline-none">{unlocked ? "Din övergripande profil" : preview.title}</h2>
         {unlocked && <><p className="text-xl font-semibold">{result.level}</p><p className="text-4xl font-semibold tabular-nums">{formatPercent(result.percent)} %</p>
         <p className="text-sm text-neutral-600">Andel av självtestets möjliga poäng, inte en sannolikhet.</p></>}
-        {!unlocked && <><p>{preview.body}</p>{preview.next && <p>{preview.next}</p>}<p>{preview.value}</p><button type="button" onClick={checkout} className={primary + " w-full"}>{preview.cta}</button><p className="text-sm text-neutral-600">Engångsköp – {PRICE_SEK} kr</p>{checkoutUnavailable && <p role="status" className="text-sm text-neutral-600">Köp av fullständig profil är inte tillgängligt just nu. Dina svar finns kvar i den här webbläsaren.</p>}</>}
+        {!unlocked && <><p>{preview.body}</p>{preview.next && <p>{preview.next}</p>}<p>{preview.value}</p><button type="button" onClick={checkout} className={primary + " w-full"}>{preview.cta} – {PRICE_SEK} kr</button><p className="text-sm text-neutral-600">{PRICE_SEK} kr · Engångsbetalning · Ingen prenumeration</p>{checkoutUnavailable && <p role="status" className="text-sm text-neutral-600">Köp av fullständig profil är inte tillgängligt just nu. Dina svar finns kvar i den här webbläsaren.</p>}</>}
         {unlocked && <p className="rounded-xl bg-neutral-50 p-4"><span className="block text-sm text-neutral-600">Profiltyp</span><strong>{result.profileType}</strong></p>}
       </section>
       {unlocked && <>
