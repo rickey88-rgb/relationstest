@@ -103,6 +103,11 @@ const homeGuides: HomeGuide[] = [
   { href: "/vald-i-nara-relation", label: "Våld i nära relation — tecken och var du kan få hjälp", group: "Psykiskt våld & stöd" },
   { href: "/jag-ar-radd-att-min-partner-ska-sla-mig", label: "Jag är rädd att min partner ska slå mig — vad kan jag göra?", group: "Psykiskt våld & stöd" },
   { href: "/traumabindning-i-relation", label: "Traumabindning i en relation — tecken och varför det är svårt att lämna", group: "Manipulation & påverkan" },
+  { href: "/svartsjuk-partner", label: "Svartsjuk partner — när oro blir kontroll", group: "Relationer & mönster" },
+  { href: "/stanna-eller-ga", label: "Stanna eller gå — strukturera dina frågor", group: "Relationer & mönster" },
+  { href: "/granser-i-relation", label: "Gränser i relationer", group: "Relationer & mönster" },
+  { href: "/stonewalling-relation", label: "Stonewalling och känslomässig nedstängning", group: "Manipulation & påverkan" },
+  { href: "/adhd-och-relationer", label: "ADHD och relationer", group: "NPF & självtest" },
 ];
 
 export default function Landing() {

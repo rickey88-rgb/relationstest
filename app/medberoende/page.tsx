@@ -58,6 +58,7 @@ export default function Page() {
           <p>Du kan märka att du läser av tonfall, ansiktsuttryck eller meddelanden innan du bestämmer vad du själv vågar säga. Om partnern är irriterad ställer du in planer. Om partnern är ledsen känner du att du måste ordna något omedelbart. Ditt handlingsutrymme blir beroende av att den andra först mår bra.</p>
           <p>Att uppmärksamma partnerns känslor är normalt. Det som behöver undersökas är om du upplever att varje känsla är din uppgift att ändra, eller att du inte får fortsätta med ditt eget liv innan den har gått över. Partnern kan vara besviken utan att du gjort fel och ledsen utan att du har en lösning.</p>
           <p>Om vaksamheten beror på att partnern hotar, exploderar eller bestraffar dig är det däremot viktigt att se risken i miljön. Då är anpassningen inte något som ska beskrivas enbart som dina svaga gränser. Säkerhet och stöd kan behöva komma före försök att ändra samspelet.</p>
+          <p>För en konkret genomgång av nej, ansvar och personligt utrymme, läs om <Link href="/granser-i-relation" className="underline underline-offset-4">gränser i relationer</Link>.</p>
         </section>
         <section className="mt-10 space-y-4 leading-7 text-neutral-700">
           <h2 className="text-2xl font-semibold tracking-tight text-neutral-900">Skuld och rädsla för att göra någon besviken</h2>

@@ -188,6 +188,7 @@ export default function Page() {
           <p className="leading-7 text-neutral-700">
             Att det är svårt att lämna betyder inte att du accepterar det som
             händer. Du kan behöva stöd och tid för att se möjliga nästa steg.
+            Guiden <Link href="/stanna-eller-ga" className={textLink}>stanna eller gå</Link> hjälper dig att strukturera frågor om trygghet, respekt och förändring utan att fatta beslut åt dig.
           </p>
         </section>
 
@@ -198,6 +199,7 @@ export default function Page() {
             skuldvändning och gränser respekteras. Det behöver synas i handling
             över tid, även när ni är oense. En tillfällig ursäkt eller en bra vecka
             räcker inte för att visa att mönstret har ändrats.
+            Läs också om <Link href="/granser-i-relation" className={textLink}>hur gränser uttrycks och respekteras i en relation</Link>.
           </p>
           <p className="leading-7 text-neutral-700">
             Om du är rädd, utsätts för hot eller våld eller lever med stark kontroll

@@ -355,6 +355,7 @@ export default function SilentTreatmentRelationPage() {
 
             <p className="text-[1.05rem] leading-8 text-neutral-700">
               Behov av avstånd kan också förstås i relation till <Link href="/anknytning/undvikande-anknytning" className="underline underline-offset-4">anknytning och känslomässig närhet</Link>. Det gör inte avståndstagande och bestraffande tystnad till samma sak.
+              Läs också om <Link href="/stonewalling-relation" className="underline underline-offset-4">stonewalling och känslomässig nedstängning</Link>, där stress och möjligheten att återuppta samtalet står i centrum.
             </p>
 
             <div className="grid gap-4 md:grid-cols-2">

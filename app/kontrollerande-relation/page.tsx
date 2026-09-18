@@ -219,6 +219,10 @@ export default function Page() {
       </Link>
       .
     </p>
+    <p>
+      Svartsjuka blir särskilt viktig att uppmärksamma när den leder till regler,
+      förhör eller krav på insyn. Läs guiden om <Link href="/svartsjuk-partner" className="font-medium text-neutral-950 underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700">svartsjuka och kontroll i relationen</Link>. För en bredare genomgång av nej och personligt utrymme finns även <Link href="/granser-i-relation" className="font-medium text-neutral-950 underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700">gränser i relationer</Link>.
+    </p>
   </div>
 </section>
 
