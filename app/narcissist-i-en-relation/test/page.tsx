@@ -1,4 +1,5 @@
 "use client";
+import PostPurchaseRecommendation from "../../_components/PostPurchaseRecommendation";
 import { buildPaywallTeaser } from "../../_lib/paywallTeaser";
 
 import { hasPaidReturn, usePaymentRecovery } from "../../_components/usePaymentRecovery";
@@ -1185,6 +1186,7 @@ export default function Page() {
           </div>
         </section>
       )}
+      {isFinished && unlocked && <PostPurchaseRecommendation sourceTest="narcissist_partner" recommendedTest="screening_test" />}
 
       <p style={{ marginTop: 26, fontSize: 12, lineHeight: 1.6, color: "#777" }}>
         Testet är ett orienteringsverktyg och kan inte avgöra om en person

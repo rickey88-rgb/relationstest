@@ -1,4 +1,5 @@
 "use client";
+import PostPurchaseRecommendation from "../../_components/PostPurchaseRecommendation";
 import { buildPaywallTeaser } from "../../_lib/paywallTeaser";
 
 import { hasPaidReturn, usePaymentRecovery } from "../../_components/usePaymentRecovery";
@@ -1281,6 +1282,7 @@ export default function Page() {
           </div>
         </section>
       )}
+      {isFinished && unlocked && <PostPurchaseRecommendation sourceTest="attachment_test" recommendedTest="codependency_test" />}
 
       <style jsx>{`
         .answer-button {

@@ -8,6 +8,8 @@ import { useTestAnalytics } from "../_analytics/useTestAnalytics";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { answerLabels, band, calculate, domainCopy, domains, emptyAnswers, parseState, questions, recommendations, SCREENING_CHECKOUT_URL, SCREENING_PRICE_SEK, STATE_VERSION, STORAGE_KEY } from "./screening";
+import PostPurchaseRecommendation from "../_components/PostPurchaseRecommendation";
+import type { TestId } from "../_analytics/config";
 
 import { resultAnalysis } from "./analysis";
 
@@ -72,6 +74,9 @@ export default function ScreeningPage() {
   const teaserScores = profile.ranked.map((domain) => profile.scores[domain]);
   const teaserCopy = buildPaywallTeaser(teaserScores);
   const suggested = useMemo(() => recommendations(profile), [profile]);
+  const recommendedTest: TestId | null = suggested[0] && (suggested.length === 1 || suggested[0].rank - suggested[1].rank >= 10)
+    ? ({ "/gaslightingtest/test": "gaslighting_test", "/psykisk-misshandel-relation/test": "psychological_abuse_test", "/traumabindningtest/test": "trauma_bond_test", "/medberoendetest/test": "codependency_test", "/anknytningstest/test": "attachment_test", "/narcissist-i-en-relation/test": "narcissist_partner" } as Record<string, TestId>)[suggested[0].href] ?? null
+    : null;
   const analysis = useMemo(() => resultAnalysis(profile, answers), [profile, answers]);
   useEffect(() => {
     if (moveFocus.current) { heading.current?.focus({ preventScroll: true }); moveFocus.current = false; }
@@ -159,7 +164,7 @@ export default function ScreeningPage() {
         })}</div></section>
       </>}</>}
       <section className="mt-8 space-y-2 text-sm leading-6 text-neutral-600"><h2 className="font-semibold text-neutral-900">Om resultatet</h2><p>Screeningen är ett reflektionsverktyg baserat på dina egna svar. Den ställer inte diagnoser och avgör inte juridiskt om ett brott har begåtts.</p><Link href="/metodik" className={link}>Läs om metodiken</Link></section>
-      {unlocked && <section className={section}><h2 className="text-2xl font-semibold">Vill du förstå något område bättre?</h2>{suggested.length ? <div className="space-y-4">{suggested.map(item => <div key={item.href} className="space-y-3 rounded-xl bg-neutral-50 p-4"><h3 className="font-semibold">{item.title}</h3><p>{item.reason}</p><Link href={item.href} className={secondary + " w-full"}>{item.href === "/gaslightingtest/test" ? "Gör gaslightingtestet" : "Gör testet"}</Link></div>)}</div> : <p>Den här profilen pekar inte ut något särskilt fördjupningstest. Du kan börja med <Link href="/beteenden" className={link}>guiden om beteenden i relationer</Link> om du vill sätta ord på en egen fråga.</p>}</section>}
+      {unlocked && <PostPurchaseRecommendation sourceTest="screening_test" recommendedTest={recommendedTest} />}
       <div className="mt-6 flex flex-wrap gap-3"><button type="button" onClick={() => { moveFocus.current = true; setEditing(true); setIndex(0); }} className={secondary}>Granska mina svar</button><button type="button" onClick={restart} className={secondary}>Börja om</button></div>
     </div>}
     <nav aria-label="Stöd och vidare läsning" className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-sm"><Link href="/" className={link + " inline-flex min-h-11 items-center"}>Till startsidan</Link>{(!showResult || !profile.safety) && <Link href="/psykiskt-vald/hjalp" className={link + " inline-flex min-h-11 items-center"}>Stöd och hjälp</Link>}</nav>
