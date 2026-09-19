@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import GuideNextSteps from "../_components/GuideNextSteps";
 
 export const metadata: Metadata = {
   title: "Silent treatment i relation – när tystnad blir makt och kontroll",
@@ -392,26 +393,7 @@ export default function SilentTreatmentRelationPage() {
             </div>
           </section>
 
-          <section className="rounded-3xl border border-neutral-300 bg-white p-7 shadow-sm md:p-8">
-            <div className="text-sm font-medium uppercase tracking-[0.18em] text-neutral-700">
-              När tystnaden börjar styra ditt mående
-            </div>
-            <h2 className="mt-3 text-2xl font-semibold tracking-tight text-neutral-950">
-              Om du behöver få syn på helheten
-            </h2>
-            <p className="mt-4 text-[1.02rem] leading-8 text-neutral-700">
-              Känner du igen flera destruktiva eller kontrollerande mönster i relationen?
-              På Relationsvarnings startsida finns huvudtestet som kan hjälpa dig att
-              reflektera över helheten. Ett test ger ingen diagnos och ersätter inte
-              ditt eget perspektiv på hur trygg du känner dig.
-            </p>
-            <Link
-              href="/"
-              className="mt-5 inline-flex min-h-12 items-center justify-center rounded-xl bg-[#7A1F1F] px-5 py-3 text-center font-semibold text-white hover:bg-[#5C1717] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#5C1717]"
-            >
-              Gör Relationsvarnings test
-            </Link>
-          </section>
+
 
           <section id="varfor" className="space-y-6">
             <h2 className="text-3xl font-semibold tracking-tight text-neutral-950">
@@ -814,6 +796,7 @@ export default function SilentTreatmentRelationPage() {
               mönster och upplevelser i relationer – inte på att ställa diagnos på någon.
             </p>
           </section>
+        <GuideNextSteps sourcePage="/silent-treatment-relation" />
         </article>
       </section>
     </main>

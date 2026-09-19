@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import GuideNextSteps from "../_components/GuideNextSteps";
 
 export const metadata: Metadata = {
   title: "Anknytning i relationer – trygg, ängslig och undvikande anknytning",
@@ -92,8 +93,7 @@ export default function Page() {
           <p>Om mönstren orsakar mycket lidande kan en legitimerad psykolog eller psykoterapeut hjälpa dig att undersöka dem i sitt sammanhang. Du behöver inte först välja rätt etikett. Det går att börja med något konkret: att du inte kan koppla av mellan träffar, att du stänger av i konflikter eller att relationen gör dig rädd. Vid hot eller våld finns också <Link href="/psykiskt-vald/hjalp" className="underline underline-offset-4">vägar till hjälp och stöd</Link>.</p>
         </section>
 
-        <p className="mt-10 leading-7 text-neutral-700">Vill du sätta ord på dina egna reaktioner? Använd testet som en utgångspunkt för reflektion och läs resultatet tillsammans med det du vet om din faktiska relation.</p>
-        <Link href="/anknytningstest/test" className="mt-4 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-neutral-900 px-5 py-3 text-center text-sm font-semibold text-white hover:bg-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900 sm:w-auto">Starta anknytningstestet</Link>
+        <GuideNextSteps sourcePage="/anknytning" />
       </article>
     </main>
   );

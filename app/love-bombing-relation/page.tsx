@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import GuideNextSteps from "../_components/GuideNextSteps";
 
 export const metadata: Metadata = {
   title: "Love bombing – 10 tecken och skillnaden mot förälskelse",
@@ -445,25 +446,7 @@ export default function LoveBombingRelationPage() {
             </div>
           </section>
 
-          <section className="rounded-3xl border border-rose-200 bg-rose-50 p-7 md:p-8">
-            <div className="text-sm font-medium uppercase tracking-[0.18em] text-rose-700">
-              Mitt i relationen kan det vara svårt att se klart
-            </div>
-            <h2 className="mt-3 text-2xl font-semibold tracking-tight text-neutral-950">
-              Vill du reflektera över relationens mönster?
-            </h2>
-            <p className="mt-4 text-[1.02rem] leading-8 text-neutral-700">
-              Känner du igen flera intensiva eller destruktiva mönster i relationen?
-              På Relationsvarnings startsida finns huvudtestet som hjälper dig att
-              reflektera över helheten. Det ger ingen diagnos.
-            </p>
-            <Link
-              href="/"
-              className="mt-5 inline-flex min-h-12 items-center justify-center rounded-xl bg-[#7A1F1F] px-5 py-3 text-center font-semibold text-white hover:bg-[#5C1717] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#5C1717]"
-            >
-              Gör Relationsvarnings test
-            </Link>
-          </section>
+
 
           <section className="border-t border-neutral-200 pt-14">
             <h2 className="text-3xl font-semibold tracking-tight text-neutral-950">
@@ -494,6 +477,7 @@ export default function LoveBombingRelationPage() {
               mönster och upplevelser i relationer – inte på att ställa diagnos på någon.
             </p>
           </section>
+        <GuideNextSteps sourcePage="/love-bombing-relation" />
         </article>
       </section>
     </main>

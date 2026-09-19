@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import GuideNextSteps from "../_components/GuideNextSteps";
 
 export const metadata: Metadata = {
   title: "Destruktivt förhållande – tecken, mönster och vad du kan göra | Relationsvarning",
@@ -227,22 +228,7 @@ export default function Page() {
           </p>
         </section>
 
-        <section className="rounded-3xl border border-neutral-200 bg-neutral-50 p-7 shadow-sm md:p-8">
-          <h2 className="text-2xl font-semibold tracking-tight text-neutral-950">
-            Osäker på vilket mönster som beskriver relationen?
-          </h2>
-          <p className="mt-4 leading-7 text-neutral-700">
-            Relationsvarnings generella test hjälper dig att strukturera flera
-            typer av varningssignaler samtidigt. Det är ett stöd för reflektion,
-            inte en diagnos eller ett beslut om vad du måste göra.
-          </p>
-          <Link
-            href="/"
-            className="mt-5 inline-flex min-h-12 items-center justify-center rounded-xl bg-[#7A1F1F] px-5 py-3 text-center font-semibold text-white hover:bg-[#5C1717] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#5C1717]"
-          >
-            Gör relationstestet
-          </Link>
-        </section>
+
 
         <section className="space-y-5 border-t border-neutral-200 pt-10">
           <h2 className="text-2xl font-semibold tracking-tight">Vanliga frågor</h2>
@@ -267,6 +253,7 @@ export default function Page() {
           situation åt dig eller ersätta professionellt stöd. Du behöver inte
           göra något test för att få hjälp.
         </p>
+        <GuideNextSteps sourcePage="/destruktivt-forhallande" />
       </article>
     </main>
   );

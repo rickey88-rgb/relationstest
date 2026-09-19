@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import GuideNextSteps from "../_components/GuideNextSteps";
 
 export const metadata: Metadata = {
   title: "Medberoende – tecken, orsaker och mönster i relationer",
@@ -95,8 +96,7 @@ export default function Page() {
           <p><a href="https://www.1177.se/sa-fungerar-varden/anhorig---narstaende/anhorigstod---stod-for-dig-som-vardar-eller-stodjer-en-narstaende/" className="underline underline-offset-4">1177 beskriver stöd för den som vårdar eller stöttar en närstående</a>. Vid hot eller våld finns också <Link href="/psykiskt-vald/hjalp" className="underline underline-offset-4">vägar till hjälp</Link>. Ett självskattningstest kan ge språk åt erfarenheterna men ställer ingen klinisk diagnos, och Relationsvarnings eget test ska inte uppfattas som ett kliniskt validerat instrument.</p>
         </section>
 
-        <p className="mt-10 leading-7 text-neutral-700">Vill du börja med dina egna erfarenheter? Medberoendetestet kan hjälpa dig att sätta ord på mönster, men resultatet behöver förstås tillsammans med relationens villkor och vad du faktiskt får bära.</p>
-        <Link href="/medberoendetest/test" className="mt-4 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-neutral-900 px-5 py-3 text-center text-sm font-semibold text-white hover:bg-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900 sm:w-auto">Starta medberoendetestet</Link>
+        <GuideNextSteps sourcePage="/medberoende" />
       </article>
     </main>
   );

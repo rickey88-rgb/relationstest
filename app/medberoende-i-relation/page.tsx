@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import GuideNextSteps from "../_components/GuideNextSteps";
 
 export const metadata: Metadata = {
   title: "Medberoende i relation – när du tar för mycket ansvar",
@@ -77,7 +78,7 @@ export default function Page() {
         </section>
 
         <p className="mt-10 leading-7 text-neutral-700">Läs <Link href="/medberoende" className="underline underline-offset-4">huvudguiden om medberoende</Link> för begreppets bakgrund och begränsningar. Testet kan hjälpa dig att reflektera över vad som återkommer, men avgör inte vem du är eller vem som bär skuld i relationen.</p>
-        <Link href="/medberoendetest/test" className="mt-4 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-neutral-900 px-5 py-3 text-center text-sm font-semibold text-white hover:bg-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900 sm:w-auto">Starta medberoendetestet</Link>
+        <GuideNextSteps sourcePage="/medberoende-i-relation" />
       </article>
     </main>
   );

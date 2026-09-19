@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import guides from "../../content/adhd-guides.json";
 import { ContentGuide, GuideSection, textLink } from "./ContentGuide";
+import GuideNextSteps from "./GuideNextSteps";
 
 const sources = {
   "1177": { href: "https://www.1177.se/sjukdomar--besvar/hjarna-och-nerver/neuropsykiatriska-funktionsnedsattningar/adhd/", label: "1177 – ADHD och vägar till stöd" },
@@ -40,10 +41,6 @@ export default function ADHDGuide({ slug }: { slug: string }) {
         return <li key={id}><a href={source.href} className={`inline-flex min-h-11 items-center ${textLink}`}>{source.label}</a></li>;
       })}</ul>
     </GuideSection>
-    <section aria-label={guide.ctaTitle} className="mt-10 rounded-2xl border border-neutral-200 bg-neutral-50 p-5 sm:p-6">
-      <h2 className="text-2xl font-semibold tracking-tight">{guide.ctaTitle}</h2>
-      <p className="mt-4 leading-7 text-neutral-700">{guide.ctaText}</p>
-      <Link href="/adhd-test" className="mt-5 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-neutral-900 px-5 py-3 text-center font-semibold text-white hover:bg-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900 sm:w-auto">Gör ADHD-testet för vuxna</Link>
-    </section>
+    <GuideNextSteps sourcePage={`/${slug}`} />
   </ContentGuide>;
 }

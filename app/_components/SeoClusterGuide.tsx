@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import GuideNextSteps from "./GuideNextSteps";
+import { guideRecommendations } from "./guideRecommendations";
 
 export type ClusterSection = { heading: string; paragraphs: string[]; bullets?: string[] };
 export type ClusterLink = { href: string; label: string; description: string };
@@ -27,6 +29,8 @@ export function clusterMetadata(data: ClusterGuideData): Metadata {
 
 export default function SeoClusterGuide({ data }: { data: ClusterGuideData }) {
   const url = `${host}/${data.slug}`;
+  const highlighted = new Set(guideRecommendations[`/${data.slug}`]?.related.map((item) => item.href));
+  const additionalLinks = data.related.filter((item) => !highlighted.has(item.href));
   const schema = [
     { "@context": "https://schema.org", "@type": "Article", headline: data.h1, description: data.description, url, mainEntityOfPage: url, publisher: { "@type": "Organization", name: "Relationsvarning", url: host } },
     { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [
@@ -58,25 +62,13 @@ export default function SeoClusterGuide({ data }: { data: ClusterGuideData }) {
         </section>)}
       </div>
 
-      <section className="mt-12 border-t border-neutral-200 pt-9">
-        <h2 className="text-2xl font-semibold tracking-tight">Läs vidare utifrån din situation</h2>
-        <div className="mt-5 grid gap-4 sm:grid-cols-2">
-          {data.related.map((item) => <Link key={item.href} href={item.href} className="rounded-2xl border border-neutral-200 p-5 transition hover:border-neutral-300 hover:bg-neutral-50">
-            <h3 className="font-semibold text-neutral-950">{item.label} →</h3><p className="mt-2 text-sm leading-6 text-neutral-600">{item.description}</p>
-          </Link>)}
-        </div>
-      </section>
-
-      <section className="mt-12 rounded-3xl border border-neutral-200 bg-neutral-50 p-6 sm:p-8">
-        <h2 className="text-2xl font-semibold tracking-tight">{data.cta.title}</h2>
-        <p className="mt-3 leading-7 text-neutral-700">{data.cta.text}</p>
-        <Link href={data.cta.href} className="mt-5 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-neutral-900 px-5 py-3 text-center font-semibold text-white hover:bg-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900 sm:w-auto">{data.cta.label}</Link>
-      </section>
+      {additionalLinks.length > 0 && <p className="mt-9 text-sm leading-7 text-neutral-600">Fler fördjupningar: {additionalLinks.map((item, index) => <span key={item.href}>{index > 0 ? ", " : ""}<Link href={item.href} className={textLink}>{item.label}</Link></span>)}.</p>}
 
       {data.faq?.length ? <section className="mt-12 space-y-6 border-t border-neutral-200 pt-9">
         <h2 className="text-2xl font-semibold tracking-tight">Vanliga frågor</h2>
         {data.faq.map((item) => <div key={item.question}><h3 className="font-semibold text-neutral-950">{item.question}</h3><p className="mt-2 leading-7 text-neutral-700">{item.answer}</p></div>)}
       </section> : null}
+      <GuideNextSteps sourcePage={`/${data.slug}`} />
     </article>
   </main>;
 }
