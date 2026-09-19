@@ -77,7 +77,7 @@ export default function Page() {
           <p>Du kan söka professionellt stöd både för egna återkommande svårigheter och för att förstå vad som händer i relationen. Det kräver ingen bestämd profil. En artikel eller ett test kan hjälpa till med språket, men kan inte avgöra om relationen är säker, ställa diagnos eller ersätta en individuell bedömning.</p>
         </section>
 
-        <p className="mt-10 leading-7 text-neutral-700">Läs <Link href="/anknytning" className="underline underline-offset-4">huvudguiden om anknytning</Link> för att förstå hur ångest och undvikande samverkar. Testet kan ge en överblick över dina egna reaktioner, men är inget godkännande av en relation eller ett mått på ditt värde.</p>
+        <p className="mt-10 leading-7 text-neutral-700">Läs <Link href="/anknytning" className="underline underline-offset-4">huvudguiden om anknytning</Link> för att förstå hur ångest och undvikande samverkar. Om du undrar hur trygghet märks mellan två personer finns guiden om <Link href="/sund-relation" className="underline underline-offset-4">en sund relation</Link>. Om kontakten i stället minskar över tid kan du läsa om att <Link href="/glider-isar" className="underline underline-offset-4">glida isär</Link>. Testet kan ge en överblick över dina egna reaktioner, men är inget godkännande av en relation eller ett mått på ditt värde.</p>
         <Link href="/anknytningstest/test" className="mt-4 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-neutral-900 px-5 py-3 text-center text-sm font-semibold text-white hover:bg-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900 sm:w-auto">Starta anknytningstestet</Link>
       </article>
     </main>

@@ -253,6 +253,7 @@ export default function Page() {
           situation åt dig eller ersätta professionellt stöd. Du behöver inte
           göra något test för att få hjälp.
         </p>
+        <p className="leading-7 text-neutral-700">Om du ännu försöker förstå tidiga signaler kan du läsa om <Link href="/roda-flaggor-relation" className={textLink}>röda flaggor i relationer</Link>. Om svårigheten främst gäller återkommande gräl finns guiden om <Link href="/brak-i-relation" className={textLink}>bråk och konfliktmönster</Link>.</p>
         <GuideNextSteps sourcePage="/destruktivt-forhallande" />
       </article>
     </main>

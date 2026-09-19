@@ -15,7 +15,7 @@ export type ClusterGuideData = {
   intro: string;
   sections: ClusterSection[];
   related: ClusterLink[];
-  cta: { title: string; text: string; href: string; label: string };
+  cta?: { title: string; text: string; href: string; label: string };
   faq?: ClusterFaq[];
   parent?: { href: string; label: string };
 };
