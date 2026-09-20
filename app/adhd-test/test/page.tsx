@@ -141,7 +141,7 @@ export default function ADHDSelfTestPage() {
         <h2 id="result-heading" ref={heading} tabIndex={-1} className="text-2xl font-semibold outline-none">{preview.title}</h2>
         <p className="text-neutral-200">{preview.body}</p>
         <div className="space-y-4 border-t border-white/15 pt-5">
-          <h3 className="text-xl font-semibold">Det här får du se i din fullständiga analys</h3>
+          <h3 className="text-xl font-semibold">I din fullständiga analys ser du</h3>
           <ul className="space-y-2 text-neutral-200"><li>✓ vad som väger tyngst i dina svar</li><li>✓ hur fokus, planering och tempo samspelar</li><li>✓ vad som förstärker eller nyanserar bilden i vardagen</li></ul>
           <div><p className="font-semibold">{PRICE_SEK} kr</p><p className="text-sm text-neutral-300">Engångsbetalning · Ingen prenumeration</p><p className="text-sm text-neutral-300">Resultatet visas direkt efter betalning</p></div>
           <PaywallCheckoutCTA onClick={checkout} />

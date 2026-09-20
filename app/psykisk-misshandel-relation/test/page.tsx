@@ -977,7 +977,6 @@ export default function Page() {
         >
           <h2 style={{ margin: "8px 0 0", fontSize: "clamp(24px, 7vw, 32px)", lineHeight: 1.2 }}>{teaserCopy.title}</h2>
           <p style={{ marginTop: 14, lineHeight: 1.7, color: "#e5e5e5" }}>{teaserCopy.body}</p>
-          <p style={{ marginTop: 14, lineHeight: 1.7, color: "#e5e5e5" }}>Det är samspelet mellan dina svar som påverkar hur helheten bör förstås.</p>
 
           <div
             style={{
@@ -993,7 +992,7 @@ export default function Page() {
                   "0 0 8px",
               }}
             >
-              Det här får du se i din fullständiga analys
+              I din fullständiga analys ser du
             </h3>
 
             <ul

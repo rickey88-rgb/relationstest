@@ -43,7 +43,7 @@ assert(a.text().includes('Analyserar dina svar…'));assert(!a.text().includes('
 a.advance(1000);assert(a.text().includes('Jämför mönster mellan sex områden…'));
 a.advance(1000);assert(a.text().includes('Sammanställer din profil…'));
 a.advance(999);assert(!a.text().includes('39 kr'));a.advance(1);
-assert(a.text().includes('Flera mönster i dina svar förstärker varandra'));
+assert(a.text().includes('Helheten blir tydligare när dina svar läggs ihop'));
 assert(a.text().includes('🔒 Säker betalning · Ingen prenumeration'));
 for(const forbidden of ['50 / 100','Socialt samspel','Måttligt autismrelaterat mönster','Bred kombinerad profil','Din övergripande profil'])assert(!a.text().includes(forbidden),forbidden+' leaked before payment');
 const checkout=a.button('Lås upp mitt resultat · 39 kr');checkout.props.onClick();checkout.props.onClick();a.render();
@@ -53,7 +53,7 @@ assert.deepEqual(JSON.parse(a.data.get(key)).answers,Array(30).fill(2));
 a=mount({data:a.data,paid:true});assert(a.text().includes('Ditt test är upplåst'));assert(a.text().includes('Din övergripande profil'));assert(a.text().includes('50 / 100'));
 assert(!a.text().includes('Lås upp mitt resultat · 39 kr'));assert.equal(a.data.get(key+':paid'),'true');
 a=mount({data:a.data});assert(a.text().includes('Din övergripande profil'));a.click('Börja om');assert(a.text().includes('Ditt test är upplåst'));
-a=mount();complete(a,[...Array(5).fill(4),...Array(25).fill(0)]);a.advance(3000);assert(a.text().includes('Dina svar pekar åt mer än ett håll'));assert(!a.text().includes('Socialt samspel'));
+a=mount();complete(a,[...Array(5).fill(4),...Array(25).fill(0)]);a.advance(3000);assert(a.text().includes('Ett mönster i dina svar är svårt att bortse från'));assert(!a.text().includes('Socialt samspel'));
 a.env.blocked=true;a.click('Lås upp mitt resultat · 39 kr');assert(!a.events.some(e=>e[0]==='checkout'));assert(a.text().includes('kunde sparas säkert'));
 a=mount({blocked:true,paid:true});assert(a.text().includes('Ditt test är upplåst'));assert(window.location.search.includes('paid=true'));a.click('Aldrig');a.advance(220);assert(a.text().includes('Fråga 2'));
 console.log('PASS: actual page flow, 30 answers, 220 ms pressed state, 3-second transition, both teasers, no prepay result leak, checkout guard, saved answers, paid return, reload, restart entitlement, blocked storage.');

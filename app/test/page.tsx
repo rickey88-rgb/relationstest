@@ -145,7 +145,7 @@ export default function ScreeningPage() {
         <h2 id="result-heading" ref={heading} tabIndex={-1} className="text-2xl font-semibold outline-none">{teaserCopy.title}</h2>
         <p className="text-neutral-200">{teaserCopy.body}</p>
         <div className="space-y-4 border-t border-white/15 pt-5">
-          <h3 className="text-xl font-semibold">Det här får du se i din fullständiga analys</h3>
+          <h3 className="text-xl font-semibold">I din fullständiga analys ser du</h3>
           <ul className="space-y-2 text-neutral-200"><li>✓ vilket relationsmönster som väger tyngst i dina svar</li><li>✓ vad som förstärker eller nyanserar helhetsbilden</li><li>✓ hur beteenden, gränser och trygghet hänger ihop</li></ul>
           <div><p className="font-semibold">39 kr</p><p className="text-sm text-neutral-300">Engångsbetalning · Ingen prenumeration</p><p className="text-sm text-neutral-300">Resultatet visas direkt efter betalning</p></div>
           <PaywallCheckoutCTA onClick={checkout} />
