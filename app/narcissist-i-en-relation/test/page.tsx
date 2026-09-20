@@ -650,7 +650,7 @@ export default function Page() {
                   type="button"
                   disabled={transitioning}
                   aria-pressed={selected}
-                  onClick={(event) => { if (event.detail <= 1) pickAnswer(value); }}
+                  onClick={() => pickAnswer(value)}
                   onKeyDown={(event) => { if (event.repeat) event.preventDefault(); }}
                   className={selected ? undefined : "hover:bg-neutral-100!"}
                   style={{

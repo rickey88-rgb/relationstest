@@ -8,7 +8,7 @@ import { hasPaidReturn, usePaymentRecovery } from "../../_components/usePaymentR
 
 import { useTestAnalytics } from "../../_analytics/useTestAnalytics";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 type Area =
   | "accusations"
@@ -446,6 +446,10 @@ export default function Page() {
   const [answers, setAnswers] = useState<number[]>(
     Array(totalQuestions).fill(-1)
   );
+  const [transitioning, setTransitioning] = useState(false);
+  const answerLock = useRef(false);
+  const answerTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => () => { if (answerTimer.current) clearTimeout(answerTimer.current); }, []);
   const [unlocked, setUnlocked] = useState(false);
   const [hydrated, setHydrated] = useState(false);
   const tracking = useTestAnalytics("psychological_abuse_test", questions.length);
@@ -652,7 +656,9 @@ export default function Page() {
   const teaserCopy = buildPaywallTeaser(sortedAreas.map((item) => item.score));
 
   function pickAnswer(value: number) {
-    if (!unlocked && !isFinished && answers.every((answer, i) => i === index || answer >= 0)) setAnalysisStep(0);
+    if (answerLock.current) return;
+    answerLock.current = true;
+    setTransitioning(true);
     tracking.answer(answers.filter(answer => answer >= 0).length + (answers[index] < 0 ? 1 : 0), index + 1);
     const next = [...answers];
 
@@ -660,16 +666,20 @@ export default function Page() {
 
     setAnswers(next);
 
-    if (index < totalQuestions - 1) {
-      setTimeout(() => {
+    answerTimer.current = setTimeout(() => {
+      if (!unlocked && !isFinished && next.every((answer) => answer >= 0)) setAnalysisStep(0);
+      if (index < totalQuestions - 1) {
         setIndex((currentIndex) =>
           Math.min(
             currentIndex + 1,
             totalQuestions - 1
           )
         );
-      }, 220);
-    }
+      }
+      answerLock.current = false;
+      setTransitioning(false);
+      answerTimer.current = null;
+    }, 220);
   }
 
   function goPrev() {
@@ -678,6 +688,10 @@ export default function Page() {
 
   function restart() {
     tracking.restart();
+    if (answerTimer.current) clearTimeout(answerTimer.current);
+    answerTimer.current = null;
+    answerLock.current = false;
+    setTransitioning(false);
     setAnalysisStep(null);
     setIndex(0);
 
@@ -883,6 +897,7 @@ export default function Page() {
               (value) => (
                 <button
                   key={value}
+                  disabled={transitioning}
                   onClick={() =>
                     pickAnswer(value)
                   }
@@ -919,7 +934,7 @@ export default function Page() {
           >
             <button
               onClick={goPrev}
-              disabled={index === 0}
+              disabled={index === 0 || transitioning}
               style={{
                 padding: "10px 13px",
                 borderRadius: 12,
