@@ -1,4 +1,6 @@
 "use client";
+
+import PaywallCheckoutCTA from "../../_components/PaywallCheckoutCTA";
 import PostPurchaseRecommendation from "../../_components/PostPurchaseRecommendation";
 import { buildPaywallTeaser } from "../../_lib/paywallTeaser";
 
@@ -819,28 +821,7 @@ export default function Page() {
 
             <p style={{ margin: "4px 0 0", fontSize: 13, color: "#d4d4d4" }}>Resultatet visas direkt efter betalning</p>
 
-            <button
-              type="button"
-              onClick={goToCheckout}
-              className="!min-h-14 !px-4 !py-4 !text-[17px] !font-bold !leading-[1.2] whitespace-nowrap sm:!min-h-[52px] sm:!py-[13px] sm:!text-base"
-              onMouseEnter={(event) => { event.currentTarget.style.background = "#285C44"; }}
-              onMouseLeave={(event) => { event.currentTarget.style.background = "#2F6B4F"; }}
-              style={{
-                marginTop: 16,
-                width: "100%",
-                minHeight: 52,
-                padding: "13px 16px",
-                borderRadius: 13,
-                border: "1px solid #2F6B4F",
-                background: "#2F6B4F",
-                color: "#fff",
-                cursor: "pointer",
-                fontSize: 16,
-                fontWeight: 800,
-              }}
-            >
-              Visa min <span className="hidden sm:inline">fullständiga </span>analys – 39 kr
-            </button>
+            <PaywallCheckoutCTA onClick={goToCheckout} separated />
 
 
           </div>

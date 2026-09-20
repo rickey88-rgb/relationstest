@@ -11,7 +11,11 @@ module.exports = function createLoader(overrides = {}) {
     const code = ts.transpileModule(fs.readFileSync(file, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.ReactJSX } }).outputText;
     new Function('require', 'module', 'exports', code)(name => {
       if (Object.hasOwn(overrides, name)) return overrides[name];
-      return name.startsWith('.') ? load(path.resolve(path.dirname(file), name + '.ts')) : require(name);
+      if (name.startsWith('.')) {
+        const base = path.resolve(path.dirname(file), name);
+        return load(fs.existsSync(base + '.ts') ? base + '.ts' : base + '.tsx');
+      }
+      return require(name);
     }, loadedModule, loadedModule.exports);
     return loadedModule.exports;
   }

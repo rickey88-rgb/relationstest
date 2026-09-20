@@ -1,4 +1,6 @@
 "use client";
+
+import PaywallCheckoutCTA from "../../_components/PaywallCheckoutCTA";
 import { buildPaywallTeaser } from "../../_lib/paywallTeaser";
 
 import { hasPaidReturn, usePaymentRecovery } from "../../_components/usePaymentRecovery";
@@ -14,7 +16,6 @@ import { interpretation, profileAnalysis } from "./interpretation";
 
 const button = "inline-flex min-h-12 items-center justify-center rounded-xl px-5 py-3 text-center font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900";
 const secondary = button + " border border-neutral-300 bg-white text-neutral-900 hover:bg-neutral-100";
-const primary = button + " bg-[#2F6B4F] text-white hover:bg-[#285C44]";
 const link = "underline underline-offset-4 decoration-neutral-400 focus-visible:outline-2 focus-visible:outline-offset-4";
 const section = "mt-8 space-y-4 rounded-2xl border border-neutral-200 p-5 leading-7 sm:p-6";
 
@@ -142,7 +143,7 @@ export default function NarcissismSelfTestPage() {
         <h2 id="result-heading" ref={heading} tabIndex={-1} className="text-2xl font-semibold outline-none">{unlocked ? "Din övergripande profil" : preview.title}</h2>
         {unlocked && <><p className="text-xl font-semibold">{result.level}</p><p className="text-4xl font-semibold tabular-nums">{formatPercent(result.percent)} %</p>
         <p className="text-sm text-neutral-600">Andel av självtestets möjliga poäng, inte en sannolikhet.</p></>}
-        {!unlocked && <><p className="text-neutral-200">{preview.body}</p><div className="space-y-4 border-t border-white/15 pt-5"><h3 className="text-xl font-semibold">Det här får du se i din fullständiga analys</h3><ul className="space-y-2 text-neutral-200"><li>✓ vilket drag som väger tyngst i dina svar</li><li>✓ vad som förstärker eller nyanserar helhetsbilden</li><li>✓ hur de olika delarna samverkar i din profil</li></ul><div><p className="font-semibold">{PRICE_SEK} kr</p><p className="text-sm text-neutral-300">Engångsbetalning · Ingen prenumeration</p><p className="text-sm text-neutral-300">Resultatet visas direkt efter betalning</p></div><button type="button" onClick={checkout} className={primary + " w-full !min-h-14 !px-4 !py-4 !text-[17px] !font-bold !leading-[1.2] whitespace-nowrap sm:!min-h-12 sm:!px-5 sm:!py-3 sm:!text-base"}>Visa min <span className="hidden sm:inline">fullständiga </span>analys – {PRICE_SEK} kr</button><button type="button" onClick={restart} className="min-h-11 w-full text-sm text-neutral-300 underline underline-offset-4 hover:text-white">Gör om testet</button>{checkoutUnavailable && <p role="status" className="text-sm text-neutral-300">Köp av fullständig profil är inte tillgängligt just nu. Dina svar finns kvar i den här webbläsaren.</p>}</div></>}
+        {!unlocked && <><p className="text-neutral-200">{preview.body}</p><div className="space-y-4 border-t border-white/15 pt-5"><h3 className="text-xl font-semibold">Det här får du se i din fullständiga analys</h3><ul className="space-y-2 text-neutral-200"><li>✓ vilket drag som väger tyngst i dina svar</li><li>✓ vad som förstärker eller nyanserar helhetsbilden</li><li>✓ hur de olika delarna samverkar i din profil</li></ul><div><p className="font-semibold">{PRICE_SEK} kr</p><p className="text-sm text-neutral-300">Engångsbetalning · Ingen prenumeration</p><p className="text-sm text-neutral-300">Resultatet visas direkt efter betalning</p></div><PaywallCheckoutCTA onClick={checkout} /><button type="button" onClick={restart} className="min-h-11 w-full text-sm text-neutral-300 underline underline-offset-4 hover:text-white">Gör om testet</button>{checkoutUnavailable && <p role="status" className="text-sm text-neutral-300">Köp av fullständig profil är inte tillgängligt just nu. Dina svar finns kvar i den här webbläsaren.</p>}</div></>}
         {unlocked && <p className="rounded-xl bg-neutral-50 p-4"><span className="block text-sm text-neutral-600">Profiltyp</span><strong>{result.profileType}</strong></p>}
       </section>
       {unlocked && <>
