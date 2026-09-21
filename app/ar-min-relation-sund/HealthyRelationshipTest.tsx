@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { trackEvent } from "../_analytics/analytics";
+import ShareTest from "../_components/ShareTest";
 import { answerLabels, applyAnswer, calculate, dimensionDescriptions, dimensionLabels, emptyAnswers, parseState, questions, STATE_VERSION, STORAGE_KEY, type SavedState } from "./model";
 
 const panel = "rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm sm:p-7";
@@ -123,6 +124,15 @@ export default function HealthyRelationshipTest() {
     <section className={panel}><h2 className="text-2xl font-semibold">Styrkor i relationen</h2>{result.strengths.length ? <div className="mt-5 space-y-4">{result.strengths.map((dimension) => <DimensionCard key={dimension} dimension={dimension} score={result.scores[dimension]} tone="strength" />)}</div> : <p className="mt-3 leading-7 text-neutral-700">Inget område når nivån tydlig styrka i den här självskattningen. Det betyder inte att relationen saknar positiva delar, utan att svaren är mer blandade.</p>}</section>
     <section className={panel}><h2 className="text-2xl font-semibold">Områden som kan förtjäna mer uppmärksamhet</h2>{result.weaker.length ? <div className="mt-5 space-y-4">{result.weaker.map((dimension) => <DimensionCard key={dimension} dimension={dimension} score={result.scores[dimension]} tone="attention" />)}</div> : <p className="mt-3 leading-7 text-neutral-700">Inget av de sex områdena ligger på den svagare nivån i dina svar. Fortsatt öppenhet och respekt för bådas behov kan hjälpa relationens styrkor att bestå.</p>}</section>
     <section className={panel} aria-labelledby="healthy-next-heading"><h2 id="healthy-next-heading" className="text-2xl font-semibold">Relevanta nästa steg</h2><p className="mt-3 leading-7 text-neutral-700">{result.weaker.length ? "Länkarna väljs utifrån de svagare områdena i dina svar." : "Dina svar ger ingen anledning att fylla på med problemtester. Här är en neutral fördjupning om sunda relationer."}</p><div className="mt-5 grid gap-4 sm:grid-cols-2">{result.recommendations.map((recommendation, position) => <Link key={recommendation.href} href={recommendation.href} onClick={() => trackEvent("healthy_relationship_specialist_click", { target_route: recommendation.href, destination_test: recommendation.target, weakest_dimension: result.weaker[0], recommendation_position: position + 1, position: position + 1 })} className="rounded-xl border border-neutral-200 p-5 transition-colors hover:border-neutral-400 hover:bg-neutral-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"><h3 className="font-semibold">{recommendation.title}</h3><p className="mt-2 text-sm leading-6 text-neutral-600">{recommendation.description}</p><span className="mt-4 inline-block font-semibold underline underline-offset-4">Läs vidare</span></Link>)}</div></section>
+    <ShareTest
+      heading="Vill du skicka testet till någon annan?"
+      description="Du delar bara länken till testet – aldrig dina egna svar eller ditt resultat."
+      shareTitle="Är min relation sund?"
+      shareText="Ett kort relationstest om trygghet, respekt, kommunikation och andra viktiga områden."
+      shareUrl="https://www.relationsvarning.se/ar-min-relation-sund?utm_source=share&utm_medium=referral&utm_campaign=healthy_relationship_test"
+      clickEvent="healthy_relationship_share_click"
+      successEvent="healthy_relationship_share_success"
+    />
     <div className="flex flex-wrap gap-3"><button type="button" onClick={() => { setView("test"); setIndex(0); }} className={button}>Granska mina svar</button><button type="button" onClick={restart} className={button}>Gör om testet</button></div>
   </div>;
 
