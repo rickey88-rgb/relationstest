@@ -5,14 +5,17 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { GA_MEASUREMENT_ID } from "./config";
 import { consent, CONSENT_EVENT, CONSENT_KEY, flushEvents, initializeAnalytics, pageView, setConsent, SETTINGS_EVENT, type Consent } from "./analytics";
-import { clearAttemptMemory } from "./testEvents";
 
 export default function Analytics() {
   const pathname = usePathname();
   const [choice,setChoice] = useState<Consent>("unknown");
   const [open,setOpen] = useState(false);
   useEffect(() => {
-    const update = () => { const value=consent(); setChoice(value); if (value === "denied") clearAttemptMemory(); };
+    const update = () => {
+      const value = consent();
+      setChoice(value);
+      if (value === "denied") void import("./testEvents").then(({ clearAttemptMemory }) => clearAttemptMemory());
+    };
     update(); setOpen(consent() === "unknown");
     const show = () => setOpen(true);
     const storage = (event: StorageEvent) => { if (event.key === CONSENT_KEY && (event.newValue === "granted" || event.newValue === "denied")) setConsent(event.newValue); };
