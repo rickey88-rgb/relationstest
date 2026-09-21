@@ -4,7 +4,8 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Narcissism självtest – 30 frågor om dina egna drag | Relationsvarning",
   description: "Besvara 30 frågor om dina egna narcissistiska drag. Få en övergripande nivå och utforska din profil inom självbild, bekräftelse, empati och relationer.",
-  alternates: { canonical: "https://www.relationsvarning.se/narcissism-sjalvtest/test" },
+  alternates: { canonical: "https://www.relationsvarning.se/narcissism-sjalvtest" },
+  robots: { index: false, follow: true },
 };
 export default function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
   return <main className="mx-auto max-w-3xl px-4 py-8 text-neutral-900 [overflow-wrap:anywhere] sm:px-6 sm:py-12 [&:has([data-selftest-result])_[data-test-intro]]:hidden">

@@ -6,8 +6,9 @@ export const metadata: Metadata = {
   description:
     "Gör vårt anknytningstest med 30 frågor och undersök din anknytningsprofil, anknytningsångest och anknytningsundvikande i romantiska relationer.",
   alternates: {
-    canonical: "https://www.relationsvarning.se/anknytningstest/test",
+    canonical: "https://www.relationsvarning.se/anknytningstest",
   },
+  robots: { index: false, follow: true },
 };
 
 export default function Layout({

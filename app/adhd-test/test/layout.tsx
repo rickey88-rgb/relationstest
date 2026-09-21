@@ -3,7 +3,8 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "ADHD-självtest – 30 frågor om vuxnas vardag | Relationsvarning",
   description: "Gör ett ADHD-självtest för vuxna med 30 frågor om uppmärksamhet, organisation, impulsivitet, rastlöshet, igångsättning och vardagspåverkan.",
-  alternates: { canonical: "https://www.relationsvarning.se/adhd-test/test" },
+  alternates: { canonical: "https://www.relationsvarning.se/adhd-test" },
+  robots: { index: false, follow: true },
 };
 export default function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
   return <main className="mx-auto max-w-3xl px-4 py-8 text-neutral-900 [overflow-wrap:anywhere] sm:px-6 sm:py-12 [&:has([data-adhd-result])_[data-test-intro]]:hidden">

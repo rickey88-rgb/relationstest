@@ -5,8 +5,9 @@ export const metadata: Metadata = {
   description:
     "Gör ett anonymt test med 30 frågor om kontroll, hot, förnedring, övervakning och psykisk nedbrytning i din relation. Få hjälp att se återkommande mönster.",
   alternates: {
-    canonical: "/psykisk-misshandel-relation/test",
+    canonical: "/psykisk-misshandel-relation",
   },
+  robots: { index: false, follow: true },
 };
 
 export default function Layout({
