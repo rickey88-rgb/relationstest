@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import ArticleImage from "../_components/ArticleImage";
+import {
+  getArticleImageMetadata,
+  getArticleImageSchema,
+  getPublishedArticleImage,
+} from "../_seo/articleImages";
 
 export const metadata: Metadata = {
   title: "Psykisk misshandel – test, tecken & lagen om psykiskt våld",
@@ -8,11 +14,29 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/psykisk-misshandel-relation",
   },
+  ...getArticleImageMetadata("/psykisk-misshandel-relation"),
+};
+
+const articleImage = getPublishedArticleImage("/psykisk-misshandel-relation");
+const articleImageSchema = getArticleImageSchema("/psykisk-misshandel-relation");
+const articleJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: "Psykisk misshandel i relation – tecken, mönster och konsekvenser",
+  description:
+    "Misstänker du psykisk misshandel i din relation? Läs om vanliga tecken, vad lagen om psykiskt våld innebär och gör ett anonymt test.",
+  mainEntityOfPage: "https://www.relationsvarning.se/psykisk-misshandel-relation",
+  publisher: { "@type": "Organization", name: "Relationsvarning", url: "https://www.relationsvarning.se" },
+  ...(articleImageSchema ? { image: articleImageSchema } : {}),
 };
 
 export default function PsykiskMisshandelRelationPage() {
   return (
     <main className="min-h-screen bg-white text-neutral-900">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd).replace(/</g, "\\u003c") }}
+      />
       <section className="mx-auto max-w-3xl px-6 py-14">
 
         {/* H1 */}
@@ -34,6 +58,8 @@ export default function PsykiskMisshandelRelationPage() {
             på vad.”
           </em>
         </p>
+
+        {articleImage ? <ArticleImage image={articleImage} /> : null}
 
         {/* Testbox */}
         <div className="mb-12 rounded-2xl border border-neutral-200 bg-neutral-50 p-6 sm:p-8">

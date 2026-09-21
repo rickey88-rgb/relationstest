@@ -1,6 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import GuideNextSteps from "../_components/GuideNextSteps";
+import ArticleImage from "../_components/ArticleImage";
+import {
+  getArticleImageMetadata,
+  getArticleImageSchema,
+  getPublishedArticleImage,
+} from "../_seo/articleImages";
+
+const imageMetadata = getArticleImageMetadata("/love-bombing-relation");
 
 export const metadata: Metadata = {
   title: "Love bombing – 10 tecken och skillnaden mot förälskelse",
@@ -15,7 +23,9 @@ export const metadata: Metadata = {
       "En saklig guide om love bombing: 10 tecken, gränser, stark förälskelse och vad du kan göra om du känner igen mönstret.",
     url: "/love-bombing-relation",
     type: "article",
+    ...(imageMetadata.openGraph ?? {}),
   },
+  twitter: imageMetadata.twitter,
 };
 
 const warningSigns = [
@@ -91,6 +101,8 @@ const faqs = [
   },
 ];
 
+const articleImage = getPublishedArticleImage("/love-bombing-relation");
+const articleImageSchema = getArticleImageSchema("/love-bombing-relation");
 const articleJsonLd = {
   "@context": "https://schema.org",
   "@type": "Article",
@@ -109,6 +121,7 @@ const articleJsonLd = {
     "@type": "WebPage",
     "@id": "/love-bombing-relation",
   },
+  ...(articleImageSchema ? { image: articleImageSchema } : {}),
 };
 
 const faqJsonLd = {
@@ -199,6 +212,8 @@ export default function LoveBombingRelationPage() {
 
       <section className="mx-auto max-w-4xl px-6 py-14">
         <article className="space-y-14">
+          {articleImage ? <ArticleImage image={articleImage} /> : null}
+
           <section id="tecken" className="space-y-6">
             <h2 className="text-3xl font-semibold tracking-tight text-neutral-950">
               10 tecken på love bombing

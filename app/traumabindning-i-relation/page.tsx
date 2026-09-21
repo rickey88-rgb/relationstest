@@ -1,5 +1,11 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import ArticleImage from "../_components/ArticleImage";
+import {
+  getArticleImageMetadata,
+  getArticleImageSchema,
+  getPublishedArticleImage,
+} from "../_seo/articleImages";
 
 export const metadata: Metadata = {
   title: "Traumabindning i en relation – tecken, varför det händer och varför det är så svårt att lämna",
@@ -8,11 +14,29 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://www.relationsvarning.se/traumabindning-i-relation",
   },
+  ...getArticleImageMetadata("/traumabindning-i-relation"),
+};
+
+const articleImage = getPublishedArticleImage("/traumabindning-i-relation");
+const articleImageSchema = getArticleImageSchema("/traumabindning-i-relation");
+const articleJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: "Traumabindning i en relation – tecken, varför det händer och varför det är så svårt att lämna",
+  description:
+    "Vad är traumabindning i en relation? Läs om vanliga tecken, varför starka band kan uppstå i destruktiva relationer och varför det kan kännas så svårt att lämna.",
+  mainEntityOfPage: "https://www.relationsvarning.se/traumabindning-i-relation",
+  publisher: { "@type": "Organization", name: "Relationsvarning", url: "https://www.relationsvarning.se" },
+  ...(articleImageSchema ? { image: articleImageSchema } : {}),
 };
 
 export default function TraumabindningIRelationPage() {
   return (
     <main className="min-h-screen bg-white text-neutral-900">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd).replace(/</g, "\\u003c") }}
+      />
       <article className="mx-auto max-w-4xl px-6 py-12 md:px-8 md:py-16">
         <header className="mb-10">
           <p className="mb-3 text-sm font-medium uppercase tracking-wide text-neutral-500">
@@ -114,6 +138,8 @@ export default function TraumabindningIRelationPage() {
             automatiskt leder till ett uppbrott.
           </p>
         </section>
+
+        {articleImage ? <ArticleImage image={articleImage} /> : null}
 
         <section className="mt-12 space-y-5 text-[17px] leading-8 text-neutral-800">
           <h2 className="text-2xl font-bold text-neutral-900">
