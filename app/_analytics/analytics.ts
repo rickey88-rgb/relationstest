@@ -5,7 +5,7 @@ export const CONSENT_EVENT = "rv:analytics-consent";
 export const SETTINGS_EVENT = "rv:analytics-settings";
 export const ATTEMPT_PREFIX = "rv_analytics_attempt_v1:";
 export type Consent = "granted" | "denied" | "unknown";
-export type EventName = "page_view" | "test_start" | "test_progress" | "test_complete" | "paywall_view" | "checkout_start" | "purchase" | "cross_sell_view" | "cross_sell_click" | "related_guide_click" | "guide_to_test_click";
+export type EventName = "page_view" | "test_start" | "test_progress" | "test_complete" | "paywall_view" | "checkout_start" | "purchase" | "cross_sell_view" | "cross_sell_click" | "related_guide_click" | "guide_to_test_click" | "quickcheck_start" | "quickcheck_complete" | "quickcheck_analysis_view" | "quickcheck_result_view" | "quickcheck_recommendation_view" | "quickcheck_specialist_test_click";
 export type EventParams = Record<string, string | number | boolean | undefined>;
 
 declare global {
@@ -21,7 +21,7 @@ let initialized = false;
 const initialUrl = typeof window === "undefined" ? "" : window.location.href;
 const initialReferrer = typeof document === "undefined" ? "" : document.referrer;
 let lastPage = "";
-const allowedParams = new Set(["test_id", "test_name", "page_path", "progress_percent", "current_question", "total_questions", "completion_time_seconds", "price", "value", "currency", "transaction_id", "page_location", "page_referrer", "page_title", "source_test", "recommended_test", "source_page", "destination_page", "position", "destination_test", "cta_label"]);
+const allowedParams = new Set(["test_id", "test_name", "page_path", "progress_percent", "current_question", "total_questions", "completion_time_seconds", "price", "value", "currency", "transaction_id", "page_location", "page_referrer", "page_title", "source_test", "recommended_test", "source_page", "destination_page", "position", "destination_test", "cta_label", "target_route", "dominant_dimension", "recommendation_position"]);
 const campaignKeys = ["gclid", "dclid", "gbraid", "wbraid", "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "utm_id"];
 
 export function consent(): Consent {
@@ -52,6 +52,7 @@ export function initializeAnalytics() {
   (window as unknown as Record<string,unknown>)[`ga-disable-${GA_MEASUREMENT_ID}`] = false;
   if (initialized) return;
   window.dataLayer = window.dataLayer || [];
+  // eslint-disable-next-line prefer-rest-params -- gtag's documented queue format uses the function arguments object.
   window.gtag = window.gtag || function () { window.dataLayer?.push(arguments); };
   window.gtag("consent", "default", { analytics_storage: "denied", ad_storage: "denied", ad_user_data: "denied", ad_personalization: "denied" });
   window.gtag("consent", "update", { analytics_storage: "granted" });

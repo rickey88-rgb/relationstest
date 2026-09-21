@@ -77,6 +77,14 @@ export default function PsykiskMisshandelRelationPage() {
             psykiskt destruktivt beteende.
           </p>
 
+          <p className="mb-5 text-sm leading-6 text-neutral-600">
+            Osäker på vilket område som är mest relevant? Börja med vår kostnadsfria{" "}
+            <Link href="/roda-flaggor-relation-test" className="font-medium underline underline-offset-4">
+              snabbcheck för varningssignaler
+            </Link>
+            .
+          </p>
+
           <Link
             href="/psykisk-misshandel-relation/test"
             className="inline-block rounded-xl bg-neutral-900 px-6 py-3 text-sm font-semibold text-white hover:bg-neutral-800"

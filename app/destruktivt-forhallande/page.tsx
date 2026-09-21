@@ -35,7 +35,9 @@ export default function Page() {
             Om du undrar om din relation har blivit destruktiv kan du börja med två
             frågor: Vad händer när du säger nej eller tar upp något svårt? Och får du
             mer eller mindre utrymme att vara dig själv med tiden? Du behöver inte
-            bestämma en etikett direkt för att ta det du upplever på allvar.
+            bestämma en etikett direkt för att ta det du upplever på allvar. En{" "}
+            <Link href="/roda-flaggor-relation-test" className={textLink}>gratis snabbcheck med 12 frågor</Link>{" "}
+            kan hjälpa dig att sortera vilka områden som är mest relevanta att läsa vidare om.
           </p>
         </header>
 

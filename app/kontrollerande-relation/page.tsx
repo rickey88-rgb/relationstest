@@ -53,6 +53,14 @@ export default function Page() {
           </Link>
         </div>
 
+        <p className="text-sm leading-6 text-neutral-700">
+          Vill du först se om kontroll eller något närliggande mönster framträder kan du göra vår{" "}
+          <Link href="/roda-flaggor-relation-test" className="font-medium underline underline-offset-4">
+            kostnadsfria snabbcheck
+          </Link>
+          .
+        </p>
+
         <h2 className="text-2xl font-semibold">
           Tecken på att du lever med en kontrollerande partner
         </h2>

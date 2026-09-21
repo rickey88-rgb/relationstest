@@ -448,7 +448,11 @@ export default function Page() {
             .
           </p>
           <p className="text-sm text-neutral-700">
-            Testet fokuserar på mönster i relationen – inte på diagnoser.
+            Testet fokuserar på mönster i relationen – inte på diagnoser. För en kortare första orientering kan du göra{" "}
+            <Link href="/roda-flaggor-relation-test" className="font-medium underline underline-offset-4">
+              snabbchecken för återkommande varningssignaler
+            </Link>
+            .
           </p>
         </div>
 

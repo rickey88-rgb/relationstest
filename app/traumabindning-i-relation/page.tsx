@@ -179,6 +179,10 @@ export default function TraumabindningIRelationPage() {
             <Link href="/test" className="font-medium text-neutral-900 underline underline-offset-4">
               göra vårt test här
             </Link>
+            . Om du ännu inte vet vilket relationsmönster du vill undersöka finns också en{" "}
+            <Link href="/roda-flaggor-relation-test" className="font-medium text-neutral-900 underline underline-offset-4">
+              kort check av flera varningssignaler
+            </Link>
             . Det ersätter inte professionell hjälp, men kan hjälpa dig att få
             lite mer språk för sådant som annars bara känns diffust.
           </p>

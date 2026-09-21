@@ -416,7 +416,11 @@ export default function GaslightingRelationPage() {
             <li>Har jag börjat tvivla på min egen förmåga att bedöma situationer?</li>
           </ul>
           <p className="leading-7">
-            Om flera frågor träffar, kan det vara värt att läsa mer om närliggande mönster som manipulation och kontroll.
+            Om flera frågor träffar, kan det vara värt att läsa mer om närliggande mönster som manipulation och kontroll. Vår{" "}
+            <Link href="/roda-flaggor-relation-test" className="font-medium underline underline-offset-4">
+              breda snabbcheck om röda flaggor
+            </Link>{" "}
+            hjälper dig att jämföra flera sådana områden.
           </p>
         </section>
 
