@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import GuideNextSteps from "./GuideNextSteps";
 import { guideRecommendations } from "./guideRecommendations";
+import { getArticleImageMetadata, getArticleImageSchema } from "../_seo/articleImages";
 
 export type ClusterSection = { heading: string; paragraphs: string[]; bullets?: string[] };
 export type ClusterLink = { href: string; label: string; description: string };
@@ -24,15 +25,21 @@ const host = "https://www.relationsvarning.se";
 const textLink = "font-medium underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700";
 
 export function clusterMetadata(data: ClusterGuideData): Metadata {
-  return { title: data.title, description: data.description, alternates: { canonical: `${host}/${data.slug}` } };
+  return {
+    title: data.title,
+    description: data.description,
+    alternates: { canonical: `${host}/${data.slug}` },
+    ...getArticleImageMetadata(`/${data.slug}`),
+  };
 }
 
 export default function SeoClusterGuide({ data }: { data: ClusterGuideData }) {
   const url = `${host}/${data.slug}`;
+  const articleImage = getArticleImageSchema(`/${data.slug}`);
   const highlighted = new Set(guideRecommendations[`/${data.slug}`]?.related.map((item) => item.href));
   const additionalLinks = data.related.filter((item) => !highlighted.has(item.href));
   const schema = [
-    { "@context": "https://schema.org", "@type": "Article", headline: data.h1, description: data.description, url, mainEntityOfPage: url, publisher: { "@type": "Organization", name: "Relationsvarning", url: host } },
+    { "@context": "https://schema.org", "@type": "Article", headline: data.h1, description: data.description, url, mainEntityOfPage: url, publisher: { "@type": "Organization", name: "Relationsvarning", url: host }, ...(articleImage ? { image: articleImage } : {}) },
     { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [
       { "@type": "ListItem", position: 1, name: "Relationsvarning", item: `${host}/` },
       ...(data.parent ? [{ "@type": "ListItem", position: 2, name: data.parent.label, item: `${host}${data.parent.href}` }, { "@type": "ListItem", position: 3, name: data.h1, item: url }] : [{ "@type": "ListItem", position: 2, name: data.h1, item: url }]),
