@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import styles from "./HomeGuideDirectory.module.css";
 
 export type HomeGuide = { href: string; label: string; group: string };
 
@@ -25,14 +26,17 @@ export default function HomeGuideDirectory({ guides }: { guides: HomeGuide[] }) 
 
   return (
     <>
-      <ul className="mt-4 grid gap-x-8 sm:grid-cols-2">
-        {featured.map((guide) => <li key={guide.href}><Link href={guide.href} className={linkClass}>{guide.label}</Link></li>)}
+      <ul className={styles.featured}>
+        {featured.map((guide) => <li key={guide.href} className={styles.card}>
+          <span className={styles.label}>{guide.group}</span>
+          <h3><Link href={guide.href} className={styles.link}>{guide.label}<span className={styles.readMore}>Läs mer <span aria-hidden="true">↗</span></span></Link></h3>
+        </li>)}
       </ul>
 
       <div id="all-guides" hidden={!expanded} className="mt-7 space-y-7 border-t border-neutral-200/70 pt-7">
         {groups.map((group) => (
           <section key={group} aria-labelledby={`guide-group-${group.replaceAll(" ", "-").toLowerCase()}`}>
-            <h4 id={`guide-group-${group.replaceAll(" ", "-").toLowerCase()}`} className="text-xs font-semibold uppercase tracking-[0.16em] text-neutral-500">{group}</h4>
+            <h3 id={`guide-group-${group.replaceAll(" ", "-").toLowerCase()}`} className={styles.groupHeading}>{group}</h3>
             <ul className="mt-2 grid gap-x-8 sm:grid-cols-2">
               {remaining.filter((guide) => guide.group === group).map((guide) => <li key={guide.href}><Link href={guide.href} className={linkClass}>{guide.label}</Link></li>)}
             </ul>

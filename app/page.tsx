@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import styles from "./home.module.css";
 import adhdGuides from "../content/adhd-guides.json";
 import autismGuides from "../content/autism-guides.json";
 import HomeGuideDirectory, { type HomeGuide } from "./_components/HomeGuideDirectory";
@@ -112,11 +113,11 @@ const homeGuides: HomeGuide[] = [
 
 export default function Landing() {
   return (
-    <main className="min-h-screen bg-white text-neutral-900">
+    <main className={styles.home}>
       {/* Topbar */}
-      <header className="border-b border-neutral-200/70">
+      <header className={styles.header}>
         <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-          <div className="text-sm font-semibold tracking-tight">
+          <div className={styles.brand}>
             Relationsvarning
           </div>
           <div className="flex items-center gap-3 text-xs text-neutral-600">
@@ -132,11 +133,11 @@ export default function Landing() {
         </div>
       </header>
 
-      {/* Content */}
-      <section className="mx-auto max-w-5xl px-4 pb-4 pt-8 sm:px-6 sm:py-14">
-        <div className="grid gap-10 lg:grid-cols-12 lg:gap-12">
+      {/* Home-only editorial hero */}
+      <section className={styles.hero}>
+        <div className={styles.heroGrid}>
           {/* Left: Editorial copy */}
-          <div className="min-w-0 max-w-3xl lg:col-span-12">
+          <div className={styles.heroCopy}>
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-neutral-500">
               Självreflektion • beteenden • mönster
             </p>
@@ -152,6 +153,7 @@ export default function Landing() {
               Frågorna har bakgrund i forskning och etablerad kunskap och hjälper
               dig att reflektera över beteendemönster – inte att ställa en diagnos.
             </p>
+            <Link href="/test" className={styles.primary}>Gör screeningtestet <span aria-hidden="true">↗</span></Link>
             <p className="mt-3 flex flex-wrap items-center gap-x-2 text-sm text-neutral-600">
               <Link href="/metodik" className="inline-flex min-h-11 items-center underline underline-offset-4">Forskning och metodik</Link>
               <span aria-hidden="true">•</span><span>Anonymt</span>
@@ -160,16 +162,34 @@ export default function Landing() {
 
           </div>
 
-          <section className="order-2 min-w-0 lg:col-span-12">
-            <div className="mb-8 rounded-2xl border border-neutral-200 bg-neutral-50 p-5 sm:p-6">
-              <h2 className="text-2xl font-semibold tracking-tight">Vet du inte riktigt vad som är fel?</h2>
+          <div className={styles.heroArt} aria-hidden="true">
+            <span className={styles.artLabel}>Relationsvarning / Självreflektion</span>
+            <svg viewBox="0 0 400 330" fill="none">
+              <ellipse cx="206" cy="292" rx="135" ry="13" fill="#24312B" opacity=".05" />
+              <path d="M69 268V160C69 88 110 47 169 47s96 42 96 113v108Z" fill="#D7E0D6" />
+              <path d="M177 281V188c0-60 34-99 86-99s86 39 86 99v93Z" fill="#E9D1CF" />
+              <path d="M132 268V163c0-46 19-69 43-69 35 0 55 34 55 71v60c0 28 10 43 29 43 24 0 36-28 36-58 0-33-13-53-31-53-19 0-34 21-34 55" stroke="#68796A" strokeWidth="2" strokeLinecap="round" />
+              <path d="M281 61v26m-13-13h26" stroke="#9D5663" strokeWidth="1.5" />
+              <circle cx="102" cy="214" r="7" fill="#FFFDFB" />
+            </svg>
+            <p>Ett stöd för att se<br /><em>mönster tydligare.</em></p>
+            <span className={styles.artLabel}>Beteenden. Upplevelser. Förståelse.</span>
+          </div>
+          <div className={styles.trust}>
+            <p><span aria-hidden="true">01</span> Strukturerade frågor</p>
+            <p><span aria-hidden="true">02</span> Direkt resultat</p>
+            <p><span aria-hidden="true">03</span> Ingen registrering</p>
+          </div>
+          <section className={styles.feature}>
+            <div className={styles.featureInner}>
+              <p className={styles.eyebrow}>En första överblick</p><h2 className="text-2xl font-semibold tracking-tight">Vet du inte riktigt vad som är fel?</h2>
               <p className="mt-3 max-w-3xl leading-relaxed text-neutral-700">Om något känns fel i relationen men du har svårt att sätta fingret på vad, börja med screeningtestet. Det går igenom flera typer av destruktiva beteenden och hjälper dig att identifiera vilka områden som kan vara relevanta att titta närmare på.</p>
-              <Link href="/test" className="mt-5 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[#7A1F1F] px-5 py-3 text-center font-semibold text-white hover:bg-[#5C1717] focus-visible:bg-[#5C1717] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#5C1717] sm:w-auto">Gör screeningtestet</Link>
+              <Link href="/test" className={styles.primary}>Gör screeningtestet</Link>
             </div>
           </section>
 
           {/* Short safety note after the main test */}
-          <aside className="order-3 -mt-4 min-w-0 max-w-3xl lg:col-span-12 lg:mt-0">
+          <aside className={styles.safety}>
             <p className="text-xs leading-relaxed text-neutral-500">
               Om du känner dig akut hotad eller i fara, ring 112 eller kontakta någon du litar på.
             </p>
@@ -177,7 +197,7 @@ export default function Landing() {
         </div>
       </section>
 
-      <section aria-labelledby="tests-heading" className="mx-auto max-w-5xl px-4 pb-12 sm:px-6">
+      <section aria-labelledby="tests-heading" className={styles.section}>
         <h2 id="tests-heading" className="text-2xl font-semibold tracking-tight">Relationstester</h2>
         <p className="mt-3 max-w-3xl leading-relaxed text-neutral-700">
           Vill du undersöka ett specifikt mönster i relationen? Välj ett fördjupat test nedan.
@@ -185,7 +205,7 @@ export default function Landing() {
         <TestCards items={relationTests} />
       </section>
 
-      <section aria-labelledby="self-tests-heading" className="mx-auto max-w-5xl px-4 pb-14 sm:px-6">
+      <section aria-labelledby="self-tests-heading" className={styles.section}>
         <div className="border-t border-neutral-200/70 pt-10 sm:pt-12">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-neutral-500">
             Fokus på dig själv
@@ -199,7 +219,7 @@ export default function Landing() {
         </div>
       </section>
 
-      <section aria-labelledby="about-tests-heading" className="mx-auto max-w-5xl px-4 pb-14 sm:px-6">
+      <section aria-labelledby="about-tests-heading" className={`${styles.section} ${styles.about}`}>
         <div className="max-w-3xl">
             <div className="rounded-2xl border border-neutral-200/70 p-6 shadow-[0_1px_0_rgba(0,0,0,0.02)]">
               <h2 id="about-tests-heading" className="text-sm font-semibold tracking-tight">
@@ -270,165 +290,23 @@ export default function Landing() {
       </section>
 
       {/* Read more (SEO, minimal) */}
-      <section className="mx-auto max-w-5xl px-6 pb-10">
+      <section className={styles.section}>
         <div className="border-t border-neutral-200/70 pt-6">
-          <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-neutral-500">
-            Läs mer
-          </h3>
+          <p className={styles.eyebrow}>Kunskap & perspektiv</p><h2>Läs mer</h2>
 
           <div className="text-sm text-neutral-700">
             <HomeGuideDirectory guides={homeGuides} />
           </div>
-          {/*
-          <ul className="mt-3 space-y-2 text-sm text-neutral-700">
-            {autismGuides.map((guide) => <li key={guide.slug}><Link href={`/${guide.slug}`} className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700">{guide.label}</Link></li>)}
-            {adhdGuides.map((guide) => <li key={guide.slug}><Link href={`/${guide.slug}`} className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700">{guide.label}</Link></li>)}
-            <li>
-              <Link href="/anknytning" className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700">
-                Anknytning i relationer
-              </Link>
-            </li>
-            <li>
-              <Link href="/medberoende" className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700">
-                Medberoende – överansvar och gränser
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/psykisk-misshandel"
-                className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
-              >
-                Psykisk misshandel — tecken, exempel och hjälp
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/psykiskt-vald"
-                className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
-              >
-                Psykiskt våld — guide till beteenden, lagen och stöd
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/tecken-pa-psykopat"
-                className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
-              >
-                Tecken på att du lever med en psykopat
-              </Link>
-            </li>
 
-            <li>
-              <Link
-                href="/gaslighting-relation"
-                className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
-              >
-                Gaslighting i relationer — tecken, exempel och vad du kan göra
-              </Link>
-            </li>
-
-            <li>
-  <Link
-    href="/narcissist-i-en-relation"
-    className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
-  >
-    Narcissist i en relation — tecken, beteenden och varningssignaler
-  </Link>
-</li>
-
-            <li>
-              <Link
-                href="/manipulativ-partner"
-                className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
-              >
-                Hur vet man om någon är manipulativ?
-              </Link>
-            </li>
-
-            <li>
-              <Link
-                href="/kontrollerande-relation"
-                className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
-              >
-                Varför känner jag mig kontrollerad i min relation?
-              </Link>
-            </li>
-
-            <li>
-              <Link
-                href="/psykopatiska-drag-relation"
-                className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
-              >
-                Psykopatiska drag i relation — tidiga signaler
-              </Link>
-            </li>
-            <li>
-  <Link
-    href="/silent-treatment-relation"
-    className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
-  >
-    Silent treatment i relation — när tystnad blir makt
-  </Link>
-</li>
-
-<li>
-  <Link
-    href="/love-bombing-relation"
-    className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
-  >
-    Love bombing i relation — när intensitet blir manipulation
-  </Link>
-</li>
-
-            <li>
-              <Link
-                href="/skillnad-psykopat-narcissist"
-                className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
-              >
-                Skillnad på psykopat och narcissist
-              </Link>
-            </li>
-
-            <li>
-              <Link
-                href="/psykisk-misshandel-relation"
-                className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
-              >
-                Psykisk misshandel i relation — tecken, mönster och konsekvenser
-              </Link>
-            </li>
-
-            <li>
-              <Link
-                href="/vald-i-nara-relation"
-                className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
-              >
-                Våld i nära relation — tecken och var du kan få hjälp
-              </Link>
-            </li>
-
-            <li>
-              <Link
-                href="/jag-ar-radd-att-min-partner-ska-sla-mig"
-                className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
-              >
-                Jag är rädd att min partner ska slå mig — vad kan jag göra?
-              </Link>
-            </li>
-
-            <li>
-              <Link
-                href="/traumabindning-i-relation"
-                className="underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700"
-              >
-                Traumabindning i en relation — tecken, varför det händer och
-                varför det är så svårt att lämna
-              </Link>
-            </li>
-          </ul> */}
         </div>
       </section>
 
+      <section className={styles.closing} aria-labelledby="closing-heading">
+        <p className={styles.eyebrow}>Ett stöd för självreflektion</p>
+        <h2 id="closing-heading">Vill du förstå dina<br />relationsmönster bättre?</h2>
+        <Link href="/test" className={styles.primary}>Gör screeningtestet <span aria-hidden="true">↗</span></Link>
+        <p className={styles.closingMeta}>Anonymt · Ingen registrering</p>
+      </section>
     </main>
   );
 }
@@ -439,10 +317,13 @@ function TestCards({
   items: { href: string; title: string; category: string; description: string; cta?: string }[];
 }) {
   return (
-    <ul className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5">
-      {items.map((test) => (
-        <li key={test.href} className="flex min-w-0 flex-col rounded-2xl border border-neutral-200/70 bg-neutral-50 p-4 sm:p-5">
-          <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
+    <ul className={styles.cards}>
+      {items.map((test, index) => (
+        <li key={test.href} className={styles.card}>
+          <svg className={styles.symbol} viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            {index % 3 === 0 ? <><path d="M13 33V22a11 11 0 0 1 22 0v11" /><path d="M20 33V23a4 4 0 0 1 8 0v10" /></> : index % 3 === 1 ? <><circle cx="19" cy="24" r="10" /><circle cx="29" cy="24" r="10" /></> : <path d="M24 37V14m0 15c-10 0-14-6-14-14 9 0 14 5 14 14Zm0-5c9 0 13-6 13-13-8 0-13 5-13 13Z" />}
+          </svg>
+          <p className={styles.eyebrow}>
             {test.category}
           </p>
           <h3 className="mt-2 text-lg font-semibold leading-snug tracking-tight text-neutral-900">
@@ -455,9 +336,9 @@ function TestCards({
             <Link
               href={test.href}
               aria-label={`${test.cta ?? "Starta testet"}: ${test.title}`}
-              className="inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-neutral-900 px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-neutral-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
+              className={styles.cardLink}
             >
-              {test.cta ?? "Starta testet"}
+              {test.cta ?? "Starta testet"}<span aria-hidden="true">↗</span>
             </Link>
           </div>
         </li>

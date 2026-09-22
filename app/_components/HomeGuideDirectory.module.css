@@ -1,0 +1,9 @@
+.featured { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 28px; }
+.card { min-width: 0; padding: 26px; border: 1px solid #ddd5cd; border-radius: 24px; background: #fffdfb; }
+.label { display: block; margin-bottom: 12px; color: #626d66; font-size: .6rem; font-weight: 600; text-transform: uppercase; letter-spacing: .12em; }
+.card h3 { height: calc(100% - 28px); }
+.link { display: flex; flex-direction: column; height: 100%; font-size: 1.3rem; line-height: 1.4; }
+.link:hover { color: #824452; }
+.readMore { display: flex; justify-content: space-between; gap: 16px; margin-top: auto; padding-top: 22px; color: #824452; font: 600 .8rem/1.5 Arial, Helvetica, sans-serif; }
+.groupHeading { font-size: 1.25rem !important; margin-bottom: 12px; }
+@media (max-width: 700px) { .featured { grid-template-columns: 1fr; } }
