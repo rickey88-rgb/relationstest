@@ -1,3 +1,4 @@
+import EditorialSurface from "../_components/EditorialSurface";
 import type { Metadata } from "next";
 import Link from "next/link";
 import GuideNextSteps from "../_components/GuideNextSteps";
@@ -139,7 +140,7 @@ const faqJsonLd = {
 
 export default function LoveBombingRelationPage() {
   return (
-    <main className="bg-white text-neutral-900">
+    <EditorialSurface><main className="bg-white text-neutral-900">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
@@ -150,7 +151,7 @@ export default function LoveBombingRelationPage() {
       />
 
       <section className="border-b border-neutral-200 bg-gradient-to-b from-rose-50 via-white to-white">
-        <div className="mx-auto max-w-4xl px-6 py-14 md:py-20">
+        <div data-rv="container" className="mx-auto max-w-4xl px-6 py-14 md:py-20">
           <div className="mb-5 text-sm text-neutral-500">
             <Link href="/" className="hover:text-neutral-800">
               Startsida
@@ -159,7 +160,7 @@ export default function LoveBombingRelationPage() {
             <span>Love bombing i relation</span>
           </div>
 
-          <div className="inline-flex items-center rounded-full border border-rose-200 bg-white px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-rose-700">
+          <div data-rv="card" className="inline-flex items-center rounded-full border border-rose-200 bg-white px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-rose-700">
             Varningssignaler i relationer
           </div>
 
@@ -182,25 +183,25 @@ export default function LoveBombingRelationPage() {
           </p>
 
           <div className="mt-8 grid gap-3 sm:grid-cols-2 md:grid-cols-4">
-            <Link
+            <Link data-rv="card"
               href="#vad-ar"
               className="rounded-xl border border-neutral-200 bg-white px-4 py-3 text-sm font-medium text-neutral-700 transition hover:border-neutral-300 hover:text-neutral-950"
             >
               Vad love bombing är
             </Link>
-            <Link
+            <Link data-rv="card"
               href="#tecken"
               className="rounded-xl border border-neutral-200 bg-white px-4 py-3 text-sm font-medium text-neutral-700 transition hover:border-neutral-300 hover:text-neutral-950"
             >
               Tidiga tecken
             </Link>
-            <Link
+            <Link data-rv="card"
               href="#vad-sen"
               className="rounded-xl border border-neutral-200 bg-white px-4 py-3 text-sm font-medium text-neutral-700 transition hover:border-neutral-300 hover:text-neutral-950"
             >
               Vad som ofta händer sen
             </Link>
-            <Link
+            <Link data-rv="card"
               href="#vad-gora"
               className="rounded-xl border border-neutral-200 bg-white px-4 py-3 text-sm font-medium text-neutral-700 transition hover:border-neutral-300 hover:text-neutral-950"
             >
@@ -210,7 +211,7 @@ export default function LoveBombingRelationPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-4xl px-6 py-14">
+      <section data-rv="container" className="mx-auto max-w-4xl px-6 py-14">
         <article className="space-y-14">
           {articleImage ? <ArticleImage image={articleImage} /> : null}
 
@@ -228,7 +229,7 @@ export default function LoveBombingRelationPage() {
 
             <div className="grid gap-4">
               {warningSigns.map((item, index) => (
-                <div
+                <div data-rv="card"
                   key={index}
                   className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm"
                 >
@@ -262,7 +263,7 @@ export default function LoveBombingRelationPage() {
 
             <div className="grid gap-4 md:grid-cols-2">
               {differences.map((item, index) => (
-                <div
+                <div data-rv="card"
                   key={index}
                   className="rounded-2xl border border-neutral-200 bg-white p-6"
                 >
@@ -394,7 +395,7 @@ export default function LoveBombingRelationPage() {
 
             <div className="grid gap-4">
               {whatToDo.map((item, index) => (
-                <div
+                <div data-rv="card"
                   key={index}
                   className="rounded-2xl border border-neutral-200 bg-neutral-50 p-5"
                 >
@@ -470,7 +471,7 @@ export default function LoveBombingRelationPage() {
 
             <div className="mt-8 space-y-4">
               {faqs.map((faq) => (
-                <div
+                <div data-rv="card"
                   key={faq.question}
                   className="rounded-2xl border border-neutral-200 bg-white p-6"
                 >
@@ -485,7 +486,7 @@ export default function LoveBombingRelationPage() {
             </div>
           </section>
 
-          <section className="rounded-3xl border border-neutral-200 bg-neutral-50 p-6">
+          <section data-rv="card" className="rounded-3xl border border-neutral-200 bg-neutral-50 p-6">
             <p className="text-sm leading-7 text-neutral-600">
               <strong>Obs:</strong> Den här texten är informativ och ersätter inte
               professionell rådgivning eller akut hjälp. Fokus här ligger på beteenden,
@@ -495,6 +496,6 @@ export default function LoveBombingRelationPage() {
         <GuideNextSteps sourcePage="/love-bombing-relation" />
         </article>
       </section>
-    </main>
+    </main></EditorialSurface>
   );
 }

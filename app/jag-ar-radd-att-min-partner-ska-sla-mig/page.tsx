@@ -1,3 +1,4 @@
+import EditorialSurface from "../_components/EditorialSurface";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -11,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <main className="mx-auto max-w-3xl px-4 py-12">
+    <EditorialSurface><main data-rv="container" className="mx-auto max-w-3xl px-4 py-12">
       <header className="mb-10">
         <h1 className="text-3xl font-semibold tracking-tight text-neutral-900">
           Jag är rädd att min partner ska slå mig – tecken, risk och vad du kan göra nu
@@ -24,7 +25,7 @@ export default function Page() {
           rimligt att ta rädslan på allvar.
         </p>
 
-        <div className="mt-6 rounded-xl border border-neutral-200 bg-neutral-50 p-4">
+        <div data-rv="card" className="mt-6 rounded-xl border border-neutral-200 bg-neutral-50 p-4">
           <p className="text-sm text-neutral-800 leading-relaxed">
             <strong>Om du är i akut fara eller känner att det kan bli våld snart:</strong> ring{" "}
             <strong>112</strong>.
@@ -56,7 +57,7 @@ export default function Page() {
           ska inte kräva att du går på tå för att undvika en explosion.
         </p>
 
-        <div className="not-prose my-6 rounded-xl border border-neutral-200 bg-white p-5">
+        <div data-rv="card" className="not-prose my-6 rounded-xl border border-neutral-200 bg-white p-5">
           <p className="text-sm text-neutral-700 leading-relaxed">
             Relaterat (för mönster som ofta hänger ihop med rädsla):{" "}
             <Link href="/kontrollerande-relation" className="underline underline-offset-4">
@@ -310,7 +311,7 @@ export default function Page() {
           <li>du har börjat “planera” för att undvika att det blir farligt</li>
         </ul>
 
-        <div className="not-prose my-8 rounded-xl border border-neutral-200 bg-neutral-50 p-5">
+        <div data-rv="card" className="not-prose my-8 rounded-xl border border-neutral-200 bg-neutral-50 p-5">
           <p className="text-sm text-neutral-800 leading-relaxed">
             <strong>Akut:</strong> ring <strong>112</strong>. <br />
             <strong>Råd:</strong> ring <strong>1177</strong>. <br />
@@ -351,7 +352,7 @@ export default function Page() {
           din säkerhet spelar diagnos ofta mindre roll än beteendemönster.
         </p>
 
-        <div className="not-prose my-6 rounded-xl border border-neutral-200 bg-white p-5">
+        <div data-rv="card" className="not-prose my-6 rounded-xl border border-neutral-200 bg-white p-5">
           <p className="text-sm text-neutral-700 leading-relaxed">
             Om du vill läsa mer:{" "}
             <Link href="/psykopatiska-drag-relation" className="underline underline-offset-4">
@@ -680,6 +681,6 @@ export default function Page() {
           rådgivning, vård eller juridisk bedömning. Vid akut fara: ring <strong>112</strong>.
         </p>
       </section>
-    </main>
+    </main></EditorialSurface>
   );
 }

@@ -1,3 +1,4 @@
+import EditorialSurface from "../../_components/EditorialSurface";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -9,17 +10,17 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <main className="mx-auto max-w-3xl px-4 py-10 text-neutral-900 sm:px-6 sm:py-14">
+    <EditorialSurface><main data-rv="container" className="mx-auto max-w-3xl px-4 py-10 text-neutral-900 sm:px-6 sm:py-14">
       <article>
         <Link href="/medberoende" className="inline-flex min-h-11 items-center text-sm text-neutral-600 underline underline-offset-4">Till huvudguiden om medberoende</Link>
         <header className="mt-4">
           <h1 className="text-3xl font-semibold leading-tight tracking-tight [overflow-wrap:anywhere] sm:text-4xl">Bryta medberoende – så kan du börja förändra mönstret</h1>
           <p className="mt-5 leading-7 text-neutral-700">Att minska överansvar behöver inte innebära att bli kall eller sluta hjälpa. Det kan handla om att göra stödet tydligare, låta dina egna behov räknas och skilja det du kan påverka från det du försöker bära åt någon annan. Börja med en avgränsad situation och anpassa förändringen till dina faktiska omständigheter.</p>
         </header>
-        <div className="mt-8 rounded-2xl border border-neutral-200 bg-neutral-50 p-5 sm:p-6">
+        <div data-rv="panel" className="mt-8 rounded-2xl border border-neutral-200 bg-neutral-50 p-5 sm:p-6">
           <h2 className="text-xl font-semibold">Undersök dina relationsmönster</h2>
           <p className="mt-3 leading-7 text-neutral-700">Svara på 30 frågor om självuppoffring, överansvar, gränser och fokus på partnern. Testet är ett stöd för självreflektion och ställer ingen klinisk diagnos.</p>
-          <Link href="/medberoendetest/test" className="mt-4 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-neutral-900 px-5 py-3 text-center text-sm font-semibold text-white hover:bg-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900 sm:w-auto">Gör medberoendetestet</Link>
+          <Link data-rv="button" href="/medberoendetest/test" className="mt-4 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-neutral-900 px-5 py-3 text-center text-sm font-semibold text-white hover:bg-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900 sm:w-auto">Gör medberoendetestet</Link>
         </div>
         <section className="mt-10 space-y-4 leading-7 text-neutral-700">
           <h2 className="text-2xl font-semibold tracking-tight text-neutral-900">Börja med situationen, inte med en etikett</h2>
@@ -88,8 +89,8 @@ export default function Page() {
         </section>
 
         <p className="mt-10 leading-7 text-neutral-700">I <Link href="/medberoende" className="underline underline-offset-4">huvudguiden om medberoende</Link> finns bakgrund och viktiga skillnader mot anknytningssvårigheter och destruktiva relationer. Testet kan hjälpa dig att välja vad du vill reflektera över, men är ingen behandling eller klinisk diagnos.</p>
-        <Link href="/medberoendetest/test" className="mt-4 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-neutral-900 px-5 py-3 text-center text-sm font-semibold text-white hover:bg-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900 sm:w-auto">Starta medberoendetestet</Link>
+        <Link data-rv="button" href="/medberoendetest/test" className="mt-4 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-neutral-900 px-5 py-3 text-center text-sm font-semibold text-white hover:bg-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900 sm:w-auto">Starta medberoendetestet</Link>
       </article>
-    </main>
+    </main></EditorialSurface>
   );
 }

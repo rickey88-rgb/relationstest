@@ -1,3 +1,4 @@
+import EditorialSurface from "../../_components/EditorialSurface";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <main
+    <EditorialSurface><main data-rv="container"
       style={{
         maxWidth: 820,
         margin: "0 auto",
@@ -70,7 +71,7 @@ export default function Page() {
         </p>
       </header>
 
-      <section
+      <section data-rv="panel"
         style={{
           marginTop: 30,
           padding: 24,
@@ -116,7 +117,7 @@ export default function Page() {
         </p>
       </section>
 
-      <section
+      <section data-rv="card"
         style={{
           marginTop: 42,
           padding: 24,
@@ -188,7 +189,7 @@ export default function Page() {
         </p>
       </section>
 
-      <section
+      <section data-rv="card"
         style={{
           marginTop: 42,
           padding: 24,
@@ -286,7 +287,7 @@ export default function Page() {
         </p>
       </section>
 
-      <section
+      <section data-rv="panel"
         style={{
           marginTop: 42,
           padding: 24,
@@ -305,7 +306,7 @@ export default function Page() {
           upprepning och påverkan på självkänsla och frihet.
         </p>
 
-        <Link
+        <Link data-rv="button"
           href="/psykisk-misshandel-relation/test"
           style={{
             display: "inline-block",
@@ -375,7 +376,7 @@ export default function Page() {
         <h2 style={{ fontSize: 30 }}>Läs vidare</h2>
 
         <div style={{ display: "grid", gap: 12 }}>
-          <Link
+          <Link data-rv="card"
             href="/psykiskt-vald"
             style={{
               padding: 16,
@@ -389,7 +390,7 @@ export default function Page() {
             Psykiskt våld – komplett guide →
           </Link>
 
-          <Link
+          <Link data-rv="card"
             href="/psykiskt-vald/vad-raknas-som"
             style={{
               padding: 16,
@@ -403,7 +404,7 @@ export default function Page() {
             Vad räknas som psykiskt våld? →
           </Link>
 
-          <Link
+          <Link data-rv="card"
             href="/psykiskt-vald/exempel"
             style={{
               padding: 16,
@@ -417,7 +418,7 @@ export default function Page() {
             Exempel på psykiskt våld →
           </Link>
 
-          <Link
+          <Link data-rv="card"
             href="/psykiskt-vald/bevis"
             style={{
               padding: 16,
@@ -431,7 +432,7 @@ export default function Page() {
             Bevis och dokumentation →
           </Link>
 
-          <Link
+          <Link data-rv="card"
             href="/psykiskt-vald/polisanmalan"
             style={{
               padding: 16,
@@ -489,6 +490,6 @@ export default function Page() {
         </div>
       </section>
 
-    </main>
+    </main></EditorialSurface>
   );
 }

@@ -1,3 +1,5 @@
+import Brand from "../_components/Brand";
+import EditorialSurface from "../_components/EditorialSurface";
 import Link from "next/link";
 
 export const metadata = {
@@ -76,17 +78,15 @@ export default function Page() {
   };
 
   return (
-    <main className="min-h-screen bg-white text-neutral-900">
+    <EditorialSurface><main className="min-h-screen bg-white text-neutral-900">
       {/* Header */}
-      <header className="border-b border-neutral-200/70">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-          <div className="text-sm font-semibold tracking-tight">
-            Relationsvarning
-          </div>
+      <header data-rv="site-header" className="border-b border-neutral-200/70">
+        <div data-rv="wide-container" className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
+          <Brand />
 
           <div className="flex items-center gap-3 text-xs text-neutral-600">
             <span className="inline-flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-neutral-900" />
+              <span data-rv="dot" className="h-1.5 w-1.5 rounded-full bg-neutral-900" />
               Sakligt & tryggt
             </span>
             <span className="hidden sm:inline">•</span>
@@ -98,7 +98,7 @@ export default function Page() {
       </header>
 
       {/* Hero */}
-      <section className="mx-auto max-w-5xl px-6 py-10 sm:py-14">
+      <section data-rv="wide-container" className="mx-auto max-w-5xl px-6 py-10 sm:py-14">
         <div className="grid gap-10 lg:grid-cols-12 lg:gap-12">
           <div className="lg:col-span-7">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-neutral-500">
@@ -132,7 +132,7 @@ export default function Page() {
             </p>
 
             <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
-              <Link
+              <Link data-rv="button"
                 href="/test"
                 className="inline-flex w-full items-center justify-center rounded-xl bg-neutral-900 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-2 sm:w-auto"
               >
@@ -175,7 +175,7 @@ export default function Page() {
 
           {/* Right: Quick index */}
           <aside className="lg:col-span-5">
-            <div className="rounded-2xl border border-neutral-200/70 p-6 shadow-[0_1px_0_rgba(0,0,0,0.02)]">
+            <div data-rv="card" className="rounded-2xl border border-neutral-200/70 p-6 shadow-[0_1px_0_rgba(0,0,0,0.02)]">
               <h2 className="text-sm font-semibold tracking-tight">
                 Snabbnavigering
               </h2>
@@ -228,7 +228,7 @@ export default function Page() {
                 </li>
               </ul>
 
-              <div className="mt-5 rounded-xl bg-neutral-50 p-4">
+              <div data-rv="card" className="mt-5 rounded-xl bg-neutral-50 p-4">
                 <p className="text-sm font-semibold text-neutral-900">
                   Relaterat 
                 </p>
@@ -274,7 +274,7 @@ export default function Page() {
       </section>
 
       {/* Body */}
-      <section className="mx-auto max-w-5xl px-6 pb-14">
+      <section data-rv="wide-container" className="mx-auto max-w-5xl px-6 pb-14">
         <article className="grid gap-10 lg:grid-cols-12 lg:gap-12">
           <div className="lg:col-span-8">
             {/* What it is */}
@@ -319,7 +319,7 @@ export default function Page() {
                 .
               </p>
 
-              <div className="mt-6 rounded-2xl border border-neutral-200/70 p-5">
+              <div data-rv="card" className="mt-6 rounded-2xl border border-neutral-200/70 p-5">
                 <p className="text-sm font-semibold tracking-tight">
                   En viktig skiljelinje
                 </p>
@@ -490,43 +490,43 @@ export default function Page() {
 
               <ul className="mt-6 space-y-3 text-base text-neutral-700">
                 <li className="flex gap-3">
-                  <span className="mt-2 h-1.5 w-1.5 rounded-full bg-neutral-900" />
+                  <span data-rv="dot" className="mt-2 h-1.5 w-1.5 rounded-full bg-neutral-900" />
                   Du ändrar ditt beteende för att undvika reaktioner (tonläge,
                   ämnen, tider, kläder, kontakter).
                 </li>
                 <li className="flex gap-3">
-                  <span className="mt-2 h-1.5 w-1.5 rounded-full bg-neutral-900" />
+                  <span data-rv="dot" className="mt-2 h-1.5 w-1.5 rounded-full bg-neutral-900" />
                   Du börjar tvivla på dig själv: “Är jag känslig?”, “Är det jag
                   som förstör?”, “Kanske minns jag fel?”
                 </li>
                 <li className="flex gap-3">
-                  <span className="mt-2 h-1.5 w-1.5 rounded-full bg-neutral-900" />
+                  <span data-rv="dot" className="mt-2 h-1.5 w-1.5 rounded-full bg-neutral-900" />
                   Du känner dig ofta skyldig, i underläge eller som att du
                   behöver “förtjäna” lugn.
                 </li>
                 <li className="flex gap-3">
-                  <span className="mt-2 h-1.5 w-1.5 rounded-full bg-neutral-900" />
+                  <span data-rv="dot" className="mt-2 h-1.5 w-1.5 rounded-full bg-neutral-900" />
                   Personen kan explodera, och efteråt säger hen att du “tvingade
                   fram det”, eller att det “inte är så farligt”.
                 </li>
                 <li className="flex gap-3">
-                  <span className="mt-2 h-1.5 w-1.5 rounded-full bg-neutral-900" />
+                  <span data-rv="dot" className="mt-2 h-1.5 w-1.5 rounded-full bg-neutral-900" />
                   Du drar dig för att ta upp problem eftersom det alltid blir
                   ditt fel, eller slutar med att du ber om ursäkt.
                 </li>
                 <li className="flex gap-3">
-                  <span className="mt-2 h-1.5 w-1.5 rounded-full bg-neutral-900" />
+                  <span data-rv="dot" className="mt-2 h-1.5 w-1.5 rounded-full bg-neutral-900" />
                   Du känner att din frihet krymper: vilka du träffar, vad du
                   gör, hur du spenderar pengar, vad du skriver.
                 </li>
                 <li className="flex gap-3">
-                  <span className="mt-2 h-1.5 w-1.5 rounded-full bg-neutral-900" />
+                  <span data-rv="dot" className="mt-2 h-1.5 w-1.5 rounded-full bg-neutral-900" />
                   Det finns hot — öppna eller subtila: “Du kommer ångra dig”,
                   “Ingen annan vill ha dig”, “Jag kan göra livet svårt för dig”.
                 </li>
               </ul>
 
-              <div className="mt-8 rounded-2xl bg-neutral-50 p-6">
+              <div data-rv="card" className="mt-8 rounded-2xl bg-neutral-50 p-6">
                 <p className="text-sm font-semibold tracking-tight text-neutral-900">
                   En fråga som ofta skär igenom dimman
                 </p>
@@ -697,7 +697,7 @@ export default function Page() {
                 av vad som händer. Ensamhet gör kontrollen starkare.
               </p>
 
-              <div className="mt-8 rounded-2xl border border-neutral-200/70 p-6">
+              <div data-rv="card" className="mt-8 rounded-2xl border border-neutral-200/70 p-6">
                 <p className="text-sm font-semibold tracking-tight">
                   Ett viktigt perspektiv
                 </p>
@@ -772,7 +772,7 @@ export default function Page() {
                 “hjälpa” genom att vara duktiga, tysta eller avleda.
               </p>
 
-              <div className="mt-6 rounded-2xl bg-neutral-50 p-6">
+              <div data-rv="card" className="mt-6 rounded-2xl bg-neutral-50 p-6">
                 <p className="text-sm font-semibold tracking-tight text-neutral-900">
                   Om du bär mycket skuld
                 </p>
@@ -841,7 +841,7 @@ export default function Page() {
                 stegvis skapa mer trygghet omkring sig.
               </p>
 
-              <div className="mt-8 rounded-2xl border border-neutral-200/70 p-6">
+              <div data-rv="card" className="mt-8 rounded-2xl border border-neutral-200/70 p-6">
                 <p className="text-sm font-semibold tracking-tight">
                   Viktigt: “Det är inte alltid dramatik som är farligast”
                 </p>
@@ -868,20 +868,20 @@ export default function Page() {
 
               <ul className="mt-6 space-y-3 text-base text-neutral-700">
                 <li className="flex gap-3">
-                  <span className="mt-2 h-1.5 w-1.5 rounded-full bg-neutral-900" />
+                  <span data-rv="dot" className="mt-2 h-1.5 w-1.5 rounded-full bg-neutral-900" />
                   Lyssna mer än du argumenterar.
                 </li>
                 <li className="flex gap-3">
-                  <span className="mt-2 h-1.5 w-1.5 rounded-full bg-neutral-900" />
+                  <span data-rv="dot" className="mt-2 h-1.5 w-1.5 rounded-full bg-neutral-900" />
                   Spegla mönster: “Jag ser att du blir mindre fri.”
                 </li>
                 <li className="flex gap-3">
-                  <span className="mt-2 h-1.5 w-1.5 rounded-full bg-neutral-900" />
+                  <span data-rv="dot" className="mt-2 h-1.5 w-1.5 rounded-full bg-neutral-900" />
                   Fråga vad personen behöver just nu: sällskap, praktisk hjälp,
                   någon att ringa.
                 </li>
                 <li className="flex gap-3">
-                  <span className="mt-2 h-1.5 w-1.5 rounded-full bg-neutral-900" />
+                  <span data-rv="dot" className="mt-2 h-1.5 w-1.5 rounded-full bg-neutral-900" />
                   Undvik ultimatum. Satsa på kontakt och långsiktig trygghet.
                 </li>
               </ul>
@@ -949,7 +949,7 @@ export default function Page() {
                 inte professionell bedömning eller akut hjälp.
               </p>
 
-              <div className="mt-10 rounded-2xl bg-neutral-50 p-6">
+              <div data-rv="card" className="mt-10 rounded-2xl bg-neutral-50 p-6">
                 <p className="text-sm font-semibold tracking-tight text-neutral-900">
                   Läs mer i samma SEO-kluster
                 </p>
@@ -999,19 +999,19 @@ export default function Page() {
                 Läs också vår guide till <Link href="/psykiskt-vald/hjalp" className="underline underline-offset-4">stöd och hjälp vid psykiskt våld</Link> för information om säkerhet och möjliga nästa steg.
               </p>
 
-              <div className="mt-5 rounded-2xl border border-neutral-200/70 p-6">
+              <div data-rv="card" className="mt-5 rounded-2xl border border-neutral-200/70 p-6">
                 <p className="text-sm font-semibold tracking-tight text-neutral-900">
                   Akut
                 </p>
                 <ul className="mt-3 space-y-2 text-sm text-neutral-700">
                   <li className="flex gap-3">
-                    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-neutral-900" />
+                    <span data-rv="dot" className="mt-2 h-1.5 w-1.5 rounded-full bg-neutral-900" />
                     <span>
                       Vid akut fara / pågående våld: <strong>ring 112</strong>.
                     </span>
                   </li>
                   <li className="flex gap-3">
-                    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-neutral-900" />
+                    <span data-rv="dot" className="mt-2 h-1.5 w-1.5 rounded-full bg-neutral-900" />
                     <span>
                       Polis (icke-akut): <strong>114 14</strong>.
                     </span>
@@ -1019,7 +1019,7 @@ export default function Page() {
                 </ul>
               </div>
 
-              <div className="mt-6 rounded-2xl bg-neutral-50 p-6">
+              <div data-rv="card" className="mt-6 rounded-2xl bg-neutral-50 p-6">
                 <p className="text-sm font-semibold tracking-tight text-neutral-900">
                   Nationella stödlinjer
                 </p>
@@ -1075,7 +1075,7 @@ export default function Page() {
                 </ul>
               </div>
 
-              <div className="mt-6 rounded-2xl border border-neutral-200/70 p-6">
+              <div data-rv="card" className="mt-6 rounded-2xl border border-neutral-200/70 p-6">
                 <p className="text-sm font-semibold tracking-tight text-neutral-900">
                   Kvinnojourer och tjejjourer (hitta lokalt)
                 </p>
@@ -1105,7 +1105,7 @@ export default function Page() {
                 </ul>
               </div>
 
-              <div className="mt-6 rounded-2xl bg-neutral-50 p-6">
+              <div data-rv="card" className="mt-6 rounded-2xl bg-neutral-50 p-6">
                 <p className="text-sm font-semibold tracking-tight text-neutral-900">
                   Om du själv använder våld eller känner att du riskerar att göra det
                 </p>
@@ -1140,7 +1140,7 @@ export default function Page() {
           {/* Sidebar */}
           <div className="lg:col-span-4">
             <div className="sticky top-6 space-y-4">
-              <div className="rounded-2xl border border-neutral-200/70 p-6">
+              <div data-rv="card" className="rounded-2xl border border-neutral-200/70 p-6">
                 <p className="text-sm font-semibold tracking-tight">
                   Snabb check-in
                 </p>
@@ -1164,7 +1164,7 @@ export default function Page() {
                 </p>
 
                 <div className="mt-4">
-                  <Link
+                  <Link data-rv="button"
                     href="/test"
                     className="inline-flex w-full items-center justify-center rounded-xl bg-neutral-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-2"
                   >
@@ -1189,6 +1189,6 @@ export default function Page() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
 
-    </main>
+    </main></EditorialSurface>
   );
 }

@@ -1,3 +1,4 @@
+import EditorialSurface from "../_components/EditorialSurface";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ContentGuide, GuideSection, GuideLinks, textLink } from "../_components/ContentGuide";
@@ -9,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 export default function MethodologyPage() {
-  return <ContentGuide title="Så bygger vi våra tester" intro="Relationsvarning är en informationstjänst med tester för strukturerad självreflektion. Här förklarar vi vad frågorna och resultaten kan hjälpa dig med, vilken kunskap innehållet anknyter till och vilka begränsningar som är viktiga att känna till.">
+  return <EditorialSurface><ContentGuide title="Så bygger vi våra tester" intro="Relationsvarning är en informationstjänst med tester för strukturerad självreflektion. Här förklarar vi vad frågorna och resultaten kan hjälpa dig med, vilken kunskap innehållet anknyter till och vilka begränsningar som är viktiga att känna till.">
     <GuideSection title="Syftet: sätta ord på återkommande mönster">
       <p>Frågorna tar upp upplevelser och beteenden i relationer, till exempel kontroll, skuldvändning, bemötande av gränser och reaktioner på närhet. Svaren kan hjälpa dig att sortera erfarenheter och hitta relevant fördjupning. De beskriver din egen rapportering, inte en oberoende observation av partnern.</p>
       <p>Återkommande mönster kan säga mer än en isolerad konflikt. Samtidigt ska ett allvarligt hot eller en farlig situation tas på allvar även om det bara hänt en gång.</p>
@@ -49,5 +50,5 @@ export default function MethodologyPage() {
       <p>Om du upptäcker ett sakfel eller vill fråga om innehållet kan du <Link href="/kontakt" className={textLink}>kontakta Relationsvarning</Link>. För information om uppgifter och lokal lagring, läs <Link href="/integritet" className={textLink}>integritetspolicyn</Link>.</p>
     </GuideSection>
     <GuideSection title="Välj en väg vidare"><GuideLinks links={[{ href: "/", label: "Alla relationstester på startsidan" }, { href: "/test", label: "Generellt relationstest" }, { href: "/anknytning", label: "Läs om anknytning i relationer" }, { href: "/medberoende", label: "Läs om medberoende och gränser" }]} /></GuideSection>
-  </ContentGuide>;
+  </ContentGuide></EditorialSurface>;
 }

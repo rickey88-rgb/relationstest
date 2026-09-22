@@ -1,3 +1,4 @@
+import EditorialSurface from "../_components/EditorialSurface";
 import Link from "next/link";
 
 export const metadata = {
@@ -11,7 +12,7 @@ export const metadata = {
 
 export default function Page() {
   return (
-    <main className="mx-auto max-w-3xl px-6 py-12">
+    <EditorialSurface><main data-rv="container" className="mx-auto max-w-3xl px-6 py-12">
       <article className="space-y-6">
         <h1 className="text-3xl font-semibold">
           Skillnad mellan psykopat och narcissist: begrepp, överlapp och vanliga missförstånd
@@ -151,6 +152,6 @@ export default function Page() {
           </Link>
         </p>
       </article>
-    </main>
+    </main></EditorialSurface>
   );
 }

@@ -1,3 +1,4 @@
+import EditorialSurface from "../_components/EditorialSurface";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { EditorialArticleJsonLd, getEditorialArticleSchema, getEditorialMetadata } from "../_seo/editorialSeo";
@@ -15,7 +16,7 @@ const articleJsonLd = getEditorialArticleSchema({ route: "/psykiskt-vald", title
 
 export default function Page() {
   return (
-    <main
+    <EditorialSurface><main data-rv="container"
       style={{
         maxWidth: 820,
         margin: "0 auto",
@@ -65,7 +66,7 @@ export default function Page() {
         </p>
       </header>
 
-      <section
+      <section data-rv="panel"
         style={{
           marginTop: 30,
           padding: 24,
@@ -103,7 +104,7 @@ export default function Page() {
           självkänsla och handlingsfrihet.
         </p>
 
-        <Link
+        <Link data-rv="button"
           href="/psykisk-misshandel-relation/test"
           style={{
             display: "inline-block",
@@ -198,7 +199,7 @@ export default function Page() {
               "Kontroll eller bevakning som exempelvis kan röra mobil, platsinformation, konton eller vardagsliv.",
             ],
           ].map(([title, text]) => (
-            <div
+            <div data-rv="card"
               key={title}
               style={{
                 padding: 18,
@@ -222,7 +223,7 @@ export default function Page() {
         </div>
       </section>
 
-      <section
+      <section data-rv="card"
         style={{
           marginTop: 42,
           padding: 24,
@@ -366,7 +367,7 @@ export default function Page() {
         </p>
       </section>
 
-      <section
+      <section data-rv="panel"
         style={{
           marginTop: 46,
           padding: 26,
@@ -393,7 +394,7 @@ export default function Page() {
           se vilka mönster som sticker ut.
         </p>
 
-        <Link
+        <Link data-rv="button"
           href="/psykisk-misshandel-relation/test"
           style={{
             display: "inline-block",
@@ -424,7 +425,7 @@ export default function Page() {
       marginTop: 20,
     }}
   >
-    <Link
+    <Link data-rv="card"
       href="/psykiskt-vald/vad-raknas-som"
       style={{
         padding: 16,
@@ -438,7 +439,7 @@ export default function Page() {
       Vad räknas som psykiskt våld? →
     </Link>
 
-    <Link
+    <Link data-rv="card"
       href="/psykiskt-vald/exempel"
       style={{
         padding: 16,
@@ -452,7 +453,7 @@ export default function Page() {
       Konkreta exempel på psykiskt våld →
     </Link>
 
-    <Link
+    <Link data-rv="card"
       href="/psykiskt-vald/ny-lag-2026"
       style={{
         padding: 16,
@@ -466,7 +467,7 @@ export default function Page() {
       Nya lagen om psykiskt våld 2026 →
     </Link>
 
-    <Link
+    <Link data-rv="card"
       href="/psykiskt-vald/straff"
       style={{
         padding: 16,
@@ -480,7 +481,7 @@ export default function Page() {
       Straff för psykiskt våld →
     </Link>
 
-    <Link
+    <Link data-rv="card"
       href="/psykiskt-vald/bevis"
       style={{
         padding: 16,
@@ -493,7 +494,7 @@ export default function Page() {
     >
       Bevis och dokumentation vid psykiskt våld →
     </Link>
-    <Link
+    <Link data-rv="card"
   href="/psykiskt-vald/polisanmalan"
   style={{
     padding: 16,
@@ -507,7 +508,7 @@ export default function Page() {
   Polisanmäla psykiskt våld →
 </Link>
 
-<Link
+<Link data-rv="card"
   href="/psykiskt-vald/hjalp"
   style={{
     padding: 16,
@@ -521,7 +522,7 @@ export default function Page() {
   Hjälp vid psykiskt våld →
 </Link>
 
-<Link
+<Link data-rv="card"
   href="/psykisk-misshandel"
   style={{
     padding: 16,
@@ -535,7 +536,7 @@ export default function Page() {
   Psykisk misshandel – tecken och guide →
 </Link>
 
-<Link
+<Link data-rv="card"
   href="/digitalt-vald"
   style={{
     padding: 16,
@@ -549,7 +550,7 @@ export default function Page() {
   Digitalt våld – kontroll och övervakning →
 </Link>
 
-<Link
+<Link data-rv="card"
   href="/ekonomiskt-vald"
   style={{
     padding: 16,
@@ -608,6 +609,6 @@ export default function Page() {
         </div>
       </section>
 
-    </main>
+    </main></EditorialSurface>
   );
 }

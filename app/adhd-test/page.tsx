@@ -1,3 +1,4 @@
+import EditorialSurface from "../_components/EditorialSurface";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { GuideLinks, GuideSection, textLink } from "../_components/ContentGuide";
@@ -108,16 +109,16 @@ const faq = [
 ];
 const cta = "inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-neutral-900 px-5 py-3 text-center font-semibold text-white hover:bg-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900 sm:w-auto";
 export default function ADHDLanding() {
-  return <main className="mx-auto max-w-3xl px-4 py-10 text-neutral-900 [overflow-wrap:anywhere] sm:px-6 sm:py-14">
+  return <EditorialSurface><main data-rv="container" className="mx-auto max-w-3xl px-4 py-10 text-neutral-900 [overflow-wrap:anywhere] sm:px-6 sm:py-14">
     <EditorialArticleJsonLd data={articleJsonLd} />
     <nav aria-label="Brödsmulor" className="text-sm text-neutral-600"><Link href="/" className={textLink + " inline-flex min-h-11 items-center"}>Relationsvarning</Link><span aria-hidden="true"> / </span><span aria-current="page">ADHD-test</span></nav>
     <article><header className="mt-5"><h1 className="text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">ADHD-test för vuxna</h1>
       <p className="mt-5 text-lg leading-8 text-neutral-700">30 frågor som kartlägger sex områden som ofta är relevanta vid ADHD – och visar hur dina svar faktiskt hänger ihop.</p>
       <p className="mt-4 leading-7 text-neutral-700">Inte bara koncentration. Testet tittar även på organisation, impulsivitet, inre rastlöshet, tidsuppfattning och hur svårigheterna påverkar vardagen.</p>
-      <div className="mt-6"><Link href="/adhd-test/test" className={cta}>Starta ADHD-testet</Link></div><p className="mt-3 text-sm text-neutral-600">Tar cirka 5 minuter · För vuxna · Ingen registrering</p>
+      <div className="mt-6"><Link data-rv="button" href="/adhd-test/test" className={cta}>Starta ADHD-testet</Link></div><p className="mt-3 text-sm text-neutral-600">Tar cirka 5 minuter · För vuxna · Ingen registrering</p>
     </header>
-    {sections.slice(0,2).map((s,i) => <GuideSection key={s.title} title={s.title}>{s.paragraphs.map(p => <p key={p}>{p}</p>)}{i===1 && <Link href="/adhd-test/test" className={cta}>Gör ADHD-testet</Link>}</GuideSection>)}
-    <GuideSection title="Mer än ett koncentrationstest"><div className="grid gap-3 sm:grid-cols-2">{cards.map(([name,description]) => <div key={name} className="min-w-0 rounded-2xl border border-neutral-200 bg-neutral-50 p-5"><h3 className="font-semibold text-neutral-900">{name}</h3><p className="mt-2">{description}</p></div>)}</div></GuideSection>
+    {sections.slice(0,2).map((s,i) => <GuideSection key={s.title} title={s.title}>{s.paragraphs.map(p => <p key={p}>{p}</p>)}{i===1 && <Link data-rv="button" href="/adhd-test/test" className={cta}>Gör ADHD-testet</Link>}</GuideSection>)}
+    <GuideSection title="Mer än ett koncentrationstest"><div className="grid gap-3 sm:grid-cols-2">{cards.map(([name,description]) => <div data-rv="card" key={name} className="min-w-0 rounded-2xl border border-neutral-200 bg-neutral-50 p-5"><h3 className="font-semibold text-neutral-900">{name}</h3><p className="mt-2">{description}</p></div>)}</div></GuideSection>
     <GuideSection title={sections[2].title}>{sections[2].paragraphs.map(p => <p key={p}>{p}</p>)}</GuideSection>
     <GuideSection title="Hur vet man om man kan ha ADHD som vuxen?">
       <p>Frågan ”har jag ADHD?” blir mer meningsfull när den kopplas till återkommande mönster än till en enskild svår dag. ADHD-symtom hos vuxna kan handla om att tappa koncentrationen, få svårt att organisera uppgifter eller komma igång trots att man vill. Tidsuppfattning, impulsiva handlingar och en inre rastlöshet kan också vara relevanta delar av bilden.</p>
@@ -131,8 +132,8 @@ export default function ADHDLanding() {
     </GuideSection>
     <GuideSection title={sections[3].title}>{sections[3].paragraphs.map(p => <p key={p}>{p}</p>)}<p>Det är Relationsvarnings egen självskattningsmodell, inte ett kliniskt validerat instrument. Produktprofilerna är inte officiella ADHD-subtyper.</p></GuideSection>
     <GuideSection title="Vanliga frågor om ADHD-testet">{faq.map(([question,answer]) => <div key={question} className="space-y-2 border-t border-neutral-200 pt-4"><h3 className="text-lg font-semibold text-neutral-900">{question}</h3><p>{answer}</p></div>)}</GuideSection>
-    <GuideSection title="Nyfiken på vad dina egna svar visar?"><p>30 frågor. Sex områden. En samlad analys av ditt svarsmönster.</p><Link href="/adhd-test/test" className={cta}>Starta ADHD-testet</Link></GuideSection>
+    <GuideSection title="Nyfiken på vad dina egna svar visar?"><p>30 frågor. Sex områden. En samlad analys av ditt svarsmönster.</p><Link data-rv="button" href="/adhd-test/test" className={cta}>Starta ADHD-testet</Link></GuideSection>
     <GuideSection title="Läs mer om ADHD"><p>Utforska symtom, olika uttryck och situationer i vuxenlivet.</p><GuideLinks links={adhdGuides.map((guide) => ({ href: `/${guide.slug}`, label: guide.label }))} /></GuideSection>
     </article>
-  </main>;
+  </main></EditorialSurface>;
 }

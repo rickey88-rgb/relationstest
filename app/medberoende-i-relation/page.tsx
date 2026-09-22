@@ -1,3 +1,4 @@
+import EditorialSurface from "../_components/EditorialSurface";
 import type { Metadata } from "next";
 import Link from "next/link";
 import GuideNextSteps from "../_components/GuideNextSteps";
@@ -10,17 +11,17 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <main className="mx-auto max-w-3xl px-4 py-10 text-neutral-900 sm:px-6 sm:py-14">
+    <EditorialSurface><main data-rv="container" className="mx-auto max-w-3xl px-4 py-10 text-neutral-900 sm:px-6 sm:py-14">
       <article>
         <Link href="/medberoende" className="inline-flex min-h-11 items-center text-sm text-neutral-600 underline underline-offset-4">Till huvudguiden om medberoende</Link>
         <header className="mt-4">
           <h1 className="text-3xl font-semibold leading-tight tracking-tight [overflow-wrap:anywhere] sm:text-4xl">Medberoende i relation – när du tar för mycket ansvar för din partner</h1>
           <p className="mt-5 leading-7 text-neutral-700">Du håller koll på hur partnern mår, tar hand om det som blir ogjort och försöker se till att ingen konflikt uppstår. Varje enskild insats kan kännas rimlig. Frågan är vad som händer när insatserna tillsammans blir ditt huvudsakliga sätt att vara i relationen och ditt eget liv ständigt får vänta.</p>
         </header>
-        <div className="mt-8 rounded-2xl border border-neutral-200 bg-neutral-50 p-5 sm:p-6">
+        <div data-rv="panel" className="mt-8 rounded-2xl border border-neutral-200 bg-neutral-50 p-5 sm:p-6">
           <h2 className="text-xl font-semibold">Undersök dina relationsmönster</h2>
           <p className="mt-3 leading-7 text-neutral-700">Svara på 30 frågor om självuppoffring, överansvar, gränser och fokus på partnern. Testet är ett stöd för självreflektion och ställer ingen klinisk diagnos.</p>
-          <Link href="/medberoendetest/test" className="mt-4 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-neutral-900 px-5 py-3 text-center text-sm font-semibold text-white hover:bg-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900 sm:w-auto">Gör medberoendetestet</Link>
+          <Link data-rv="button" href="/medberoendetest/test" className="mt-4 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-neutral-900 px-5 py-3 text-center text-sm font-semibold text-white hover:bg-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900 sm:w-auto">Gör medberoendetestet</Link>
         </div>
         <section className="mt-10 space-y-4 leading-7 text-neutral-700">
           <h2 className="text-2xl font-semibold tracking-tight text-neutral-900">Hur medberoende kan märkas mellan två personer</h2>
@@ -80,6 +81,6 @@ export default function Page() {
         <p className="mt-10 leading-7 text-neutral-700">Läs <Link href="/medberoende" className="underline underline-offset-4">huvudguiden om medberoende</Link> för begreppets bakgrund och begränsningar. Testet kan hjälpa dig att reflektera över vad som återkommer, men avgör inte vem du är eller vem som bär skuld i relationen.</p>
         <GuideNextSteps sourcePage="/medberoende-i-relation" />
       </article>
-    </main>
+    </main></EditorialSurface>
   );
 }

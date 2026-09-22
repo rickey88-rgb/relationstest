@@ -1,3 +1,4 @@
+import EditorialSurface from "../../_components/EditorialSurface";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <main
+    <EditorialSurface><main data-rv="container"
       style={{
         maxWidth: 820,
         margin: "0 auto",
@@ -60,7 +61,7 @@ export default function Page() {
         </p>
       </header>
 
-      <section
+      <section data-rv="panel"
         style={{
           marginTop: 30,
           padding: 24,
@@ -131,7 +132,7 @@ export default function Page() {
         </p>
       </section>
 
-      <section
+      <section data-rv="card"
         style={{
           marginTop: 42,
           padding: 24,
@@ -199,7 +200,7 @@ export default function Page() {
               "Mobil, platsinformation, appar, konton eller annan teknik används för att övervaka personen på ett otillbörligt sätt.",
             ],
           ].map(([title, text]) => (
-            <div
+            <div data-rv="card"
               key={title}
               style={{
                 padding: 18,
@@ -235,7 +236,7 @@ export default function Page() {
         </p>
       </section>
 
-      <section
+      <section data-rv="panel"
         style={{
           marginTop: 42,
           padding: 24,
@@ -254,7 +255,7 @@ export default function Page() {
           självkänsla och handlingsfrihet.
         </p>
 
-        <Link
+        <Link data-rv="button"
           href="/psykisk-misshandel-relation/test"
           style={{
             display: "inline-block",
@@ -341,7 +342,7 @@ export default function Page() {
         <h2 style={{ fontSize: 30 }}>Läs vidare</h2>
 
         <div style={{ display: "grid", gap: 12 }}>
-          <Link
+          <Link data-rv="card"
             href="/psykiskt-vald"
             style={{
               padding: 16,
@@ -355,7 +356,7 @@ export default function Page() {
             Psykiskt våld – komplett guide →
           </Link>
 
-          <Link
+          <Link data-rv="card"
             href="/psykisk-misshandel-relation"
             style={{
               padding: 16,
@@ -410,6 +411,6 @@ export default function Page() {
         </div>
       </section>
 
-    </main>
+    </main></EditorialSurface>
   );
 }

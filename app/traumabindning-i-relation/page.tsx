@@ -1,3 +1,4 @@
+import EditorialSurface from "../_components/EditorialSurface";
 import Link from "next/link";
 import type { Metadata } from "next";
 import ArticleImage from "../_components/ArticleImage";
@@ -18,9 +19,9 @@ const articleJsonLd = getEditorialArticleSchema({ route: "/traumabindning-i-rela
 
 export default function TraumabindningIRelationPage() {
   return (
-    <main className="min-h-screen bg-white text-neutral-900">
+    <EditorialSurface><main className="min-h-screen bg-white text-neutral-900">
       <EditorialArticleJsonLd data={articleJsonLd} />
-      <article className="mx-auto max-w-4xl px-6 py-12 md:px-8 md:py-16">
+      <article data-rv="container" className="mx-auto max-w-4xl px-6 py-12 md:px-8 md:py-16">
         <header className="mb-10">
           <p className="mb-3 text-sm font-medium uppercase tracking-wide text-neutral-500">
             Läs mer
@@ -64,14 +65,14 @@ export default function TraumabindningIRelationPage() {
           </p>
         </header>
 
-        <section className="mb-10 rounded-2xl border border-neutral-200 bg-neutral-50 p-6">
+        <section data-rv="panel" className="mb-10 rounded-2xl border border-neutral-200 bg-neutral-50 p-6">
           <h2 className="text-xl font-semibold tracking-tight">Känner du igen mönstren?</h2>
           <p className="mt-3 leading-7 text-neutral-700">
             Traumabindningstestet innehåller 30 frågor om starka känsloband trots
             smärta, hopp om förändring och egna gränser. Använd det för att
             reflektera över din situation; resultatet är inte en diagnos.
           </p>
-          <Link
+          <Link data-rv="button"
             href="/traumabindningtest/test"
             className="mt-4 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-neutral-900 px-5 py-3 text-center text-sm font-semibold text-white hover:bg-neutral-800 sm:w-auto"
           >
@@ -156,7 +157,7 @@ export default function TraumabindningIRelationPage() {
             och den enda som kan ge lättnad. Den kombinationen är psykologiskt
             brutal.
           </p>
-          <p className="rounded-2xl bg-neutral-50 p-5 text-[16px] leading-7 text-neutral-700">
+          <p data-rv="callout" className="rounded-2xl bg-neutral-50 p-5 text-[16px] leading-7 text-neutral-700">
             Om du vill få en första strukturerad känsla för relationens mönster
             kan du också{" "}
             <Link href="/test" className="font-medium text-neutral-900 underline underline-offset-4">
@@ -473,7 +474,7 @@ export default function TraumabindningIRelationPage() {
             tydligare. Klarhet kommer ofta före handling. Och ibland kommer den
             lite i taget.
           </p>
-          <p className="rounded-2xl bg-neutral-50 p-5 text-[16px] leading-7 text-neutral-700">
+          <p data-rv="callout" className="rounded-2xl bg-neutral-50 p-5 text-[16px] leading-7 text-neutral-700">
             Vill du få ett första, mer strukturerat perspektiv på relationens
             signaler kan du också{" "}
             <Link href="/test" className="font-medium text-neutral-900 underline underline-offset-4">
@@ -563,7 +564,7 @@ export default function TraumabindningIRelationPage() {
           </div>
         </section>
 
-        <section className="mt-10 rounded-2xl bg-neutral-50 p-6 text-sm leading-7 text-neutral-600">
+        <section data-rv="card" className="mt-10 rounded-2xl bg-neutral-50 p-6 text-sm leading-7 text-neutral-600">
           <p>
             Den här texten är tänkt som allmän information och ersätter inte
             professionell rådgivning, vård eller stöd i akuta situationer. Om du
@@ -571,6 +572,6 @@ export default function TraumabindningIRelationPage() {
           </p>
         </section>
       </article>
-    </main>
+    </main></EditorialSurface>
   );
 }

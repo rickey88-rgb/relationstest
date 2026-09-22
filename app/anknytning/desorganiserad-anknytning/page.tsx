@@ -1,3 +1,4 @@
+import EditorialSurface from "../../_components/EditorialSurface";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -9,17 +10,17 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <main className="mx-auto max-w-3xl px-4 py-10 text-neutral-900 sm:px-6 sm:py-14">
+    <EditorialSurface><main data-rv="container" className="mx-auto max-w-3xl px-4 py-10 text-neutral-900 sm:px-6 sm:py-14">
       <article>
         <Link href="/anknytning" className="inline-flex min-h-11 items-center text-sm text-neutral-600 underline underline-offset-4">Till huvudguiden om anknytning</Link>
         <header className="mt-4">
           <h1 className="text-3xl font-semibold leading-tight tracking-tight [overflow-wrap:anywhere] sm:text-4xl">Desorganiserad anknytning – när närhet både lockar och skrämmer</h1>
           <p className="mt-5 leading-7 text-neutral-700">Du vill komma nära men känner ett starkt behov av att backa när kontakten blir djupare. När den andra sedan drar sig undan kan längtan bli intensiv igen. Sådana erfarenheter behöver tas på allvar, men ordet desorganiserad används på flera olika sätt. Det är viktigt att förstå vad en beskrivning kan säga och vad den inte kan avgöra.</p>
         </header>
-        <div className="mt-8 rounded-2xl border border-neutral-200 bg-neutral-50 p-5 sm:p-6">
+        <div data-rv="panel" className="mt-8 rounded-2xl border border-neutral-200 bg-neutral-50 p-5 sm:p-6">
           <h2 className="text-xl font-semibold">Utforska dina reaktioner i anknytningstestet</h2>
           <p className="mt-3 leading-7 text-neutral-700">Svara på 30 frågor om närhet, osäkerhet och känslomässigt avstånd. Resultatet är ett stöd för självreflektion, inte en klinisk diagnos eller en bedömning av din partner.</p>
-          <Link href="/anknytningstest/test" className="mt-4 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-neutral-900 px-5 py-3 text-center text-sm font-semibold text-white hover:bg-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900 sm:w-auto">Gör anknytningstestet</Link>
+          <Link data-rv="button" href="/anknytningstest/test" className="mt-4 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-neutral-900 px-5 py-3 text-center text-sm font-semibold text-white hover:bg-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900 sm:w-auto">Gör anknytningstestet</Link>
         </div>
         <section className="mt-10 space-y-4 leading-7 text-neutral-700">
           <h2 className="text-2xl font-semibold tracking-tight text-neutral-900">Varifrån kommer begreppet desorganiserad anknytning?</h2>
@@ -76,8 +77,8 @@ export default function Page() {
         </section>
 
         <p className="mt-10 leading-7 text-neutral-700">I <Link href="/anknytning" className="underline underline-offset-4">huvudguiden om anknytning</Link> finns en samlad förklaring av de vuxna anknytningsdimensionerna. Testet beskriver dina självrapporterade reaktioner och kan inte fastställa desorganiserad anknytning, trauma eller en klinisk diagnos.</p>
-        <Link href="/anknytningstest/test" className="mt-4 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-neutral-900 px-5 py-3 text-center text-sm font-semibold text-white hover:bg-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900 sm:w-auto">Starta anknytningstestet</Link>
+        <Link data-rv="button" href="/anknytningstest/test" className="mt-4 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-neutral-900 px-5 py-3 text-center text-sm font-semibold text-white hover:bg-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900 sm:w-auto">Starta anknytningstestet</Link>
       </article>
-    </main>
+    </main></EditorialSurface>
   );
 }

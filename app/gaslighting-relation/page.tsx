@@ -1,3 +1,4 @@
+import EditorialSurface from "../_components/EditorialSurface";
 // app/gaslighting-relation/page.tsx
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -19,7 +20,7 @@ const articleJsonLd = getEditorialArticleSchema({ route: "/gaslighting-relation"
 
 export default function GaslightingRelationPage() {
   return (
-    <main className="mx-auto max-w-3xl px-4 py-12">
+    <EditorialSurface><main data-rv="container" className="mx-auto max-w-3xl px-4 py-12">
       <EditorialArticleJsonLd data={articleJsonLd} />
       <header className="mb-10">
         <p className="text-sm text-neutral-500">Relationsvarning • Kunskapssida</p>
@@ -33,7 +34,7 @@ export default function GaslightingRelationPage() {
           tydlighet och trygghet.
         </p>
 
-        <div className="mt-6 rounded-2xl border border-neutral-200 bg-neutral-50 p-5">
+        <div data-rv="card" className="mt-6 rounded-2xl border border-neutral-200 bg-neutral-50 p-5">
           <p className="text-sm leading-6 text-neutral-700">
             <strong>Viktig notis:</strong> Detta är allmän information och inte en diagnos, terapi
             eller juridisk rådgivning. Om du känner dig hotad eller riskerar våld, prioritera din
@@ -63,7 +64,7 @@ export default function GaslightingRelationPage() {
 
         {gaslightingImage ? <ArticleImage image={gaslightingImage} /> : null}
 
-        <div
+        <div data-rv="card"
   style={{
     margin: "24px 0",
     padding: 18,
@@ -94,7 +95,7 @@ export default function GaslightingRelationPage() {
     Det kan hjälpa dig att strukturera vad du upplever, utan att ställa diagnos.
   </p>
 
-  <Link
+  <Link data-rv="button"
     href="/gaslightingtest/test"
     style={{
       display: "inline-block",
@@ -138,7 +139,7 @@ export default function GaslightingRelationPage() {
             Här är vanliga exempel, med fokus på <strong>mönster</strong> snarare än enskilda repliker:
           </p>
 
-          <div className="space-y-4 rounded-2xl border border-neutral-200 p-6">
+          <div data-rv="card" className="space-y-4 rounded-2xl border border-neutral-200 p-6">
             <h3 className="text-lg font-semibold">Förnekande av det som hände</h3>
             <p className="leading-7">
               Du tar upp något konkret: ett löfte som bröts, ett hårt ord, en händelse. Den andra
@@ -150,7 +151,7 @@ export default function GaslightingRelationPage() {
             </p>
           </div>
 
-          <div className="space-y-4 rounded-2xl border border-neutral-200 p-6">
+          <div data-rv="card" className="space-y-4 rounded-2xl border border-neutral-200 p-6">
             <h3 className="text-lg font-semibold">Omformulering av din intention</h3>
             <p className="leading-7">
               Du säger: “Jag blev ledsen när du avbröt mig.” Den andra svarar: <em>“Du vill bara
@@ -164,7 +165,7 @@ export default function GaslightingRelationPage() {
             </p>
           </div>
 
-          <div className="space-y-4 rounded-2xl border border-neutral-200 p-6">
+          <div data-rv="card" className="space-y-4 rounded-2xl border border-neutral-200 p-6">
             <h3 className="text-lg font-semibold">Skambeläggning av känslor</h3>
             <p className="leading-7">
               Du reagerar på något och möts av: <em>“Du överreagerar.”</em> <em>“Du är galen.”</em>
@@ -177,7 +178,7 @@ export default function GaslightingRelationPage() {
             </p>
           </div>
 
-          <div className="space-y-4 rounded-2xl border border-neutral-200 p-6">
+          <div data-rv="card" className="space-y-4 rounded-2xl border border-neutral-200 p-6">
             <h3 className="text-lg font-semibold">Flytta målstolparna</h3>
             <p className="leading-7">
               Du anpassar dig, kompromissar, blir tydligare. Ändå blir det fel. När du möter den
@@ -189,7 +190,7 @@ export default function GaslightingRelationPage() {
             </p>
           </div>
 
-          <div className="space-y-4 rounded-2xl border border-neutral-200 p-6">
+          <div data-rv="card" className="space-y-4 rounded-2xl border border-neutral-200 p-6">
             <h3 className="text-lg font-semibold">Triangulering</h3>
             <p className="leading-7">
               Den andra drar in “andra” som auktoritet: <em>“Alla tycker att du är svår.”</em>
@@ -201,7 +202,7 @@ export default function GaslightingRelationPage() {
             </p>
           </div>
 
-          <div className="space-y-4 rounded-2xl border border-neutral-200 p-6">
+          <div data-rv="card" className="space-y-4 rounded-2xl border border-neutral-200 p-6">
             <h3 className="text-lg font-semibold">Samma händelse får en ny version</h3>
             <p className="leading-7">
               Din partner kritiserar dig inför vänner eller läser dina meddelanden utan lov.
@@ -286,7 +287,7 @@ export default function GaslightingRelationPage() {
             Inget enskilt tecken bevisar gaslighting. Det som spelar roll är <strong>helheten</strong>.
             Här är tecken som ofta återkommer:
           </p>
-          <div className="rounded-2xl border border-neutral-200 p-6">
+          <div data-rv="card" className="rounded-2xl border border-neutral-200 p-6">
             <ul className="list-disc space-y-2 pl-5 leading-7">
               <li>du börjar censurera dig själv för att undvika reaktioner</li>
               <li>du känner att du måste “presentera ditt fall” som i en rättegång</li>
@@ -308,7 +309,7 @@ export default function GaslightingRelationPage() {
           </p>
 
           <div className="space-y-6">
-            <div className="rounded-2xl border border-neutral-200 p-6">
+            <div data-rv="card" className="rounded-2xl border border-neutral-200 p-6">
               <h3 className="text-lg font-semibold">Sakta ner samtalet</h3>
               <p className="mt-2 leading-7">
                 Gaslighting lever på tempo. Om du pressas att svara snabbt kan du tappa fotfästet.
@@ -317,7 +318,7 @@ export default function GaslightingRelationPage() {
               </p>
             </div>
 
-            <div className="rounded-2xl border border-neutral-200 p-6">
+            <div data-rv="card" className="rounded-2xl border border-neutral-200 p-6">
               <h3 className="text-lg font-semibold">Håll dig till det konkreta</h3>
               <p className="mt-2 leading-7">
                 Gaslighting försöker ofta dra samtalet till dina “brister” istället för händelsen.
@@ -326,7 +327,7 @@ export default function GaslightingRelationPage() {
               </p>
             </div>
 
-            <div className="rounded-2xl border border-neutral-200 p-6">
+            <div data-rv="card" className="rounded-2xl border border-neutral-200 p-6">
               <h3 className="text-lg font-semibold">Sök en extern verklighetskontroll</h3>
               <p className="mt-2 leading-7">
                 Ett av de mest effektiva skydden är en trygg person utanför relationen. Inte för att
@@ -335,7 +336,7 @@ export default function GaslightingRelationPage() {
               </p>
             </div>
 
-            <div className="rounded-2xl border border-neutral-200 p-6">
+            <div data-rv="card" className="rounded-2xl border border-neutral-200 p-6">
               <h3 className="text-lg font-semibold">Dokumentera för din egen skull</h3>
               <p className="mt-2 leading-7">
                 Om du märker att du blir osäker på vad som händer kan du skriva ner händelser och hur
@@ -344,7 +345,7 @@ export default function GaslightingRelationPage() {
               </p>
             </div>
 
-            <div className="rounded-2xl border border-neutral-200 p-6">
+            <div data-rv="card" className="rounded-2xl border border-neutral-200 p-6">
               <h3 className="text-lg font-semibold">Sätt gränser som handlar om dig</h3>
               <p className="mt-2 leading-7">
                 En gräns är tydlig när den beskriver vad <strong>du</strong> gör: <em>“Om vi börjar
@@ -373,7 +374,7 @@ export default function GaslightingRelationPage() {
             . Du behöver inte “bevisa” något för att ta din oro på allvar.
           </p>
 
-          <div className="rounded-2xl border border-neutral-200 bg-neutral-50 p-6">
+          <div data-rv="card" className="rounded-2xl border border-neutral-200 bg-neutral-50 p-6">
             <p className="leading-7 text-neutral-800">
               <strong>Kom ihåg:</strong> En relation ska inte kräva att du krymper. Om du märker att du
               ständigt anpassar dig för att undvika konflikt, och att din självkänsla blir mindre med tiden,
@@ -403,7 +404,7 @@ export default function GaslightingRelationPage() {
           </p>
         </section>
 
-        <section className="rounded-3xl border border-neutral-200 bg-white p-7 shadow-sm md:p-8">
+        <section data-rv="card" className="rounded-3xl border border-neutral-200 bg-white p-7 shadow-sm md:p-8">
   <h2 className="text-2xl font-semibold tracking-tight text-neutral-950">
     Läs också
   </h2>
@@ -463,7 +464,7 @@ export default function GaslightingRelationPage() {
 
         <p className="pt-2 text-sm leading-6 text-neutral-500">Senast uppdaterad: 2026-03-13</p>
       </article>
-    </main>
+    </main></EditorialSurface>
   );
 }
 
@@ -477,7 +478,7 @@ function InternalCard({
   children: React.ReactNode;
 }) {
   return (
-    <Link
+    <Link data-rv="card"
       href={href}
       className="group rounded-2xl border border-neutral-200 p-5 transition hover:border-neutral-300 hover:bg-neutral-50"
     >

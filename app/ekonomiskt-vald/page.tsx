@@ -1,3 +1,4 @@
+import EditorialSurface from "../_components/EditorialSurface";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { canonicalHost } from "../../content/behaviors";
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
 };
 
 export default function EconomicViolenceGuide() {
-  return <ContentGuide title="Ekonomiskt våld i relation – tecken, exempel och hjälp" intro="Ekonomiskt våld kan handla om att begränsa en partners pengar, utnyttja personens ekonomi eller hindra möjligheten att försörja sig. Det är inte samma sak som att ett hushåll har ont om pengar. Frågan är hur tillgångar, beslut och beroende används i relationen." breadcrumbs={[{ href: "/beteenden", label: "Beteenden" }]}>
+  return <EditorialSurface><ContentGuide title="Ekonomiskt våld i relation – tecken, exempel och hjälp" intro="Ekonomiskt våld kan handla om att begränsa en partners pengar, utnyttja personens ekonomi eller hindra möjligheten att försörja sig. Det är inte samma sak som att ett hushåll har ont om pengar. Frågan är hur tillgångar, beslut och beroende används i relationen." breadcrumbs={[{ href: "/beteenden", label: "Beteenden" }]}>
     <GuideSection title="När pengar blir ett sätt att styra"><p>Kontrollen kan vara tydlig, som att du inte får använda ditt konto. Den kan också vara svårare att sätta ord på: du har pengar på papperet men måste försvara varje inköp eller be om tillstånd att betala en resa. Det kan begränsa både vardagen och möjligheten att förändra relationen.</p><p>En ojämn inkomstfördelning är inte i sig ekonomiskt våld. Det viktiga är om upplägget går att förstå och påverka, och om du kan uttrycka behov utan att bli hotad eller förnedrad.</p></GuideSection>
     <GuideSection title="Tecken och konkreta exempel"><h3 className="text-xl font-semibold text-neutral-900">Pengar och inköp</h3><p>Partnern kan kräva att få hela din inkomst, hålla inne pengar eller bestämma vilka inköp som är tillåtna. Gemensamma besparingar blir något annat när bara en person får avgöra vad den andra behöver, medan de egna utgifterna aldrig ifrågasätts.</p><h3 className="text-xl font-semibold text-neutral-900">Bankkonton och BankID</h3><p>Det kan handla om press att lämna över kontotillgång, logga in eller godkänna något du inte vill. Hjälp med en betalning ska inte innebära att en annan person tar över din e-legitimation. BankID är personligt och säkerhetskoden ska inte lämnas ut.</p><h3 className="text-xl font-semibold text-neutral-900">Lån, skulder och utnyttjande</h3><p>Du kan pressas att stå för lån eller avtal som främst gynnar partnern, utan att få en tydlig bild av villkoren. Om du upptäcker något du inte känner igen behöver du få individuell hjälp; en artikel kan inte avgöra vilket ansvar du har för ett visst avtal.</p><h3 className="text-xl font-semibold text-neutral-900">Arbete och inkomst</h3><p>Återkommande bråk inför arbetspass, krav på att sluta jobba eller hinder för studier kan minska möjligheten till egen försörjning. Det kan börja som ett förslag om hur familjen ska få vardagen att fungera men bli ett upplägg som du inte längre får ompröva.</p></GuideSection>
     <GuideLinksSection />
@@ -20,7 +21,7 @@ export default function EconomicViolenceGuide() {
     <SupportNotice />
     <GuideSection title="Ekonomin kan vara en del av ett större mönster"><p>Om pengar används tillsammans med hot, förnedring eller isolering kan du läsa om <Link href="/psykiskt-vald" className={textLink}>psykiskt våld</Link>. På <Link href="/psykiskt-vald/hjalp" className={textLink}>sidan om hjälp och stöd</Link> finns fler vägar vidare.</p><p>Du hittar fler konkreta situationer i <Link href="/beteenden" className={textLink}>beteendeöversikten</Link>. Du behöver inte avgöra om något är ett brott för att söka stöd kring det du upplever.</p></GuideSection>
     <SourceList ids={["economic", "bankid", "budget", "violence"]} />
-  </ContentGuide>;
+  </ContentGuide></EditorialSurface>;
 }
 
 function GuideLinksSection() {

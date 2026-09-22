@@ -1,3 +1,4 @@
+import EditorialSurface from "../_components/EditorialSurface";
 import type { Metadata } from "next";
 import Link from "next/link";
 import GuideNextSteps from "../_components/GuideNextSteps";
@@ -15,8 +16,8 @@ const textLink = "font-medium underline decoration-neutral-300 underline-offset-
 
 export default function Page() {
   return (
-    <main className="bg-white text-neutral-900">
-      <article className="mx-auto max-w-3xl space-y-12 px-6 py-12 md:py-16">
+    <EditorialSurface><main className="bg-white text-neutral-900">
+      <article data-rv="container" className="mx-auto max-w-3xl space-y-12 px-6 py-12 md:py-16">
         <header className="space-y-5">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-neutral-500">
             Relationsmönster och varningssignaler
@@ -258,6 +259,6 @@ export default function Page() {
         <p className="leading-7 text-neutral-700">Om du ännu försöker förstå tidiga signaler kan du läsa om <Link href="/roda-flaggor-relation" className={textLink}>röda flaggor i relationer</Link>. Om svårigheten främst gäller återkommande gräl finns guiden om <Link href="/brak-i-relation" className={textLink}>bråk och konfliktmönster</Link>.</p>
         <GuideNextSteps sourcePage="/destruktivt-forhallande" />
       </article>
-    </main>
+    </main></EditorialSurface>
   );
 }

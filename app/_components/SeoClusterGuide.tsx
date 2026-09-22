@@ -48,7 +48,7 @@ export default function SeoClusterGuide({ data }: { data: ClusterGuideData }) {
   ];
 
   return <main className="bg-white text-neutral-900">
-    <article className="mx-auto max-w-3xl px-5 py-10 sm:px-6 sm:py-14">
+    <article data-rv="container" className="mx-auto max-w-3xl px-5 py-10 sm:px-6 sm:py-14">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema).replace(/</g, "\\u003c") }} />
       <nav aria-label="Brödsmulor" className="mb-7 text-sm text-neutral-500">
         <Link href="/" className={textLink}>Start</Link><span aria-hidden="true"> / </span>

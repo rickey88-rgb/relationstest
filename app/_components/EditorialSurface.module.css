@@ -1,0 +1,112 @@
+/* Presentation adapters for existing editorial markup. All rules require this
+   opt-in surface, so shared components retain their old appearance in test flows.
+   !important is limited to properties also set by legacy inline article styles. */
+.surface {
+  background: var(--rv-bg);
+  color: var(--rv-text);
+  font-family: var(--rv-sans);
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+.surface main {
+  background: transparent;
+  color: var(--rv-text) !important;
+  font-family: var(--rv-sans) !important;
+}
+
+.surface [data-rv="container"] {
+  width: 100%;
+  max-width: 816px !important;
+  margin-inline: auto !important;
+  padding: 52px 32px 72px !important;
+}
+.surface [data-rv="wide-container"] { max-width: 1152px; margin-inline: auto; }
+.surface [data-rv="dot"] { background: #68796a; flex-shrink: 0; }
+
+.surface :where(h1, h2, h3) {
+  font-family: var(--rv-serif);
+  font-weight: 400;
+  color: var(--rv-text) !important;
+  text-wrap: balance;
+}
+.surface h1 { font-size: clamp(2.25rem, 3.65vw, 3.6rem) !important; line-height: 1.12 !important; letter-spacing: -.04em !important; }
+.surface h2 { font-size: clamp(1.65rem, 2.8vw, 2.35rem) !important; line-height: 1.22 !important; letter-spacing: -.025em; }
+.surface h3 { font-size: 1.35rem; line-height: 1.3; letter-spacing: -.02em; }
+.surface :where(p, li, dd) { line-height: 1.8; }
+.surface p { text-wrap: pretty; }
+.surface :where(p, h1, h2, h3)[style] { opacity: 1 !important; }
+.surface :where(p, li, dd, a, span, div)[style*="color:"] { color: inherit !important; }
+.surface :where(article, main) > section + section { margin-top: 44px; }
+.surface :where(article, main) > header + section { margin-top: 40px; }
+.surface :where(section, header, article, main) > p + p { margin-top: 16px; }
+.surface :where(section, article, main) > h2 + :where(p, ul, div) { margin-top: 18px; }
+.surface :where(article, main) > header > p:not([class*="uppercase"]):not(:first-child) { line-height: 1.8; }
+.surface :where([class*="text-neutral-5"], [class*="text-neutral-6"], [class*="text-neutral-7"]) { color: var(--rv-muted); }
+.surface :where([class*="text-neutral-8"], [class*="text-neutral-9"]) { color: var(--rv-text); }
+.surface :where([class*="border-neutral-"]) { border-color: var(--rv-border); }
+.surface :where([class*="bg-neutral-50"], [class*="bg-white"]) { background-color: var(--rv-surface); }
+.surface nav[aria-label="Brödsmulor"] { font-size: .8rem; color: var(--rv-muted); line-height: 1.7; }
+.surface nav[aria-label="Brödsmulor"] a { display: inline-flex; align-items: center; min-height: 44px; }
+.surface :where(a, button, summary) { transition: color 160ms, background-color 160ms, border-color 160ms; }
+.surface a:not([data-rv]) { text-decoration-color: #b8b9aa; text-underline-offset: 4px; }
+.surface a:not([data-rv]):hover { color: var(--rv-rose); }
+.surface :where(a, button, summary):focus-visible { outline: 3px solid var(--rv-focus); outline-offset: 5px; }
+.surface :where(section[id], h2[id], h3[id]) { scroll-margin-top: 24px; }
+
+/* Shared cards, callouts and CTA panels retain their original content/links. */
+.surface :is([data-rv="card"], [class~="rv-card"]), .surface [data-rv="callout"], .surface [data-rv="panel"] {
+  min-width: 0;
+  border: 1px solid var(--rv-border) !important;
+  border-radius: var(--rv-card-radius) !important;
+  padding: 26px !important;
+  background: var(--rv-surface) !important;
+  color: var(--rv-text) !important;
+  box-shadow: none;
+}
+.surface [data-rv="callout"] { background: var(--rv-beige) !important; border-radius: var(--rv-panel-radius) !important; }
+.surface [data-rv="panel"] { background: var(--rv-sage-soft) !important; border-color: #c7d3c7 !important; border-radius: var(--rv-panel-radius) !important; }
+.surface aside[data-rv="callout"] { background: var(--rv-rose-soft) !important; }
+.surface :is([data-rv="panel"], [data-rv="callout"]) :where([class*="text-neutral-5"], [class*="text-neutral-6"], [class*="text-neutral-7"]) { color: var(--rv-text); }
+.surface a:is([data-rv="card"], [class~="rv-card"]) { display: block; min-height: 48px; text-decoration: none; }
+.surface a:is([data-rv="card"], [class~="rv-card"]):hover { border-color: #9ead9f !important; background: #e4eae1 !important; }
+.surface :is([data-rv="card"], [class~="rv-card"]) :where(h2, h3) { font-size: 1.4rem !important; }
+.surface :where(h3, p)[class*="uppercase"] { font-family: var(--rv-sans); font-size: .65rem !important; font-weight: 600; letter-spacing: .16em; line-height: 1.7; }
+
+.surface a:is([data-rv="button"], [class~="rv-button"]) {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--rv-button-height);
+  max-width: 100%;
+  gap: 16px;
+  padding: 14px 24px !important;
+  border: 1px solid transparent !important;
+  border-radius: var(--rv-button-radius) !important;
+  background: var(--rv-rose) !important;
+  color: var(--rv-surface) !important;
+  font: 600 .9rem/1.5 var(--rv-sans);
+  text-align: center;
+  text-decoration: none !important;
+}
+.surface a:is([data-rv="button"], [class~="rv-button"]):hover { background: var(--rv-rose-hover) !important; }
+.surface a:is([data-rv="button"], [class~="rv-button"]):focus-visible { outline: 3px solid var(--rv-focus); outline-offset: 5px; }
+.surface figure { border-radius: var(--rv-panel-radius); border-color: var(--rv-border); background: var(--rv-surface); }
+.surface img { max-width: 100%; }
+.surface table { width: 100%; font-size: .9rem; }
+.surface :where(th, td) { overflow-wrap: anywhere; }
+.surface [data-rv="site-header"] { border-bottom: 1px solid var(--rv-border); }
+.surface [data-rv="site-header"] > div { max-width: 1200px; min-height: 84px; }
+
+@media (max-width: 700px) {
+  .surface [data-rv="container"] { padding: 32px 20px 48px !important; }
+  .surface h1 { font-size: 2.25rem !important; }
+  .surface h2 { font-size: 1.8rem !important; }
+  .surface :where(article, main) > section + section { margin-top: 32px; }
+  .surface :is([data-rv="card"], [class~="rv-card"]), .surface [data-rv="callout"], .surface [data-rv="panel"] { padding: 24px !important; }
+  .surface a:is([data-rv="button"], [class~="rv-button"]) { width: 100%; padding-inline: 18px !important; }
+  .surface [data-rv="site-header"] > div { min-height: 72px; padding-inline: 20px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .surface :where(a, button, summary) { transition: none; }
+}

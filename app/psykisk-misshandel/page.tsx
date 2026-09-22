@@ -1,3 +1,4 @@
+import EditorialSurface from "../_components/EditorialSurface";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { EditorialArticleJsonLd, getEditorialArticleSchema, getEditorialMetadata } from "../_seo/editorialSeo";
@@ -15,7 +16,7 @@ const articleJsonLd = getEditorialArticleSchema({ route: "/psykisk-misshandel", 
 
 export default function Page() {
   return (
-    <main
+    <EditorialSurface><main data-rv="container"
       style={{
         maxWidth: 820,
         margin: "0 auto",
@@ -70,7 +71,7 @@ export default function Page() {
         </p>
       </header>
 
-      <section
+      <section data-rv="panel"
         style={{
           marginTop: 30,
           padding: 24,
@@ -89,7 +90,7 @@ export default function Page() {
           och påverkan på din självkänsla och frihet.
         </p>
 
-        <Link
+        <Link data-rv="button"
           href="/psykisk-misshandel-relation/test"
           style={{
             display: "inline-block",
@@ -179,7 +180,7 @@ export default function Page() {
               "Ett nej leder till press, skuld, konflikt eller andra konsekvenser tills du till slut ger efter.",
             ],
           ].map(([title, text]) => (
-            <div
+            <div data-rv="card"
               key={title}
               style={{
                 padding: 20,
@@ -224,7 +225,7 @@ export default function Page() {
 </Link>
       </section>
 
-      <section
+      <section data-rv="card"
         style={{
           marginTop: 42,
           padding: 24,
@@ -363,7 +364,7 @@ export default function Page() {
         </Link>
       </section>
 
-      <section
+      <section data-rv="panel"
         style={{
           marginTop: 42,
           padding: 24,
@@ -382,7 +383,7 @@ export default function Page() {
           relation.
         </p>
 
-        <Link
+        <Link data-rv="button"
           href="/psykisk-misshandel-relation/test"
           style={{
             display: "inline-block",
@@ -424,7 +425,7 @@ export default function Page() {
         </Link>
       </section>
 
-      <section
+      <section data-rv="card"
         style={{
           marginTop: 42,
           padding: 24,
@@ -454,7 +455,7 @@ export default function Page() {
         <h2 style={{ fontSize: 30 }}>Läs vidare</h2>
 
         <div style={{ display: "grid", gap: 12 }}>
-          <Link
+          <Link data-rv="card"
             href="/psykiskt-vald"
             style={{
               padding: 16,
@@ -468,7 +469,7 @@ export default function Page() {
             Psykiskt våld – komplett guide →
           </Link>
 
-          <Link
+          <Link data-rv="card"
             href="/psykiskt-vald/vad-raknas-som"
             style={{
               padding: 16,
@@ -482,7 +483,7 @@ export default function Page() {
             Vad räknas som psykiskt våld? →
           </Link>
 
-          <Link
+          <Link data-rv="card"
             href="/psykiskt-vald/exempel"
             style={{
               padding: 16,
@@ -496,7 +497,7 @@ export default function Page() {
             Konkreta exempel på psykiskt våld →
           </Link>
 
-          <Link
+          <Link data-rv="card"
             href="/psykiskt-vald/hjalp"
             style={{
               padding: 16,
@@ -554,6 +555,6 @@ export default function Page() {
         </div>
       </section>
 
-    </main>
+    </main></EditorialSurface>
   );
 }

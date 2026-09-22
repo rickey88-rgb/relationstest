@@ -1,3 +1,5 @@
+import EditorialSurface from "../_components/EditorialSurface";
+import Brand from "../_components/Brand";
 import Link from "next/link";
 import type { Metadata } from "next";
 
@@ -12,16 +14,16 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <main className="min-h-screen bg-white text-neutral-900">
+    <EditorialSurface><main className="min-h-screen bg-white text-neutral-900">
       {/* Topbar */}
-      <header className="border-b border-neutral-200/70">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
+      <header data-rv="site-header" className="border-b border-neutral-200/70">
+        <div data-rv="wide-container" className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
           <Link href="/" className="text-sm font-semibold tracking-tight">
-            Relationsvarning
+            <Brand />
           </Link>
           <div className="hidden sm:flex items-center gap-3 text-xs text-neutral-600">
             <span className="inline-flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-neutral-900" />
+              <span data-rv="dot" className="h-1.5 w-1.5 rounded-full bg-neutral-900" />
               Resurs
             </span>
             <span>•</span>
@@ -31,7 +33,7 @@ export default function Page() {
       </header>
 
       {/* Content */}
-      <article className="mx-auto max-w-5xl px-6 py-10 sm:py-14">
+      <article data-rv="wide-container" className="mx-auto max-w-5xl px-6 py-10 sm:py-14">
         <div className="grid gap-10 lg:grid-cols-12 lg:gap-12">
           {/* Main */}
           <div className="lg:col-span-8">
@@ -68,7 +70,7 @@ export default function Page() {
             </p>
 
             {/* Quick CTA */}
-            <div className="mt-7 flex flex-col gap-3 rounded-2xl border border-neutral-200/70 bg-neutral-50 p-5 sm:flex-row sm:items-center sm:justify-between">
+            <div data-rv="panel" className="mt-7 flex flex-col gap-3 rounded-2xl border border-neutral-200/70 bg-neutral-50 p-5 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <p className="text-sm font-semibold tracking-tight">
                   Vill du få en strukturerad indikation?
@@ -77,7 +79,7 @@ export default function Page() {
                   Gör testet anonymt och svara utifrån den andra personens beteenden.
                 </p>
               </div>
-              <Link
+              <Link data-rv="button"
                 href="/test"
                 className="inline-flex items-center justify-center rounded-xl bg-neutral-900 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-2"
               >
@@ -226,7 +228,7 @@ export default function Page() {
             </p>
 
             <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
-              <Link
+              <Link data-rv="button"
                 href="/test"
                 className="inline-flex w-full items-center justify-center rounded-xl bg-neutral-900 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-2 sm:w-auto"
               >
@@ -270,7 +272,7 @@ export default function Page() {
               </ul>
             </div>
 
-            <section className="rounded-3xl border border-neutral-200 bg-white p-7 shadow-sm md:p-8">
+            <section data-rv="card" className="rounded-3xl border border-neutral-200 bg-white p-7 shadow-sm md:p-8">
   <h2 className="text-2xl font-semibold tracking-tight text-neutral-950">
     Läs också
   </h2>
@@ -312,7 +314,7 @@ export default function Page() {
 
           {/* Sidebar */}
           <aside className="lg:col-span-4">
-            <div className="rounded-2xl border border-neutral-200/70 p-6 shadow-[0_1px_0_rgba(0,0,0,0.02)]">
+            <div data-rv="card" className="rounded-2xl border border-neutral-200/70 p-6 shadow-[0_1px_0_rgba(0,0,0,0.02)]">
               <h2 className="text-sm font-semibold tracking-tight">
                 Snabb check
               </h2>
@@ -323,31 +325,31 @@ export default function Page() {
 
               <ul className="mt-4 space-y-2 text-sm text-neutral-700">
                 <li className="flex gap-3">
-                  <span className="mt-1 h-1.5 w-1.5 rounded-full bg-neutral-900" />
+                  <span data-rv="dot" className="mt-1 h-1.5 w-1.5 rounded-full bg-neutral-900" />
                   Du känner dig ofta spänd eller vaksam hemma
                 </li>
                 <li className="flex gap-3">
-                  <span className="mt-1 h-1.5 w-1.5 rounded-full bg-neutral-900" />
+                  <span data-rv="dot" className="mt-1 h-1.5 w-1.5 rounded-full bg-neutral-900" />
                   Du “förklarar bort” saker för att få vardagen att fungera
                 </li>
                 <li className="flex gap-3">
-                  <span className="mt-1 h-1.5 w-1.5 rounded-full bg-neutral-900" />
+                  <span data-rv="dot" className="mt-1 h-1.5 w-1.5 rounded-full bg-neutral-900" />
                   Konflikter slutar sällan med förståelse – bara med tystnad
                 </li>
                 <li className="flex gap-3">
-                  <span className="mt-1 h-1.5 w-1.5 rounded-full bg-neutral-900" />
+                  <span data-rv="dot" className="mt-1 h-1.5 w-1.5 rounded-full bg-neutral-900" />
                   Du tar mer ansvar ju mer fel det känns
                 </li>
               </ul>
 
-              <div className="mt-6 rounded-xl bg-neutral-50 p-4">
+              <div data-rv="panel" className="mt-6 rounded-xl bg-neutral-50 p-4">
                 <p className="text-sm font-semibold text-neutral-900">
                   Gör testet
                 </p>
                 <p className="mt-1 text-sm text-neutral-700">
                   Få en indikation baserad på dina svar – anonymt.
                 </p>
-                <Link
+                <Link data-rv="button"
                   href="/test"
                   className="mt-3 inline-flex w-full items-center justify-center rounded-xl bg-neutral-900 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-2"
                 >
@@ -356,7 +358,7 @@ export default function Page() {
               </div>
             </div>
 
-            <div className="mt-6 rounded-2xl border border-neutral-200/70 p-6">
+            <div data-rv="card" className="mt-6 rounded-2xl border border-neutral-200/70 p-6">
               <h2 className="text-sm font-semibold tracking-tight">
                 Viktigt att komma ihåg
               </h2>
@@ -374,6 +376,6 @@ export default function Page() {
         </div>
       </article>
 
-    </main>
+    </main></EditorialSurface>
   );
 }

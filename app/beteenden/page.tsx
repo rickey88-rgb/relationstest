@@ -1,3 +1,4 @@
+import EditorialSurface from "../_components/EditorialSurface";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { behaviors, canonicalHost } from "../../content/behaviors";
@@ -19,11 +20,11 @@ const groups = [
 ];
 
 export default function BehaviorsHub() {
-  return <ContentGuide title="Beteenden i relationer – kontroll, manipulation och varningssignaler" intro="Utgå från det som händer i din vardag. Här finns 15 konkreta situationer med exempel, skillnader att fundera över och möjliga nästa steg. Du behöver inte först hitta en etikett för partnern eller relationen.">
+  return <EditorialSurface><ContentGuide title="Beteenden i relationer – kontroll, manipulation och varningssignaler" intro="Utgå från det som händer i din vardag. Här finns 15 konkreta situationer med exempel, skillnader att fundera över och möjliga nästa steg. Du behöver inte först hitta en etikett för partnern eller relationen.">
     <GuideSection title="Hur du kan använda översikten"><p>Välj det beteende som ligger närmast din fråga. Läs sedan om sammanhanget: upprepas det, kan du säga nej och vad händer när du gör det? Enstaka händelser beskriver inte hela en relation, men ett allvarligt hot behöver tas på allvar även första gången.</p><p>Texten kan hjälpa dig att sätta ord på en upplevelse. Den avgör inte någons diagnos, avsikt eller juridiska ansvar. Flera beteenden kan förekomma samtidigt utan att du behöver läsa allt för att söka stöd.</p></GuideSection>
     {groups.map((group) => <GuideSection key={group.id} title={group.title}><p>{group.intro}</p><GuideLinks links={behaviors.filter((page) => page.group === group.id).map((page) => ({ href: `/beteenden/${page.slug}`, label: page.h1 }))} /></GuideSection>)}
     <SupportNotice />
     <GuideSection title="Förstå det större mönstret"><GuideLinks links={[{ href: "/digitalt-vald", label: "Digitalt våld – konton, mobil och övervakning" }, { href: "/ekonomiskt-vald", label: "Ekonomiskt våld – pengar, beroende och hjälp" }, { href: "/kontrollerande-relation", label: "Kontrollerande partner – vanliga tecken" }, { href: "/psykiskt-vald", label: "Psykiskt våld – översikt och stöd" }]} /></GuideSection>
     <GuideSection title="Test som nästa steg, om du vill"><p>För en bredare reflektion finns <Link href="/psykisk-misshandel-relation/test" className={textLink}>testet om psykisk misshandel och psykiskt våld</Link>. Om du särskilt känner igen återkommande förnekanden eller tvivel på din egen upplevelse finns <Link href="/gaslightingtest/test" className={textLink}>gaslightingtestet</Link>.</p><p>Testerna är inte diagnoser eller juridiska bedömningar. Stöd och säkerhetsinformation finns tillgängligt utan test eller köp.</p></GuideSection>
-  </ContentGuide>;
+  </ContentGuide></EditorialSurface>;
 }

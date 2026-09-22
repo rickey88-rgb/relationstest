@@ -1,3 +1,4 @@
+import EditorialSurface from "../_components/EditorialSurface";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { EditorialArticleJsonLd, getEditorialArticleSchema, getEditorialMetadata } from "../_seo/editorialSeo";
@@ -21,13 +22,13 @@ function TestCta({
   text: string;
 }) {
   return (
-    <div className="my-10 rounded-2xl border border-neutral-200 bg-neutral-50 p-6">
+    <div data-rv="panel" className="my-10 rounded-2xl border border-neutral-200 bg-neutral-50 p-6">
       <h2 className="text-xl font-semibold tracking-tight text-neutral-900">
         {title}
       </h2>
       <p className="mt-3 leading-7 text-neutral-700">{text}</p>
       <div className="mt-4">
-        <Link
+        <Link data-rv="button"
           href="/test"
           className="inline-flex rounded-full bg-neutral-900 px-5 py-3 text-sm font-medium text-white transition hover:bg-neutral-800"
         >
@@ -40,9 +41,9 @@ function TestCta({
 
 export default function NarcissistRelationPage() {
   return (
-    <main className="bg-white text-neutral-900">
+    <EditorialSurface><main className="bg-white text-neutral-900">
       <EditorialArticleJsonLd data={articleJsonLd} />
-      <article className="mx-auto max-w-3xl px-6 py-14 md:px-8 md:py-20">
+      <article data-rv="container" className="mx-auto max-w-3xl px-6 py-14 md:px-8 md:py-20">
         <header className="max-w-3xl">
           <p className="text-sm font-medium uppercase tracking-[0.18em] text-neutral-500">
             Relationsvarning
@@ -51,7 +52,7 @@ export default function NarcissistRelationPage() {
             Narcissist i en relation – tecken, beteenden och varningssignaler
           </h1>
           <div className="mt-6">
-            <Link
+            <Link data-rv="button"
               href="/narcissist-i-en-relation/test"
               className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-neutral-900 px-5 py-3 text-center text-sm font-medium text-white transition hover:bg-neutral-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 sm:w-auto"
             >
@@ -582,12 +583,12 @@ export default function NarcissistRelationPage() {
             ignorera den inre signal som redan försökt fånga din uppmärksamhet länge.
             Ibland är obehaget inte överdrivet. Ibland är det information.
           </p>
-          <div className="rounded-2xl border border-neutral-200 bg-neutral-50 p-6">
+          <div data-rv="panel" className="rounded-2xl border border-neutral-200 bg-neutral-50 p-6">
             <p className="mb-4 leading-7 text-neutral-700">
               Vill du undersöka mönstren mer strukturerat? Narcissisttestet hjälper
               dig att reflektera över beteenden i relationen utan att ställa en diagnos.
             </p>
-            <Link
+            <Link data-rv="button"
               href="/narcissist-i-en-relation/test"
               className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-neutral-900 px-5 py-3 text-center text-sm font-medium text-white transition hover:bg-neutral-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 sm:w-auto"
             >
@@ -667,7 +668,7 @@ export default function NarcissistRelationPage() {
           </div>
         </section>
 
-        <section className="mt-14 rounded-2xl border border-neutral-200 p-6">
+        <section data-rv="card" className="mt-14 rounded-2xl border border-neutral-200 p-6">
           <h2 className="text-2xl font-semibold tracking-tight text-neutral-950">
             Läs mer
           </h2>
@@ -750,6 +751,6 @@ export default function NarcissistRelationPage() {
           vem någon är. Det viktiga är hur relationen påverkar dig över tid.
         </p>
       </article>
-    </main>
+    </main></EditorialSurface>
   );
 }

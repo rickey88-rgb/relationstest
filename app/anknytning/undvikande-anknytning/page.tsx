@@ -1,3 +1,4 @@
+import EditorialSurface from "../../_components/EditorialSurface";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -9,17 +10,17 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <main className="mx-auto max-w-3xl px-4 py-10 text-neutral-900 sm:px-6 sm:py-14">
+    <EditorialSurface><main data-rv="container" className="mx-auto max-w-3xl px-4 py-10 text-neutral-900 sm:px-6 sm:py-14">
       <article>
         <Link href="/anknytning" className="inline-flex min-h-11 items-center text-sm text-neutral-600 underline underline-offset-4">Till huvudguiden om anknytning</Link>
         <header className="mt-4">
           <h1 className="text-3xl font-semibold leading-tight tracking-tight [overflow-wrap:anywhere] sm:text-4xl">Undvikande anknytning i relationer</h1>
           <p className="mt-5 leading-7 text-neutral-700">Du kan längta efter en relation och ändå känna ett behov av att backa när någon kommer nära. Undvikande anknytningsmönster handlar om hur sårbarhet och beroende hanteras, inte om att sakna känslor. Att se vad som händer i konkreta situationer är mer användbart än att kalla sig själv eller partnern för ”en undvikare”.</p>
         </header>
-        <div className="mt-8 rounded-2xl border border-neutral-200 bg-neutral-50 p-5 sm:p-6">
+        <div data-rv="panel" className="mt-8 rounded-2xl border border-neutral-200 bg-neutral-50 p-5 sm:p-6">
           <h2 className="text-xl font-semibold">Utforska dina reaktioner i anknytningstestet</h2>
           <p className="mt-3 leading-7 text-neutral-700">Svara på 30 frågor om närhet, osäkerhet och känslomässigt avstånd. Resultatet är ett stöd för självreflektion, inte en klinisk diagnos eller en bedömning av din partner.</p>
-          <Link href="/anknytningstest/test" className="mt-4 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-neutral-900 px-5 py-3 text-center text-sm font-semibold text-white hover:bg-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900 sm:w-auto">Gör anknytningstestet</Link>
+          <Link data-rv="button" href="/anknytningstest/test" className="mt-4 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-neutral-900 px-5 py-3 text-center text-sm font-semibold text-white hover:bg-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900 sm:w-auto">Gör anknytningstestet</Link>
         </div>
         <section className="mt-10 space-y-4 leading-7 text-neutral-700">
           <h2 className="text-2xl font-semibold tracking-tight text-neutral-900">Vad innebär undvikande anknytning?</h2>
@@ -71,8 +72,8 @@ export default function Page() {
         </section>
 
         <p className="mt-10 leading-7 text-neutral-700">I <Link href="/anknytning" className="underline underline-offset-4">huvudguiden om anknytning</Link> finns det bredare perspektivet på dimensioner, relationens villkor och förändring. I testet kan du reflektera över hur både närhet och osäkerhet påverkar dig.</p>
-        <Link href="/anknytningstest/test" className="mt-4 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-neutral-900 px-5 py-3 text-center text-sm font-semibold text-white hover:bg-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900 sm:w-auto">Starta anknytningstestet</Link>
+        <Link data-rv="button" href="/anknytningstest/test" className="mt-4 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-neutral-900 px-5 py-3 text-center text-sm font-semibold text-white hover:bg-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900 sm:w-auto">Starta anknytningstestet</Link>
       </article>
-    </main>
+    </main></EditorialSurface>
   );
 }

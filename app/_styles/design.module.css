@@ -1,0 +1,26 @@
+/* The approved homepage palette. Opt-in: never applied to :root or body. */
+.tokens {
+  --rv-bg: #f7f3ef;
+  --rv-surface: #fffdfb;
+  --rv-text: #24312b;
+  --rv-muted: #626d66;
+  --rv-rose: #9d5663;
+  --rv-rose-hover: #844451;
+  --rv-rose-soft: #e9d1cf;
+  --rv-sage-soft: #d7e0d6;
+  --rv-beige: #ede4db;
+  --rv-border: #ddd5cd;
+  --rv-focus: #576f60;
+  --rv-serif: Georgia, "Times New Roman", serif;
+  --rv-sans: Arial, Helvetica, sans-serif;
+  --rv-card-radius: 26px;
+  --rv-panel-radius: 28px;
+  --rv-button-radius: 12px;
+  --rv-button-height: 52px;
+}
+
+.brand { font-size: 1.1rem; font-weight: 600; letter-spacing: -.035em; display: flex; align-items: center; gap: 12px; color: var(--rv-text, #24312b); }
+.brandMark { width: 35px; height: 39px; flex-shrink: 0; color: var(--rv-text, #24312b); }
+@media (max-width: 700px) {
+  .brand { font-size: 1rem; }
+}

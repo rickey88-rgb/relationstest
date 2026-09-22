@@ -1,3 +1,4 @@
+import EditorialSurface from "../_components/EditorialSurface";
 import Link from "next/link";
 
 export const metadata = {
@@ -11,7 +12,7 @@ export const metadata = {
 
 export default function Page() {
   return (
-    <main className="mx-auto max-w-3xl px-6 py-12">
+    <EditorialSurface><main data-rv="container" className="mx-auto max-w-3xl px-6 py-12">
       <article className="space-y-6">
         <h1 className="text-3xl font-semibold">
           Manipulativ partner: tecken, mönster och hur du kan orientera dig tryggt
@@ -437,7 +438,7 @@ export default function Page() {
           vänja dig vid något som steg för steg gör dig mindre trygg i dig själv.
         </p>
 
-        <div className="rounded-2xl border border-neutral-200 bg-neutral-50 p-6 space-y-3">
+        <div data-rv="card" className="rounded-2xl border border-neutral-200 bg-neutral-50 p-6 space-y-3">
           <h2 className="text-2xl font-semibold">Behöver du en tydligare bild?</h2>
           <p>
             När något har pågått länge blir det lätt att normalisera det. Om du vill
@@ -483,7 +484,7 @@ export default function Page() {
           .
           Om du känner igen just sådana mönster kan du också <Link href="/gaslightingtest/test" className="underline">göra gaslightingtestet</Link> för att reflektera över dina erfarenheter.
         </p>
-        <section className="rounded-3xl border border-neutral-200 bg-white p-7 shadow-sm md:p-8">
+        <section data-rv="card" className="rounded-3xl border border-neutral-200 bg-white p-7 shadow-sm md:p-8">
   <h2 className="text-2xl font-semibold tracking-tight text-neutral-950">
     Läs också
   </h2>
@@ -558,6 +559,6 @@ export default function Page() {
           stöd hos vården eller en stödlinje. Vid akut fara, ring 112.
         </p>
       </article>
-    </main>
+    </main></EditorialSurface>
   );
 }

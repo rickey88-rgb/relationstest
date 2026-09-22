@@ -11,7 +11,7 @@ export function ContentGuide({ title, intro, breadcrumbs = [], children }: {
   children: ReactNode;
 }) {
   return (
-    <main className="mx-auto max-w-3xl px-4 py-10 text-neutral-900 [overflow-wrap:anywhere] sm:px-6 sm:py-14">
+    <main data-rv="container" className="mx-auto max-w-3xl px-4 py-10 text-neutral-900 [overflow-wrap:anywhere] sm:px-6 sm:py-14">
       <nav aria-label="Brödsmulor" className="text-sm text-neutral-600">
         <ol className="flex flex-wrap items-center gap-x-2">
           <li><Link href="/" className={`inline-flex min-h-11 items-center ${textLink}`}>Startsida</Link></li>
@@ -35,11 +35,11 @@ export function GuideSection({ title, children }: { title: string; children: Rea
 }
 
 export function GuideLinks({ links }: { links: ContentLink[] }) {
-  return <ul className="grid gap-3 sm:grid-cols-2">{links.map((link) => <li key={link.href} className="min-w-0"><Link href={link.href} className="flex min-h-12 h-full items-center rounded-2xl border border-neutral-200 bg-neutral-50 p-4 font-medium leading-6 text-neutral-900 hover:bg-neutral-100">{link.label}</Link></li>)}</ul>;
+  return <ul className="grid gap-3 sm:grid-cols-2">{links.map((link) => <li key={link.href} className="min-w-0"><Link data-rv="card" href={link.href} className="flex min-h-12 h-full items-center rounded-2xl border border-neutral-200 bg-neutral-50 p-4 font-medium leading-6 text-neutral-900 hover:bg-neutral-100">{link.label}</Link></li>)}</ul>;
 }
 
 export function SupportNotice() {
-  return <aside aria-label="Hjälp och säkerhet" className="mt-8 space-y-3 rounded-2xl border border-neutral-200 bg-neutral-50 p-5 leading-7">
+  return <aside data-rv="callout" aria-label="Hjälp och säkerhet" className="mt-8 space-y-3 rounded-2xl border border-neutral-200 bg-neutral-50 p-5 leading-7">
     <p>Om du känner rädsla eller utsätts för hot kan du söka stöd utan att först göra ett test, köpa en analys eller veta hur beteendet ska benämnas. <strong>Vid akut fara, ring 112.</strong></p>
     <Link href="/psykiskt-vald/hjalp" className={`inline-flex min-h-11 items-center ${textLink}`}>Vägar till stöd och hjälp</Link>
   </aside>;

@@ -1,3 +1,4 @@
+import EditorialSurface from "../_components/EditorialSurface";
 import type { Metadata } from "next";
 import Link from "next/link";
 import GuideNextSteps from "../_components/GuideNextSteps";
@@ -10,17 +11,17 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <main className="mx-auto max-w-3xl px-4 py-10 text-neutral-900 sm:px-6 sm:py-14">
+    <EditorialSurface><main data-rv="container" className="mx-auto max-w-3xl px-4 py-10 text-neutral-900 sm:px-6 sm:py-14">
       <article>
         <Link href="/" className="inline-flex min-h-11 items-center text-sm text-neutral-600 underline underline-offset-4">Till Relationsvarning</Link>
         <header className="mt-4">
           <h1 className="text-3xl font-semibold leading-tight tracking-tight [overflow-wrap:anywhere] sm:text-4xl">Anknytning i relationer – förstå ditt anknytningsmönster</h1>
           <p className="mt-5 leading-7 text-neutral-700">Hur är det för dig att behöva någon? Kan du be om närhet, vänta på ett svar och vara oense utan att relationen känns hotad? Anknytning ger ett språk för sådana erfarenheter. Det kan hjälpa dig att förstå återkommande reaktioner, men säger inte allt om dig, din partner eller hur ni har det tillsammans.</p>
         </header>
-        <div className="mt-8 rounded-2xl border border-neutral-200 bg-neutral-50 p-5 sm:p-6">
+        <div data-rv="panel" className="mt-8 rounded-2xl border border-neutral-200 bg-neutral-50 p-5 sm:p-6">
           <h2 className="text-xl font-semibold">Utforska dina reaktioner i anknytningstestet</h2>
           <p className="mt-3 leading-7 text-neutral-700">Svara på 30 frågor om närhet, osäkerhet och känslomässigt avstånd. Resultatet är ett stöd för självreflektion, inte en klinisk diagnos eller en bedömning av din partner.</p>
-          <Link href="/anknytningstest/test" className="mt-4 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-neutral-900 px-5 py-3 text-center text-sm font-semibold text-white hover:bg-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900 sm:w-auto">Gör anknytningstestet</Link>
+          <Link data-rv="button" href="/anknytningstest/test" className="mt-4 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-neutral-900 px-5 py-3 text-center text-sm font-semibold text-white hover:bg-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900 sm:w-auto">Gör anknytningstestet</Link>
           <p className="mt-4 text-sm leading-6 text-neutral-600">
             Vill du i stället se hur relationen fungerar inom flera områden kan du{" "}
             <Link href="/ar-min-relation-sund" className="font-semibold text-neutral-900 underline underline-offset-4">
@@ -102,6 +103,6 @@ export default function Page() {
 
         <GuideNextSteps sourcePage="/anknytning" />
       </article>
-    </main>
+    </main></EditorialSurface>
   );
 }

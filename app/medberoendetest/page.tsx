@@ -1,3 +1,4 @@
+import EditorialSurface from "../_components/EditorialSurface";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <main
+    <EditorialSurface><main data-rv="container"
       style={{
         maxWidth: 760,
         margin: "0 auto",
@@ -60,7 +61,7 @@ export default function Page() {
         Vill du läsa mer innan du gör testet? Vår <Link href="/medberoende" className="underline underline-offset-4">huvudguide om medberoende</Link> förklarar skillnaden mellan omtanke och överansvar och leder vidare till tecken, vardagsexempel och gränssättning.
       </p>
 
-      <Link
+      <Link data-rv="button"
         href="/medberoendetest/test"
         style={{
           display: "inline-flex",
@@ -211,7 +212,7 @@ export default function Page() {
         </div>
       </section>
 
-      <section
+      <section data-rv="card"
         style={{
           marginTop: 40,
           padding: "22px 18px",
@@ -228,7 +229,7 @@ export default function Page() {
           tydligast i dina svar.
         </p>
 
-        <Link
+        <Link data-rv="button"
           href="/medberoendetest/test"
           style={{
             display: "inline-flex",
@@ -262,7 +263,7 @@ export default function Page() {
         Resultatet beskriver relationsmönster utifrån dina egna svar och bör
         förstås tillsammans med din faktiska situation.
       </p>
-    </main>
+    </main></EditorialSurface>
   );
 }
 

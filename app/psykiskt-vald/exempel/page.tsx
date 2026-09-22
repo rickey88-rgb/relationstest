@@ -1,3 +1,4 @@
+import EditorialSurface from "../../_components/EditorialSurface";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <main
+    <EditorialSurface><main data-rv="container"
       style={{
         maxWidth: 820,
         margin: "0 auto",
@@ -60,7 +61,7 @@ export default function Page() {
         </p>
       </header>
 
-      <section
+      <section data-rv="panel"
         style={{
           marginTop: 30,
           padding: 24,
@@ -84,7 +85,7 @@ export default function Page() {
       <section style={{ marginTop: 42 }}>
         <h2 style={{ fontSize: 30 }}>Exempel 1: Du får alltid skulden</h2>
 
-        <div
+        <div data-rv="card"
           style={{
             padding: 20,
             border: "1px solid #e4e4e4",
@@ -117,7 +118,7 @@ export default function Page() {
           Exempel 2: Du blir förminskad som person
         </h2>
 
-        <div
+        <div data-rv="card"
           style={{
             padding: 20,
             border: "1px solid #e4e4e4",
@@ -133,7 +134,7 @@ export default function Page() {
             Du kanske får höra att du är dum, värdelös, psykiskt instabil
             eller att ingen annan skulle vilja vara tillsammans med dig.
             Kommentarerna kan ibland följas av:{" "}
-            <em>"Jag skojade ju bara."</em>
+            <em>&quot;Jag skojade ju bara.&quot;</em>
           </p>
         </div>
       </section>
@@ -143,7 +144,7 @@ export default function Page() {
           Exempel 3: Förnedring inför andra
         </h2>
 
-        <div
+        <div data-rv="card"
           style={{
             padding: 20,
             border: "1px solid #e4e4e4",
@@ -168,7 +169,7 @@ export default function Page() {
           Exempel 4: Du börjar gå på äggskal
         </h2>
 
-        <div
+        <div data-rv="card"
           style={{
             padding: 20,
             border: "1px solid #e4e4e4",
@@ -192,7 +193,7 @@ export default function Page() {
       <section style={{ marginTop: 42 }}>
         <h2 style={{ fontSize: 30 }}>Exempel 5: Mobilen blir ett kontrollverktyg</h2>
 
-        <div
+        <div data-rv="card"
           style={{
             padding: 20,
             border: "1px solid #e4e4e4",
@@ -227,7 +228,7 @@ export default function Page() {
           Exempel 6: Du får inte träffa vem du vill
         </h2>
 
-        <div
+        <div data-rv="card"
           style={{
             padding: 20,
             border: "1px solid #e4e4e4",
@@ -252,7 +253,7 @@ export default function Page() {
           Exempel 7: Ett nej respekteras inte
         </h2>
 
-        <div
+        <div data-rv="card"
           style={{
             padding: 20,
             border: "1px solid #e4e4e4",
@@ -276,7 +277,7 @@ export default function Page() {
       <section style={{ marginTop: 42 }}>
         <h2 style={{ fontSize: 30 }}>Exempel 8: Hot utan fysiskt våld</h2>
 
-        <div
+        <div data-rv="card"
           style={{
             padding: 20,
             border: "1px solid #e4e4e4",
@@ -296,10 +297,10 @@ export default function Page() {
               marginBottom: 0,
             }}
           >
-            <li>"Om du lämnar mig kommer du ångra dig."</li>
-            <li>"Jag ska se till att alla får veta hur du egentligen är."</li>
-            <li>"Om du går ut ikväll är det slut mellan oss."</li>
-            <li>"Om du lämnar mig gör jag något mot mig själv."</li>
+            <li>&quot;Om du lämnar mig kommer du ångra dig.&quot;</li>
+            <li>&quot;Jag ska se till att alla får veta hur du egentligen är.&quot;</li>
+            <li>&quot;Om du går ut ikväll är det slut mellan oss.&quot;</li>
+            <li>&quot;Om du lämnar mig gör jag något mot mig själv.&quot;</li>
           </ul>
         </div>
       </section>
@@ -309,7 +310,7 @@ export default function Page() {
           Exempel 9: Pengar används för att kontrollera
         </h2>
 
-        <div
+        <div data-rv="card"
           style={{
             padding: 20,
             border: "1px solid #e4e4e4",
@@ -334,7 +335,7 @@ export default function Page() {
           Exempel 10: Din verklighetsuppfattning ifrågasätts
         </h2>
 
-        <div
+        <div data-rv="card"
           style={{
             padding: 20,
             border: "1px solid #e4e4e4",
@@ -364,7 +365,7 @@ export default function Page() {
         </div>
       </section>
 
-      <section
+      <section data-rv="panel"
         style={{
           marginTop: 42,
           padding: 24,
@@ -389,7 +390,7 @@ export default function Page() {
           hur relationen påverkar din självkänsla och frihet.
         </p>
 
-        <Link
+        <Link data-rv="button"
           href="/psykisk-misshandel-relation/test"
           style={{
             display: "inline-block",
@@ -481,7 +482,7 @@ export default function Page() {
         <h2 style={{ fontSize: 30 }}>Läs vidare</h2>
 
         <div style={{ display: "grid", gap: 12 }}>
-          <Link
+          <Link data-rv="card"
             href="/psykiskt-vald"
             style={{
               padding: 16,
@@ -495,7 +496,7 @@ export default function Page() {
             Psykiskt våld – komplett guide →
           </Link>
 
-          <Link
+          <Link data-rv="card"
             href="/psykiskt-vald/vad-raknas-som"
             style={{
               padding: 16,
@@ -509,7 +510,7 @@ export default function Page() {
             Vad räknas som psykiskt våld? →
           </Link>
 
-          <Link
+          <Link data-rv="card"
             href="/psykiskt-vald/ny-lag-2026"
             style={{
               padding: 16,
@@ -523,7 +524,7 @@ export default function Page() {
             Nya lagen om psykiskt våld 2026 →
           </Link>
 
-          <Link
+          <Link data-rv="card"
             href="/psykiskt-vald/straff"
             style={{
               padding: 16,
@@ -582,6 +583,6 @@ export default function Page() {
         </div>
       </section>
 
-    </main>
+    </main></EditorialSurface>
   );
 }

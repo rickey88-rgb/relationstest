@@ -1,3 +1,4 @@
+import EditorialSurface from "../_components/EditorialSurface";
 import Link from "next/link";
 
 export const metadata = {
@@ -11,7 +12,7 @@ export const metadata = {
 
 export default function Page() {
   return (
-    <main className="mx-auto max-w-3xl px-6 py-12">
+    <EditorialSurface><main data-rv="container" className="mx-auto max-w-3xl px-6 py-12">
       <article className="space-y-6">
         <h1 className="text-3xl font-semibold">
           Psykopatiska drag i relation: beteenden, mönster och varningssignaler
@@ -163,7 +164,7 @@ export default function Page() {
           .
         </p>
 
-        <section className="rounded-3xl border border-neutral-200 bg-white p-7 shadow-sm md:p-8">
+        <section data-rv="card" className="rounded-3xl border border-neutral-200 bg-white p-7 shadow-sm md:p-8">
           <h2 className="text-2xl font-semibold tracking-tight text-neutral-950">
             Läs också
           </h2>
@@ -205,6 +206,6 @@ export default function Page() {
           </Link>
         </p>
       </article>
-    </main>
+    </main></EditorialSurface>
   );
 }

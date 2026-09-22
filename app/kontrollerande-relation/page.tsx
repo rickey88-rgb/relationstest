@@ -1,3 +1,4 @@
+import EditorialSurface from "../_components/EditorialSurface";
 import Link from "next/link";
 import { EditorialArticleJsonLd, getEditorialArticleSchema, getEditorialMetadata } from "../_seo/editorialSeo";
 
@@ -14,7 +15,7 @@ const articleJsonLd = getEditorialArticleSchema({ route: "/kontrollerande-relati
 
 export default function Page() {
   return (
-    <main className="mx-auto max-w-3xl px-6 py-12">
+    <EditorialSurface><main data-rv="container" className="mx-auto max-w-3xl px-6 py-12">
       <EditorialArticleJsonLd data={articleJsonLd} />
       <article className="space-y-6">
         <h1 className="text-3xl font-semibold">
@@ -49,7 +50,7 @@ export default function Page() {
           <p className="text-sm leading-6 text-neutral-700">
             Känner du igen flera av de här mönstren i din relation?
           </p>
-          <Link
+          <Link data-rv="card"
             href="/"
             className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-xl border border-neutral-300 bg-white px-4 py-2 text-sm font-semibold text-neutral-900 hover:bg-neutral-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"
           >
@@ -183,7 +184,7 @@ export default function Page() {
           <strong> Vid akut fara, ring 112.</strong>
         </p>
 
-        <section className="rounded-3xl border border-neutral-200 bg-white p-7 shadow-sm md:p-8">
+        <section data-rv="card" className="rounded-3xl border border-neutral-200 bg-white p-7 shadow-sm md:p-8">
           <h2 className="text-2xl font-semibold tracking-tight text-neutral-950">
             Vill du reflektera över fler mönster i relationen?
           </h2>
@@ -193,7 +194,7 @@ export default function Page() {
             få en bredare överblick. Utgå också från dina egna erfarenheter och
             hur trygg du känner dig.
           </p>
-          <Link
+          <Link data-rv="button"
             href="/"
             className="mt-5 inline-flex min-h-12 items-center justify-center rounded-xl bg-[#7A1F1F] px-5 py-3 text-center font-semibold text-white hover:bg-[#5C1717] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#5C1717]"
           >
@@ -201,7 +202,7 @@ export default function Page() {
           </Link>
         </section>
 
-        <section className="rounded-3xl border border-neutral-200 bg-white p-7 shadow-sm md:p-8">
+        <section data-rv="card" className="rounded-3xl border border-neutral-200 bg-white p-7 shadow-sm md:p-8">
   <h2 className="text-2xl font-semibold tracking-tight text-neutral-950">
     Läs också
   </h2>
@@ -256,7 +257,7 @@ export default function Page() {
         </p>
 
       </article>
-    </main>
+    </main></EditorialSurface>
   );
 
    }

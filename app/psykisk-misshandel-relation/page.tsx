@@ -1,3 +1,4 @@
+import EditorialSurface from "../_components/EditorialSurface";
 import type { Metadata } from "next";
 import Link from "next/link";
 import ArticleImage from "../_components/ArticleImage";
@@ -32,12 +33,12 @@ const articleJsonLd = {
 
 export default function PsykiskMisshandelRelationPage() {
   return (
-    <main className="min-h-screen bg-white text-neutral-900">
+    <EditorialSurface><main className="min-h-screen bg-white text-neutral-900">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd).replace(/</g, "\\u003c") }}
       />
-      <section className="mx-auto max-w-3xl px-6 py-14">
+      <section data-rv="container" className="mx-auto max-w-3xl px-6 py-14">
 
         {/* H1 */}
         <h1 className="mb-6 text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
@@ -62,7 +63,7 @@ export default function PsykiskMisshandelRelationPage() {
         {articleImage ? <ArticleImage image={articleImage} /> : null}
 
         {/* Testbox */}
-        <div className="mb-12 rounded-2xl border border-neutral-200 bg-neutral-50 p-6 sm:p-8">
+        <div data-rv="panel" className="mb-12 rounded-2xl border border-neutral-200 bg-neutral-50 p-6 sm:p-8">
           <p className="mb-2 text-sm font-semibold uppercase tracking-wide text-neutral-500">
             Anonymt test
           </p>
@@ -85,7 +86,7 @@ export default function PsykiskMisshandelRelationPage() {
             .
           </p>
 
-          <Link
+          <Link data-rv="button"
             href="/psykisk-misshandel-relation/test"
             className="inline-block rounded-xl bg-neutral-900 px-6 py-3 text-sm font-semibold text-white hover:bg-neutral-800"
           >
@@ -120,7 +121,7 @@ export default function PsykiskMisshandelRelationPage() {
         </p>
 
         {/* Lagsektion */}
-        <div className="my-12 rounded-2xl border border-neutral-200 bg-neutral-50 p-6 sm:p-8">
+        <div data-rv="card" className="my-12 rounded-2xl border border-neutral-200 bg-neutral-50 p-6 sm:p-8">
           <p className="mb-2 text-sm font-semibold uppercase tracking-wide text-neutral-500">
             Ny lag från 1 juli 2026
           </p>
@@ -345,7 +346,7 @@ export default function PsykiskMisshandelRelationPage() {
         </div>
 
         {/* Slut-CTA */}
-        <div className="mt-14 rounded-2xl bg-neutral-900 p-6 text-white sm:p-8">
+        <div data-rv="panel" className="mt-14 rounded-2xl bg-neutral-900 p-6 text-white sm:p-8">
           <h2 className="mb-3 text-2xl font-semibold">
             Känner du igen flera av de här mönstren?
           </h2>
@@ -355,7 +356,7 @@ export default function PsykiskMisshandelRelationPage() {
             psykiskt destruktiva beteenden som återkommer.
           </p>
 
-          <Link
+          <Link data-rv="card"
             href="/psykisk-misshandel-relation/test"
             className="inline-block rounded-xl bg-white px-6 py-3 text-sm font-semibold text-neutral-900 hover:bg-neutral-100"
           >
@@ -364,6 +365,6 @@ export default function PsykiskMisshandelRelationPage() {
         </div>
 
       </section>
-    </main>
+    </main></EditorialSurface>
   );
 }
