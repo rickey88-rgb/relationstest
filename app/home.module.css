@@ -27,7 +27,7 @@
 .header { border-bottom: 1px solid var(--rv-border); }
 .header > div { max-width: 1200px; min-height: 84px; }
 .brand { font-size: 1.1rem; font-weight: 600; letter-spacing: -.035em; display: flex; align-items: center; gap: 12px; }
-.brand::before { content: "r."; display: grid; place-items: center; width: 35px; height: 39px; border: 1px solid #aebcac; border-radius: 18px 18px 6px 6px; font: 26px Georgia, serif; background: #e6ebe2; }
+.brandMark { width: 35px; height: 39px; flex-shrink: 0; color: var(--rv-text); }
 .hero, .section { width: min(100% - 64px, 1152px); margin-inline: auto; }
 .hero { padding-top: 64px; padding-bottom: 48px; }
 .heroGrid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px 64px; align-items: center; }
@@ -63,9 +63,9 @@
 .card .eyebrow { font-size: .6rem; letter-spacing: .12em; }
 .card h3 { margin-top: 12px; }
 .card > p:not(.eyebrow) { margin-top: 16px; line-height: 1.75; }
-.home .cardLink { display: flex; align-items: center; justify-content: space-between; min-height: 48px; margin-top: 12px; border-top: 1px solid var(--rv-border); color: #824452; font-size: .85rem; font-weight: 600; }
-.cardLink:hover { color: #24312b; text-decoration: underline; text-underline-offset: 4px; }
-.cardLink span { font-size: 1.25rem; }
+.home .cardLink { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 48px; margin-top: 12px; padding: 11px 16px; border: 1px solid #d9babb; border-radius: 12px; background: #f3e6e3; color: #824452; font-size: .85rem; font-weight: 600; }
+.home .cardLink:hover { background: #e9d1cf; border-color: #b77e87; color: #693643; }
+.cardLink svg { width: 18px; height: 18px; flex-shrink: 0; }
 .about > div { max-width: none; }
 .about > div > div { padding: 36px; border-color: var(--rv-border); border-radius: 28px; background: #eee8e0; box-shadow: none; }
 .about h2 { font-size: 1.9rem; }
@@ -96,7 +96,7 @@
   .heroArt { min-height: 0; border-radius: 28px; padding: 24px; }
   .heroArt svg { max-width: 230px; }
   .heroArt p { font-size: 1.8rem; margin-bottom: 16px; }
-  .trust { gap: 16px; grid-template-columns: 1fr; margin: 0; }
+  .trust, .feature, .safety { display: none; }
   .trust p { font-size: .85rem; }
   .featureInner { display: block; padding: 28px; }
   .featureInner h2 { margin-top: 12px; }

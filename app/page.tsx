@@ -118,6 +118,10 @@ export default function Landing() {
       <header className={styles.header}>
         <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
           <div className={styles.brand}>
+            <svg className={styles.brandMark} viewBox="0 0 44 36" fill="none" aria-hidden="true" focusable="false">
+              <path d="M17 29 5.5 17.5C-2 10 8 1 17 10c9-9 19 0 11.5 7.5Z" fill="#D7E0D6" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+              <path d="M27 29 15.5 17.5C8 10 18 1 27 10c9-9 19 0 11.5 7.5Z" fill="#E9D1CF" fillOpacity=".65" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+            </svg>
             Relationsvarning
           </div>
           <div className="flex items-center gap-3 text-xs text-neutral-600">
@@ -164,13 +168,17 @@ export default function Landing() {
 
           <div className={styles.heroArt} aria-hidden="true">
             <span className={styles.artLabel}>Relationsvarning / Självreflektion</span>
-            <svg viewBox="0 0 400 330" fill="none">
-              <ellipse cx="206" cy="292" rx="135" ry="13" fill="#24312B" opacity=".05" />
-              <path d="M69 268V160C69 88 110 47 169 47s96 42 96 113v108Z" fill="#D7E0D6" />
-              <path d="M177 281V188c0-60 34-99 86-99s86 39 86 99v93Z" fill="#E9D1CF" />
-              <path d="M132 268V163c0-46 19-69 43-69 35 0 55 34 55 71v60c0 28 10 43 29 43 24 0 36-28 36-58 0-33-13-53-31-53-19 0-34 21-34 55" stroke="#68796A" strokeWidth="2" strokeLinecap="round" />
-              <path d="M281 61v26m-13-13h26" stroke="#9D5663" strokeWidth="1.5" />
-              <circle cx="102" cy="214" r="7" fill="#FFFDFB" />
+            <svg viewBox="0 0 400 330" fill="none" focusable="false">
+              <ellipse cx="200" cy="290" rx="145" ry="12" fill="#24312B" opacity=".05" />
+              {/* Two inward-facing profiles, with a shared space for reflection. */}
+              <path d="M52 278c0-50 25-75 66-85v-24c-19-10-29-28-29-53 0-31 19-54 46-54 26 0 43 20 43 47l13 22-16 7v21c0 15-13 23-28 23v15c34 12 55 39 55 81Z" fill="#D7E0D6" />
+              <path d="M348 278c0-44-24-65-62-77v-25c18-10 28-28 28-52 0-30-18-52-44-52-25 0-42 19-42 46l-13 21 16 7v20c0 15 12 23 27 23v15c-32 12-52 35-52 74Z" fill="#E9D1CF" />
+              <path d="M145 85c18 5 26 17 26 34l12 16-15 6v17c0 12-11 17-24 17m112-80c-16 5-22 18-22 31l-12 16 15 6v16c0 11 10 17 23 17" stroke="#68796A" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M155 124h6m80 8h6" stroke="#24312B" strokeWidth="2" strokeLinecap="round" />
+              <circle cx="200" cy="231" r="43" fill="#FFFDFB" fillOpacity=".85" stroke="#B8B9AA" />
+              <path d="m200 250-19-19c-13-13 4-28 19-13 15-15 32 0 19 13Z" stroke="#9D5663" strokeWidth="2" strokeLinejoin="round" />
+              <path d="M108 244c22 20 40 18 59 5m126 0c-20 16-41 14-59 0" stroke="#68796A" strokeWidth="1.8" strokeLinecap="round" />
+              <path d="M200 63v12m-6-6h12" stroke="#9D5663" strokeWidth="1.5" strokeLinecap="round" />
             </svg>
             <p>Ett stöd för att se<br /><em>mönster tydligare.</em></p>
             <span className={styles.artLabel}>Beteenden. Upplevelser. Förståelse.</span>
@@ -338,7 +346,10 @@ function TestCards({
               aria-label={`${test.cta ?? "Starta testet"}: ${test.title}`}
               className={styles.cardLink}
             >
-              {test.cta ?? "Starta testet"}<span aria-hidden="true">↗</span>
+              {test.cta ?? "Starta testet"}
+              <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false">
+                <path d="M4 10h12m-5-5 5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
             </Link>
           </div>
         </li>
