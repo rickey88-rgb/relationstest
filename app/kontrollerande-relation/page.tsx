@@ -1,17 +1,21 @@
 import Link from "next/link";
+import { EditorialArticleJsonLd, getEditorialArticleSchema, getEditorialMetadata } from "../_seo/editorialSeo";
+
+const title = "Kontrollerande partner – tecken på kontrollerande beteende";
+const description = "Hur märks en kontrollerande partner? Läs om vanliga tecken, skillnaden mellan omtanke och kontroll och vad du kan göra om du känner igen beteendet.";
 
 export const metadata = {
-  title: "Kontrollerande partner – tecken på kontrollerande beteende",
-  description:
-    "Hur märks en kontrollerande partner? Läs om vanliga tecken, skillnaden mellan omtanke och kontroll och vad du kan göra om du känner igen beteendet.",
-  alternates: {
-    canonical: "https://www.relationsvarning.se/kontrollerande-relation",
-  },
+  title,
+  description,
+  ...getEditorialMetadata({ route: "/kontrollerande-relation", title, description, datePublished: "2026-02-22T13:39:05+01:00", dateModified: "2026-09-21T22:29:14+02:00" }),
 };
+
+const articleJsonLd = getEditorialArticleSchema({ route: "/kontrollerande-relation", title, description, datePublished: "2026-02-22T13:39:05+01:00", dateModified: "2026-09-21T22:29:14+02:00" });
 
 export default function Page() {
   return (
     <main className="mx-auto max-w-3xl px-6 py-12">
+      <EditorialArticleJsonLd data={articleJsonLd} />
       <article className="space-y-6">
         <h1 className="text-3xl font-semibold">
           Kontrollerande partner – tecken du bör vara uppmärksam på

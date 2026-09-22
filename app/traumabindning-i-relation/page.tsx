@@ -1,42 +1,25 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import ArticleImage from "../_components/ArticleImage";
-import {
-  getArticleImageMetadata,
-  getArticleImageSchema,
-  getPublishedArticleImage,
-} from "../_seo/articleImages";
+import { getPublishedArticleImage } from "../_seo/articleImages";
+import { EditorialArticleJsonLd, getEditorialArticleSchema, getEditorialMetadata } from "../_seo/editorialSeo";
+
+const title = "Traumabindning i en relation – tecken, varför det händer och varför det är så svårt att lämna";
+const description = "Vad är traumabindning i en relation? Läs om vanliga tecken, varför starka band kan uppstå i destruktiva relationer och varför det kan kännas så svårt att lämna.";
 
 export const metadata: Metadata = {
-  title: "Traumabindning i en relation – tecken, varför det händer och varför det är så svårt att lämna",
-  description:
-    "Vad är traumabindning i en relation? Läs om vanliga tecken, varför starka band kan uppstå i destruktiva relationer och varför det kan kännas så svårt att lämna.",
-  alternates: {
-    canonical: "https://www.relationsvarning.se/traumabindning-i-relation",
-  },
-  ...getArticleImageMetadata("/traumabindning-i-relation"),
+  title,
+  description,
+  ...getEditorialMetadata({ route: "/traumabindning-i-relation", title, description, datePublished: "2026-03-15T23:41:45+01:00", dateModified: "2026-09-21T22:29:14+02:00" }),
 };
 
 const articleImage = getPublishedArticleImage("/traumabindning-i-relation");
-const articleImageSchema = getArticleImageSchema("/traumabindning-i-relation");
-const articleJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Article",
-  headline: "Traumabindning i en relation – tecken, varför det händer och varför det är så svårt att lämna",
-  description:
-    "Vad är traumabindning i en relation? Läs om vanliga tecken, varför starka band kan uppstå i destruktiva relationer och varför det kan kännas så svårt att lämna.",
-  mainEntityOfPage: "https://www.relationsvarning.se/traumabindning-i-relation",
-  publisher: { "@type": "Organization", name: "Relationsvarning", url: "https://www.relationsvarning.se" },
-  ...(articleImageSchema ? { image: articleImageSchema } : {}),
-};
+const articleJsonLd = getEditorialArticleSchema({ route: "/traumabindning-i-relation", title, description, datePublished: "2026-03-15T23:41:45+01:00", dateModified: "2026-09-21T22:29:14+02:00" });
 
 export default function TraumabindningIRelationPage() {
   return (
     <main className="min-h-screen bg-white text-neutral-900">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd).replace(/</g, "\\u003c") }}
-      />
+      <EditorialArticleJsonLd data={articleJsonLd} />
       <article className="mx-auto max-w-4xl px-6 py-12 md:px-8 md:py-16">
         <header className="mb-10">
           <p className="mb-3 text-sm font-medium uppercase tracking-wide text-neutral-500">

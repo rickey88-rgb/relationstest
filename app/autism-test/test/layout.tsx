@@ -4,7 +4,7 @@ export const metadata: Metadata = {
   title: "Autism-självtest – 30 frågor för vuxna | Relationsvarning",
   description: "Besvara 30 frågor om socialt samspel, kommunikation, förutsägbarhet, sensorik, intressen och vardagspåverkan i Relationsvarnings självskattning.",
   alternates: { canonical: "https://www.relationsvarning.se/autism-test" },
-  robots: { index: false, follow: true },
+  robots: { index: false, follow: true, googleBot: { index: false, follow: true, "max-image-preview": "large" } },
 };
 export default function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
   return <main className="mx-auto max-w-3xl px-4 py-8 text-neutral-900 [overflow-wrap:anywhere] sm:px-6 sm:py-12 [&:has([data-autism-result])_[data-test-intro]]:hidden">

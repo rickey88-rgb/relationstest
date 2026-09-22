@@ -31,6 +31,23 @@ export type PublishedArticleImage = ArticleImagePlan & {
   sourcePath: `/seo-images/${string}`;
 };
 
+type DiscoverImage = {
+  route: `/${string}`;
+  sourcePath: `/seo-images/${string}`;
+  alt: string;
+  width: number;
+  height: number;
+};
+
+const discoverImages: readonly DiscoverImage[] = [
+  { route: "/psykiskt-vald", sourcePath: "/seo-images/psykiskt-vald-discover.png", alt: "Illustration om psykiskt våld i nära relation", width: 1672, height: 941 },
+  { route: "/psykisk-misshandel", sourcePath: "/seo-images/psykisk-misshandel-discover.png", alt: "Illustration om psykisk misshandel och återkommande relationsmönster", width: 1672, height: 941 },
+  { route: "/narcissist-i-en-relation", sourcePath: "/seo-images/narcissist-i-en-relation-discover.png", alt: "Illustration om narcissistiska mönster i en relation", width: 1672, height: 941 },
+  { route: "/kontrollerande-relation", sourcePath: "/seo-images/kontrollerande-relation-discover.png", alt: "Illustration om kontrollerande beteenden i en relation", width: 1672, height: 941 },
+  { route: "/adhd-test", sourcePath: "/seo-images/adhd-test-discover.png", alt: "Illustration för ADHD-test för vuxna", width: 1672, height: 941 },
+  { route: "/autism-test", sourcePath: "/seo-images/autism-test-discover.png", alt: "Illustration för autismtest för vuxna", width: 1672, height: 941 },
+] as const;
+
 export const articleImagePlans: readonly ArticleImagePlan[] = [
   { route: "/gaslighting-relation", priority: 1, concept: "Ett vertikalt femstegsflöde uppifrån och ned: 1. Något händer. 2. Händelsen förnekas eller förvrängs. 3. Du börjar tvivla på ditt eget minne. 4. Du söker mer bekräftelse. 5. Den andres version får större makt.", heading: "Gaslighting – hur mönstret kan utvecklas", alt: "Vertikalt femstegsdiagram över hur gaslighting kan utvecklas från en händelse och förnekande till självtvivel, bekräftelsesökande och ökad makt för den andres version", fileName: "gaslighting-hur-monstret-kan-utvecklas.webp", placement: "Efter definitionen och före listan med tecken.", aspectRatio: "4:5", useAsOpenGraph: true, width: 1200, height: 1500, sourcePath: "/seo-images/gaslighting-hur-monstret-kan-utvecklas.webp", ogImage: { heading: "Gaslighting – hur mönstret kan utvecklas", brief: "Stor rubrik och en förenklad antydan till förnekande, självtvivel och förskjuten makt. Högst tre korta stödpunkter; inga små etiketter. Samma grafit-, varmvit- och dämpat gröna identitet som artikelbilden, komponerad för liten social preview.", fileName: "gaslighting-hur-monstret-kan-utvecklas-og.webp", width: 1200, height: 630, sourcePath: "/seo-images/gaslighting-hur-monstret-kan-utvecklas-og.webp" } },
   { route: "/psykisk-misshandel-relation", priority: 2, concept: "Ett vertikalt femstegsflöde från nedvärdering eller skuldbeläggning via kontroll och anpassning till växande självtvivel och minskat handlingsutrymme.", heading: "Psykisk misshandel – hur mönstret kan utvecklas", alt: "Vertikalt femstegsdiagram över hur psykisk misshandel kan utvecklas från nedvärdering och kontroll till självtvivel och minskat handlingsutrymme", fileName: "psykisk-misshandel-hur-monstret-kan-utvecklas.webp", placement: "Efter introduktionen och före testboxen.", aspectRatio: "4:5", useAsOpenGraph: true, width: 1200, height: 1500, sourcePath: "/seo-images/psykisk-misshandel-hur-monstret-kan-utvecklas.webp", ogImage: { heading: "Psykisk misshandel – hur mönstret kan utvecklas", brief: "Förenklad OG-version med nedvärdering, självtvivel och minskat handlingsutrymme.", fileName: "psykisk-misshandel-hur-monstret-kan-utvecklas-og.webp", width: 1200, height: 630, sourcePath: "/seo-images/psykisk-misshandel-hur-monstret-kan-utvecklas-og.webp" } },
@@ -61,7 +78,20 @@ export function getPublishedArticleImage(route: string): PublishedArticleImage |
   return image?.sourcePath ? (image as PublishedArticleImage) : undefined;
 }
 
+function getDiscoverImage(route: string) {
+  return discoverImages.find((image) => image.route === route);
+}
+
 export function getArticleImageMetadata(route: string): Pick<Metadata, "openGraph" | "twitter"> {
+  const discoverImage = getDiscoverImage(route);
+  if (discoverImage) {
+    const url = `${SITE_URL}${discoverImage.sourcePath}`;
+    return {
+      openGraph: { images: [{ url, width: discoverImage.width, height: discoverImage.height, alt: discoverImage.alt }] },
+      twitter: { card: "summary_large_image", images: [{ url, alt: discoverImage.alt }] },
+    };
+  }
+
   const image = getPublishedArticleImage(route);
   const ogImage = image?.ogImage;
   if (!image?.useAsOpenGraph || !ogImage?.sourcePath) return {};
@@ -73,6 +103,17 @@ export function getArticleImageMetadata(route: string): Pick<Metadata, "openGrap
 }
 
 export function getArticleImageSchema(route: string) {
+  const discoverImage = getDiscoverImage(route);
+  if (discoverImage) {
+    return {
+      "@type": "ImageObject",
+      url: `${SITE_URL}${discoverImage.sourcePath}`,
+      width: discoverImage.width,
+      height: discoverImage.height,
+      caption: discoverImage.alt,
+    };
+  }
+
   const image = getPublishedArticleImage(route);
   if (!image) return undefined;
   return {

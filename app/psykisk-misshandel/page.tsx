@@ -1,14 +1,17 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { EditorialArticleJsonLd, getEditorialArticleSchema, getEditorialMetadata } from "../_seo/editorialSeo";
+
+const title = "Psykisk misshandel – tecken, exempel & vad du kan göra";
+const description = "Vad är psykisk misshandel? Läs om vanliga tecken, exempel, kontroll, hot, förnedring och hur psykisk misshandel förhåller sig till lagen om psykiskt våld.";
 
 export const metadata: Metadata = {
-  title: "Psykisk misshandel – tecken, exempel & vad du kan göra",
-  description:
-    "Vad är psykisk misshandel? Läs om vanliga tecken, exempel, kontroll, hot, förnedring och hur psykisk misshandel förhåller sig till lagen om psykiskt våld.",
-  alternates: {
-    canonical: "/psykisk-misshandel",
-  },
+  title,
+  description,
+  ...getEditorialMetadata({ route: "/psykisk-misshandel", title, description, datePublished: "2026-09-05T13:13:03+02:00", dateModified: "2026-09-06T16:23:44+02:00" }),
 };
+
+const articleJsonLd = getEditorialArticleSchema({ route: "/psykisk-misshandel", title, description, datePublished: "2026-09-05T13:13:03+02:00", dateModified: "2026-09-06T16:23:44+02:00" });
 
 export default function Page() {
   return (
@@ -22,6 +25,7 @@ export default function Page() {
         color: "#111",
       }}
     >
+      <EditorialArticleJsonLd data={articleJsonLd} />
       <header>
         <p
           style={{

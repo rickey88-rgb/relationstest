@@ -1,14 +1,17 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { EditorialArticleJsonLd, getEditorialArticleSchema, getEditorialMetadata } from "../_seo/editorialSeo";
+
+const title = "Narcissist i en relation – tecken, beteenden och varningssignaler";
+const description = "Hur känns det att leva nära någon med narcissistiska drag? En djupgående guide om mönster, varningssignaler, kontroll, skuld, charm och känslomässig påverkan i relationer.";
 
 export const metadata: Metadata = {
-  title: "Narcissist i en relation – tecken, beteenden och varningssignaler",
-  description:
-    "Hur känns det att leva nära någon med narcissistiska drag? En djupgående guide om mönster, varningssignaler, kontroll, skuld, charm och känslomässig påverkan i relationer.",
-  alternates: {
-    canonical: "/narcissist-i-en-relation",
-  },
+  title,
+  description,
+  ...getEditorialMetadata({ route: "/narcissist-i-en-relation", title, description, datePublished: "2026-03-23T15:32:34+01:00", dateModified: "2026-09-09T20:11:31+02:00" }),
 };
+
+const articleJsonLd = getEditorialArticleSchema({ route: "/narcissist-i-en-relation", title, description, datePublished: "2026-03-23T15:32:34+01:00", dateModified: "2026-09-09T20:11:31+02:00" });
 
 function TestCta({
   title,
@@ -38,6 +41,7 @@ function TestCta({
 export default function NarcissistRelationPage() {
   return (
     <main className="bg-white text-neutral-900">
+      <EditorialArticleJsonLd data={articleJsonLd} />
       <article className="mx-auto max-w-3xl px-6 py-14 md:px-8 md:py-20">
         <header className="max-w-3xl">
           <p className="text-sm font-medium uppercase tracking-[0.18em] text-neutral-500">

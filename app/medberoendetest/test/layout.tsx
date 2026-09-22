@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://www.relationsvarning.se/medberoendetest",
   },
-  robots: { index: false, follow: true },
+  robots: { index: false, follow: true, googleBot: { index: false, follow: true, "max-image-preview": "large" } },
 };
 
 export default function Layout({

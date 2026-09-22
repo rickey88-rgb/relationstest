@@ -11,6 +11,15 @@ export const metadata: Metadata = {
   other: {
     "p:domain_verify": "1cf0c8f0329365a4b1dc2e0dda1020d3",
   },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+    },
+  },
 };
 
 export default function RootLayout({

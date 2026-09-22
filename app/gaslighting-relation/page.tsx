@@ -2,46 +2,25 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import ArticleImage from "../_components/ArticleImage";
-import {
-  getArticleImageMetadata,
-  getArticleImageSchema,
-  getPublishedArticleImage,
-} from "../_seo/articleImages";
+import { getPublishedArticleImage } from "../_seo/articleImages";
+import { EditorialArticleJsonLd, getEditorialArticleSchema, getEditorialMetadata } from "../_seo/editorialSeo";
+
+const title = "Gaslighting i relationer: tecken, exempel och vad du kan göra";
+const description = "En saklig guide till gaslighting i relationer: vad det betyder, vanliga tecken, konkreta exempel, skillnaden mot vanlig konflikt och praktiska sätt att skydda dig.";
 
 export const metadata: Metadata = {
-  title: "Gaslighting i relationer: tecken, exempel och vad du kan göra",
-  description:
-    "En saklig guide till gaslighting i relationer: vad det betyder, vanliga tecken, konkreta exempel, skillnaden mot vanlig konflikt och praktiska sätt att skydda dig.",
-  alternates: {
-    canonical: "/gaslighting-relation",
-  },
-  ...getArticleImageMetadata("/gaslighting-relation"),
+  title,
+  description,
+  ...getEditorialMetadata({ route: "/gaslighting-relation", title, description, datePublished: "2026-03-13T21:44:14+01:00", dateModified: "2026-09-21T22:29:14+02:00" }),
 };
 
 const gaslightingImage = getPublishedArticleImage("/gaslighting-relation");
-const gaslightingImageSchema = getArticleImageSchema("/gaslighting-relation");
-const articleJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Article",
-  headline: "Gaslighting i relationer: tecken, exempel och vad du kan göra",
-  description:
-    "En saklig guide till gaslighting i relationer: vad det betyder, vanliga tecken, konkreta exempel, skillnaden mot vanlig konflikt och praktiska sätt att skydda dig.",
-  mainEntityOfPage: "https://www.relationsvarning.se/gaslighting-relation",
-  publisher: {
-    "@type": "Organization",
-    name: "Relationsvarning",
-    url: "https://www.relationsvarning.se",
-  },
-  ...(gaslightingImageSchema ? { image: gaslightingImageSchema } : {}),
-};
+const articleJsonLd = getEditorialArticleSchema({ route: "/gaslighting-relation", title, description, datePublished: "2026-03-13T21:44:14+01:00", dateModified: "2026-09-21T22:29:14+02:00" });
 
 export default function GaslightingRelationPage() {
   return (
     <main className="mx-auto max-w-3xl px-4 py-12">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd).replace(/</g, "\\u003c") }}
-      />
+      <EditorialArticleJsonLd data={articleJsonLd} />
       <header className="mb-10">
         <p className="text-sm text-neutral-500">Relationsvarning • Kunskapssida</p>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight text-neutral-900">

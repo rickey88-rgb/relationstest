@@ -1,14 +1,17 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { EditorialArticleJsonLd, getEditorialArticleSchema, getEditorialMetadata } from "../_seo/editorialSeo";
+
+const title = "Psykiskt våld – tecken, ny lag 2026, test & hjälp";
+const description = "Lär dig känna igen psykiskt våld i en relation, vad den nya lagen från 1 juli 2026 innebär och gör ett anonymt test baserat på återkommande beteendemönster.";
 
 export const metadata: Metadata = {
-  title: "Psykiskt våld – tecken, ny lag 2026, test & hjälp",
-  description:
-    "Lär dig känna igen psykiskt våld i en relation, vad den nya lagen från 1 juli 2026 innebär och gör ett anonymt test baserat på återkommande beteendemönster.",
-  alternates: {
-    canonical: "/psykiskt-vald",
-  },
+  title,
+  description,
+  ...getEditorialMetadata({ route: "/psykiskt-vald", title, description, datePublished: "2026-09-05T12:40:46+02:00", dateModified: "2026-09-17T17:46:06+02:00" }),
 };
+
+const articleJsonLd = getEditorialArticleSchema({ route: "/psykiskt-vald", title, description, datePublished: "2026-09-05T12:40:46+02:00", dateModified: "2026-09-17T17:46:06+02:00" });
 
 export default function Page() {
   return (
@@ -22,6 +25,7 @@ export default function Page() {
         color: "#111",
       }}
     >
+      <EditorialArticleJsonLd data={articleJsonLd} />
       <header>
         <p
           style={{

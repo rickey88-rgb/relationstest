@@ -1,14 +1,19 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { GuideLinks, GuideSection, textLink } from "../_components/ContentGuide";
+import { EditorialArticleJsonLd, getEditorialArticleSchema, getEditorialMetadata } from "../_seo/editorialSeo";
 import guides from "../../content/autism-guides.json";
 import { areaNames, areas } from "./test/model";
 
+const title = "Autismtest för vuxna – självtest med 30 frågor | Relationsvarning";
+const description = "Gör ett autismtest för vuxna med 30 frågor. Kartlägg socialt samspel, kommunikation, sensorik, rutiner, flexibilitet och andra återkommande mönster.";
+
 export const metadata: Metadata = {
-  title: "Autismtest för vuxna – självtest med 30 frågor | Relationsvarning",
-  description: "Gör ett autismtest för vuxna med 30 frågor. Kartlägg socialt samspel, kommunikation, sensorik, rutiner, flexibilitet och andra återkommande mönster.",
-  alternates: { canonical: "https://www.relationsvarning.se/autism-test" },
+  title,
+  description,
+  ...getEditorialMetadata({ route: "/autism-test", title, description, datePublished: "2026-09-15T19:27:30+02:00", dateModified: "2026-09-15T19:27:30+02:00" }),
 };
+const articleJsonLd = getEditorialArticleSchema({ route: "/autism-test", title, description, datePublished: "2026-09-15T19:27:30+02:00", dateModified: "2026-09-15T19:27:30+02:00" });
 const cta = "inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-neutral-900 px-5 py-3 text-center font-semibold text-white hover:bg-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900 sm:w-auto";
 const descriptions = [
   "Aktiv analys av sociala situationer, förväntningar och samspelet i samtal.",
@@ -28,6 +33,7 @@ const faq = [
 ];
 export default function AutismLanding() {
   return <main className="mx-auto max-w-3xl px-4 py-10 text-neutral-900 [overflow-wrap:anywhere] sm:px-6 sm:py-14">
+    <EditorialArticleJsonLd data={articleJsonLd} />
     <nav aria-label="Brödsmulor" className="text-sm text-neutral-600"><Link href="/" className={textLink + " inline-flex min-h-11 items-center"}>Relationsvarning</Link><span aria-hidden="true"> / </span><span aria-current="page">Autismtest</span></nav>
     <article><header className="mt-5"><h1 className="text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">Autismtest för vuxna</h1>
       <p className="mt-5 text-lg leading-8 text-neutral-700">30 frågor som kartlägger flera områden som ofta är relevanta när man funderar på autism som vuxen.</p>

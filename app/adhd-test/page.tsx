@@ -1,12 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { GuideLinks, GuideSection, textLink } from "../_components/ContentGuide";
+import { EditorialArticleJsonLd, getEditorialArticleSchema, getEditorialMetadata } from "../_seo/editorialSeo";
 import adhdGuides from "../../content/adhd-guides.json";
+const title = "ADHD-test för vuxna – självtest med 30 frågor | Relationsvarning";
+const description = "ADHD-test för vuxna med 30 frågor om fokus, organisation, impulsivitet, inre rastlöshet, tid och vardagspåverkan. Utforska hur dina svar hänger ihop.";
 export const metadata: Metadata = {
-  title: "ADHD-test för vuxna – självtest med 30 frågor | Relationsvarning",
-  description: "ADHD-test för vuxna med 30 frågor om fokus, organisation, impulsivitet, inre rastlöshet, tid och vardagspåverkan. Utforska hur dina svar hänger ihop.",
-  alternates: { canonical: "https://www.relationsvarning.se/adhd-test" },
+  title,
+  description,
+  ...getEditorialMetadata({ route: "/adhd-test", title, description, datePublished: "2026-09-14T19:17:23+02:00", dateModified: "2026-09-14T23:13:54+02:00" }),
 };
+const articleJsonLd = getEditorialArticleSchema({ route: "/adhd-test", title, description, datePublished: "2026-09-14T19:17:23+02:00", dateModified: "2026-09-14T23:13:54+02:00" });
 const sections = [
   {
     "title": "Ett ADHD-test ska inte försöka övertyga dig om att du har ADHD",
@@ -105,6 +109,7 @@ const faq = [
 const cta = "inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-neutral-900 px-5 py-3 text-center font-semibold text-white hover:bg-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900 sm:w-auto";
 export default function ADHDLanding() {
   return <main className="mx-auto max-w-3xl px-4 py-10 text-neutral-900 [overflow-wrap:anywhere] sm:px-6 sm:py-14">
+    <EditorialArticleJsonLd data={articleJsonLd} />
     <nav aria-label="Brödsmulor" className="text-sm text-neutral-600"><Link href="/" className={textLink + " inline-flex min-h-11 items-center"}>Relationsvarning</Link><span aria-hidden="true"> / </span><span aria-current="page">ADHD-test</span></nav>
     <article><header className="mt-5"><h1 className="text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">ADHD-test för vuxna</h1>
       <p className="mt-5 text-lg leading-8 text-neutral-700">30 frågor som kartlägger sex områden som ofta är relevanta vid ADHD – och visar hur dina svar faktiskt hänger ihop.</p>
