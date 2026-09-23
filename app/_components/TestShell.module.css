@@ -65,6 +65,35 @@
    fallbacks mirror the existing tokens without changing the shared footer. */
 :global(body):has(.flow) > footer { background: var(--rv-bg, #f7f3ef); color: var(--rv-muted, #626d66); border-color: var(--rv-border, #ddd5cd); font-family: var(--rv-sans, Arial, Helvetica, sans-serif); }
 @keyframes turn { to { transform: rotate(360deg); } }
+/* Desktop paywall refinements only. Keep the approved mobile/tablet rules intact. */
+@media (min-width: 1024px) {
+  .flow [data-flow="paywall"] h2 { max-width: 100%; }
+  .flow [data-flow="paywall"] > div:has(> h3) { margin-top: 36px !important; }
+
+  /* Outrank the generic button hover/active rules, retaining light CTA text. */
+  .flow [data-flow="paywall"] button[data-flow="cta"]:is(:hover, :active):not(:disabled) {
+    background: var(--rv-rose-hover) !important;
+    border-color: var(--rv-rose-hover) !important;
+    color: var(--rv-surface) !important;
+  }
+  .flow [data-flow="paywall"] button:not([data-flow="cta"]) {
+    display: flex;
+    width: fit-content !important;
+    min-height: 40px !important;
+    margin: 16px 0 0 auto !important;
+    padding: 8px 12px !important;
+    background: transparent !important;
+    border-color: transparent !important;
+    color: var(--rv-text) !important;
+    font-size: .8125rem !important;
+    font-weight: 400 !important;
+  }
+  .flow [data-flow="paywall"] button:not([data-flow="cta"]):hover:not(:disabled) {
+    background: var(--rv-surface) !important;
+    border-color: var(--rv-border) !important;
+    color: var(--rv-text) !important;
+  }
+}
 @media (max-width: 700px) {
   .brand { padding: 20px 20px 0; }
   .flow main, .flow article { padding: 12px 20px 28px !important; }
