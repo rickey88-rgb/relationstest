@@ -29,7 +29,7 @@ export default function HomeGuideDirectory({ guides }: { guides: HomeGuide[] }) 
       <ul className={styles.featured}>
         {featured.map((guide) => <li key={guide.href} className={styles.card}>
           <span className={styles.label}>{guide.group}</span>
-          <h3><Link href={guide.href} className={styles.link}>{guide.label}<span className={styles.readMore}>Läs mer <span aria-hidden="true">↗</span></span></Link></h3>
+          <h3><Link href={guide.href} className={styles.link}>{guide.label}<span className={styles.readMore}>Läs mer <span aria-hidden="true">→</span></span></Link></h3>
         </li>)}
       </ul>
 

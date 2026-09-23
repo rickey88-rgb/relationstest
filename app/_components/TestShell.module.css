@@ -24,6 +24,7 @@
 }
 .flow :global(.question-box), .flow :global(.question-box) * { color: var(--rv-text) !important; -webkit-text-fill-color: var(--rv-text) !important; }
 .flow [data-flow="inset"] { background: var(--rv-beige) !important; border-color: var(--rv-border) !important; border-radius: 16px !important; color: var(--rv-text) !important; box-shadow: none !important; min-width: 0; }
+.flow [data-flow="inset"] :where(p, li) { color: #405045 !important; }
 .flow [data-flow="grid"] { grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr)) !important; }
 .flow button, .flow [data-flow="cta"] {
   min-height: var(--rv-button-height) !important; max-width: 100%;
@@ -103,6 +104,18 @@
   .flow [data-flow="card"], .flow [data-flow="question"], .flow [data-flow="analysis"], .flow [data-flow="paywall"] { padding: 20px !important; border-radius: 22px !important; }
   .flow [data-flow="paywall"] > div:has([data-flow="cta"]) { padding: 16px !important; }
   .flow [data-flow="paywall"] [data-flow="cta"] { padding-inline: 10px !important; }
+  .flow [data-flow="paywall"] { position: relative; margin-bottom: 76px !important; }
+  .flow [data-flow="paywall"] button:not([data-flow="cta"]) {
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 0;
+    left: 0;
+    width: 100% !important;
+    margin: 0 !important;
+    background: var(--rv-surface) !important;
+    border-color: var(--rv-border) !important;
+    color: var(--rv-text) !important;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .flow *, .flow *::before { animation: none !important; transition: none !important; scroll-behavior: auto !important; }

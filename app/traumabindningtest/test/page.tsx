@@ -614,7 +614,7 @@ export default function Page() {
         <p role="status" aria-live="polite" style={{ marginTop: 14, lineHeight: 1.7 }}>{["Analyserar dina svar...", "Identifierar återkommande mönster...", "Sammanställer din profil..."][analysisStep ?? 0]}</p>
       </section>}
 
-      {isFinished && !unlocked && !analyzing && (
+      {isFinished && !unlocked && !analyzing && !transitioning && (
         <section data-flow="paywall" ref={tracking.paywallRef}
           style={{
             background: "#0d0d0d",

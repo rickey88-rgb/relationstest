@@ -67,7 +67,8 @@
 .surface [data-rv="callout"] { background: var(--rv-beige) !important; border-radius: var(--rv-panel-radius) !important; }
 .surface [data-rv="panel"] { background: var(--rv-sage-soft) !important; border-color: #c7d3c7 !important; border-radius: var(--rv-panel-radius) !important; }
 .surface aside[data-rv="callout"] { background: var(--rv-rose-soft) !important; }
-.surface :is([data-rv="panel"], [data-rv="callout"]) :where([class*="text-neutral-5"], [class*="text-neutral-6"], [class*="text-neutral-7"]) { color: var(--rv-text); }
+.surface :is([data-rv="panel"], [data-rv="callout"]) :where([class*="text-neutral-5"], [class*="text-neutral-6"], [class*="text-neutral-7"]) { color: var(--rv-text) !important; }
+.surface :is([data-rv="panel"], [data-rv="callout"]) :where(p, li):not([class*="uppercase"]) { color: #405045 !important; }
 .surface a:is([data-rv="card"], [class~="rv-card"]) { display: block; min-height: 48px; text-decoration: none; }
 .surface a:is([data-rv="card"], [class~="rv-card"]):hover { border-color: #9ead9f !important; background: #e4eae1 !important; }
 .surface :is([data-rv="card"], [class~="rv-card"]) :where(h2, h3) { font-size: 1.4rem !important; }

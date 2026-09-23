@@ -152,7 +152,7 @@ export default function Landing() {
               Frågorna har bakgrund i forskning och etablerad kunskap och hjälper
               dig att reflektera över beteendemönster – inte att ställa en diagnos.
             </p>
-            <Link href="/test" className={styles.primary}>Gör screeningtestet <span aria-hidden="true">↗</span></Link>
+            <Link href="/test" className={styles.primary}>Gör screeningtestet <span aria-hidden="true">→</span></Link>
             <p className="mt-3 flex flex-wrap items-center gap-x-2 text-sm text-neutral-600">
               <Link href="/metodik" className="inline-flex min-h-11 items-center underline underline-offset-4">Forskning och metodik</Link>
               <span aria-hidden="true">•</span><span>Anonymt</span>
@@ -307,7 +307,7 @@ export default function Landing() {
       <section className={styles.closing} aria-labelledby="closing-heading">
         <p className={styles.eyebrow}>Ett stöd för självreflektion</p>
         <h2 id="closing-heading">Vill du förstå dina<br />relationsmönster bättre?</h2>
-        <Link href="/test" className={styles.primary}>Gör screeningtestet <span aria-hidden="true">↗</span></Link>
+        <Link href="/test" className={styles.primary}>Gör screeningtestet <span aria-hidden="true">→</span></Link>
         <p className={styles.closingMeta}>Anonymt · Ingen registrering</p>
       </section>
     </main>
