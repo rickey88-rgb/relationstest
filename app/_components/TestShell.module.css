@@ -55,21 +55,21 @@
 .flow [data-flow="paywall"] [data-flow="cta"]::before {
   content: "";
   position: absolute;
-  inset: -2px;
-  padding: 1.5px;
+  inset: -3px;
+  padding: 2.5px;
   border-radius: inherit;
   pointer-events: none;
-  background: conic-gradient(from var(--rv-paywall-glow-angle), #9d5663, #d8a4a5, #fff8f2, #c77f8c, #9d5663);
+  background: conic-gradient(from var(--rv-paywall-glow-angle), #8e4f5b 0deg, #9d5663 250deg, #d58f97 292deg, #f4c8c4 318deg, #fffdf8 332deg, #efbbb8 344deg, #9d5663 360deg);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   mask-composite: exclude;
-  filter: drop-shadow(0 0 4px rgb(157 86 99 / .24));
-  opacity: .72;
+  filter: drop-shadow(0 0 6px rgb(157 86 99 / .34));
+  opacity: .88;
   animation: paywall-glow 5.5s linear infinite;
   transition: opacity 160ms ease;
 }
-.flow [data-flow="paywall"] [data-flow="cta"]:hover::before { opacity: .84; }
+.flow [data-flow="paywall"] [data-flow="cta"]:hover::before { opacity: .96; }
 .flow [data-flow="paywall"] > div:has([data-flow="cta"]) { background: var(--rv-surface); border-radius: 18px; padding: 20px !important; }
 .flow [data-flow="paywall"] > div:has(> button:not([data-flow="cta"])) { background: transparent; padding: 0 !important; }
 .flow [data-flow="lock"] { display: inline-block; position: relative; font-size: 0; width: 9px; height: 8px; border: 1px solid currentColor; border-radius: 2px; margin-right: 3px; }
