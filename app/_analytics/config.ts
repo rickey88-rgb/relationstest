@@ -2,6 +2,7 @@ export const GA_MEASUREMENT_ID = "G-XWVSHHNY7G";
 export const testConfig = {
   autism_test: { name: "Autismtest för vuxna", path: "/autism-test/test", price: 39, currency: "SEK" },
   adhd_test: { name: "ADHD-test för vuxna", path: "/adhd-test/test", price: 39, currency: "SEK" },
+  angest_test: { name: "Ångesttest för vuxna", path: "/angest-test/test", price: 39, currency: "SEK" },
   screening_test: { name: "Screeningtest för relationen", path: "/test", price: 39, currency: "SEK" },
   psychological_abuse_test: { name: "Test om psykisk misshandel och psykiskt våld", path: "/psykisk-misshandel-relation/test", price: 39, currency: "SEK" },
   attachment_test: { name: "Anknytningstest", path: "/anknytningstest/test", price: 39, currency: "SEK" },

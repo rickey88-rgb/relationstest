@@ -287,6 +287,11 @@ export default function PsykiskMisshandelRelationPage() {
         </p>
 
         <p className="mb-8 leading-relaxed text-neutral-700">
+          Långvarig otrygghet kan också göra att oro och anspänning tar stor
+          plats. Ett <Link href="/angest-test" className="underline underline-offset-4">självtest för oro och ångest</Link> kan hjälpa dig att strukturera dina egna upplevelser.
+        </p>
+
+        <p className="mb-8 leading-relaxed text-neutral-700">
           Läs mer om{" "}
           <Link href="/traumabindning-i-relation" className="underline underline-offset-4">traumabindning och varför det kan vara svårt att lämna en skadlig relation</Link>
           .

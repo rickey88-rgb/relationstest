@@ -15,6 +15,7 @@ const storageKeys: Record<TestId, string> = {
   trauma_bond_test: "traumabindningtest_state_v1",
   narcissist_partner: "narcissist_relation_test_state_v1",
   adhd_test: "relationsvarning_adhd_state_v1",
+  angest_test: "relationsvarning_angest_state_v1",
   autism_test: "relationsvarning_autism_state_v1",
   narcissism_selftest: "relationsvarning_narcissism_self_v1",
 };
@@ -27,6 +28,7 @@ const copy: Partial<Record<TestId, { title: string; description: string; label: 
   codependency_test: { title: "Vill du utforska överansvar och egna behov?", description: "Medberoendetestet undersöker hur omsorg, gränser och ansvar kan samspela i en relation.", label: "Gör medberoendetestet" },
   trauma_bond_test: { title: "Vill du undersöka växlingen i relationen?", description: "Traumabindningstestet fokuserar på starka band och på hur perioder av närhet och smärta kan hänga ihop.", label: "Gör traumabindningstestet" },
   narcissist_partner: { title: "Vill du undersöka relationsmönstren mer specifikt?", description: "Det separata testet utforskar beteenden i relationen utan att avgöra om en partner har en diagnos.", label: "Gör testet om relationsmönster" },
+  angest_test: { title: "Vill du utforska oro och återhämtning?", description: "Ångesttestet är en självskattning av oro, anspänning, sömn och vardagspåverkan.", label: "Gör ångesttestet" },
 };
 
 export default function PostPurchaseRecommendation({ sourceTest, recommendedTest }: { sourceTest: TestId; recommendedTest: TestId | null }) {

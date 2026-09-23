@@ -4,6 +4,7 @@ module.exports = {
   generateRobotsTxt: true,
   sitemapSize: 5000,
   exclude: [
+    '/angest-test/test',
     '/adhd-test/test',
     '/autism-test/test',
     '/anknytningstest/test',

@@ -214,6 +214,9 @@ export default function TraumabindningIRelationPage() {
             det i själva verket också kan handla om att nervsystemet söker
             lättnad från stress.
           </p>
+          <p>
+            Kroppslig stress kan ha flera förklaringar. Om du vill förstå hur oro kan märkas i kroppen kan du läsa om <Link href="/fysisk-angest" className="text-neutral-900 underline underline-offset-4">fysisk ångest</Link>.
+          </p>
 
           <h3 className="pt-3 text-xl font-semibold text-neutral-900">
             4. Du börjar tvivla på din egen upplevelse

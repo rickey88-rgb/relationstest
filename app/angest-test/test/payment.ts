@@ -1,0 +1,1 @@
+export const ANGEST_TEST_STRIPE_URL = process.env.NEXT_PUBLIC_ANGEST_TEST_STRIPE_URL ?? "";

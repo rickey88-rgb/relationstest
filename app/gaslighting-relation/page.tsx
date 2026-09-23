@@ -60,6 +60,9 @@ export default function GaslightingRelationPage() {
             Att bli <em>gaslightad</em> betyder i vardagligt språk att påverkas av ett sådant
             mönster; en <em>gaslighter</em> är den som utövar beteendet, inte en diagnos.
           </p>
+          <p className="leading-7">
+            Om stressen följs av tankar som fortsätter kretsa även utanför situationen kan du läsa mer om <Link href="/standig-oro" className="underline underline-offset-4">ständig oro</Link>.
+          </p>
         </section>
 
         {gaslightingImage ? <ArticleImage image={gaslightingImage} /> : null}

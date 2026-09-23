@@ -17,6 +17,13 @@ export const metadata: Metadata = {
 
 const selfTests = [
   {
+    href: "/angest-test",
+    title: "Ångesttest för vuxna",
+    category: "Självtest för vuxna",
+    description: "Utforska ständig oro, kroppslig spänning, sömn, koncentration och vardagspåverkan med 30 frågor.",
+    cta: "Gör självtestet",
+  },
+  {
     href: "/autism-test",
     title: "Autismtest för vuxna",
     category: "Självtest för vuxna",
