@@ -103,6 +103,7 @@
   .flow main > header h1 { margin-top: 12px !important; }
   .flow [data-flow="card"], .flow [data-flow="question"], .flow [data-flow="analysis"], .flow [data-flow="paywall"] { padding: 20px !important; border-radius: 22px !important; }
   .flow [data-flow="paywall"] > div:has([data-flow="cta"]) { padding: 16px !important; }
+  .flow [data-flow="paywall"] > div:has(> h3) { border: 0 !important; outline: 0; box-shadow: none !important; }
   .flow [data-flow="paywall"] [data-flow="cta"] { padding-inline: 10px !important; }
   .flow [data-flow="paywall"] { position: relative; margin-bottom: 76px !important; }
   .flow [data-flow="paywall"] button:not([data-flow="cta"]) {

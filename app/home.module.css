@@ -36,7 +36,7 @@
 .artLabel { font-size: .6rem; letter-spacing: .14em; text-transform: uppercase; color: #62675e; }
 .home .primary { display: inline-flex; align-items: center; justify-content: space-between; gap: 28px; min-height: 52px; margin-top: 24px; padding: 14px 24px; background: var(--rv-rose); border-radius: 12px; color: #fffdfb; font-size: .9rem; font-weight: 600; text-decoration: none; }
 .home .primary:hover { background: var(--rv-rose-hover); }
-.primary span { font-size: 1.2rem; }
+.primary span { display: inline-block; font: 400 1.45rem/1 Georgia, serif; transform: translateY(-.02em); }
 .trust { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, 1fr); border-block: 1px solid var(--rv-border); padding-block: 24px; margin-block: 12px; gap: 24px; }
 .trust p { display: flex; gap: 14px; align-items: center; font-size: .85rem; }
 .trust span { font: italic 1rem Georgia, serif; color: #6a7b6b; }
