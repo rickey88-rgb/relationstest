@@ -1,3 +1,4 @@
+import TestShell from "../_components/TestShell";
 import type { Metadata } from "next";
 import Link from "next/link";
 import Quickcheck from "./Quickcheck";
@@ -24,8 +25,7 @@ const breadcrumbJsonLd = {
 };
 
 export default function RedFlagsQuickcheckPage() {
-  return (
-    <main className="bg-neutral-50 text-neutral-900">
+  return (<TestShell><main className="bg-neutral-50 text-neutral-900">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd).replace(/</g, "\\u003c") }} />
       <article className="mx-auto max-w-3xl px-5 py-10 sm:px-6 sm:py-14">
         <nav aria-label="Brödsmulor" className="mb-7 text-sm text-neutral-500"><Link href="/" className="underline underline-offset-4">Start</Link><span aria-hidden="true"> / </span><span aria-current="page">Röda flaggor i relation</span></nav>
@@ -36,13 +36,14 @@ export default function RedFlagsQuickcheckPage() {
           <p className="mt-4 leading-7 text-neutral-700">Du får hela resultatet direkt utan registrering eller betalning. Resultatet är ett orienterande reflektionsstöd och ersätter inte professionell, medicinsk eller juridisk bedömning.</p>
         </header>
 
-        <section className="mt-9 rounded-2xl border border-neutral-200 bg-white p-5 sm:p-7">
+
+
+        <Quickcheck />
+    <section data-flow="card" className="mt-9 rounded-2xl border border-neutral-200 bg-white p-5 sm:p-7">
           <h2 className="text-2xl font-semibold">Vad menas med röda flaggor?</h2>
           <p className="mt-3 leading-7 text-neutral-700">Röda flaggor är beteenden som kan signalera att trygghet, respekt eller frihet håller på att minska. En enstaka konflikt säger sällan allt. Det är upprepningen, utvecklingen över tid och hur beteendet påverkar dig som är viktigt.</p>
           <p className="mt-3 leading-7 text-neutral-700">Om du känner dig akut hotad eller är i fara, ring 112 eller kontakta någon du litar på. Använd inte ett test som ersättning för att söka hjälp.</p>
         </section>
-
-        <Quickcheck />
 
         <section className="mt-12 space-y-8 border-t border-neutral-200 pt-10">
           <div>
@@ -61,6 +62,5 @@ export default function RedFlagsQuickcheckPage() {
           </div>
         </section>
       </article>
-    </main>
-  );
+    </main></TestShell>);
 }

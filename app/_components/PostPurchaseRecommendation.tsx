@@ -56,10 +56,10 @@ export default function PostPurchaseRecommendation({ sourceTest, recommendedTest
 
   if (!eligible || !recommendedTest || !copy[recommendedTest]) return null;
   const item = copy[recommendedTest];
-  return <section ref={card} aria-label="Ett möjligt nästa test" className="mt-10 rounded-2xl border border-neutral-200 bg-neutral-50 p-5 text-neutral-900 sm:p-6">
+  return <section data-flow="card" ref={card} aria-label="Ett möjligt nästa test" className="mt-10 rounded-2xl border border-neutral-200 bg-neutral-50 p-5 text-neutral-900 sm:p-6">
     <p className="text-xs font-semibold uppercase tracking-[0.16em] text-neutral-500">Nästa steg</p>
     <h2 className="mt-2 text-xl font-semibold tracking-tight">{item.title}</h2>
     <p className="mt-3 max-w-2xl leading-7 text-neutral-700">{item.description}</p>
-    <Link href={testConfig[recommendedTest].path} onClick={() => trackEvent("cross_sell_click", { source_test: sourceTest, recommended_test: recommendedTest, price: 39, currency: "SEK" })} className="mt-5 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[#2F6B4F] px-5 py-3 text-center font-semibold text-white transition-colors hover:bg-[#285C44] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#2F6B4F] sm:w-auto">{item.label}</Link>
+    <Link data-flow="cta" href={testConfig[recommendedTest].path} onClick={() => trackEvent("cross_sell_click", { source_test: sourceTest, recommended_test: recommendedTest, price: 39, currency: "SEK" })} className="mt-5 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[#2F6B4F] px-5 py-3 text-center font-semibold text-white transition-colors hover:bg-[#285C44] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#2F6B4F] sm:w-auto">{item.label}</Link>
   </section>;
 }

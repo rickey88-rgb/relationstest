@@ -485,13 +485,13 @@ export default function Page() {
 
   return (
     <>
-      {unlocked && <div role="status" style={{ margin: "20px 0", padding: 16, border: "1px solid #ddd", borderRadius: 12, lineHeight: 1.6 }}><strong>Ditt test är upplåst – du behöver inte betala igen.</strong>{answers.every(answer => answer >= 0) ? <p>Din fullständiga analys visas nedan.</p> : <p>Tidigare svar saknas eller är ofullständiga i den här webbläsaren. Öppna testet i samma webbläsare som före betalningen, eller svara på frågorna här utan att köpa igen. Behöver du hjälp? Kontakta <a href="mailto:support@relationsvarning.se">support@relationsvarning.se</a>.</p>}</div>}
+      {unlocked && <div data-flow="inset" role="status" style={{ margin: "20px 0", padding: 16, border: "1px solid #ddd", borderRadius: 12, lineHeight: 1.6 }}><strong>Ditt test är upplåst – du behöver inte betala igen.</strong>{answers.every(answer => answer >= 0) ? <p>Din fullständiga analys visas nedan.</p> : <p>Tidigare svar saknas eller är ofullständiga i den här webbläsaren. Öppna testet i samma webbläsare som före betalningen, eller svara på frågorna här utan att köpa igen. Behöver du hjälp? Kontakta <a href="mailto:support@relationsvarning.se">support@relationsvarning.se</a>.</p>}</div>}
       {payment.checkoutError && <p role="alert" style={{ margin: "20px 0", lineHeight: 1.6 }}>{payment.checkoutError}</p>}
 
       <div style={{ marginBottom: 20 }}>
         {!isFinished && (
           <div style={{ marginTop: 20 }}>
-            <div
+            <div data-flow="track"
               style={{
                 height: 9,
                 background: "#ededed",
@@ -499,7 +499,7 @@ export default function Page() {
                 overflow: "hidden",
               }}
             >
-              <div
+              <div data-flow="fill"
                 style={{
                   width: `${progress}%`,
                   height: "100%",
@@ -529,7 +529,7 @@ export default function Page() {
       </div>
 
       {!isFinished && (
-        <section
+        <section data-flow="question"
           style={{
             background: "#fff",
             border: "1px solid #e6e6e6",
@@ -550,7 +550,7 @@ export default function Page() {
             Hur ofta känner du igen detta?
           </p>
 
-          <p
+          <p data-flow="question-text"
             style={{
               margin: "14px auto 20px",
               maxWidth: 620,
@@ -606,13 +606,13 @@ export default function Page() {
         </section>
       )}
 
-      {isFinished && analyzing && !unlocked && <section style={{ border: "1px solid #ddd", borderRadius: 20, padding: "24px 18px" }} aria-busy="true">
+      {isFinished && analyzing && !unlocked && <section data-flow="analysis" style={{ border: "1px solid #ddd", borderRadius: 20, padding: "24px 18px" }} aria-busy="true">
         <h2 style={{ margin: 0, fontSize: 24 }}>Vi sammanställer din analys</h2>
         <p role="status" aria-live="polite" style={{ marginTop: 14, lineHeight: 1.7 }}>{["Analyserar dina svar...", "Identifierar återkommande mönster...", "Sammanställer din profil..."][analysisStep ?? 0]}</p>
       </section>}
 
       {isFinished && !unlocked && !analyzing && (
-        <section ref={tracking.paywallRef}
+        <section data-flow="paywall" ref={tracking.paywallRef}
           style={{
             background: "#0d0d0d",
             color: "#fff",
@@ -666,7 +666,7 @@ export default function Page() {
       )}
 
       {isFinished && unlocked && (
-        <section
+        <section data-flow="card"
           style={{
             background: "#fff",
             border: "1px solid #e6e6e6",
@@ -726,7 +726,7 @@ export default function Page() {
             {overallDescription(scores.overall)}
           </p>
 
-          <div
+          <div data-flow="inset"
             style={{
               marginTop: 16,
               padding: 14,
@@ -773,7 +773,7 @@ export default function Page() {
             }}
           >
             {sortedAreas.map(({ area, score }) => (
-              <div
+              <div data-flow="inset"
                 key={area}
                 style={{
                   padding: 16,
@@ -805,7 +805,7 @@ export default function Page() {
                   </div>
                 </div>
 
-                <div
+                <div data-flow="track"
                   style={{
                     marginTop: 10,
                     height: 8,
@@ -814,7 +814,7 @@ export default function Page() {
                     overflow: "hidden",
                   }}
                 >
-                  <div
+                  <div data-flow="fill"
                     style={{
                       width: `${score}%`,
                       height: "100%",
@@ -940,37 +940,37 @@ export default function Page() {
               marginTop: 16,
             }}
           >
-            <Link
+            <Link data-flow="inset"
               href="/psykisk-misshandel-relation/test"
               style={linkCardStyle}
             >
               Gör testet om psykisk misshandel och psykiskt våld →
             </Link>
 
-            <Link
+            <Link data-flow="inset"
               href="/narcissist-i-en-relation/test"
               style={linkCardStyle}
             >
               Testa narcissistiska relationsmönster →
             </Link>
 
-            <Link href="/medberoendetest/test" style={linkCardStyle}>
+            <Link data-flow="inset" href="/medberoendetest/test" style={linkCardStyle}>
               Gör medberoendetestet →
             </Link>
 
-            <Link
+            <Link data-flow="inset"
               href="/traumabindning-i-relation"
               style={linkCardStyle}
             >
               Läs om traumabindning →
             </Link>
 
-            <Link href="/psykiskt-vald/hjalp" style={linkCardStyle}>
+            <Link data-flow="inset" href="/psykiskt-vald/hjalp" style={linkCardStyle}>
               Se vart du kan vända dig för hjälp →
             </Link>
           </div>
 
-          <div
+          <div data-flow="inset"
             style={{
               marginTop: 26,
               padding: 16,

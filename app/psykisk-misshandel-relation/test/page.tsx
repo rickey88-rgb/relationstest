@@ -745,7 +745,7 @@ export default function Page() {
         color: "#111",
       }}
     >
-      {unlocked && <div role="status" style={{ margin: "20px 0", padding: 16, border: "1px solid #ddd", borderRadius: 12, lineHeight: 1.6 }}><strong>Ditt test är upplåst – du behöver inte betala igen.</strong>{answers.every(answer => answer >= 0) ? <p>Din fullständiga analys visas nedan.</p> : <p>Tidigare svar saknas eller är ofullständiga i den här webbläsaren. Öppna testet i samma webbläsare som före betalningen, eller svara på frågorna här utan att köpa igen. Behöver du hjälp? Kontakta <a href="mailto:support@relationsvarning.se">support@relationsvarning.se</a>.</p>}</div>}
+      {unlocked && <div data-flow="inset" role="status" style={{ margin: "20px 0", padding: 16, border: "1px solid #ddd", borderRadius: 12, lineHeight: 1.6 }}><strong>Ditt test är upplåst – du behöver inte betala igen.</strong>{answers.every(answer => answer >= 0) ? <p>Din fullständiga analys visas nedan.</p> : <p>Tidigare svar saknas eller är ofullständiga i den här webbläsaren. Öppna testet i samma webbläsare som före betalningen, eller svara på frågorna här utan att köpa igen. Behöver du hjälp? Kontakta <a href="mailto:support@relationsvarning.se">support@relationsvarning.se</a>.</p>}</div>}
       {payment.checkoutError && <p role="alert" style={{ margin: "20px 0", lineHeight: 1.6 }}>{payment.checkoutError}</p>}
 
       <nav aria-label="Vidare läsning och stöd" style={{ marginBottom: 20, fontSize: 13, lineHeight: 1.7 }}>
@@ -809,7 +809,7 @@ export default function Page() {
               textAlign: "left",
             }}
           >
-            <div
+            <div data-flow="track"
               style={{
                 height: 10,
                 background: "#eee",
@@ -817,7 +817,7 @@ export default function Page() {
                 overflow: "hidden",
               }}
             >
-              <div
+              <div data-flow="fill"
                 style={{
                   height: "100%",
                   width: `${progress}%`,
@@ -851,7 +851,7 @@ export default function Page() {
       </header>
 
       {!isFinished && (
-        <section
+        <section data-flow="question"
           style={{
             background: "#fff",
             border: "1px solid #e8e8e8",
@@ -873,7 +873,7 @@ export default function Page() {
             Hur ofta stämmer detta?
           </p>
 
-          <p
+          <p data-flow="question-text"
             style={{
               fontSize: 22,
               lineHeight: 1.4,
@@ -895,7 +895,7 @@ export default function Page() {
           >
             {[0, 1, 2, 3, 4].map(
               (value) => (
-                <button
+                <button aria-pressed={answers[index] === value}
                   key={value}
                   disabled={transitioning}
                   onClick={() =>
@@ -976,13 +976,13 @@ export default function Page() {
         </section>
       )}
 
-      {isFinished && analyzing && !unlocked && <section style={{ border: "1px solid #ddd", borderRadius: 20, padding: "24px 18px" }} aria-busy="true">
+      {isFinished && analyzing && !unlocked && <section data-flow="analysis" style={{ border: "1px solid #ddd", borderRadius: 20, padding: "24px 18px" }} aria-busy="true">
         <h2 style={{ margin: 0, fontSize: 24 }}>Vi sammanställer din analys</h2>
         <p role="status" aria-live="polite" style={{ marginTop: 14, lineHeight: 1.7 }}>{["Analyserar dina svar...", "Identifierar återkommande mönster...", "Sammanställer din profil..."][analysisStep ?? 0]}</p>
       </section>}
 
       {isFinished && !unlocked && !analyzing && (
-        <section ref={tracking.paywallRef}
+        <section data-flow="paywall" ref={tracking.paywallRef}
           style={{
             background: "#0d0d0d",
             color: "#fff",
@@ -1061,7 +1061,7 @@ export default function Page() {
 
       {isFinished && unlocked && (
         <section>
-          <div
+          <div data-flow="dark"
             style={{
               padding: 22,
               background: "#111",
@@ -1186,7 +1186,7 @@ export default function Page() {
             >
               {sortedAreas.map(
                 ({ area, score }) => (
-                  <div
+                  <div data-flow="inset"
                     key={area}
                     style={{
                       border:
@@ -1226,7 +1226,7 @@ export default function Page() {
                       </b>
                     </div>
 
-                    <div
+                    <div data-flow="track"
                       style={{
                         height: 8,
                         background:
@@ -1238,7 +1238,7 @@ export default function Page() {
                         marginTop: 12,
                       }}
                     >
-                      <div
+                      <div data-flow="fill"
                         style={{
                           height:
                             "100%",
@@ -1267,7 +1267,7 @@ export default function Page() {
             </div>
           </div>
 
-          <div
+          <div data-flow="inset"
             style={{
               marginTop: 30,
               padding: 20,
@@ -1444,7 +1444,7 @@ export default function Page() {
             </p>
           </div>
 
-          <div
+          <div data-flow="inset"
             style={{
               marginTop: 28,
               padding: 20,
@@ -1578,7 +1578,7 @@ export default function Page() {
             </p>
           </div>
 
-          <div
+          <div data-flow="dark"
             style={{
               marginTop: 30,
               padding: 20,

@@ -80,7 +80,7 @@ export default function ShareTest({ heading, description, shareTitle, shareText,
   }
 
   return (
-    <section aria-labelledby={headingId} className="rounded-2xl border border-neutral-200 bg-neutral-50 p-5 sm:p-6">
+    <section data-flow="card" aria-labelledby={headingId} className="rounded-2xl border border-neutral-200 bg-neutral-50 p-5 sm:p-6">
       <h2 id={headingId} className="text-xl font-semibold tracking-tight text-neutral-900">{heading}</h2>
       <p className="mt-2 text-sm leading-6 text-neutral-600">{description}</p>
       <button type="button" onClick={handleShare} className="mt-5 inline-flex min-h-12 w-full items-center justify-center rounded-xl border border-neutral-300 bg-white px-5 py-3 text-center font-semibold text-neutral-900 transition-colors hover:border-neutral-400 hover:bg-neutral-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900 active:bg-neutral-200 sm:w-auto">

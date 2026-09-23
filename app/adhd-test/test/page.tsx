@@ -117,11 +117,11 @@ export default function ADHDSelfTestPage() {
 
   if (!hydrated) return <p className="mt-6" role="status">Laddar testet...</p>;
   return <>
-      {unlocked && <div role="status" style={{ margin: "20px 0", padding: 16, border: "1px solid #ddd", borderRadius: 12, lineHeight: 1.6 }}><strong>Ditt test är upplåst – du behöver inte betala igen.</strong>{answers.every(answer => answer >= 0) ? <p>Din fullständiga analys visas nedan.</p> : <p>Tidigare svar saknas eller är ofullständiga i den här webbläsaren. Öppna testet i samma webbläsare som före betalningen, eller svara på frågorna här utan att köpa igen. Behöver du hjälp? Kontakta <a href="mailto:support@relationsvarning.se">support@relationsvarning.se</a>.</p>}</div>}
+      {unlocked && <div data-flow="inset" role="status" style={{ margin: "20px 0", padding: 16, border: "1px solid #ddd", borderRadius: 12, lineHeight: 1.6 }}><strong>Ditt test är upplåst – du behöver inte betala igen.</strong>{answers.every(answer => answer >= 0) ? <p>Din fullständiga analys visas nedan.</p> : <p>Tidigare svar saknas eller är ofullständiga i den här webbläsaren. Öppna testet i samma webbläsare som före betalningen, eller svara på frågorna här utan att köpa igen. Behöver du hjälp? Kontakta <a href="mailto:support@relationsvarning.se">support@relationsvarning.se</a>.</p>}</div>}
       {payment.checkoutError && <p role="alert" style={{ margin: "20px 0", lineHeight: 1.6 }}>{payment.checkoutError}</p>}
 
     {storageUnavailable && <p role="status" className="mt-6 rounded-xl border border-neutral-300 bg-neutral-50 p-4 text-sm leading-6">Webbläsaren kan inte spara testet. Du kan svara här, men återupptagning och betalning behöver fungerande lokal lagring. Lämna inte sidan om du vill behålla svaren.</p>}
-    {!showResult && <section data-nosnippet className={section} aria-labelledby="question-heading">
+    {!showResult && <section data-flow="question" data-nosnippet className={section} aria-labelledby="question-heading">
       <div className="flex flex-wrap justify-between gap-2 text-sm text-neutral-600"><span>Fråga {index + 1} av {questions.length}</span><span>{answeredCount} av {questions.length} besvarade</span></div>
       <progress aria-label="Besvarade frågor" value={answeredCount} max={questions.length} className="h-2 w-full accent-neutral-900" />
       <h2 ref={heading} tabIndex={-1} id="question-heading" className="text-xl font-semibold leading-snug outline-none sm:text-2xl">{questions[index].text}</h2>
@@ -132,12 +132,12 @@ export default function ADHDSelfTestPage() {
       <div className="flex flex-wrap gap-3 pt-2"><button type="button" disabled={index === 0 || transitioning} onClick={() => navigate(index - 1)} className={secondary + " disabled:cursor-not-allowed disabled:opacity-40"}>Tillbaka</button></div>
       <p className="text-xs leading-5 text-neutral-500">Svaren sparas lokalt i den här webbläsaren. Du kan ändra tidigare svar med Tillbaka.</p>
     </section>}
-    {showResult && analyzing && !unlocked && <section className={section} aria-labelledby="analysis-heading" aria-busy="true">
+    {showResult && analyzing && !unlocked && <section data-flow="analysis" className={section} aria-labelledby="analysis-heading" aria-busy="true">
       <h2 id="analysis-heading" ref={heading} tabIndex={-1} className="text-xl font-semibold outline-none">Vi sammanställer din profil</h2>
       <p role="status" aria-live="polite">{["Analyserar dina svar…", "Jämför mönster mellan sex områden…", "Sammanställer din profil…"][analysisStep ?? 0]}</p>
     </section>}
     {showResult && (!analyzing || unlocked) && result && <div data-adhd-result>
-      {!unlocked ? <section ref={tracking.paywallRef} className="mt-8 space-y-5 rounded-[20px] bg-[#0d0d0d] px-[18px] py-6 leading-7 text-white" aria-labelledby="result-heading">
+      {!unlocked ? <section data-flow="paywall" ref={tracking.paywallRef} className="mt-8 space-y-5 rounded-[20px] bg-[#0d0d0d] px-[18px] py-6 leading-7 text-white" aria-labelledby="result-heading">
         <h2 id="result-heading" ref={heading} tabIndex={-1} className="text-2xl font-semibold outline-none">{preview.title}</h2>
         <p className="text-neutral-200">{preview.body}</p>
         <div className="space-y-4 border-t border-white/15 pt-5">
@@ -149,19 +149,19 @@ export default function ADHDSelfTestPage() {
           {checkoutUnavailable && <p role="status" className="text-neutral-300">Köp är inte tillgängligt just nu. Dina svar finns kvar i den här webbläsaren.</p>}
         </div>
       </section> : <>
-        <section className={section} aria-labelledby="result-heading"><h2 id="result-heading" ref={heading} tabIndex={-1} className="text-2xl font-semibold outline-none">Din samlade profil</h2>
+        <section data-flow="card" className={section} aria-labelledby="result-heading"><h2 id="result-heading" ref={heading} tabIndex={-1} className="text-2xl font-semibold outline-none">Din samlade profil</h2>
           <p className="text-xl font-semibold">{result.level}</p><p className="text-4xl font-semibold tabular-nums">{formatPercent(result.symptomIndex)} / 100</p>
           <p className="text-sm text-neutral-600">Symptomindex för fem områden. Detta är självskattningspoäng, inte sannolikheten att ha ADHD.</p>
           <p>{levelTexts[result.level]}</p>
           {result.impactModifier !== "standard" && <p>{impactText(result).title}. {impactText(result).text}</p>}
         </section>
-        <section className={section}><h2 className="text-2xl font-semibold">Det som sticker ut mest</h2><p>{standoutText(result)}</p></section>
-        <section className={section}><h2 className="text-2xl font-semibold">Dina sex delresultat</h2><div className="grid gap-3 sm:grid-cols-2">{areas.map(area => <div key={area} className="min-w-0 space-y-3 rounded-xl bg-neutral-50 p-4"><h3 className="font-semibold">{areaNames[area]}</h3><p className="tabular-nums">{formatPercent(result.scores[area])} / 100</p><div className="h-2 overflow-hidden rounded bg-neutral-200" aria-hidden="true"><div className="h-full rounded bg-neutral-700" style={{ width: result.scores[area] + "%" }} /></div><p>{describeArea(area, result.scores[area])}</p></div>)}</div></section>
-        <section className={section}><h2 className="text-2xl font-semibold">Din profiltyp</h2><h3 className="text-xl font-semibold">{result.profileType}</h3><p>{profileTexts[result.profileType]}</p><p className="text-sm text-neutral-600">Profilen är en beskrivning inom detta självtest, inte en klinisk diagnos eller en officiell ADHD-subtyp.</p></section>
-        <section className={section}><h2 className="text-2xl font-semibold">Vardagspåverkan</h2><h3 className="text-xl font-semibold">{impactText(result).title}</h3><p>{impactText(result).text}</p></section>
-        <section className={section}><h2 className="text-2xl font-semibold">Det som talar för ADHD-liknande mönster</h2>{result.supporting.length ? <ul className="list-disc space-y-3 pl-5">{result.supporting.map(text => <li key={text}>{text}</li>)}</ul> : <p>Dina svar ger inte tydligt stöd för de kombinationer av förhöjda områden, vardagspåverkan eller tidigare svårigheter som den här modellen lyfter fram.</p>}</section>
-        <section className={section}><h2 className="text-2xl font-semibold">Det som gör bilden mindre entydig</h2>{result.lessClear.length ? <ul className="list-disc space-y-3 pl-5">{result.lessClear.map(text => <li key={text}>{text}</li>)}</ul> : <p>Inga av modellens särskilda dämpande faktorer framträder i dina svar. Det betyder inte att andra förklaringar har uteslutits.</p>}</section>
-        <section className={section}><h2 className="text-2xl font-semibold">Andra möjliga förklaringar</h2><p>Liknande svårigheter kan också förekomma vid exempelvis långvarig stress, sömnbrist, ångest, depression eller annan belastning. Resultatet bör därför ses som en strukturerad självskattning, inte som en diagnos.</p></section>
+        <section data-flow="card" className={section}><h2 className="text-2xl font-semibold">Det som sticker ut mest</h2><p>{standoutText(result)}</p></section>
+        <section data-flow="card" className={section}><h2 className="text-2xl font-semibold">Dina sex delresultat</h2><div className="grid gap-3 sm:grid-cols-2">{areas.map(area => <div data-flow="inset" key={area} className="min-w-0 space-y-3 rounded-xl bg-neutral-50 p-4"><h3 className="font-semibold">{areaNames[area]}</h3><p className="tabular-nums">{formatPercent(result.scores[area])} / 100</p><div className="h-2 overflow-hidden rounded bg-neutral-200" aria-hidden="true"><div data-flow="fill" className="h-full rounded bg-neutral-700" style={{ width: result.scores[area] + "%" }} /></div><p>{describeArea(area, result.scores[area])}</p></div>)}</div></section>
+        <section data-flow="card" className={section}><h2 className="text-2xl font-semibold">Din profiltyp</h2><h3 className="text-xl font-semibold">{result.profileType}</h3><p>{profileTexts[result.profileType]}</p><p className="text-sm text-neutral-600">Profilen är en beskrivning inom detta självtest, inte en klinisk diagnos eller en officiell ADHD-subtyp.</p></section>
+        <section data-flow="card" className={section}><h2 className="text-2xl font-semibold">Vardagspåverkan</h2><h3 className="text-xl font-semibold">{impactText(result).title}</h3><p>{impactText(result).text}</p></section>
+        <section data-flow="card" className={section}><h2 className="text-2xl font-semibold">Det som talar för ADHD-liknande mönster</h2>{result.supporting.length ? <ul className="list-disc space-y-3 pl-5">{result.supporting.map(text => <li key={text}>{text}</li>)}</ul> : <p>Dina svar ger inte tydligt stöd för de kombinationer av förhöjda områden, vardagspåverkan eller tidigare svårigheter som den här modellen lyfter fram.</p>}</section>
+        <section data-flow="card" className={section}><h2 className="text-2xl font-semibold">Det som gör bilden mindre entydig</h2>{result.lessClear.length ? <ul className="list-disc space-y-3 pl-5">{result.lessClear.map(text => <li key={text}>{text}</li>)}</ul> : <p>Inga av modellens särskilda dämpande faktorer framträder i dina svar. Det betyder inte att andra förklaringar har uteslutits.</p>}</section>
+        <section data-flow="card" className={section}><h2 className="text-2xl font-semibold">Andra möjliga förklaringar</h2><p>Liknande svårigheter kan också förekomma vid exempelvis långvarig stress, sömnbrist, ångest, depression eller annan belastning. Resultatet bör därför ses som en strukturerad självskattning, inte som en diagnos.</p></section>
         <p className="mt-8 text-sm leading-6 text-neutral-600">Det här resultatet ställer ingen diagnos. Om svårigheterna påverkar vardagen tydligt och har funnits under lång tid kan en professionell bedömning vara relevant. <a href="https://www.1177.se/sjukdomar--besvar/hjarna-och-nerver/neuropsykiatriska-funktionsnedsattningar/adhd/" className={link}>Läs om ADHD och att söka stöd på 1177.</a></p>
       </>}
       <div className="mt-6 flex flex-wrap gap-3"><button type="button" onClick={() => { moveFocus.current = true; setEditing(true); setIndex(0); }} className={secondary}>Granska mina svar</button><button type="button" onClick={restart} className={secondary}>Börja om</button></div>

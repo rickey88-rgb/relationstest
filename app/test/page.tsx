@@ -121,11 +121,11 @@ export default function ScreeningPage() {
 
   if (!hydrated) return <p className="mt-6" role="status">Laddar testet...</p>;
   return <>
-      {unlocked && <div role="status" style={{ margin: "20px 0", padding: 16, border: "1px solid #ddd", borderRadius: 12, lineHeight: 1.6 }}><strong>Ditt test är upplåst – du behöver inte betala igen.</strong>{answers.every(answer => answer >= 0) ? <p>Din fullständiga analys visas nedan.</p> : <p>Tidigare svar saknas eller är ofullständiga i den här webbläsaren. Öppna testet i samma webbläsare som före betalningen, eller svara på frågorna här utan att köpa igen. Behöver du hjälp? Kontakta <a href="mailto:support@relationsvarning.se">support@relationsvarning.se</a>.</p>}</div>}
+      {unlocked && <div data-flow="inset" role="status" style={{ margin: "20px 0", padding: 16, border: "1px solid #ddd", borderRadius: 12, lineHeight: 1.6 }}><strong>Ditt test är upplåst – du behöver inte betala igen.</strong>{answers.every(answer => answer >= 0) ? <p>Din fullständiga analys visas nedan.</p> : <p>Tidigare svar saknas eller är ofullständiga i den här webbläsaren. Öppna testet i samma webbläsare som före betalningen, eller svara på frågorna här utan att köpa igen. Behöver du hjälp? Kontakta <a href="mailto:support@relationsvarning.se">support@relationsvarning.se</a>.</p>}</div>}
       {payment.checkoutError && <p role="alert" style={{ margin: "20px 0", lineHeight: 1.6 }}>{payment.checkoutError}</p>}
 
     {storageUnavailable && <p role="status" className="mt-6 rounded-xl border border-neutral-300 bg-neutral-50 p-4 text-sm leading-6">Webbläsaren kan inte spara testet. Du kan svara här, men återupptagning och betalning behöver fungerande lokal lagring. Lämna inte sidan om du vill behålla svaren.</p>}
-    {!showResult && <section data-nosnippet className={section} aria-labelledby="question-heading">
+    {!showResult && <section data-flow="question" data-nosnippet className={section} aria-labelledby="question-heading">
       <div className="flex flex-wrap justify-between gap-2 text-sm text-neutral-600"><span>Fråga {index + 1} av {questions.length}</span><span>{answeredCount} av {questions.length} besvarade</span></div>
       <progress aria-label="Besvarade frågor" value={answeredCount} max={questions.length} className="h-2 w-full accent-neutral-900" />
       <h2 ref={heading} tabIndex={-1} id="question-heading" className="text-xl font-semibold leading-snug outline-none sm:text-2xl">{questions[index].text}</h2>
@@ -137,11 +137,11 @@ export default function ScreeningPage() {
       <p className="text-xs leading-5 text-neutral-500">Svaren sparas lokalt i den här webbläsaren. Du kan ändra tidigare svar med Tillbaka.</p>
     </section>}
     {showResult && <div data-screening-result>
-      {profile.safety && <aside aria-label="Stöd och säkerhet" className="mt-6 rounded-xl border border-neutral-200 bg-neutral-50 p-4 text-sm leading-6">
+      {profile.safety && <aside data-flow="inset" aria-label="Stöd och säkerhet" className="mt-6 rounded-xl border border-neutral-200 bg-neutral-50 p-4 text-sm leading-6">
         <p><strong>Känner du dig otrygg i relationen?</strong> Du kan läsa om <Link href="/psykiskt-vald/hjalp" className={link}>stöd och hjälp</Link> här. Vid akut fara, ring 112.</p>
       </aside>}
-      {analyzing && !unlocked && <section className={section} aria-busy="true"><h2 className="text-2xl font-semibold">Vi sammanställer din analys</h2><p role="status" aria-live="polite">{["Analyserar dina svar...", "Identifierar återkommande mönster...", "Sammanställer din profil..."][analysisStep ?? 0]}</p></section>}
-      {(!analyzing || unlocked) && <>{!unlocked ? <section ref={tracking.paywallRef} className="mt-8 space-y-5 rounded-[20px] bg-[#0d0d0d] px-[18px] py-6 leading-7 text-white" aria-labelledby="result-heading">
+      {analyzing && !unlocked && <section data-flow="analysis" className={section} aria-busy="true"><h2 className="text-2xl font-semibold">Vi sammanställer din analys</h2><p role="status" aria-live="polite">{["Analyserar dina svar...", "Identifierar återkommande mönster...", "Sammanställer din profil..."][analysisStep ?? 0]}</p></section>}
+      {(!analyzing || unlocked) && <>{!unlocked ? <section data-flow="paywall" ref={tracking.paywallRef} className="mt-8 space-y-5 rounded-[20px] bg-[#0d0d0d] px-[18px] py-6 leading-7 text-white" aria-labelledby="result-heading">
         <h2 id="result-heading" ref={heading} tabIndex={-1} className="text-2xl font-semibold outline-none">{teaserCopy.title}</h2>
         <p className="text-neutral-200">{teaserCopy.body}</p>
         <div className="space-y-4 border-t border-white/15 pt-5">
@@ -152,16 +152,16 @@ export default function ScreeningPage() {
           <button type="button" onClick={restart} className="min-h-11 w-full text-sm text-neutral-300 underline underline-offset-4 hover:text-white">Gör om testet</button>
         </div>
       </section> : <>
-        <section className={section} aria-labelledby="result-heading"><h2 id="result-heading" ref={heading} tabIndex={-1} className="text-2xl font-semibold outline-none">Din analys</h2>{analysis.paragraphs.map((text,i) => <p key={i}>{text}</p>)}</section>
-        <section className={section}><h2 className="text-2xl font-semibold">Så hänger dina svar ihop</h2>{analysis.connections.map(item => <p key={item.id} data-insight={item.id}>{item.text}</p>)}</section>
-        <section className={section}><h2 className="text-2xl font-semibold">Det här sticker ut i dina svar</h2>
+        <section data-flow="card" className={section} aria-labelledby="result-heading"><h2 id="result-heading" ref={heading} tabIndex={-1} className="text-2xl font-semibold outline-none">Din analys</h2>{analysis.paragraphs.map((text,i) => <p key={i}>{text}</p>)}</section>
+        <section data-flow="card" className={section}><h2 className="text-2xl font-semibold">Så hänger dina svar ihop</h2>{analysis.connections.map(item => <p key={item.id} data-insight={item.id}>{item.text}</p>)}</section>
+        <section data-flow="card" className={section}><h2 className="text-2xl font-semibold">Det här sticker ut i dina svar</h2>
           {analysis.observations.map(item => <div key={item.domain} className="space-y-3 border-t border-neutral-200 pt-4"><h3 className="text-xl font-semibold">{item.heading}</h3><p>{item.text}</p><p className="rounded-xl bg-neutral-50 p-3 text-sm">Ett konkret svar: ”{item.marker.text}” — {answerLabels[item.marker.value]}.</p><p>{item.reflection}</p><Link href={item.guide} className={link}>{item.guideLabel}</Link></div>)}
           {analysis.zero && <><p>Inget av de efterfrågade mönstren finns rapporterat. Vad fick dig att söka testet: ett behov, en enskild situation eller något som frågorna inte tog upp?</p><p>Fundera på vad du själv upplever fungerar, till exempel utrymme för egna val, privatliv och ett nej utan rädsla. Det är sådant du kan vilja bevara.</p><Link href="/beteenden" className={link}>Utforska guiden om beteenden i relationer</Link></>}
         </section>
-        <section className={section}><h2 className="text-2xl font-semibold">Vad kan du göra med resultatet?</h2><ol className="list-decimal space-y-4 pl-5">{analysis.nextSteps.map(text => <li key={text}>{text}</li>)}</ol></section>
-        <section className={section}><h2 className="text-xl font-semibold">Din fullständiga profil</h2><div className="grid gap-3 sm:grid-cols-2">{domains.map(domain => {
+        <section data-flow="card" className={section}><h2 className="text-2xl font-semibold">Vad kan du göra med resultatet?</h2><ol className="list-decimal space-y-4 pl-5">{analysis.nextSteps.map(text => <li key={text}>{text}</li>)}</ol></section>
+        <section data-flow="card" className={section}><h2 className="text-xl font-semibold">Din fullständiga profil</h2><div className="grid gap-3 sm:grid-cols-2">{domains.map(domain => {
           const level = profile.scores[domain] >= 65 ? 4 : profile.scores[domain] >= 45 ? 3 : profile.scores[domain] >= 25 ? 2 : 1;
-          return <div key={domain} className="min-w-0 rounded-xl bg-neutral-50 p-3"><h3 className="text-sm font-semibold">{domainCopy[domain].label}</h3><p className="mt-1 text-sm text-neutral-600">{band(profile.scores[domain])}</p><div className="mt-2 flex gap-1" aria-hidden="true">{[1,2,3,4].map(part => <span key={part} className={`h-1 flex-1 rounded ${part <= level ? "bg-neutral-500" : "bg-neutral-200"}`} />)}</div></div>;
+          return <div data-flow="inset" key={domain} className="min-w-0 rounded-xl bg-neutral-50 p-3"><h3 className="text-sm font-semibold">{domainCopy[domain].label}</h3><p className="mt-1 text-sm text-neutral-600">{band(profile.scores[domain])}</p><div className="mt-2 flex gap-1" aria-hidden="true">{[1,2,3,4].map(part => <span key={part} className={`h-1 flex-1 rounded ${part <= level ? "bg-neutral-500" : "bg-neutral-200"}`} />)}</div></div>;
         })}</div></section>
       </>}</>}
       <section className="mt-8 space-y-2 text-sm leading-6 text-neutral-600"><h2 className="font-semibold text-neutral-900">Om resultatet</h2><p>Screeningen är ett reflektionsverktyg baserat på dina egna svar. Den ställer inte diagnoser och avgör inte juridiskt om ett brott har begåtts.</p><Link href="/metodik" className={link}>Läs om metodiken</Link></section>

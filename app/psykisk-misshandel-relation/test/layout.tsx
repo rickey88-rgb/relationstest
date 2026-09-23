@@ -1,3 +1,4 @@
+import TestShell from "../../_components/TestShell";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -15,5 +16,5 @@ export default function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return children;
+  return <TestShell>{children}</TestShell>;
 }

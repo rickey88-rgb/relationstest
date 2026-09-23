@@ -120,7 +120,7 @@ export default function Quickcheck() {
   if (!hydrated) return <p className="mt-8" role="status">Laddar snabbchecken…</p>;
 
   if (view === "analysis") return (
-    <section data-nosnippet className={`${panel} mt-8`} aria-labelledby="analysis-heading" aria-busy="true">
+    <section data-flow="analysis" data-nosnippet className={`${panel} mt-8`} aria-labelledby="analysis-heading" aria-busy="true">
       <h2 ref={heading} tabIndex={-1} id="analysis-heading" className="text-2xl font-semibold outline-none">Vi analyserar dina svar</h2>
       <p className="mt-3 leading-7 text-neutral-700">Vi jämför mönstren i dina svar och sammanställer vilka områden som verkar mest framträdande.</p>
       <ol className="mt-6 space-y-3" aria-live="polite">
@@ -131,17 +131,17 @@ export default function Quickcheck() {
 
   if (view === "result" && result) return (
     <div data-nosnippet className="mt-8 space-y-8">
-      <section className={panel} aria-labelledby="quickcheck-result-heading">
+      <section data-flow="card" className={panel} aria-labelledby="quickcheck-result-heading">
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-neutral-500">Ditt resultat</p>
         <h2 ref={heading} tabIndex={-1} id="quickcheck-result-heading" className="mt-2 text-2xl font-semibold tracking-tight outline-none sm:text-3xl">{result.title}</h2>
         <p className="mt-4 leading-7 text-neutral-700">{result.category === "low" ? "Dina svar visar inte något tydligt genomgående mönster av de beteenden som snabbchecken undersöker. Det utesluter inte att enskilda situationer kan vara viktiga att ta på allvar." : "Resultatet visar vilka områden som fått högst poäng i just dina svar. Det beskriver återkommande signaler, inte en diagnos, juridisk bedömning eller ett facit över relationen."}</p>
-        {result.prominent.length ? <div className="mt-6 space-y-4">{result.prominent.map((dimension) => <div key={dimension} className="rounded-xl bg-neutral-50 p-4"><div className="flex items-center justify-between gap-4"><h3 className="font-semibold">{dimensionLabels[dimension]}</h3><span className="shrink-0 text-sm tabular-nums text-neutral-600">{result.scores[dimension]} av 6</span></div><div className="mt-3 h-2 overflow-hidden rounded-full bg-neutral-200" aria-hidden="true"><div className="h-full rounded-full bg-[#2F6B4F]" style={{ width: `${result.scores[dimension] / 6 * 100}%` }} /></div><p className="mt-3 text-sm leading-6 text-neutral-700">{dimensionDescriptions[dimension]}</p></div>)}</div> : null}
+        {result.prominent.length ? <div className="mt-6 space-y-4">{result.prominent.map((dimension) => <div data-flow="inset" key={dimension} className="rounded-xl bg-neutral-50 p-4"><div className="flex items-center justify-between gap-4"><h3 className="font-semibold">{dimensionLabels[dimension]}</h3><span className="shrink-0 text-sm tabular-nums text-neutral-600">{result.scores[dimension]} av 6</span></div><div className="mt-3 h-2 overflow-hidden rounded-full bg-neutral-200" aria-hidden="true"><div data-flow="fill" className="h-full rounded-full bg-[#2F6B4F]" style={{ width: `${result.scores[dimension] / 6 * 100}%` }} /></div><p className="mt-3 text-sm leading-6 text-neutral-700">{dimensionDescriptions[dimension]}</p></div>)}</div> : null}
       </section>
 
-      <section className={panel} aria-labelledby="recommendations-heading">
+      <section data-flow="card" className={panel} aria-labelledby="recommendations-heading">
         <h2 id="recommendations-heading" className="text-2xl font-semibold">Fördjupa det som sticker ut</h2>
         <p className="mt-3 leading-7 text-neutral-700">Här visas bara nästa steg som passar de högst rankade områdena i dina svar.</p>
-        <div className="mt-5 grid gap-4 sm:grid-cols-2">{result.recommendations.map((recommendation, position) => <Link key={recommendation.href} href={recommendation.href} onClick={() => trackEvent("quickcheck_specialist_test_click", { target_route: recommendation.href, destination_test: recommendation.target, dominant_dimension: result.ranked[0], recommendation_position: position + 1, position: position + 1 })} className="rounded-xl border border-neutral-200 p-5 transition-colors hover:border-neutral-400 hover:bg-neutral-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"><h3 className="font-semibold">{recommendation.title}</h3><p className="mt-2 text-sm leading-6 text-neutral-600">{recommendation.description}</p><span className="mt-4 inline-block font-semibold underline underline-offset-4">Gå till testet</span></Link>)}</div>
+        <div className="mt-5 grid gap-4 sm:grid-cols-2">{result.recommendations.map((recommendation, position) => <Link data-flow="inset" key={recommendation.href} href={recommendation.href} onClick={() => trackEvent("quickcheck_specialist_test_click", { target_route: recommendation.href, destination_test: recommendation.target, dominant_dimension: result.ranked[0], recommendation_position: position + 1, position: position + 1 })} className="rounded-xl border border-neutral-200 p-5 transition-colors hover:border-neutral-400 hover:bg-neutral-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"><h3 className="font-semibold">{recommendation.title}</h3><p className="mt-2 text-sm leading-6 text-neutral-600">{recommendation.description}</p><span className="mt-4 inline-block font-semibold underline underline-offset-4">Gå till testet</span></Link>)}</div>
       </section>
 
       <ShareTest
@@ -159,7 +159,7 @@ export default function Quickcheck() {
   );
 
   return (
-    <section data-nosnippet className={`${panel} mt-8`} aria-labelledby="question-heading">
+    <section data-flow="question" data-nosnippet className={`${panel} mt-8`} aria-labelledby="question-heading">
       <div className="flex items-center justify-between gap-3 text-sm text-neutral-600"><span>Fråga {index + 1} av {questions.length}</span><span>{answeredCount} besvarade</span></div>
       <progress aria-label="Besvarade frågor" value={answeredCount} max={questions.length} className="mt-4 h-2 w-full accent-[#2F6B4F]" />
       <h2 ref={heading} tabIndex={-1} id="question-heading" className="mt-6 text-xl font-semibold leading-snug outline-none sm:text-2xl">{questions[index].text}</h2>

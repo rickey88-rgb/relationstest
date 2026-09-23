@@ -1,3 +1,4 @@
+import TestShell from "../../_components/TestShell";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -15,8 +16,7 @@ export default function GaslightingTestLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <main style={{ maxWidth: 760, margin: "0 auto", padding: "22px 16px 64px", color: "#111" }}>
+  return (<TestShell><main style={{ maxWidth: 760, margin: "0 auto", padding: "22px 16px 64px", color: "#111" }}>
       <header style={{ marginBottom: 20 }}>
         <nav aria-label="Testnavigation" style={{ display: "flex", flexWrap: "wrap", gap: "8px 20px", fontSize: 14 }}>
           <Link href="/" style={{ color: "#555", textDecoration: "underline", textUnderlineOffset: 3 }}>← Till Relationsvarning</Link>
@@ -48,7 +48,7 @@ export default function GaslightingTestLayout({
           omdöme.
         </p>
 
-        <div
+        <div data-flow="inset"
           style={{
             marginTop: 14,
             padding: 14,
@@ -68,6 +68,5 @@ export default function GaslightingTestLayout({
 
       </header>
       {children}
-    </main>
-  );
+    </main></TestShell>);
 }

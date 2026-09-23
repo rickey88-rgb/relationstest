@@ -1,3 +1,4 @@
+import TestShell from "../_components/TestShell";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -15,7 +16,7 @@ export default function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <main className="mx-auto max-w-3xl px-4 py-8 text-neutral-900 [overflow-wrap:anywhere] sm:px-6 sm:py-12 [&:has([data-screening-result])_[data-test-intro]]:hidden">
+  return <TestShell><main className="mx-auto max-w-3xl px-4 py-8 text-neutral-900 [overflow-wrap:anywhere] sm:px-6 sm:py-12 [&:has([data-screening-result])_[data-test-intro]]:hidden">
     <header>
       <Link href="/" className="inline-flex min-h-11 items-center text-sm text-neutral-600 underline underline-offset-4">Till Relationsvarning</Link>
       <h1 className="mt-4 text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">Screeningtest för relationen</h1>
@@ -25,5 +26,5 @@ export default function Layout({
       </div>
     </header>
     {children}
-  </main>;
+  </main></TestShell>;
 }

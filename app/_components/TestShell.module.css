@@ -1,0 +1,84 @@
+/* Opt-in extension of EditorialSurface. Values come from the approved tokens.
+   Legacy inline presentation is overridden here; handlers and data stay local. */
+.flow { min-height: 70vh; padding-bottom: 48px; }
+.brand { max-width: 816px; margin: auto; padding: 28px 32px 0; }
+.flow main, .flow article { max-width: 816px !important; margin-inline: auto !important; padding: 20px 32px 32px !important; }
+.flow main:has(> article) { max-width: none !important; padding: 0 !important; }
+.flow main > header { margin-bottom: 24px !important; }
+.flow h1 { font-size: clamp(1.85rem, 3.5vw, 2.75rem) !important; }
+.flow h2 { font-size: clamp(1.5rem, 2.8vw, 2rem) !important; }
+.flow h3 { font-size: 1.3rem !important; font-weight: 400 !important; }
+.flow [data-flow="inset"] h3 { min-width: 0; overflow-wrap: anywhere; hyphens: auto; }
+.flow :where(p, li) { line-height: 1.7; }
+.flow :where(nav a, header > a) { min-height: 44px; display: inline-flex; align-items: center; }
+.flow [data-flow="card"], .flow [data-flow="question"], .flow [data-flow="analysis"], .flow [data-flow="paywall"] {
+  background: var(--rv-surface) !important; color: var(--rv-text) !important;
+  border: 1px solid var(--rv-border) !important; border-radius: var(--rv-card-radius) !important;
+  padding: 28px !important; box-shadow: none !important; min-width: 0;
+}
+.flow [data-flow="question"] { margin-top: 24px !important; }
+.flow [data-flow="question"] h2, .flow [data-flow="question-text"] {
+  font-family: var(--rv-serif) !important; font-size: clamp(1.4rem, 2.5vw, 1.8rem) !important;
+  line-height: 1.35 !important; font-weight: 400 !important; text-align: left !important;
+  margin-block: 20px !important; min-height: 2.7em;
+}
+.flow :global(.question-box), .flow :global(.question-box) * { color: var(--rv-text) !important; -webkit-text-fill-color: var(--rv-text) !important; }
+.flow [data-flow="inset"] { background: var(--rv-beige) !important; border-color: var(--rv-border) !important; border-radius: 16px !important; color: var(--rv-text) !important; box-shadow: none !important; min-width: 0; }
+.flow [data-flow="grid"] { grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr)) !important; }
+.flow button, .flow [data-flow="cta"] {
+  min-height: var(--rv-button-height) !important; max-width: 100%;
+  border: 1px solid var(--rv-border) !important; border-radius: var(--rv-button-radius) !important;
+  background: var(--rv-surface) !important; color: var(--rv-text) !important;
+  font: 600 .9rem/1.5 var(--rv-sans) !important; padding: 12px 18px !important;
+  box-shadow: none !important; text-underline-offset: 4px; cursor: pointer;
+}
+.flow button:hover:not(:disabled) { background: var(--rv-beige) !important; border-color: var(--rv-muted) !important; }
+.flow button[aria-pressed] { width: 100%; text-align: left !important; font-weight: 400 !important; }
+.flow button[aria-pressed="true"], .flow button:active:not(:disabled) { background: var(--rv-sage-soft) !important; border-color: var(--rv-focus) !important; }
+.flow button:disabled:not([aria-pressed]) { opacity: .45; cursor: not-allowed; }
+.flow :where(button, a):focus-visible { outline: 3px solid var(--rv-focus) !important; outline-offset: 4px !important; }
+.flow [data-flow="cta"] { display: inline-flex; justify-content: center; align-items: center; background: var(--rv-rose) !important; color: var(--rv-surface) !important; border-color: var(--rv-rose) !important; text-decoration: none; white-space: normal !important; }
+.flow [data-flow="cta"]:hover { background: var(--rv-rose-hover) !important; color: var(--rv-surface) !important; }
+.flow progress, .flow [data-flow="track"] { height: 8px !important; background: var(--rv-beige) !important; border-radius: 999px; overflow: hidden; accent-color: var(--rv-rose); border: 0; }
+.flow progress { width: 100%; appearance: none; }
+.flow progress::-webkit-progress-bar { background: var(--rv-beige); border-radius: 999px; }
+.flow progress::-webkit-progress-value { background: var(--rv-rose); border-radius: 999px; }
+.flow progress::-moz-progress-bar { background: var(--rv-rose); border-radius: 999px; }
+.flow [data-flow="fill"] { background: var(--rv-rose) !important; border-radius: 999px; }
+.flow [data-flow="analysis"] { background: var(--rv-beige) !important; padding-block: 36px !important; }
+.flow [data-flow="analysis"]::before { content: ""; display: block; width: 30px; height: 30px; margin-bottom: 24px; border: 2px solid var(--rv-rose-soft); border-top-color: var(--rv-rose); border-radius: 50%; animation: turn 1.6s linear infinite; }
+.flow [data-flow="paywall"] { background: var(--rv-rose-soft) !important; padding: 32px !important; }
+.flow [data-flow="paywall"] :where(p, li, span, div, button) { color: var(--rv-text) !important; border-color: #c5aaa9 !important; }
+.flow [data-flow="paywall"] h2 { max-width: 25ch; }
+.flow [data-flow="paywall"] [data-flow="cta"] { color: var(--rv-surface) !important; }
+.flow [data-flow="paywall"] > div:has([data-flow="cta"]) { background: var(--rv-surface); border-radius: 18px; padding: 20px !important; }
+.flow [data-flow="paywall"] > div:has(> button:not([data-flow="cta"])) { background: transparent; padding: 0 !important; }
+.flow [data-flow="lock"] { display: inline-block; position: relative; font-size: 0; width: 9px; height: 8px; border: 1px solid currentColor; border-radius: 2px; margin-right: 3px; }
+.flow [data-flow="lock"]::before { content: ""; position: absolute; left: 1px; top: -6px; width: 5px; height: 6px; border: 1px solid currentColor; border-bottom: 0; border-radius: 4px 4px 0 0; }
+.flow [data-flow="dark"] { background: var(--rv-sage-soft) !important; color: var(--rv-text) !important; border-radius: var(--rv-card-radius) !important; }
+.flow [data-flow="dark"] * { color: var(--rv-text) !important; }
+.flow :global(.bg-neutral-500) { background: var(--rv-rose) !important; }
+.flow :global(.bg-neutral-200) { background: var(--rv-beige) !important; }
+.flow :global(.bg-amber-700) { background: var(--rv-rose) !important; }
+.flow [class*="bg-[#2F6B4F]"]:not(button) { background: var(--rv-focus) !important; }
+/* The footer sits outside EditorialSurface. Only test routes opt in here;
+   fallbacks mirror the existing tokens without changing the shared footer. */
+:global(body):has(.flow) > footer { background: var(--rv-bg, #f7f3ef); color: var(--rv-muted, #626d66); border-color: var(--rv-border, #ddd5cd); font-family: var(--rv-sans, Arial, Helvetica, sans-serif); }
+@keyframes turn { to { transform: rotate(360deg); } }
+@media (max-width: 700px) {
+  .brand { padding: 20px 20px 0; }
+  .flow main, .flow article { padding: 12px 20px 28px !important; }
+  .flow main > header p, .flow article > header p { font-size: .9rem !important; line-height: 1.65 !important; margin-top: 10px !important; }
+  .flow main > header nav { gap: 0 16px !important; font-size: .8rem !important; }
+  .flow main > header h1 { margin-top: 12px !important; }
+  .flow [data-flow="card"], .flow [data-flow="question"], .flow [data-flow="analysis"], .flow [data-flow="paywall"] { padding: 20px !important; border-radius: 22px !important; }
+  .flow [data-flow="paywall"] > div:has([data-flow="cta"]) { padding: 16px !important; }
+  .flow [data-flow="paywall"] [data-flow="cta"] { padding-inline: 10px !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .flow *, .flow *::before { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+@media (max-width: 400px) {
+  .flow [data-flow="inset"] > div:has(> h3) { flex-wrap: wrap; gap: 8px !important; }
+  .flow [data-flow="inset"] > div > h3 { flex-basis: 100%; font-size: 1.1rem !important; }
+}
