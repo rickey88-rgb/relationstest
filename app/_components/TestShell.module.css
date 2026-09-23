@@ -59,7 +59,7 @@
   padding: 2.5px;
   border-radius: inherit;
   pointer-events: none;
-  background: conic-gradient(from var(--rv-paywall-glow-angle), #8e4f5b 0deg, #9d5663 250deg, #d58f97 292deg, #f4c8c4 318deg, #fffdf8 332deg, #efbbb8 344deg, #9d5663 360deg);
+  background: conic-gradient(from var(--rv-paywall-glow-angle), rgb(142 79 91 / .12) 0deg, rgb(157 86 99 / .16) 250deg, rgb(213 143 151 / .38) 292deg, rgb(244 200 196 / .72) 318deg, #fffdf8 332deg, rgb(239 187 184 / .68) 344deg, rgb(157 86 99 / .12) 360deg);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
@@ -89,7 +89,7 @@
 /* Desktop paywall refinements only. Keep the approved mobile/tablet rules intact. */
 @media (min-width: 1024px) {
   .flow [data-flow="paywall"] h2 { max-width: 100%; }
-  .flow [data-flow="paywall"] > div:has(> h3) { margin-top: 36px !important; }
+  .flow [data-flow="paywall"] > div:has(> h3) { margin-top: 36px !important; border: 0 !important; outline: 0; box-shadow: none !important; }
 
   /* Outrank the generic button hover/active rules, retaining light CTA text. */
   .flow [data-flow="paywall"] button[data-flow="cta"]:is(:hover, :active):not(:disabled) {
