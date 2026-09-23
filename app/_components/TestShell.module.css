@@ -51,7 +51,25 @@
 .flow [data-flow="paywall"] { background: var(--rv-rose-soft) !important; padding: 32px !important; }
 .flow [data-flow="paywall"] :where(p, li, span, div, button) { color: var(--rv-text) !important; border-color: #c5aaa9 !important; }
 .flow [data-flow="paywall"] h2 { max-width: 25ch; }
-.flow [data-flow="paywall"] [data-flow="cta"] { color: var(--rv-surface) !important; }
+.flow [data-flow="paywall"] [data-flow="cta"] { position: relative; isolation: isolate; overflow: visible; color: var(--rv-surface) !important; }
+.flow [data-flow="paywall"] [data-flow="cta"]::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  padding: 1.5px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: conic-gradient(from var(--rv-paywall-glow-angle), #9d5663, #d8a4a5, #fff8f2, #c77f8c, #9d5663);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  filter: drop-shadow(0 0 4px rgb(157 86 99 / .24));
+  opacity: .72;
+  animation: paywall-glow 5.5s linear infinite;
+  transition: opacity 160ms ease;
+}
+.flow [data-flow="paywall"] [data-flow="cta"]:hover::before { opacity: .84; }
 .flow [data-flow="paywall"] > div:has([data-flow="cta"]) { background: var(--rv-surface); border-radius: 18px; padding: 20px !important; }
 .flow [data-flow="paywall"] > div:has(> button:not([data-flow="cta"])) { background: transparent; padding: 0 !important; }
 .flow [data-flow="lock"] { display: inline-block; position: relative; font-size: 0; width: 9px; height: 8px; border: 1px solid currentColor; border-radius: 2px; margin-right: 3px; }
@@ -66,6 +84,8 @@
    fallbacks mirror the existing tokens without changing the shared footer. */
 :global(body):has(.flow) > footer { background: var(--rv-bg, #f7f3ef); color: var(--rv-muted, #626d66); border-color: var(--rv-border, #ddd5cd); font-family: var(--rv-sans, Arial, Helvetica, sans-serif); }
 @keyframes turn { to { transform: rotate(360deg); } }
+@property --rv-paywall-glow-angle { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+@keyframes paywall-glow { to { --rv-paywall-glow-angle: 360deg; } }
 /* Desktop paywall refinements only. Keep the approved mobile/tablet rules intact. */
 @media (min-width: 1024px) {
   .flow [data-flow="paywall"] h2 { max-width: 100%; }
@@ -120,6 +140,7 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .flow *, .flow *::before { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  .flow [data-flow="paywall"] [data-flow="cta"]::before { --rv-paywall-glow-angle: 35deg; }
 }
 @media (max-width: 400px) {
   .flow [data-flow="inset"] > div:has(> h3) { flex-wrap: wrap; gap: 8px !important; }
