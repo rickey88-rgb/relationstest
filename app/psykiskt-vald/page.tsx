@@ -563,6 +563,20 @@ export default function Page() {
 >
   Ekonomiskt våld – kontroll över pengar →
 </Link>
+
+<Link data-rv="card"
+  href="/kontrollerande-relation"
+  style={{
+    padding: 16,
+    border: "1px solid #ddd",
+    borderRadius: 14,
+    color: "#111",
+    textDecoration: "none",
+    fontWeight: 800,
+  }}
+>
+  Kontrollerande partner – tecken och gränser →
+</Link>
   </div>
 </section>
 

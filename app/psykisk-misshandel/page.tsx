@@ -137,6 +137,11 @@ export default function Page() {
         </p>
 
         <p style={{ fontSize: 17, lineHeight: 1.75 }}>
+          Om du främst försöker förstå återkommande regler, krav på insyn eller
+          begränsningar i vardagen kan du läsa om <Link href="/kontrollerande-relation" style={{ color: "#111", fontWeight: 800 }}>tecken på en kontrollerande partner</Link>.
+        </p>
+
+        <p style={{ fontSize: 17, lineHeight: 1.75 }}>
           Ofta är det just kombinationen och upprepningen som gör situationen
           nedbrytande.
         </p>

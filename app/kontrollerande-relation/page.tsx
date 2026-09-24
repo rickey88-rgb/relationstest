@@ -98,7 +98,7 @@ export default function Page() {
         </p>
 
         <h2 className="text-2xl font-semibold">
-          Gradvis gränsförskjutning
+          Subtil kontroll och gradvis gränsförskjutning
         </h2>
 
         <p>
@@ -113,6 +113,15 @@ export default function Page() {
           <Link href="/psykisk-misshandel-relation" className="underline underline-offset-4">kontroll som del av psykisk misshandel</Link>
           . För en bredare bild av flera mönster, se också{" "}
           <Link href="/destruktivt-forhallande" className="underline underline-offset-4">tecken på ett destruktivt förhållande</Link>.
+        </p>
+
+        <h2 className="text-2xl font-semibold">
+          När kontroll kan bli psykisk misshandel
+        </h2>
+        <p>
+          Kontroll är inte automatiskt psykisk misshandel eller psykiskt våld. Men när begränsningar,
+          övervakning, hot eller förnedring återkommer och påverkar din frihet kan de vara del av ett
+          större skadligt mönster. Läs mer om <Link href="/psykisk-misshandel" className="underline underline-offset-4">psykisk misshandel och vanliga tecken</Link> och om <Link href="/psykiskt-vald" className="underline underline-offset-4">psykiskt våld och stöd</Link>.
         </p>
 
         <h2 className="text-2xl font-semibold">
@@ -146,6 +155,15 @@ export default function Page() {
         </p>
 
         <h2 className="text-2xl font-semibold">
+          Kan både kvinnor och män vara kontrollerande?
+        </h2>
+        <p>
+          Kontrollerande beteende kan förekomma oavsett kön eller relationsform. Det viktiga är inte
+          vem som har rollen i relationen, utan om en person återkommande begränsar den andres
+          handlingsutrymme, privatliv eller möjlighet att säga nej.
+        </p>
+
+        <h2 className="text-2xl font-semibold">
           När kontroll kombineras med manipulation
         </h2>
 
@@ -159,7 +177,8 @@ export default function Page() {
           <Link href="/psykopatiska-drag-relation" className="underline">
             psykopatiska drag i relation
           </Link>
-          . Kontrollerande beteende i sig visar inte att någon har sådana drag.
+          , och om <Link href="/narcissist-i-en-relation" className="underline">narcissistiska relationsmönster</Link>.
+          Kontrollerande beteende i sig visar inte att någon har sådana drag.
         </p>
 
         <p>
@@ -182,6 +201,15 @@ export default function Page() {
           stödlinje. Läs om <Link href="/psykiskt-vald/hjalp" className="underline underline-offset-4">stöd och hjälp vid psykiskt våld</Link>.
           Du behöver inte göra ett test eller köpa en analys för att söka stöd.
           <strong> Vid akut fara, ring 112.</strong>
+        </p>
+
+        <h2 className="text-2xl font-semibold">
+          Finns det ett test för en kontrollerande partner?
+        </h2>
+        <p>
+          Ett relationstest kan hjälpa dig att strukturera återkommande upplevelser av kontroll,
+          manipulation och begränsad frihet, men kan inte avgöra vem din partner är, ställa en
+          diagnos eller bedöma om ett brott har begåtts. Du kan göra <Link href="/test" className="underline underline-offset-4">Relationsvarnings relationstest</Link> om du vill se flera mönster samlat.
         </p>
 
         <section data-rv="card" className="rounded-3xl border border-neutral-200 bg-white p-7 shadow-sm md:p-8">
