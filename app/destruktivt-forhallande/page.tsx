@@ -213,6 +213,37 @@ export default function Page() {
         </section>
 
         <section className="space-y-5">
+          <h2 className="text-2xl font-semibold tracking-tight">Toxisk relation – ett vardagsord, inte en diagnos</h2>
+          <p className="leading-7 text-neutral-700">
+            En relation kan beskrivas som toxisk när den präglas av återkommande mönster som bryter ner
+            trygghet, respekt eller frihet. Ordet säger däremot inte exakt vad som händer, och det är
+            ingen medicinsk eller psykologisk diagnos. Det är mer hjälpsamt att se på konkreta beteenden
+            och hur de påverkar dig över tid.
+          </p>
+          <p className="leading-7 text-neutral-700">
+            Alla relationsproblem är inte psykisk misshandel. Men när förnedring, hot, isolering,
+            övervakning eller kontroll återkommer behöver situationen tas på allvar. Läs om{" "}
+            <Link href="/psykisk-misshandel" className={textLink}>psykisk misshandel och vanliga tecken</Link>{" "}
+            om du försöker förstå den skillnaden.
+          </p>
+        </section>
+
+        <section className="space-y-5">
+          <h2 className="text-2xl font-semibold tracking-tight">Test: är relationen sund eller destruktiv?</h2>
+          <p className="leading-7 text-neutral-700">
+            Ett test kan hjälpa dig att sortera återkommande upplevelser, men det kan inte fastställa en
+            etikett på relationen, bedöma vem som bär ansvar eller ersätta stöd när du känner dig otrygg.
+            För en bred genomgång av varningssignaler, kontroll, manipulation och gränser kan du göra{" "}
+            <Link href="/test" className={textLink}>Relationsvarnings relationstest</Link>.
+          </p>
+          <p className="leading-7 text-neutral-700">
+            Om du främst vill se vad som fungerar och vilka områden som kan stärkas i relationen finns
+            också det kostnadsfria testet <Link href="/ar-min-relation-sund" className={textLink}>Är min relation sund?</Link>.
+            Det ersätter inte den bredare screeningen och är inte ett beslut om att stanna eller lämna.
+          </p>
+        </section>
+
+        <section className="space-y-5">
           <h2 className="text-2xl font-semibold tracking-tight">Hur kan du lämna en destruktiv relation?</h2>
           <p className="leading-7 text-neutral-700">
             Om situationen inte känns farlig kan du börja med att berätta för någon

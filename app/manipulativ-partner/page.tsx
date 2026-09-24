@@ -338,6 +338,11 @@ export default function Page() {
         </p>
 
         <p>
+          För en bred vardaglig genomgång av återkommande nedbrytande beteenden kan du läsa om{" "}
+          <Link href="/psykisk-misshandel" className="underline underline-offset-4">tecken och exempel på psykisk misshandel</Link>.
+        </p>
+
+        <p>
           Om du börjar bli rädd för reaktionen, om dina gränser leder till kyla,
           vrede, skuld eller hot, eller om du märker att du drar dig undan andra för
           att hålla relationen stabil, då är det klokt att stanna upp ordentligt.

@@ -32,6 +32,7 @@ export const guideLabels: Record<string, string> = {
   "/digitalt-vald": "Digitalt våld och övervakning",
   "/ekonomiskt-vald": "Ekonomiskt våld och ekonomisk kontroll",
   "/kontrollerande-relation": "Kontrollerande partner – tecken och gränser",
+  "/psykisk-misshandel": "Psykisk misshandel – tecken och exempel",
   "/psykiskt-vald": "Psykiskt våld – en översikt",
   "/psykiskt-vald/vad-raknas-som": "Vad räknas som psykiskt våld?",
   "/psykiskt-vald/hjalp": "Stöd och hjälp vid psykiskt våld",

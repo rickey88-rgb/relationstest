@@ -581,7 +581,7 @@ export default function SilentTreatmentRelationPage() {
               <p>
                 Du kan sätta styrningen i ett större sammanhang genom att läsa om{" "}
                 <Link href="/psykisk-misshandel-relation" className="underline underline-offset-4">psykisk misshandel som återkommande relationsmönster</Link>
-                . Se även <Link href="/destruktivt-forhallande" className="underline underline-offset-4">fler mönster i en destruktiv relation</Link>.
+                . För en bredare genomgång kan du också läsa om <Link href="/psykisk-misshandel" className="underline underline-offset-4">när psykisk nedbrytning blir ett mönster</Link>. Se även <Link href="/destruktivt-forhallande" className="underline underline-offset-4">fler mönster i en destruktiv relation</Link>.
               </p>
 
               <p>

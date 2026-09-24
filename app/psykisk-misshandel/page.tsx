@@ -230,6 +230,64 @@ export default function Page() {
 </Link>
       </section>
 
+      <section style={{ marginTop: 42 }}>
+        <h2 style={{ fontSize: 30 }}>
+          När beteenden börjar kännas normala
+        </h2>
+
+        <p style={{ fontSize: 17, lineHeight: 1.75 }}>
+          Skadliga beteenden börjar inte alltid dramatiskt. Gränser kan flyttas i små steg,
+          samtidigt som relationen också har varma eller lugna perioder. Då kan du gradvis
+          börja anpassa dig för att undvika nästa reaktion.
+        </p>
+
+        <p style={{ fontSize: 17, lineHeight: 1.75 }}>
+          Med tiden kan det bli lätt att ifrågasätta sin egen reaktion eller tänka att det
+          nog inte var så farligt. En utomstående kan ibland se förändringen tydligare,
+          eftersom hen inte behöver hantera samma press eller hopp om att det ska bli bättre.
+        </p>
+      </section>
+
+      <section data-rv="card"
+        style={{
+          marginTop: 42,
+          padding: 24,
+          border: "1px solid #ddd",
+          borderRadius: 18,
+          background: "#fafafa",
+        }}
+      >
+        <h2 style={{ fontSize: 28, marginTop: 0 }}>
+          Psykisk misshandel – checklista över vanliga tecken
+        </h2>
+
+        <ul style={{ display: "grid", gap: 10, fontSize: 17, lineHeight: 1.65, paddingLeft: 22 }}>
+          <li>Du blir återkommande nedvärderad, förlöjligad eller gjord ansvarig för allt.</li>
+          <li>Det du minns, känner eller upplever förnekas eller förvrängs ofta.</li>
+          <li>Tystnad, kyla eller hot används efter att du sagt nej eller tagit upp något svårt.</li>
+          <li>Du behöver redovisa var du är, vem du träffar eller vad du gör på telefonen.</li>
+          <li>Du begränsar kontakt med vänner eller familj för att undvika en reaktion.</li>
+          <li>Din ekonomi, dina konton eller vardagsval blir något du behöver få godkänt.</li>
+          <li>Du går på äggskal och planerar dina ord för att förebygga ilska, skuld eller kyla.</li>
+          <li>Hot, skrämsel eller konsekvenser används för att få dig att anpassa dig.</li>
+          <li>Du får allt svårare att hålla fast vid dina gränser eller fatta egna beslut.</li>
+          <li>Du börjar tvivla på ditt eget omdöme eller på om du har rätt att reagera.</li>
+          <li>Din självkänsla, frihet eller känsla av trygghet har gradvis minskat.</li>
+          <li>De här beteendena återkommer, även efter ursäkter eller löften om förändring.</li>
+        </ul>
+
+        <p style={{ fontSize: 17, lineHeight: 1.75 }}>
+          En enskild punkt bevisar inte psykisk misshandel. Det viktiga är helheten, upprepningen
+          och om ett mönster av makt, kontroll eller rädsla begränsar dig över tid.
+        </p>
+
+        <p style={{ fontSize: 17, lineHeight: 1.75, marginBottom: 0 }}>
+          Om du vill sortera flera återkommande mönster kan du läsa mer om{" "}
+          <Link href="/psykisk-misshandel-relation" style={{ color: "#111", fontWeight: 800 }}>psykisk misshandel i relationer</Link>.
+          Om situationen känns otrygg finns <Link href="/psykiskt-vald/hjalp" style={{ color: "#111", fontWeight: 800 }}>stöd och hjälp vid psykiskt våld</Link>.
+        </p>
+      </section>
+
       <section data-rv="card"
         style={{
           marginTop: 42,
@@ -555,6 +613,42 @@ export default function Page() {
               Ett test kan hjälpa dig att systematiskt identifiera beteenden
               och återkommande mönster. Det kan däremot inte avgöra om ett
               brott har begåtts eller ersätta en professionell bedömning.
+            </p>
+          </div>
+
+          <div>
+            <h3>Vad är verbal misshandel?</h3>
+            <p style={{ lineHeight: 1.7 }}>
+              Verbal misshandel används ofta om ord som återkommande förnedrar, hotar,
+              skrämmer eller styr en annan person. Ett svårt eller klumpigt samtal räcker
+              inte i sig; se på mönstret och hur orden påverkar din trygghet och frihet.
+            </p>
+          </div>
+
+          <div>
+            <h3>Är mental eller emotionell misshandel samma sak som psykisk misshandel?</h3>
+            <p style={{ lineHeight: 1.7 }}>
+              Orden används ofta om närliggande upplevelser i vardagligt språk. De är inte
+              medicinska diagnoser och säger inte automatiskt något om en juridisk bedömning.
+              Det viktiga är vilka beteenden som återkommer och vilken effekt de får.
+            </p>
+          </div>
+
+          <div>
+            <h3>Kan det ske utan att personen själv kallar det psykisk misshandel?</h3>
+            <p style={{ lineHeight: 1.7 }}>
+              Det går sällan att avgöra en persons avsikt utifrån en enskild händelse.
+              Återkommande kontroll, nedvärdering, hot eller begränsningar behöver ändå tas
+              på allvar när de påverkar din trygghet, självkänsla eller möjlighet att säga nej.
+            </p>
+          </div>
+
+          <div>
+            <h3>Hur börjar psykisk misshandel ofta?</h3>
+            <p style={{ lineHeight: 1.7 }}>
+              Det kan börja med sådant som går att förklara bort var för sig: en nedsättande
+              kommentar, ett krav på insyn eller en reaktion som gör att du anpassar dig.
+              Frågan är om utrymmet för dig gradvis blir mindre och mönstret fortsätter.
             </p>
           </div>
         </div>

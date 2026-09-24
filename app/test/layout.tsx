@@ -21,7 +21,7 @@ export default function Layout({
       <Link href="/" className="inline-flex min-h-11 items-center text-sm text-neutral-600 underline underline-offset-4">Till Relationsvarning</Link>
       <h1 className="mt-4 text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">Screeningtest för relationen</h1>
       <div data-test-intro>
-      <p className="mt-5 leading-7 text-neutral-700">Det här anonyma screeningtestet hjälper dig identifiera återkommande varningssignaler i en nära relation. Testet bedömer beteendemönster som kontroll, manipulation, gaslighting och psykisk misshandel och ger vägledning om vilka områden som kan vara värda att undersöka vidare.</p>
+      <p className="mt-5 leading-7 text-neutral-700">Det här anonyma screeningtestet hjälper dig identifiera återkommande varningssignaler i en nära relation. Testet bedömer beteendemönster som kontroll, manipulation, gaslighting och psykisk misshandel och ger vägledning om vilka områden som kan vara värda att undersöka vidare. Om du funderar på om relationen har blivit osund eller destruktiv kan du läsa om <Link href="/destruktivt-forhallande" className="underline underline-offset-4">tecken på destruktiva relationsmönster</Link>.</p>
       <p className="mt-4 text-sm leading-6">Svara främst utifrån de senaste sex månaderna, eller relationen som helhet om den är nyare. Välj det svar som ligger närmast din erfarenhet. Det är 42 frågor. När du väljer ett svar går du automatiskt vidare.</p>
       </div>
     </header>
