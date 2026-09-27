@@ -1,0 +1,35 @@
+/* eslint-disable @typescript-eslint/no-require-imports -- executable product-model regression harness. */
+const assert = require('node:assert/strict');
+const path = require('node:path');
+const load = require('../../autism-test/test/test-loader.cjs')();
+const m = load(path.join(__dirname, 'model.ts'));
+const answersFor = totals => m.questions.map(question => {
+  const total = totals[question.dimension];
+  const group = m.questions.filter(item => item.dimension === question.dimension);
+  const position = group.findIndex(item => item.id === question.id);
+  const base = Math.floor(total / group.length); const remainder = total % group.length;
+  return base + (position < remainder ? 1 : 0);
+});
+const context = Array(6).fill(2);
+assert.equal(m.questions.length, 48);
+assert.equal(new Set(m.questions.map(q => q.id)).size, 48);
+assert.deepEqual(m.questions.map(q => q.dimension).sort(), ["A","A","A","A","A","A","A","A","B","B","B","B","B","B","C","C","C","C","C","C","C","D","D","D","D","D","D","D","E","E","E","E","E","F","F","F","F","F","G","G","G","G","G","H","H","H","H","H"]);
+const full = m.calculateReport(Array(48).fill(4), context);
+for (const key of m.dimensions) assert.equal(full.scores[key], 100);
+assert.equal(full.indices.adhdIndex, 100); assert.equal(full.indices.autismIndex, 100);
+const onlyMasking = m.calculateReport(answersFor({A:0,B:0,C:0,D:0,E:0,F:20,G:0,H:0}), context);
+assert.equal(onlyMasking.indices.autismIndex, 0); assert.equal(onlyMasking.indices.adhdIndex, 0);
+const onlyFriction = m.calculateReport(answersFor({A:0,B:0,C:0,D:0,E:0,F:0,G:20,H:0}), context);
+assert.equal(onlyFriction.indices.autismIndex, 0); assert.equal(onlyFriction.indices.adhdIndex, 0);
+const indices = m.calculatePrimaryIndices({A:60,B:40,C:70,D:60,E:40,F:100,G:100,H:100});
+assert.equal(indices.adhdIndex, 52); assert.equal(indices.autismIndex, 59);
+assert.equal(indices.maskingIndex, 100); assert.equal(indices.frictionIndex, 100);
+const sameCoreDifferentContext = answersFor({A:16,B:8,C:12,D:14,E:4,F:0,G:0,H:0});
+assert.equal(m.calculateReport(sameCoreDifferentContext, [0,0,0,0,0,3]).indices.adhdIndex, m.calculateReport(sameCoreDifferentContext, [4,4,4,4,4,0]).indices.adhdIndex);
+assert.equal(m.determineMainProfile(49, 20, full.scores), "Gränsnära/ojämn profil");
+assert.equal(m.determineMainProfile(55, 55, full.scores), "Gränsnära/ojämn profil");
+assert(!m.findDimensionOutliers({A:35,B:20,C:20,D:20,E:20,F:20,G:20,H:20}).some(item => item.kind === "stark topp"));
+assert.equal(m.generateTeaser({A:0,B:0,C:0,D:0,E:0,F:0,G:60,H:0}, {adhdIndex:0,autismIndex:0,maskingIndex:0,frictionIndex:60,functionalIndex:0}, [], context).type, "friction");
+assert.equal(m.parseState(JSON.stringify({reportVersion:"audhd-v1",answers:Array(48).fill(2),contextAnswers:Array(6).fill(2),questionIndex:99,contextIndex:99,unlocked:true})).questionIndex, 47);
+for (const invalid of [Array(47).fill(0), Array(48).fill(-1), Array(48).fill(5)]) assert.throws(() => m.calculateDimensions(invalid));
+console.log('PASS: AuDHD questions, weights, index isolation, context isolation, boundaries, outliers, teaser and persistence validation.');

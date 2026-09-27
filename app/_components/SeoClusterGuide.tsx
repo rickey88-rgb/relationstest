@@ -4,7 +4,7 @@ import GuideNextSteps from "./GuideNextSteps";
 import { guideRecommendations } from "./guideRecommendations";
 import { getArticleImageMetadata, getArticleImageSchema } from "../_seo/articleImages";
 
-export type ClusterSection = { heading: string; paragraphs: string[]; bullets?: string[] };
+export type ClusterSection = { heading: string; paragraphs: string[]; bullets?: string[]; links?: Array<Pick<ClusterLink, "href" | "label">> };
 export type ClusterLink = { href: string; label: string; description: string };
 export type ClusterFaq = { question: string; answer: string };
 export type ClusterGuideData = {
@@ -19,6 +19,7 @@ export type ClusterGuideData = {
   cta?: { title: string; text: string; href: string; label: string };
   faq?: ClusterFaq[];
   parent?: { href: string; label: string };
+  relatedTitle?: string;
 };
 
 const host = "https://www.relationsvarning.se";
@@ -39,7 +40,7 @@ export default function SeoClusterGuide({ data }: { data: ClusterGuideData }) {
   const highlighted = new Set(guideRecommendations[`/${data.slug}`]?.related.map((item) => item.href));
   const additionalLinks = data.related.filter((item) => !highlighted.has(item.href));
   const schema = [
-    { "@context": "https://schema.org", "@type": "Article", headline: data.h1, description: data.description, url, mainEntityOfPage: url, publisher: { "@type": "Organization", name: "Relationsvarning", url: host }, ...(articleImage ? { image: articleImage } : {}) },
+    { "@context": "https://schema.org", "@type": "Article", headline: data.h1, description: data.description, url, mainEntityOfPage: { "@type": "WebPage", "@id": url }, publisher: { "@type": "Organization", name: "Relationsvarning", url: host }, ...(articleImage ? { image: articleImage } : {}) },
     { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [
       { "@type": "ListItem", position: 1, name: "Relationsvarning", item: `${host}/` },
       ...(data.parent ? [{ "@type": "ListItem", position: 2, name: data.parent.label, item: `${host}${data.parent.href}` }, { "@type": "ListItem", position: 3, name: data.h1, item: url }] : [{ "@type": "ListItem", position: 2, name: data.h1, item: url }]),
@@ -66,10 +67,13 @@ export default function SeoClusterGuide({ data }: { data: ClusterGuideData }) {
           <h2 className="text-2xl font-semibold tracking-tight text-neutral-950">{section.heading}</h2>
           {section.paragraphs.map((paragraph) => <p key={paragraph} className="leading-7 text-neutral-700">{paragraph}</p>)}
           {section.bullets && <ul className="list-disc space-y-3 pl-6 leading-7 text-neutral-700">{section.bullets.map((item) => <li key={item}>{item}</li>)}</ul>}
+          {section.links?.length ? <p className="text-sm leading-7 text-neutral-600">Läs vidare: {section.links.map((item, index) => <span key={item.href}>{index > 0 ? ", " : ""}<Link href={item.href} className={textLink}>{item.label}</Link></span>)}.</p> : null}
         </section>)}
       </div>
 
-      {additionalLinks.length > 0 && <p className="mt-9 text-sm leading-7 text-neutral-600">Fler fördjupningar: {additionalLinks.map((item, index) => <span key={item.href}>{index > 0 ? ", " : ""}<Link href={item.href} className={textLink}>{item.label}</Link></span>)}.</p>}
+      {additionalLinks.length > 0 && (data.relatedTitle ? <section className="mt-12 border-t border-neutral-200 pt-9"><h2 className="text-2xl font-semibold tracking-tight">{data.relatedTitle}</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{additionalLinks.map((item) => <Link key={item.href} href={item.href} className="block rounded-2xl border border-neutral-200 bg-neutral-50 p-4 hover:border-neutral-300 hover:bg-white"><span className="font-semibold text-neutral-950">{item.label} <span aria-hidden="true">→</span></span><span className="mt-1 block text-sm leading-6 text-neutral-600">{item.description}</span></Link>)}</div></section> : <p className="mt-9 text-sm leading-7 text-neutral-600">Fler fördjupningar: {additionalLinks.map((item, index) => <span key={item.href}>{index > 0 ? ", " : ""}<Link href={item.href} className={textLink}>{item.label}</Link></span>)}.</p>)}
+
+      {data.cta ? <section data-rv="panel" className="mt-12 rounded-2xl border border-neutral-200 bg-neutral-50 p-5 sm:p-7"><h2 className="text-2xl font-semibold tracking-tight">{data.cta.title}</h2><p className="mt-3 leading-7 text-neutral-700">{data.cta.text}</p><Link data-rv="button" href={data.cta.href} className="mt-5 inline-flex min-h-12 items-center justify-center rounded-xl bg-neutral-900 px-5 py-3 text-center font-semibold text-white hover:bg-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900">{data.cta.label}</Link></section> : null}
 
       {data.faq?.length ? <section className="mt-12 space-y-6 border-t border-neutral-200 pt-9">
         <h2 className="text-2xl font-semibold tracking-tight">Vanliga frågor</h2>

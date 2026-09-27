@@ -27,12 +27,14 @@ export function adhdMetadata(slug: string): Metadata {
 
 export default function ADHDGuide({ slug }: { slug: string }) {
   const guide = getGuide(slug);
+  const audhdRelevant = ["adhd-vuxna", "adhd-i-vardagen", "adhd-symtom-vuxna", "adhd-kvinnor"].includes(slug);
   return <ContentGuide title={guide.h1} intro={guide.intro}>
     {guide.sections.map((section, index) => <GuideSection key={section.heading} title={section.heading}>
       {section.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
       {section.link && <p>{section.link.before}{" "}<Link href={section.link.href} className={textLink}>{section.link.label}</Link>{" "}{section.link.after}</p>}
       {index === 1 && <p>{guide.context}{" "}<Link href="/adhd-test" className={textLink}>{guide.anchor}</Link>.</p>}
       {index === 1 && <p>Om frågan främst gäller samspelet med en partner finns också guiden om <Link href="/adhd-och-relationer" className={textLink}>ADHD och relationer</Link>.</p>}
+      {index === 1 && audhdRelevant && <p>Om du också känner igen behov av förutsägbarhet, sensorisk känslighet eller mycket anpassning kan <Link href="/audhd-test" className={textLink}>AuDHD-testet för vuxna</Link> ge ett bredare reflektionsunderlag.</p>}
     </GuideSection>)}
     <GuideSection title="Källor och vidare läsning">
       <p className="text-sm">Vårdkällorna beskriver ADHD och bedömning. Vardagsexemplen i guiden är illustrationer, inte diagnostiska kriterier.</p>

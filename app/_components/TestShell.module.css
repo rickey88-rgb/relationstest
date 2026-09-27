@@ -50,6 +50,50 @@
 .flow [data-flow="analysis"]::before { content: ""; display: block; width: 30px; height: 30px; margin-bottom: 24px; border: 2px solid var(--rv-rose-soft); border-top-color: var(--rv-rose); border-radius: 50%; animation: turn 1.6s linear infinite; }
 .flow [data-flow="paywall"] { background: var(--rv-rose-soft) !important; padding: 32px !important; }
 .flow [data-flow="paywall"] :where(p, li, span, div, button) { color: var(--rv-text) !important; border-color: #c5aaa9 !important; }
+.flow [data-audhd-paywall] {
+  /* The shared shell deliberately turns paywalls off-white. Resolve the original
+     dark-card/light-text utility clash here, at the product boundary, rather
+     than changing the shared rules used by the other paid tests. */
+  color: var(--rv-text) !important;
+}
+.flow [data-audhd-paywall] :where(h2, h3, p, li, strong) {
+  color: var(--rv-text) !important;
+  -webkit-text-fill-color: var(--rv-text) !important;
+}
+.flow [data-audhd-paywall] [data-audhd-kicker] {
+  color: #713744 !important;
+  -webkit-text-fill-color: #713744 !important;
+}
+.flow [data-audhd-paywall] [data-audhd-locked-card] {
+  background: #f4e7e2 !important;
+  border-color: #c5aaa9 !important;
+}
+.flow [data-audhd-paywall] [data-audhd-locked-card] :where(p, div) {
+  color: #46554d !important;
+  -webkit-text-fill-color: #46554d !important;
+}
+.flow [data-audhd-paywall] [data-audhd-locked-card] :where([class*="h-1.5"], [class*="bg-white"]) {
+  background-color: #c7a8a6 !important;
+}
+.flow [data-audhd-paywall] [data-audhd-free-area] {
+  background: #fffdf8 !important;
+  border-color: #c5aaa9 !important;
+}
+.flow [data-audhd-paywall] [data-audhd-free-area] :where(span, strong) {
+  color: var(--rv-text) !important;
+  -webkit-text-fill-color: var(--rv-text) !important;
+}
+.flow [data-audhd-paywall] [data-audhd-free-track] { background: #eadbd6 !important; }
+.flow [data-audhd-paywall] [data-audhd-free-fill] { background: var(--rv-rose) !important; }
+.flow [data-audhd-paywall] [data-audhd-locked-area] {
+  background: #e8d8d3 !important;
+  border-color: #c5aaa9 !important;
+}
+.flow [data-audhd-paywall] [data-audhd-locked-area] :where(span) {
+  color: #58635d !important;
+  -webkit-text-fill-color: #58635d !important;
+}
+.flow [data-audhd-paywall] [data-audhd-locked-track] { background: #c7a8a6 !important; }
 .flow [data-flow="paywall"] h2 { max-width: 25ch; }
 .flow [data-flow="paywall"] [data-flow="cta"] { position: relative; isolation: isolate; overflow: visible; color: var(--rv-surface) !important; }
 .flow [data-flow="paywall"] [data-flow="cta"]::before {

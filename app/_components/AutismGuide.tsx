@@ -29,11 +29,13 @@ export function autismMetadata(slug: string): Metadata {
 
 export default function AutismGuide({ slug }: { slug: string }) {
   const guide = getGuide(slug);
+  const audhdRelevant = ["adhd-autism", "autism-vuxna", "autism-symtom-vuxna", "maskering-autism", "autism-kvinnor"].includes(slug);
   return <ContentGuide title={guide.h1} intro={guide.intro}>
     {guide.sections.map((section, index) => <GuideSection key={section.heading} title={section.heading}>
       {section.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
       {section.link && <p>{section.link.before}{" "}<Link href={section.link.href} className={textLink}>{section.link.label}</Link>{" "}{section.link.after}</p>}
       {index === 1 && <p>{guide.context}{" "}<Link href="/autism-test" className={textLink}>{guide.anchor}</Link>.</p>}
+      {index === 1 && audhdRelevant && <p>När autismrelaterade drag också finns tillsammans med fokus-, igångsättnings- eller rastlöshetssvårigheter kan du läsa om <Link href="/audhd" className={textLink}>ADHD och autism samtidigt</Link>.</p>}
     </GuideSection>)}
     <GuideSection title="Källor och vidare läsning">
       <p className="text-sm">Vårdkällorna beskriver autism och bedömning. Vardagsexemplen i guiden är illustrationer, inte diagnostiska kriterier.</p>

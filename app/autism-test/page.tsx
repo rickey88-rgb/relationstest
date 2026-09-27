@@ -41,6 +41,7 @@ export default function AutismLanding() {
       <p className="mt-4 leading-7 text-neutral-700">Testet tittar inte bara på sociala situationer. Det väger även in kommunikation, behov av förutsägbarhet, sensorisk känslighet, fokuserade intressen, flexibilitet och hur mönstren påverkar vardagen.</p>
       <div className="mt-6"><Link data-rv="button" href="/autism-test/test" className={cta}>Starta autismtestet</Link></div><p className="mt-3 text-sm text-neutral-600">Tar cirka 5 minuter · För vuxna · Ingen registrering</p>
     </header>
+    <GuideSection title="Känner du igen både autism- och ADHD-drag?"><p>Vissa beskriver en kombination av behov av förutsägbarhet och sensorisk återhämtning, tillsammans med rastlöshet, igångsättningssvårigheter eller starkt stimulansbehov.</p><p><Link href="/audhd-test" className={textLink}>Läs om och gör vårt AuDHD-test för vuxna.</Link></p></GuideSection>
     <GuideSection title="Ett autismtest ska inte försöka övertyga dig om att du har autism">
       <p>Många enskilda drag som förknippas med autism förekommer även hos personer utan autism. Att föredra rutiner, bli trött av sociala situationer eller vara känslig för ljud räcker inte i sig.</p>
       <p>Därför tittar Relationsvarnings test på flera områden samtidigt och på hur konsekvent mönstret är.</p>

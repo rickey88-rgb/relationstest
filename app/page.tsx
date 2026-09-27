@@ -31,6 +31,13 @@ const selfTests = [
     cta: "Gör självtestet",
   },
   {
+    href: "/audhd-test",
+    title: "AuDHD-test",
+    category: "ADHD OCH AUTISM SAMTIDIGT",
+    description: "Utforska hur ADHD- och autismrelaterade drag samspelar hos dig – och om olika behov förstärker eller motverkar varandra.",
+    cta: "Gör självtestet",
+  },
+  {
     href: "/adhd-test",
     title: "ADHD-test för vuxna",
     category: "Självtest för vuxna",
@@ -92,6 +99,7 @@ const relationTests = [
 ];
 
 const homeGuides: HomeGuide[] = [
+  { href: "/audhd", label: "Vad är AuDHD? ADHD och autism samtidigt", group: "NPF & självtest" },
   ...autismGuides.map((guide) => ({ href: `/${guide.slug}`, label: guide.label, group: "NPF & självtest" })),
   ...adhdGuides.map((guide) => ({ href: `/${guide.slug}`, label: guide.label, group: "NPF & självtest" })),
   { href: "/anknytning", label: "Anknytning i relationer", group: "Relationer & mönster" },
@@ -324,7 +332,7 @@ export default function Landing() {
 function TestCards({
   items,
 }: {
-  items: { href: string; title: string; category: string; description: string; cta?: string }[];
+  items: { href: string; title: string; category: string; description: string; meta?: string; cta?: string }[];
 }) {
   return (
     <ul className={styles.cards}>
@@ -342,6 +350,7 @@ function TestCards({
           <p className="mt-2 text-sm leading-relaxed text-neutral-700">
             {test.description}
           </p>
+          {test.meta && <p className="mt-3 text-xs font-semibold tracking-[0.08em] text-neutral-600">{test.meta}</p>}
           <div className="mt-auto pt-4">
             <Link
               href={test.href}
