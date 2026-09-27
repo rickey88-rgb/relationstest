@@ -98,6 +98,26 @@
   word-break: normal !important;
   hyphens: none !important;
 }
+.flow [data-audhd-paywall] [data-audhd-locked-panel] {
+  background: #e8d8d3 !important;
+  border-color: #c5aaa9 !important;
+}
+.flow [data-audhd-paywall] [data-audhd-locked-chip] {
+  display: inline-flex;
+  max-width: 100%;
+  align-items: flex-start;
+  border: 1px solid #c5aaa9;
+  border-radius: 999px;
+  background: #f4e7e2;
+  color: #58635d !important;
+  padding: .25rem .5rem;
+  font-size: .75rem;
+  line-height: 1.35;
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
+}
+.flow [data-audhd-paywall] [data-audhd-cta-wrap] [data-flow="cta"] { white-space: normal !important; }
 .flow [data-audhd-paywall] [data-audhd-locked-track] { background: #c7a8a6 !important; }
 .flow [data-flow="paywall"] h2 { max-width: 25ch; }
 .flow [data-flow="paywall"] [data-flow="cta"] { position: relative; isolation: isolate; overflow: visible; color: var(--rv-surface) !important; }
