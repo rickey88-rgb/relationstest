@@ -93,6 +93,11 @@
   color: #58635d !important;
   -webkit-text-fill-color: #58635d !important;
 }
+.flow [data-audhd-paywall] [data-audhd-locked-title] {
+  overflow-wrap: normal !important;
+  word-break: normal !important;
+  hyphens: none !important;
+}
 .flow [data-audhd-paywall] [data-audhd-locked-track] { background: #c7a8a6 !important; }
 .flow [data-flow="paywall"] h2 { max-width: 25ch; }
 .flow [data-flow="paywall"] [data-flow="cta"] { position: relative; isolation: isolate; overflow: visible; color: var(--rv-surface) !important; }
