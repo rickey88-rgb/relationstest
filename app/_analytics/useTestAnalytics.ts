@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { CONSENT_EVENT } from "./analytics";
-import { answerEvent, checkoutEvent, paywallEvent, purchaseEvent, restartEvents } from "./testEvents";
+import { answerEvent, checkoutEvent, paywallEvent, purchaseEvent, restartEvents, teaserEvent } from "./testEvents";
 import type { TestId } from "./config";
 
 export function useTestAnalytics(id: TestId, total: number) {
@@ -23,6 +23,6 @@ export function useTestAnalytics(id: TestId, total: number) {
   },[id,paywall]);
   return { paywallRef,
     answer: (answered: number, currentQuestion: number) => answerEvent(id,answered,currentQuestion,total),
-    checkout: () => checkoutEvent(id), purchase: () => purchaseEvent(id), restart: () => restartEvents(id),
+    checkout: () => checkoutEvent(id), purchase: () => purchaseEvent(id), teaser: () => teaserEvent(id), restart: () => restartEvents(id),
   };
 }

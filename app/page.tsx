@@ -38,6 +38,13 @@ const selfTests = [
     cta: "Gör självtestet",
   },
   {
+    href: "/hsp-test",
+    title: "HSP-test",
+    category: "Självtest för vuxna",
+    description: "Utforska överstimulering, sinnesintryck, känslor och återhämtning med 30 frågor om högkänslighet.",
+    cta: "Gör självtestet",
+  },
+  {
     href: "/adhd-test",
     title: "ADHD-test för vuxna",
     category: "Självtest för vuxna",

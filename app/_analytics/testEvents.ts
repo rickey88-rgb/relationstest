@@ -1,7 +1,7 @@
 import { ATTEMPT_PREFIX, consent, trackEvent } from "./analytics";
 import { testConfig, type TestId } from "./config";
 
-type Attempt = { version: 1; updatedAt: number; id: string; startedAt: number | null; completedAt: number | null; started: boolean; milestones: number[]; complete: boolean; paywall: boolean; purchase: boolean };
+type Attempt = { version: 1; updatedAt: number; id: string; startedAt: number | null; completedAt: number | null; started: boolean; milestones: number[]; complete: boolean; teaser?: boolean; paywall: boolean; purchase: boolean };
 const memory = new Map<TestId, Attempt>();
 function fresh(): Attempt {
   return {version:1,updatedAt:Date.now(),id:typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`,startedAt:null,completedAt:null,started:false,milestones:[],complete:false,paywall:false,purchase:false};
@@ -47,6 +47,11 @@ export function paywallEvent(id: TestId) {
   try { if (consent() !== "granted") return; const attempt=read(id); if (attempt.paywall) return;
     attempt.paywall=trackEvent("paywall_view",{...identity(id),price:testConfig[id].price,currency:testConfig[id].currency}); save(id,attempt);
   } catch { /* Optional measurement. */ }
+}
+export function teaserEvent(id: TestId) {
+  try { if (consent() !== "granted") return; const attempt = read(id); if (attempt.teaser) return;
+    attempt.teaser = trackEvent("teaser_view", { ...identity(id) }); save(id, attempt);
+  } catch { /* Optional measurement never changes the result flow. */ }
 }
 export function checkoutEvent(id: TestId) {
   try { if (consent() !== "granted") return; const attempt=read(id); save(id,attempt);

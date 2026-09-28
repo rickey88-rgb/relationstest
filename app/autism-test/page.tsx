@@ -42,6 +42,7 @@ export default function AutismLanding() {
       <div className="mt-6"><Link data-rv="button" href="/autism-test/test" className={cta}>Starta autismtestet</Link></div><p className="mt-3 text-sm text-neutral-600">Tar cirka 5 minuter · För vuxna · Ingen registrering</p>
     </header>
     <GuideSection title="Känner du igen både autism- och ADHD-drag?"><p>Vissa beskriver en kombination av behov av förutsägbarhet och sensorisk återhämtning, tillsammans med rastlöshet, igångsättningssvårigheter eller starkt stimulansbehov.</p><p><Link href="/audhd-test" className={textLink}>Läs om och gör vårt AuDHD-test för vuxna.</Link></p></GuideSection>
+    <GuideSection title="Sensorisk känslighet kan ha flera förklaringar"><p>Starka reaktioner på ljud, ljus eller social belastning kan förekomma vid autism, men också vid hög känslighet och i andra sammanhang. <Link href="/hsp-test" className={textLink}>Gör HSP-testet</Link> om du vill kartlägga känslighet, återhämtning och intryck separat.</p></GuideSection>
     <GuideSection title="Ett autismtest ska inte försöka övertyga dig om att du har autism">
       <p>Många enskilda drag som förknippas med autism förekommer även hos personer utan autism. Att föredra rutiner, bli trött av sociala situationer eller vara känslig för ljud räcker inte i sig.</p>
       <p>Därför tittar Relationsvarnings test på flera områden samtidigt och på hur konsekvent mönstret är.</p>

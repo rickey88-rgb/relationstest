@@ -8,6 +8,7 @@ import { hasPaidReturn } from "./usePaymentRecovery";
 
 const storageKeys: Record<TestId, string> = {
   audhd_test: "relationsvarning_audhd_state_v1",
+  hsp_test: "relationsvarning_hsp_state_v1",
   screening_test: "relationstest_screening_state_v2",
   psychological_abuse_test: "psykiskt_vald_test_state_v1",
   attachment_test: "anknytningstest_state_v1",
