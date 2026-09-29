@@ -2,13 +2,13 @@ import TestShell from "../../_components/TestShell";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Test om psykisk misshandel och psykiskt våld i relationen",
+  title: "Psykisk misshandel-test – 30 frågor om kontroll och psykiskt våld",
   description:
-    "Gör ett anonymt test med 30 frågor om kontroll, hot, förnedring, övervakning och psykisk nedbrytning i din relation. Få hjälp att se återkommande mönster.",
+    "Psykisk misshandel-test med 30 anonyma frågor om kontroll, förnedring, hot och övervakning i en relation. Identifiera återkommande mönster och få direkt resultat.",
   alternates: {
-    canonical: "/psykisk-misshandel-relation",
+    canonical: "/psykisk-misshandel-relation/test",
   },
-  robots: { index: false, follow: true, googleBot: { index: false, follow: true, "max-image-preview": "large" } },
+  robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large" } },
 };
 
 export default function Layout({

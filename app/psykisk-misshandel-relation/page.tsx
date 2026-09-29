@@ -90,7 +90,7 @@ export default function PsykiskMisshandelRelationPage() {
             href="/psykisk-misshandel-relation/test"
             className="inline-block rounded-xl bg-neutral-900 px-6 py-3 text-sm font-semibold text-white hover:bg-neutral-800"
           >
-            Gör testet anonymt
+            Gör testet om psykisk misshandel
           </Link>
         </div>
 
@@ -365,7 +365,7 @@ export default function PsykiskMisshandelRelationPage() {
             href="/psykisk-misshandel-relation/test"
             className="inline-block rounded-xl bg-white px-6 py-3 text-sm font-semibold text-neutral-900 hover:bg-neutral-100"
           >
-            Starta testet
+            Gör testet om psykisk misshandel
           </Link>
         </div>
 

@@ -63,7 +63,7 @@ const selfTests = [
 const relationTests = [
   {
     href: "/psykisk-misshandel-relation/test",
-    title: "Psykisk misshandel / psykiskt våld",
+    title: "Psykisk misshandel-test",
     category: "Fördjupningstest",
     description:
       "Undersök återkommande mönster av kontroll, hot, förnedring och psykisk nedbrytning.",
