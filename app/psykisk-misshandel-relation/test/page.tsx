@@ -7,6 +7,7 @@ import { buildPaywallTeaser } from "../../_lib/paywallTeaser";
 import { hasPaidReturn, usePaymentRecovery } from "../../_components/usePaymentRecovery";
 
 import { useTestAnalytics } from "../../_analytics/useTestAnalytics";
+import { trackEvent } from "../../_analytics/analytics";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 
@@ -452,6 +453,7 @@ export default function Page() {
   useEffect(() => () => { if (answerTimer.current) clearTimeout(answerTimer.current); }, []);
   const [unlocked, setUnlocked] = useState(false);
   const [hydrated, setHydrated] = useState(false);
+  const [showIntro, setShowIntro] = useState(true);
   const tracking = useTestAnalytics("psychological_abuse_test", questions.length);
 
   const [analysisStep, setAnalysisStep] = useState<number | null>(null);
@@ -476,11 +478,14 @@ export default function Page() {
         unlocked?: boolean;
       };
 
+      let hasSavedProgress = false;
+
       if (
         Array.isArray(parsed.answers) &&
         parsed.answers.length === totalQuestions
       ) {
         setAnswers(parsed.answers);
+        hasSavedProgress = parsed.answers.some((answer) => answer >= 0);
       }
 
       if (typeof parsed.index === "number") {
@@ -491,7 +496,10 @@ export default function Page() {
 
       if (parsed.unlocked === true) {
         setUnlocked(true);
+        hasSavedProgress = true;
       }
+
+      if (hasSavedProgress) setShowIntro(false);
     } catch {
       // ignore
     }
@@ -506,6 +514,7 @@ export default function Page() {
     if (params.get("paid") === "true") {
       tracking.purchase();
       setUnlocked(true);
+      setShowIntro(false);
 
       try {
         const raw = localStorage.getItem(LS_KEY);
@@ -732,7 +741,164 @@ export default function Page() {
       STRIPE_PAYMENT_LINK;
   }
 
+  function startTest() {
+    trackEvent("start_test", {
+      test_id: "psychological_abuse_test",
+      test_name: "Psykisk misshandel-test",
+      page_path: "/psykisk-misshandel-relation/test",
+    });
+    setShowIntro(false);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
   if (!hydrated) return <p role="status">Laddar testet...</p>;
+
+  if (showIntro) {
+    return (
+      <main
+        style={{
+          maxWidth: 760,
+          margin: "0 auto",
+          padding: 24,
+          fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, Arial",
+          color: "#111",
+        }}
+      >
+        <section
+          style={{
+            textAlign: "center",
+            padding: "20px 0 28px",
+          }}
+        >
+          <p
+            style={{
+              margin: 0,
+              fontSize: 13,
+              fontWeight: 800,
+              letterSpacing: ".08em",
+              textTransform: "uppercase",
+              opacity: 0.55,
+            }}
+          >
+            Psykisk misshandel & psykiskt våld
+          </p>
+          <h1
+            style={{
+              margin: "10px 0 0",
+              fontSize: "clamp(30px, 8vw, 42px)",
+              lineHeight: 1.12,
+              fontWeight: 900,
+            }}
+          >
+            Psykisk misshandel-test – känner du igen mönstren?
+          </h1>
+          <p
+            style={{
+              maxWidth: 620,
+              margin: "16px auto 0",
+              lineHeight: 1.6,
+              fontSize: 17,
+              opacity: 0.8,
+            }}
+          >
+            30 frågor om kontroll, förnedring, hot, övervakning och återkommande
+            beteenden i en relation.
+          </p>
+          <p
+            style={{
+              display: "inline-block",
+              margin: "18px 0 0",
+              padding: "8px 12px",
+              borderRadius: 999,
+              background: "#f1f1f1",
+              fontSize: 14,
+              fontWeight: 700,
+            }}
+          >
+            30 frågor · anonymt · direkt resultat
+          </p>
+          <div
+            style={{
+              maxWidth: 620,
+              margin: "22px auto 0",
+              padding: "16px 18px",
+              border: "1px solid #dedede",
+              borderRadius: 14,
+              background: "#fafafa",
+              textAlign: "left",
+              lineHeight: 1.6,
+            }}
+          >
+            Sedan 1 juli 2026 finns psykiskt våld som ett särskilt brott i svensk
+            lag. Testet hjälper dig att identifiera återkommande beteendemönster,
+            men kan inte avgöra om ett brott har begåtts.
+          </div>
+          <button
+            type="button"
+            onClick={startTest}
+            style={{
+              marginTop: 24,
+              minHeight: 52,
+              padding: "13px 24px",
+              border: 0,
+              borderRadius: 12,
+              background: "#111",
+              color: "#fff",
+              fontSize: 16,
+              fontWeight: 800,
+              cursor: "pointer",
+            }}
+          >
+            Starta testet
+          </button>
+        </section>
+
+        <section
+          style={{
+            borderTop: "1px solid #e6e6e6",
+            paddingTop: 26,
+          }}
+        >
+          <h2 style={{ margin: 0, fontSize: 24 }}>Vad undersöker testet?</h2>
+          <ul
+            style={{
+              margin: "16px 0 0",
+              paddingLeft: 22,
+              display: "grid",
+              gap: 9,
+              lineHeight: 1.5,
+            }}
+          >
+            <li>Kontroll och begränsningar</li>
+            <li>Förnedring och nedvärdering</li>
+            <li>Skuld och beskyllningar</li>
+            <li>Hot och rädsla</li>
+            <li>Övervakning</li>
+            <li>Upprepade beteenden över tid</li>
+            <li>Påverkan på självkänsla och handlingsfrihet</li>
+          </ul>
+          <button
+            type="button"
+            onClick={startTest}
+            style={{
+              marginTop: 24,
+              minHeight: 48,
+              padding: "12px 22px",
+              border: 0,
+              borderRadius: 12,
+              background: "#111",
+              color: "#fff",
+              fontSize: 16,
+              fontWeight: 800,
+              cursor: "pointer",
+            }}
+          >
+            Starta testet
+          </button>
+        </section>
+      </main>
+    );
+  }
 
   return (
     <main
