@@ -1,6 +1,7 @@
 "use client";
 
 import PaywallCheckoutCTA from "../../_components/PaywallCheckoutCTA";
+import PostPurchaseRecommendation from "../../_components/PostPurchaseRecommendation";
 import { buildPaywallTeaser } from "../../_lib/paywallTeaser";
 
 import { hasPaidReturn, usePaymentRecovery } from "../../_components/usePaymentRecovery";
@@ -164,6 +165,7 @@ export default function AutismSelfTestPage() {
         <p className="mt-8 text-sm leading-6 text-neutral-600">Det här resultatet ställer ingen diagnos. En autismbedömning behöver väga in utvecklingshistoria, funktion över tid, flera delar av livet och alternativa förklaringar. <a href="https://www.1177.se/sjukdomar--besvar/hjarna-och-nerver/neuropsykiatriska-funktionsnedsattningar/autism/" className={link}>Läs om autism och att söka stöd på 1177.</a></p>
       </>}
       <div className="mt-6 flex flex-wrap gap-3"><button type="button" onClick={() => { moveFocus.current = true; setEditing(true); setIndex(0); }} className={secondary}>Granska mina svar</button><button type="button" onClick={restart} className={secondary}>Börja om</button></div>
+      {unlocked && <PostPurchaseRecommendation sourceTest="autism_test" recommendedTest="audhd_test" />}
     </div>}
   </>;
 }
