@@ -5,6 +5,7 @@ import styles from "./home.module.css";
 import adhdGuides from "../content/adhd-guides.json";
 import autismGuides from "../content/autism-guides.json";
 import HomeGuideDirectory, { type HomeGuide } from "./_components/HomeGuideDirectory";
+import HomeScrollLink from "./_components/HomeScrollLink";
 
 export const metadata: Metadata = {
   title: "Relationsvarning – tester för destruktiva relationer",
@@ -68,6 +69,13 @@ const selfTests = [
 ];
 
 const relationTests = [
+  {
+    href: "/test",
+    title: "Relationstest – varningssignaler",
+    category: "Fördjupningstest",
+    description:
+      "42 frågor om kontroll, manipulation, psykisk misshandel och andra återkommande mönster i en relation.",
+  },
   {
     href: "/psykisk-misshandel-relation/test",
     title: "Psykisk misshandel-test",
@@ -167,7 +175,7 @@ export default function Landing() {
           {/* Left: Editorial copy */}
           <div className={styles.heroCopy}>
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-neutral-500">
-              Självreflektion • beteenden • mönster
+              Relationer • NPF • psykisk hälsa
             </p>
 
             <h1 className="mt-4 text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
@@ -175,13 +183,12 @@ export default function Landing() {
             </h1>
 
             <p className="mt-5 text-base leading-relaxed text-neutral-700">
-              Om du undrar om ditt förhållande har blivit destruktivt kan det
-              generella testet hjälpa dig att sortera återkommande relationsproblem:
-              kontroll, manipulation, psykisk misshandel och andra varningssignaler.
-              Frågorna har bakgrund i forskning och etablerad kunskap och hjälper
-              dig att reflektera över beteendemönster – inte att ställa en diagnos.
+              Utforska dina relationer, beteendemönster och hur du fungerar i vardagen.
+              Här hittar du självtester och guider om relationer, ADHD, autism, AuDHD,
+              ångest, trauma och andra områden inom psykisk hälsa och självreflektion.
             </p>
-            <Link href="/test" className={styles.primary}>Gör screeningtestet <span aria-hidden="true">→</span></Link>
+            <HomeScrollLink targetId="self-tests" className={styles.primary}>Utforska våra självtester <span aria-hidden="true">→</span></HomeScrollLink>
+            <p className="mt-3 text-sm text-neutral-600">eller bläddra vidare till våra <HomeScrollLink targetId="relation-tests" className="underline underline-offset-4">relationstester</HomeScrollLink> <span aria-hidden="true">↓</span></p>
             <p className="mt-3 flex flex-wrap items-center gap-x-2 text-sm text-neutral-600">
               <Link href="/metodik" className="inline-flex min-h-11 items-center underline underline-offset-4">Forskning och metodik</Link>
               <span aria-hidden="true">•</span><span>Anonymt</span>
@@ -212,14 +219,6 @@ export default function Landing() {
             <p><span aria-hidden="true">02</span> Direkt resultat</p>
             <p><span aria-hidden="true">03</span> Ingen registrering</p>
           </div>
-          <section className={styles.feature}>
-            <div className={styles.featureInner}>
-              <p className={styles.eyebrow}>En första överblick</p><h2 className="text-2xl font-semibold tracking-tight">Vet du inte riktigt vad som är fel?</h2>
-              <p className="mt-3 max-w-3xl leading-relaxed text-neutral-700">Om något känns fel i relationen men du har svårt att sätta fingret på vad, börja med screeningtestet. Det går igenom flera typer av destruktiva beteenden och hjälper dig att identifiera vilka områden som kan vara relevanta att titta närmare på.</p>
-              <Link href="/test" className={styles.primary}>Gör screeningtestet</Link>
-            </div>
-          </section>
-
           {/* Short safety note after the main test */}
           <aside className={styles.safety}>
             <p className="text-xs leading-relaxed text-neutral-500">
@@ -229,7 +228,7 @@ export default function Landing() {
         </div>
       </section>
 
-      <section aria-labelledby="tests-heading" className={styles.section}>
+      <section id="relation-tests" aria-labelledby="tests-heading" className={`${styles.section} scroll-mt-24`}>
         <h2 id="tests-heading" className="text-2xl font-semibold tracking-tight">Relationstester</h2>
         <p className="mt-3 max-w-3xl leading-relaxed text-neutral-700">
           Vill du undersöka ett specifikt mönster i relationen? Välj ett fördjupat test nedan.
@@ -237,7 +236,7 @@ export default function Landing() {
         <TestCards items={relationTests} />
       </section>
 
-      <section aria-labelledby="self-tests-heading" className={styles.section}>
+      <section id="self-tests" aria-labelledby="self-tests-heading" className={`${styles.section} scroll-mt-24`}>
         <div className="border-t border-neutral-200/70 pt-10 sm:pt-12">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-neutral-500">
             Fokus på dig själv
