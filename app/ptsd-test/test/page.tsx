@@ -151,6 +151,7 @@ export default function PtsdTestPage() {
   if (!hydrated) return <p className="mt-6" role="status">Laddar testet…</p>;
 
   return <>
+    {!showResult && <div className="mt-5"><p className="leading-7 text-neutral-700">Tänk på den senaste månaden. Hur ofta har följande stämt för dig i samband med en mycket svår eller traumatisk upplevelse?</p><p className="mt-4 text-sm leading-6 text-neutral-600">30 frågor · fem områden · svaren sparas lokalt i den här webbläsaren.</p></div>}
     {unlocked && <aside data-flow="inset" role="status" className="mt-6 rounded-xl border border-[#bfd2c3] bg-[#f2f7f1] p-4 leading-6 text-neutral-800"><strong>Ditt test är upplåst – du behöver inte betala igen.</strong>{complete ? <p className="mt-1">Din fullständiga analys visas nedan.</p> : <p className="mt-1">Svara på frågorna igen så öppnas hela analysen direkt efter sista svaret.</p>}</aside>}
     {payment.checkoutError && <p role="alert" className="mt-6 rounded-xl border border-red-200 bg-red-50 p-4 leading-6">{payment.checkoutError}</p>}
     {storageUnavailable && <p role="status" className="mt-6 rounded-xl border border-neutral-300 bg-neutral-50 p-4 text-sm leading-6">Webbläsaren kan inte spara testet. Lämna inte sidan om du vill behålla dina svar.</p>}
