@@ -45,6 +45,13 @@ const selfTests = [
     cta: "Gör självtestet",
   },
   {
+    href: "/ptsd-test",
+    title: "PTSD-test",
+    category: "Självtest för vuxna",
+    description: "30 frågor om återupplevande, undvikande, vaksamhet och andra reaktioner efter svåra upplevelser.",
+    cta: "Gör självtestet",
+  },
+  {
     href: "/adhd-test",
     title: "ADHD-test för vuxna",
     category: "Självtest för vuxna",

@@ -9,6 +9,7 @@ module.exports = {
     '/autism-test/test',
     '/audhd-test/test',
     '/hsp-test/test',
+    '/ptsd-test/test',
     '/anknytningstest/test',
     '/medberoendetest/test',
     '/narcissism-sjalvtest/test',

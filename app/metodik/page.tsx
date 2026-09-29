@@ -28,6 +28,7 @@ export default function MethodologyPage() {
         <li><strong>Gaslighting och traumabindning:</strong> svarssumman jämförs med högsta möjliga poäng för både helheten och delområdena.</li>
         <li><strong>Medberoende:</strong> helhetsindexet är ett medelvärde av delområdenas poäng på skalan 0–100.</li>
         <li><strong>Anknytning:</strong> ångest och undvikande redovisas separat tillsammans med delskalor. Vissa frågor poängsätts i omvänd riktning. Kombinationen av dimensionerna används för en förenklad profil.</li>
+        <li><strong>PTSD-testet:</strong> Relationsvarnings egna frågor är grupperade i återupplevande, undvikande, tankar och känslor, vaksamhet och stressreaktioner samt vardagspåverkan. Varje område räknas om till 0–100 för att beskriva svarsmönstret, inte sannolikheten för en PTSD-diagnos. Testet är inte PCL-5, CAPS-5 eller ett kliniskt validerat diagnostiskt instrument.</li>
       </ul>
       <p>Resultattexter väljs automatiskt utifrån poäng, områden och förinställda nivåer. Ingen individuell bedömning av en yrkesperson sker genom testet. Ett värde på 70 av 100 betyder inte 70 procents sannolikhet för en diagnos, ett brott eller framtida våld.</p>
     </GuideSection>

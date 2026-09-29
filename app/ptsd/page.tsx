@@ -1,0 +1,21 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import EditorialSurface from "../_components/EditorialSurface";
+import { ContentGuide, GuideLinks, GuideSection, textLink } from "../_components/ContentGuide";
+import { EditorialArticleJsonLd, getEditorialArticleSchema, getEditorialMetadata } from "../_seo/editorialSeo";
+
+const title = "PTSD – symtom, reaktioner och när stöd kan hjälpa | Relationsvarning";
+const description = "Läs om PTSD, vanliga traumarelaterade reaktioner, hur de kan påverka vardagen och när professionellt stöd kan vara relevant.";
+export const metadata: Metadata = { title, description, robots: { index: true, follow: true }, ...getEditorialMetadata({ route: "/ptsd", title, description, datePublished: "2026-09-29T12:00:00+02:00", dateModified: "2026-09-29T12:00:00+02:00" }) };
+const article = getEditorialArticleSchema({ route: "/ptsd", title, description, datePublished: "2026-09-29T12:00:00+02:00", dateModified: "2026-09-29T12:00:00+02:00" });
+
+export default function PtsdGuide() {
+  return <EditorialSurface><ContentGuide title="Vad är PTSD?" intro="PTSD, posttraumatiskt stressyndrom, är ett sätt att beskriva reaktioner som kan uppstå efter en mycket svår eller traumatisk upplevelse. Reaktionerna kan se olika ut och en text eller ett självtest kan inte avgöra om någon har en diagnos."><EditorialArticleJsonLd data={article} />
+    <GuideSection title="Vanliga reaktioner vid posttraumatisk stress"><p>Efter svåra upplevelser kan minnen, kroppsliga reaktioner eller starka känslor väckas av sådant som påminner om det som hänt. Vissa märker främst en ökad vaksamhet, andra försöker undvika påminnelser eller känner sig avstängda. Det går inte att dra säkra slutsatser från en enskild reaktion.</p><GuideLinks links={[{ href: "/ptsd-symtom", label: "PTSD-symtom – en fördjupad genomgång" }, { href: "/ptsd-triggers", label: "PTSD-triggers och starka påminnelser" }]} /></GuideSection>
+    <GuideSection title="Flera symtomområden kan samspela"><p>Återupplevande, undvikande, förändringar i tankar och känslor samt vaksamhet och stressreaktioner är centrala områden när PTSD beskrivs. Reaktionerna kan komma och gå, se olika ut över tid och påverkas av situation, stöd, sömn och påminnelser.</p><p>Om reaktionerna tar mycket plats i vardagen kan det vara hjälpsamt att prata med vårdcentral eller annan professionell kontakt. Du behöver inte själv avgöra vilken benämning som passar innan du söker stöd.</p></GuideSection>
+    <GuideSection title="PTSD kan påverka vardagen"><p>Traumarelaterade reaktioner kan påverka koncentration, återhämtning, sociala aktiviteter, arbete eller studier. De kan också göra närhet och kommunikation mer krävande. Det betyder inte att alla relationer eller vardagssituationer fungerar på samma sätt.</p><p><Link href="/ptsd-relationer" className={textLink}>Läs om PTSD och nära relationer</Link> om du vill förstå hur trygghet, undvikande och stress kan märkas mellan människor.</p></GuideSection>
+    <GuideSection title="PTSD och komplex PTSD"><p>Komplex PTSD används för att beskriva PTSD-symtom tillsammans med mer långvariga svårigheter, exempelvis med känsloreglering, självbild eller relationer. Det är inte bara ett ord för “svårare PTSD”.</p><p><Link href="/komplex-ptsd" className={textLink}>Läs mer om komplex PTSD</Link>.</p></GuideSection>
+    <GuideSection title="Reflektera över dina svar"><p>Relationsvarnings PTSD-test är ett självskattningstest med frågor om fem områden. Resultatet beskriver hur reaktioner framträder i dina svar och är inte ett diagnostiskt instrument.</p><Link data-rv="button" href="/ptsd-test" className="inline-flex min-h-12 items-center rounded-xl bg-[#2f6b4f] px-5 py-3 font-semibold text-white hover:bg-[#285c44]">Gör PTSD-testet</Link></GuideSection>
+    <GuideSection title="Läs vidare"><GuideLinks links={[{ href: "/ptsd-test", label: "PTSD-test – 30 frågor om posttraumatisk stress" }, { href: "/ptsd-symtom", label: "Vanliga PTSD-symtom" }, { href: "/komplex-ptsd", label: "Komplex PTSD" }, { href: "/ptsd-relationer", label: "PTSD och relationer" }, { href: "/ptsd-triggers", label: "Triggers vid PTSD" }]} /></GuideSection>
+  </ContentGuide></EditorialSurface>;
+}

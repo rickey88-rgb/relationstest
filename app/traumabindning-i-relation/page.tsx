@@ -561,6 +561,9 @@ export default function TraumabindningIRelationPage() {
             <Link href="/vald-i-nara-relation" className="underline underline-offset-4">
               Våld i nära relation — tecken och var du kan få hjälp
             </Link>
+            <Link href="/ptsd" className="underline underline-offset-4">
+              PTSD – vanliga traumarelaterade reaktioner
+            </Link>
             <Link href="/tecken-pa-psykopat" className="underline underline-offset-4">
               Tecken på att du lever med en psykopat
             </Link>
