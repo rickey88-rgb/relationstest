@@ -3,6 +3,8 @@ module.exports = {
   siteUrl: 'https://www.relationsvarning.se',
   generateRobotsTxt: true,
   sitemapSize: 5000,
+  autoLastmod: false,
+  changefreq: undefined,
   exclude: [
     '/angest-test/test',
     '/adhd-test/test',
