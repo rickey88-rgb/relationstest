@@ -36,6 +36,15 @@ for(let raw=0;raw<=20;raw++) {
 }
 assert.equal(score([20,18,0,0,0,0]).leadingGap,10);
 assert.equal(score([20,20,0,0,0,0]).leadingGap,0);
+const socialFinding = m.paywallFinding(score([20,17,0,0,0,0]));
+assert.equal(socialFinding.title, 'En sak sticker ut i dina svar');
+assert.equal(socialFinding.hasStandout, true);
+assert(socialFinding.body.includes('sociala situationer'));
+const tiedFinding = m.paywallFinding(score([20,20,0,0,0,0]));
+assert.equal(tiedFinding.hasStandout, false);
+assert(tiedFinding.body.includes('blandat mönster'));
+const lowFinding = m.paywallFinding(score([9,0,0,0,0,0]));
+assert.equal(lowFinding.hasStandout, false);
 assert(i.standoutText(score([20,17,0,0,0,0])).includes('tydligt över'));
 assert(i.standoutText(score([20,18,0,0,0,0])).includes('Två områden är ungefär lika'));
 assert(i.standoutText(score([20,20,0,0,0,0])).includes('Två områden ligger lika'));

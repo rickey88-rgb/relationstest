@@ -13,6 +13,5 @@ module.exports = {
     '/anknytningstest/test',
     '/medberoendetest/test',
     '/narcissism-sjalvtest/test',
-    '/psykisk-misshandel-relation/test',
   ],
 };

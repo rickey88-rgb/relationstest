@@ -2,15 +2,13 @@
 
 import PaywallCheckoutCTA from "../../_components/PaywallCheckoutCTA";
 import PostPurchaseRecommendation from "../../_components/PostPurchaseRecommendation";
-import { buildPaywallTeaser } from "../../_lib/paywallTeaser";
-
 import { hasPaidReturn, usePaymentRecovery } from "../../_components/usePaymentRecovery";
 
 import { useTestAnalytics } from "../../_analytics/useTestAnalytics";
 import { purchaseEvent } from "../../_analytics/testEvents";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { answerLabels, calculate, areaNames, areas, emptyAnswers, formatPercent, parseState, questions, PRICE_SEK, STATE_VERSION, STORAGE_KEY } from "./model";
+import { answerLabels, calculate, areaNames, areas, emptyAnswers, formatPercent, parseState, paywallFinding, questions, PRICE_SEK, STATE_VERSION, STORAGE_KEY } from "./model";
 import { AUTISM_STRIPE_URL } from "./payment";
 
 import { describeArea, impactText, standoutText } from "./interpretation";
@@ -76,8 +74,7 @@ export default function AutismSelfTestPage() {
   const showResult = complete && !editing;
   const answeredCount = answers.filter((answer) => answer >= 0).length;
   const result = useMemo(() => complete ? calculate(answers) : null, [complete, answers]);
-  const previewScores = result ? Object.values(result.scores).sort((a, b) => b - a) : [];
-  const preview = buildPaywallTeaser(previewScores);
+  const teaserFinding = result ? paywallFinding(result) : null;
   useEffect(() => {
     if (moveFocus.current) { heading.current?.focus({ preventScroll: true }); moveFocus.current = false; }
   }, [index, showResult, hydrated, analyzing]);
@@ -138,8 +135,9 @@ export default function AutismSelfTestPage() {
     </section>}
     {showResult && (!analyzing || unlocked) && result && <div data-autism-result>
       {!unlocked ? <section data-flow="paywall" ref={paywallRef} className="mt-8 space-y-5 rounded-[20px] bg-[#0d0d0d] px-[18px] py-6 leading-7 text-white" aria-labelledby="result-heading">
-        <h2 id="result-heading" ref={heading} tabIndex={-1} className="text-2xl font-semibold outline-none">{preview.title}</h2>
-        <p className="text-neutral-200">{preview.body}</p>
+        <h2 id="result-heading" ref={heading} tabIndex={-1} className="text-2xl font-semibold outline-none">{teaserFinding?.title}</h2>
+        <p className="text-neutral-200">{teaserFinding?.body}</p>
+        <p className="text-neutral-200">Men det är inte det enda som påverkar ditt resultat.</p>
         <div className="space-y-4 border-t border-white/15 pt-5">
           <h3 className="text-xl font-semibold">I din fullständiga analys ser du</h3>
           <ul className="space-y-2 text-neutral-200"><li>✓ vad som väger tyngst i dina svar</li><li>✓ hur olika sociala och sensoriska erfarenheter samspelar</li><li>✓ vad som förstärker eller nyanserar bilden i vardagen</li></ul>

@@ -75,6 +75,30 @@ export function calculate(answers: number[]) {
 }
 export type Result = ReturnType<typeof calculate>;
 
+export type PaywallFinding = { title: string; body: string; hasStandout: boolean };
+
+const paywallFindingCopy: Record<Exclude<Area, "impactHistory">, string> = {
+  socialInteraction: "Dina svar om hur sociala situationer fungerar för dig är mer framträdande än dina svar i de andra mönsterområdena.",
+  socialCommunication: "Dina svar om indirekta budskap och samtalssignaler är mer framträdande än dina svar i de andra mönsterområdena.",
+  predictabilityFlexibility: "Dina svar om förutsägbarhet, förändringar och att ställa om är mer framträdande än dina svar i de andra mönsterområdena.",
+  sensory: "Dina svar om sinnesintryck och återhämtning är mer framträdande än dina svar i de andra mönsterområdena.",
+  focusedInterests: "Dina svar om fördjupning, återkommande intressen och att växla fokus är mer framträdande än dina svar i de andra mönsterområdena.",
+};
+
+// This is deliberately a display rule, not a new score or diagnostic category.
+// A named area is only shown when the existing score already has a clear 15-point
+// lead, a non-low individual score, and the overall five-area pattern is not low.
+export function paywallFinding(result: Result): PaywallFinding {
+  const leadingArea = result.ranked[0] as Exclude<Area, "impactHistory">;
+  const hasStandout = result.symptomIndex >= 25 && result.scores[leadingArea] >= 45 && result.leadingGap >= 15;
+  if (!hasStandout) return {
+    title: "Dina svar visar flera delar av en helhet",
+    body: "Det finns ett blandat mönster i dina svar. Flera områden bidrar till helheten.",
+    hasStandout: false,
+  };
+  return { title: "En sak sticker ut i dina svar", body: paywallFindingCopy[leadingArea], hasStandout: true };
+}
+
 export function parseState(raw: string | null): { version: number; answers: number[]; index: number; unlocked: boolean } | null {
   try {
     const saved = JSON.parse(raw ?? "null");
