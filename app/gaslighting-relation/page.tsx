@@ -465,7 +465,7 @@ export default function GaslightingRelationPage() {
 
         </section>
 
-        <p className="pt-2 text-sm leading-6 text-neutral-500">Senast uppdaterad: 2026-03-13</p>
+        <p className="pt-2 text-sm leading-6 text-neutral-500">Senast uppdaterad: 2026-09-21</p>
       </article>
     </main></EditorialSurface>
   );
