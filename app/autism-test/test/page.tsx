@@ -134,18 +134,18 @@ export default function AutismSelfTestPage() {
       <p role="status" aria-live="polite">{["Analyserar dina svar…", "Jämför mönster mellan sex områden…", "Sammanställer din profil…"][analysisStep ?? 0]}</p>
     </section>}
     {showResult && (!analyzing || unlocked) && result && <div data-autism-result>
-      {!unlocked ? <section data-flow="paywall" ref={paywallRef} className="mt-8 space-y-5 rounded-[20px] bg-[#0d0d0d] px-[18px] py-6 leading-7 text-white" aria-labelledby="result-heading">
-        <h2 id="result-heading" ref={heading} tabIndex={-1} className="text-2xl font-semibold outline-none">{teaserFinding?.title}</h2>
-        <p className="text-neutral-200">{teaserFinding?.body}</p>
-        <p className="text-neutral-200">Men det är inte det enda som påverkar ditt resultat.</p>
-        <div className="space-y-4 border-t border-white/15 pt-5">
-          <h3 className="text-xl font-semibold">I din fullständiga analys ser du</h3>
-          <ul className="space-y-2 text-neutral-200"><li>✓ vad som väger tyngst i dina svar</li><li>✓ hur olika sociala och sensoriska erfarenheter samspelar</li><li>✓ vad som förstärker eller nyanserar bilden i vardagen</li></ul>
-          <div><p className="font-semibold">{PRICE_SEK} kr</p><p className="text-sm text-neutral-300">Engångsbetalning · Ingen prenumeration</p><p className="text-sm text-neutral-300">Resultatet visas direkt efter betalning</p></div>
-          <PaywallCheckoutCTA onClick={checkout} />
-          <button type="button" onClick={restart} className="min-h-11 w-full text-sm text-neutral-300 underline underline-offset-4 hover:text-white">Gör om testet</button>
+      {!unlocked ? <section data-flow="paywall" data-autism-paywall ref={paywallRef} className="mt-8 space-y-3 rounded-[20px] bg-[#0d0d0d] px-[18px] py-5 leading-6 text-white sm:px-6" aria-labelledby="result-heading">
+        <h2 id="result-heading" ref={heading} tabIndex={-1} className="text-2xl font-semibold leading-tight outline-none sm:text-[28px]">{teaserFinding?.title}</h2>
+        <p className="font-medium text-white">{teaserFinding?.body}</p>
+        <p className="text-sm leading-6 text-neutral-200">Men det är inte det enda som påverkar ditt resultat.</p>
+        <div className="h-px bg-white/15" aria-hidden="true" />
+        <div className="space-y-3 pt-1 lg:space-y-4">
+          <p className="text-sm font-semibold text-white">Din analys är klar</p>
+          <ul className="space-y-3.5 text-sm leading-6 text-neutral-200 lg:space-y-4"><li>🔒 Mönstret som sticker ut mest</li><li>🔒 Dina starkaste områden – och hur tydliga de är</li><li>🔒 Svarskombinationen som förändrar tolkningen</li><li>🔒 Vad som stärker eller tonar ner resultatet</li><li>🔒 Vad dina 30 svar faktiskt pekar mot tillsammans</li></ul>
+          <div className="pt-2"><PaywallCheckoutCTA onClick={checkout} label={<>Visa vad ni hittade · {PRICE_SEK} kr</>} trustText="Säker betalning · Engångsbetalning · Ingen prenumeration" trustClassName="text-xs leading-5" /></div>
           {checkoutUnavailable && <p role="status" className="text-neutral-300">Köp är inte tillgängligt just nu. Dina svar finns kvar i den här webbläsaren.</p>}
         </div>
+        <button data-flow="restart" type="button" onClick={restart} className="text-sm underline underline-offset-4">Gör om testet</button>
       </section> : <>
         <section data-flow="card" className={section} aria-labelledby="result-heading"><h2 id="result-heading" ref={heading} tabIndex={-1} className="text-2xl font-semibold outline-none">Din övergripande profil</h2>
           <p className="text-xl font-semibold">{result.level}</p><p className="text-4xl font-semibold tabular-nums">{formatPercent(result.symptomIndex)} / 100</p>

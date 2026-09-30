@@ -75,28 +75,61 @@ export function calculate(answers: number[]) {
 }
 export type Result = ReturnType<typeof calculate>;
 
-export type PaywallFinding = { title: string; body: string; hasStandout: boolean };
+type SymptomArea = Exclude<Area, "impactHistory">;
+export type PaywallFinding = { variant: "single" | "pair" | "contrast" | "mixed" | "low"; title: string; body: string; curiosity: string };
 
-const paywallFindingCopy: Record<Exclude<Area, "impactHistory">, string> = {
-  socialInteraction: "Dina svar om hur sociala situationer fungerar för dig är mer framträdande än dina svar i de andra mönsterområdena.",
-  socialCommunication: "Dina svar om indirekta budskap och samtalssignaler är mer framträdande än dina svar i de andra mönsterområdena.",
-  predictabilityFlexibility: "Dina svar om förutsägbarhet, förändringar och att ställa om är mer framträdande än dina svar i de andra mönsterområdena.",
-  sensory: "Dina svar om sinnesintryck och återhämtning är mer framträdande än dina svar i de andra mönsterområdena.",
-  focusedInterests: "Dina svar om fördjupning, återkommande intressen och att växla fokus är mer framträdande än dina svar i de andra mönsterområdena.",
+const paywallAreaCopy: Record<SymptomArea, { subject: string; label: string }> = {
+  socialInteraction: { subject: "Dina svar om hur sociala situationer fungerar för dig", label: "sociala situationer" },
+  socialCommunication: { subject: "Dina svar om indirekta budskap och samtalssignaler", label: "indirekta budskap och samtalssignaler" },
+  predictabilityFlexibility: { subject: "Dina svar om förutsägbarhet, förändringar och att ställa om", label: "förutsägbarhet och förändringar" },
+  sensory: { subject: "Dina svar om sinnesintryck och återhämtning", label: "sinnesintryck och återhämtning" },
+  focusedInterests: { subject: "Dina svar om fördjupning, återkommande intressen och att växla fokus", label: "fokuserade intressen och att växla fokus" },
 };
 
-// This is deliberately a display rule, not a new score or diagnostic category.
-// A named area is only shown when the existing score already has a clear 15-point
-// lead, a non-low individual score, and the overall five-area pattern is not low.
+// These are display rules only. They reuse the model's existing 25/65 levels and
+// 15-point gap; they neither add a score nor change the interpretation model.
 export function paywallFinding(result: Result): PaywallFinding {
-  const leadingArea = result.ranked[0] as Exclude<Area, "impactHistory">;
-  const hasStandout = result.symptomIndex >= 25 && result.scores[leadingArea] >= 45 && result.leadingGap >= 15;
-  if (!hasStandout) return {
-    title: "Dina svar visar flera delar av en helhet",
-    body: "Det finns ett blandat mönster i dina svar. Flera områden bidrar till helheten.",
-    hasStandout: false,
+  const [first, second, third, , fifth] = result.ranked as SymptomArea[];
+  const firstScore = result.scores[first];
+  const secondScore = result.scores[second];
+
+  if (result.symptomIndex < 25) return {
+    variant: "low",
+    title: "Dina svar pekar inte tydligt åt ett enda håll.",
+    body: result.leadingGap >= 15 ? "Några av dina svar påverkar resultatet mer än andra." : "Dina svar visar ingen tydlig enskild topp.",
+    curiosity: "Den fullständiga analysen visar hur resultatet har räknats fram.",
   };
-  return { title: "En sak sticker ut i dina svar", body: paywallFindingCopy[leadingArea], hasStandout: true };
+
+  if (firstScore >= 65 && secondScore >= 65 && secondScore - result.scores[third] >= 15) return {
+    variant: "pair",
+    title: "Två saker sticker ut direkt.",
+    body: `${paywallAreaCopy[first].label[0].toLocaleUpperCase("sv-SE") + paywallAreaCopy[first].label.slice(1)} och ${paywallAreaCopy[second].label} är de två tydligaste mönstren i dina svar.`,
+    curiosity: "Det intressanta är vad som händer när resten av dina svar räknas in.",
+  };
+
+  if (firstScore >= 65 && result.leadingGap >= 15 && result.scores[fifth] < 25) return {
+    variant: "contrast",
+    title: "Ditt resultat går åt två olika håll.",
+    body: `${paywallAreaCopy[first].subject} sticker ut tydligt. Men dina svar inom ${paywallAreaCopy[fifth].label} ser helt annorlunda ut.`,
+    curiosity: "Det är den kontrasten som gör resultatet intressant.",
+  };
+
+  if (firstScore >= 65 && result.leadingGap >= 15) return {
+    variant: "single",
+    title: "Det här sticker ut i dina svar.",
+    body: `${paywallAreaCopy[first].subject} sticker ut tydligare än de andra områdena.`,
+    curiosity: "Men resten av dina svar gör resultatet mindre självklart än den delen ensam.",
+  };
+
+  const tiedTop = firstScore === secondScore;
+  return {
+    variant: "mixed",
+    title: "Det här resultatet är inte så enkelt som det ser ut.",
+    body: tiedTop
+      ? `Bland de högsta områdena i dina svar finns ${paywallAreaCopy[first].label} och ${paywallAreaCopy[second].label}.`
+      : `De tydligaste spåren finns inom ${paywallAreaCopy[first].label} och ${paywallAreaCopy[second].label}.`,
+    curiosity: "Men inget av dem förklarar dina 30 svar på egen hand. Det är först när resten räknas in som resultatet blir tydligt.",
+  };
 }
 
 export function parseState(raw: string | null): { version: number; answers: number[]; index: number; unlocked: boolean } | null {

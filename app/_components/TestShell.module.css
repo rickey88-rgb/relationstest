@@ -141,6 +141,20 @@
 .flow [data-flow="paywall"] [data-flow="cta"]:hover::before { opacity: .96; }
 .flow [data-flow="paywall"] > div:has([data-flow="cta"]) { background: var(--rv-surface); border-radius: 18px; padding: 20px !important; }
 .flow [data-flow="paywall"] > div:has(> button:not([data-flow="cta"])) { background: transparent; padding: 0 !important; }
+.flow [data-autism-paywall] { padding-bottom: 24px !important; }
+.flow [data-autism-paywall] > [data-flow="restart"] {
+  display: flex !important; width: fit-content; min-height: 0 !important;
+  margin-top: 24px !important; margin-left: auto !important; padding: 0 !important;
+  border: 0 !important; border-radius: 0 !important; background: transparent !important;
+  color: var(--rv-muted) !important; font: 400 .875rem/1.5 var(--rv-sans) !important;
+}
+.flow [data-autism-paywall] > [data-flow="restart"]:hover { background: transparent !important; color: var(--rv-text) !important; }
+.flow [data-autism-paywall] [data-flow="cta"] + p { margin-top: 12px !important; }
+.flow [data-autism-paywall] [data-flow="cta"] + p + div { margin-top: 10px !important; }
+@media (min-width: 1024px) {
+  .flow [data-autism-paywall] > div:has([data-flow="cta"]) { padding-block: 24px !important; }
+  .flow [data-autism-paywall] [data-flow="cta"] + p { margin-top: 16px !important; }
+}
 .flow [data-flow="lock"] { display: inline-block; position: relative; font-size: 0; width: 9px; height: 8px; border: 1px solid currentColor; border-radius: 2px; margin-right: 3px; }
 .flow [data-flow="lock"]::before { content: ""; position: absolute; left: 1px; top: -6px; width: 5px; height: 6px; border: 1px solid currentColor; border-bottom: 0; border-radius: 4px 4px 0 0; }
 .flow [data-flow="dark"] { background: var(--rv-sage-soft) !important; color: var(--rv-text) !important; border-radius: var(--rv-card-radius) !important; }

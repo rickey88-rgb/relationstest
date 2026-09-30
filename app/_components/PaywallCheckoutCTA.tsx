@@ -1,9 +1,9 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
 
-type PaywallCheckoutCTAProps = { onClick: () => void; separated?: boolean; label?: ReactNode; belowCta?: ReactNode };
+type PaywallCheckoutCTAProps = { onClick: () => void; separated?: boolean; label?: ReactNode; belowCta?: ReactNode; trustText?: ReactNode; trustClassName?: string };
 
-export default function PaywallCheckoutCTA({ onClick, separated = false, label = "Lås upp mitt resultat · 39 kr", belowCta }: PaywallCheckoutCTAProps) {
+export default function PaywallCheckoutCTA({ onClick, separated = false, label = "Lås upp mitt resultat · 39 kr", belowCta, trustText = "Säker betalning · Ingen prenumeration", trustClassName = "text-xs leading-5" }: PaywallCheckoutCTAProps) {
   return <div className="w-full">
     <button data-flow="cta"
       type="button"
@@ -13,7 +13,7 @@ export default function PaywallCheckoutCTA({ onClick, separated = false, label =
       {label}
     </button>
     {belowCta}
-    <p className="mt-2 text-center text-xs leading-5 text-neutral-300"><span data-flow="lock" aria-hidden="true">🔒</span> Säker betalning · Ingen prenumeration</p>
+    <p className={`mt-2 text-center text-neutral-300 ${trustClassName}`}><span data-flow="lock" aria-hidden="true">🔒</span> {trustText}</p>
     <div className="mt-1.5 flex items-center justify-center gap-2.5" aria-label="Betalningsalternativ: Klarna, Visa och Mastercard">
       <Image src="/payment-methods/klarna.svg" alt="Klarna" width={20} height={20} />
       <Image src="/payment-methods/visa.svg" alt="Visa" width={30} height={20} />
