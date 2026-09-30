@@ -1,4 +1,4 @@
-import { ATTEMPT_PREFIX, consent, trackEvent } from "./analytics";
+import { ATTEMPT_PREFIX, consent, trackEvent, type EcommerceItem } from "./analytics";
 import { testConfig, type TestId } from "./config";
 
 type Attempt = { version: 1; updatedAt: number; id: string; startedAt: number | null; completedAt: number | null; started: boolean; milestones: number[]; complete: boolean; teaser?: boolean; paywall: boolean; purchase: boolean };
@@ -22,7 +22,13 @@ function save(id: TestId, attempt: Attempt) {
     try { window[storage].setItem(ATTEMPT_PREFIX+id,JSON.stringify(attempt)); return; } catch { /* Try next store. */ }
   }
 }
-const identity = (id: TestId) => ({ test_id:id, test_name:testConfig[id].name });
+const identity = (id: TestId, attempt: Attempt) => ({ test_id:id, test_name:testConfig[id].name, attempt_id:attempt.id });
+const commerce = (id: TestId, attempt: Attempt) => ({
+  ...identity(id, attempt),
+  value: testConfig[id].price,
+  currency: testConfig[id].currency,
+  items: [{ item_id: id, item_name: testConfig[id].name, price: testConfig[id].price, quantity: 1 }] satisfies EcommerceItem[],
+});
 // Counts only; answers and result data are deliberately never accepted here.
 export function answerEvent(id: TestId, answered: number, currentQuestion: number, total: number) {
   try {
@@ -30,38 +36,40 @@ export function answerEvent(id: TestId, answered: number, currentQuestion: numbe
     const attempt = read(id);
     if (!attempt.started) {
       attempt.startedAt = Date.now();
-      attempt.started = trackEvent("test_start",{...identity(id),page_path:testConfig[id].path});
+      attempt.started = trackEvent("test_start",{...identity(id,attempt),page_path:testConfig[id].path});
     }
     for (const milestone of [25,50,75]) {
       if (answered / total * 100 >= milestone && !attempt.milestones.includes(milestone)
-        && trackEvent("test_progress",{...identity(id),progress_percent:milestone,current_question:currentQuestion,total_questions:total})) attempt.milestones.push(milestone);
+        && trackEvent("test_progress",{...identity(id,attempt),progress_percent:milestone,current_question:currentQuestion,total_questions:total})) attempt.milestones.push(milestone);
     }
     if (answered >= total && !attempt.complete) {
       attempt.completedAt = Date.now();
-      attempt.complete = trackEvent("test_complete",{...identity(id),total_questions:total,completion_time_seconds:Math.max(0,Math.round((attempt.completedAt-(attempt.startedAt ?? attempt.completedAt))/1000))});
+      attempt.complete = trackEvent("test_complete",{...identity(id,attempt),total_questions:total,completion_time_seconds:Math.max(0,Math.round((attempt.completedAt-(attempt.startedAt ?? attempt.completedAt))/1000))});
     }
     save(id,attempt);
   } catch { /* Tracking never changes test behavior. */ }
 }
 export function paywallEvent(id: TestId) {
   try { if (consent() !== "granted") return; const attempt=read(id); if (attempt.paywall) return;
-    attempt.paywall=trackEvent("paywall_view",{...identity(id),price:testConfig[id].price,currency:testConfig[id].currency}); save(id,attempt);
+    attempt.paywall=trackEvent("paywall_view",{...commerce(id,attempt),price:testConfig[id].price}); save(id,attempt);
   } catch { /* Optional measurement. */ }
 }
 export function teaserEvent(id: TestId) {
   try { if (consent() !== "granted") return; const attempt = read(id); if (attempt.teaser) return;
-    attempt.teaser = trackEvent("teaser_view", { ...identity(id) }); save(id, attempt);
+    attempt.teaser = trackEvent("teaser_view", { ...identity(id,attempt) }); save(id, attempt);
   } catch { /* Optional measurement never changes the result flow. */ }
 }
 export function checkoutEvent(id: TestId) {
   try { if (consent() !== "granted") return; const attempt=read(id); save(id,attempt);
-    trackEvent("checkout_start",{...identity(id),value:testConfig[id].price,currency:testConfig[id].currency});
+    const params = commerce(id,attempt);
+    trackEvent("checkout_start",params);
+    trackEvent("begin_checkout",params);
   } catch { /* Synchronous and non-blocking; never wait for GA or a network response. */ }
 }
 export function purchaseEvent(id: TestId) {
   try { if (consent() !== "granted") return; const attempt=read(id); if (attempt.purchase) return;
     // This is a paid=true return, not a Stripe-verified transaction. Stable ID also enables GA4 deduplication.
-    attempt.purchase=trackEvent("purchase",{...identity(id),value:testConfig[id].price,currency:testConfig[id].currency,transaction_id:`rv-${id}-${attempt.id}`}); save(id,attempt);
+    attempt.purchase=trackEvent("purchase",{...commerce(id,attempt),transaction_id:`rv-${id}-${attempt.id}`}); save(id,attempt);
   } catch { /* Never affect unlock. */ }
 }
 export function restartEvents(id: TestId) {

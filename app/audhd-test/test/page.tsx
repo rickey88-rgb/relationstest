@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import PaywallCheckoutCTA from "../../_components/PaywallCheckoutCTA";
 import PostPurchaseRecommendation from "../../_components/PostPurchaseRecommendation";
 import type { TestId } from "../../_analytics/config";
+import { useTestAnalytics } from "../../_analytics/useTestAnalytics";
 import { AUDHD_STRIPE_URL } from "./payment";
 import { answerLabels, calculateReport, contextQuestions, descriptiveLevel, dimensionNames, dimensions, emptyAnswers, emptyContextAnswers, formatPercent, parseState, PRICE_SEK, questions, REPORT_VERSION, STORAGE_KEY, type Report } from "./model";
 import { useAudhdAnalytics } from "./analytics";
@@ -122,7 +123,7 @@ export default function AudhdTestPage() {
   const [answers, setAnswers] = useState<number[]>(emptyAnswers); const [context, setContext] = useState<number[]>(emptyContextAnswers);
   const [questionIndex, setQuestionIndex] = useState(0); const [contextIndex, setContextIndex] = useState(0); const [phase, setPhase] = useState<"questions" | "context" | "analysis" | "result">("questions");
   const [unlocked, setUnlocked] = useState(false); const [hydrated, setHydrated] = useState(false); const [transitioning, setTransitioning] = useState(false); const [analysisStep, setAnalysisStep] = useState(0); const [checkoutUnavailable, setCheckoutUnavailable] = useState(false); const [storageError, setStorageError] = useState(false); const [paymentRecoveryRequired, setPaymentRecoveryRequired] = useState(false); const [recoveryNotice, setRecoveryNotice] = useState(false); const [recoveryLinkInvalid, setRecoveryLinkInvalid] = useState(false);
-  const lock = useRef(false); const checkoutPending = useRef(false); const analytics = useAudhdAnalytics(); const complete = answers.every(v => v >= 0) && context.every(v => v >= 0);
+  const lock = useRef(false); const checkoutPending = useRef(false); const analytics = useAudhdAnalytics(); const standardAnalytics = useTestAnalytics("audhd_test", questions.length + contextQuestions.length); const complete = answers.every(v => v >= 0) && context.every(v => v >= 0);
   const report = useMemo(() => complete ? calculateReport(answers, context) : null, [answers, context, complete]);
   useEffect(() => {
     let disposed = false;
@@ -184,6 +185,7 @@ export default function AudhdTestPage() {
           }
           if (paidReturn) {
             analytics.purchase();
+            standardAnalytics.purchase();
             window.history.replaceState({}, "", window.location.pathname);
           }
         }
@@ -200,9 +202,9 @@ export default function AudhdTestPage() {
   useEffect(() => { if (!hydrated || paymentRecoveryRequired) return; try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ reportVersion: REPORT_VERSION, answers, contextAnswers: context, questionIndex, contextIndex, unlocked, report })); } catch { setStorageError(true); } }, [answers, context, questionIndex, contextIndex, unlocked, report, hydrated, paymentRecoveryRequired]);
   useEffect(() => { if (unlocked && report) analytics.result(); }, [unlocked, report]);
   useEffect(() => { if (phase !== "analysis" || !report) return; const timers = [setTimeout(() => setAnalysisStep(1), 1200), setTimeout(() => setAnalysisStep(2), 2500), setTimeout(() => { analytics.analysis(); setPhase("result"); analytics.paywall(report.teaser.type); }, 4000)]; return () => timers.forEach(clearTimeout); }, [phase, report]);
-  function answer(value: number) { if (lock.current) return; lock.current = true; setTransitioning(true); if (phase === "questions") { const next = answers.map((item, i) => i === questionIndex ? value : item); setAnswers(next); const count = next.filter(item => item >= 0).length; analytics.progress(count); if (count === 1) analytics.start(); setTimeout(() => { if (questionIndex < 47) setQuestionIndex(questionIndex + 1); else { analytics.complete(); setPhase("context"); } lock.current = false; setTransitioning(false); }, 180); } else { const next = context.map((item, i) => i === contextIndex ? value : item); setContext(next); setTimeout(() => { if (contextIndex < 5) setContextIndex(contextIndex + 1); else setPhase("analysis"); lock.current = false; setTransitioning(false); }, 180); } }
-  function checkout() { if (!report || unlocked) { setUnlocked(true); return; } if (checkoutPending.current) return; try { const checkoutState = { reportVersion: REPORT_VERSION, answers, contextAnswers: context, questionIndex, contextIndex, unlocked: false, report }; localStorage.setItem(STORAGE_KEY, JSON.stringify(checkoutState)); const persisted = parseState(localStorage.getItem(STORAGE_KEY)); if (!hasCompleteSavedState(persisted) || persisted?.unlocked) throw new Error("Checkout state could not be persisted"); } catch { setStorageError(true); return; } if (!AUDHD_STRIPE_URL.startsWith("https://buy.stripe.com/")) { setCheckoutUnavailable(true); return; } checkoutPending.current = true; analytics.cta(report.teaser.type); analytics.checkout(); window.location.href = AUDHD_STRIPE_URL; }
-  function restart() { setAnswers(emptyAnswers()); setContext(emptyContextAnswers()); setQuestionIndex(0); setContextIndex(0); setPhase("questions"); setCheckoutUnavailable(false); try { localStorage.removeItem(STORAGE_KEY); } catch { setStorageError(true); } }
+  function answer(value: number) { if (lock.current) return; lock.current = true; setTransitioning(true); if (phase === "questions") { const next = answers.map((item, i) => i === questionIndex ? value : item); setAnswers(next); const count = next.filter(item => item >= 0).length; standardAnalytics.answer(count, questionIndex + 1); analytics.progress(count); if (count === 1) analytics.start(); setTimeout(() => { if (questionIndex < 47) setQuestionIndex(questionIndex + 1); else { analytics.complete(); setPhase("context"); } lock.current = false; setTransitioning(false); }, 180); } else { const next = context.map((item, i) => i === contextIndex ? value : item); setContext(next); const count = next.filter(item => item >= 0).length; standardAnalytics.answer(questions.length + count, questions.length + contextIndex + 1); setTimeout(() => { if (contextIndex < 5) setContextIndex(contextIndex + 1); else setPhase("analysis"); lock.current = false; setTransitioning(false); }, 180); } }
+  function checkout() { if (!report || unlocked) { setUnlocked(true); return; } if (checkoutPending.current) return; try { const checkoutState = { reportVersion: REPORT_VERSION, answers, contextAnswers: context, questionIndex, contextIndex, unlocked: false, report }; localStorage.setItem(STORAGE_KEY, JSON.stringify(checkoutState)); const persisted = parseState(localStorage.getItem(STORAGE_KEY)); if (!hasCompleteSavedState(persisted) || persisted?.unlocked) throw new Error("Checkout state could not be persisted"); } catch { setStorageError(true); return; } if (!AUDHD_STRIPE_URL.startsWith("https://buy.stripe.com/")) { setCheckoutUnavailable(true); return; } checkoutPending.current = true; analytics.cta(report.teaser.type); analytics.checkout(); standardAnalytics.checkout(); window.location.href = AUDHD_STRIPE_URL; }
+  function restart() { standardAnalytics.restart(); setAnswers(emptyAnswers()); setContext(emptyContextAnswers()); setQuestionIndex(0); setContextIndex(0); setPhase("questions"); setCheckoutUnavailable(false); try { localStorage.removeItem(STORAGE_KEY); } catch { setStorageError(true); } }
   if (!hydrated) return <p className="mt-8" role="status">Laddar testet…</p>;
   const storageNotice = storageError ? <p role="status" className="mt-6 rounded-xl border border-neutral-300 bg-[#ede4db] p-4 text-sm leading-6">Webbläsaren kan inte spara testet säkert. Du kan fortsätta här, men lämna inte sidan om du vill behålla svaren.</p> : null;
   const recoveryMessage = recoveryNotice ? <p role="status" className="mt-6 rounded-xl border border-[#c8a777] bg-[#fff8e8] p-4 text-sm font-medium leading-6 text-[#4a3823]">Ditt test är redan upplåst – du behöver inte betala igen.</p> : null;
@@ -216,7 +218,7 @@ export default function AudhdTestPage() {
   const lockedDimensions = dimensions.filter(key => !unlockedMapAreas.has(key));
   const rankedUnlockedDimensions = [...unlockedDimensions].sort((left, right) => report.scores[right] - report.scores[left]);
   const unlockedMapInsight = `I den upplåsta delen är ${dimensionNames[rankedUnlockedDimensions[0]].toLocaleLowerCase("sv-SE")} och ${dimensionNames[rankedUnlockedDimensions[1]].toLocaleLowerCase("sv-SE")} mest framträdande.`;
-  if (!unlocked) return <><section data-audhd-paywall className={`${card} bg-[#24312b] text-white`}>
+  if (!unlocked) return <><section ref={standardAnalytics.paywallRef} data-audhd-paywall className={`${card} bg-[#24312b] text-white`}>
     <div>
       <p data-audhd-kicker className="text-sm uppercase tracking-[.16em] text-[#e9d1cf]">Ditt huvudresultat</p>
       <h2 className="text-3xl font-semibold">{report.profileType}</h2>

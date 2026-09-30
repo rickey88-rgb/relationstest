@@ -11,6 +11,7 @@ function environment({ paid = false, paidMarker = false, recovery = null, recove
   const slots = [], pending = [];
   let cursor = 0, dirty = true, tree;
   const tracking = { purchaseCount: 0, result: () => {}, analysis: () => {}, paywall: () => {}, progress: () => {}, start: () => {}, complete: () => {}, cta: () => {}, checkout: () => {}, purchase() { this.purchaseCount += 1; } };
+  const standardTracking = { purchaseCount: 0, paywallRef: () => {}, answer: () => {}, checkout: () => {}, restart: () => {}, purchase() { this.purchaseCount += 1; } };
   if (paidMarker) data.set(key + ":paid", "true");
   global.localStorage = { getItem: item => data.get(item) ?? null, setItem: (item, value) => data.set(item, value), removeItem: item => data.delete(item) };
   const query = paid ? "?paid=true" : recovery ? `?recovery=${recovery}` : "";
@@ -29,7 +30,7 @@ function environment({ paid = false, paidMarker = false, recovery = null, recove
     useEffect: (callback, deps) => { const index = cursor++; const previous = slots[index]; if (!previous || !deps || deps.some((value, dependencyIndex) => !Object.is(value, previous.deps[dependencyIndex]))) { slots[index] = { deps, cleanup: previous?.cleanup }; pending.push(() => { slots[index].cleanup?.(); slots[index].cleanup = callback(); }); } },
   };
   function PaywallCheckoutCTA() { return null; }
-  const load = createLoader({ react, "./analytics": { useAudhdAnalytics: () => tracking }, "../../_components/PaywallCheckoutCTA": { default: PaywallCheckoutCTA } });
+  const load = createLoader({ react, "./analytics": { useAudhdAnalytics: () => tracking }, "../../_analytics/useTestAnalytics": { useTestAnalytics: (id, total) => { assert.equal(id, "audhd_test"); assert.equal(total, 54); return standardTracking; } }, "../../_components/PaywallCheckoutCTA": { default: PaywallCheckoutCTA } });
   const Page = load(path.join(__dirname, "page.tsx")).default;
   function renderOnce() { dirty = false; cursor = 0; tree = Page(); }
   async function flush() {
@@ -44,13 +45,13 @@ function environment({ paid = false, paidMarker = false, recovery = null, recove
   function nodes(node = tree) { if (!node || typeof node !== "object") return []; if (Array.isArray(node)) return node.flatMap(nodes); return [node, ...nodes(node.props?.children ?? null)]; }
   function text(node) { if (node == null || typeof node === "boolean") return ""; if (typeof node !== "object") return String(node); if (Array.isArray(node)) return node.map(text).join(""); return text(node.props?.children ?? null); }
   renderOnce();
-  return { data, tracking, PaywallCheckoutCTA, get tree() { return tree; }, flush, nodes, text, runEffects };
+  return { data, tracking, standardTracking, PaywallCheckoutCTA, get tree() { return tree; }, flush, nodes, text, runEffects };
 }
 
 const incomplete = JSON.stringify({ ...completeState(false), answers: Array(48).fill(-1) });
 const complete = JSON.stringify(completeState(false));
 const legacy = JSON.stringify({ answers: Array(54).fill(2), index: 47, unlocked: false, version: 1 });
-const isReportView = environment => environment.tree?.type?.name === "ReportView";
+const isReportView = environment => environment.nodes().some(node => node.type?.name === "ReportView");
 
 (async () => {
   async function ready(options) { const test = environment(options); if (test.runEffects) await test.flush(); return test; }
@@ -69,7 +70,7 @@ const isReportView = environment => environment.tree?.type?.name === "ReportView
   assert(isReportView(e));
   saved = JSON.parse(e.data.get(key));
   assert.equal(saved.unlocked, true); assert.equal(saved.answers.length, 48); assert.equal(saved.contextAnswers.length, 6);
-  assert.equal(window.location.search, ""); assert.equal(e.tracking.purchaseCount, 1);
+  assert.equal(window.location.search, ""); assert.equal(e.tracking.purchaseCount, 1); assert.equal(e.standardTracking.purchaseCount, 1);
 
   // B + C + G: refresh, a new tab and repeated reloads keep the already-unlocked full report.
   e = await ready({ stored: e.data.get(key) });
