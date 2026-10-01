@@ -1,5 +1,6 @@
 export const GA_MEASUREMENT_ID = "G-XWVSHHNY7G";
 export const testConfig = {
+  iq_test: { name: "IQ-test", path: "/iq-test/test", price: 79, currency: "SEK" },
   audhd_test: { name: "AuDHD-test för vuxna", path: "/audhd-test/test", price: 79, currency: "SEK" },
   hsp_test: { name: "HSP-test för vuxna", path: "/hsp-test/test", price: 49, currency: "SEK" },
   ptsd_test: { name: "PTSD-test", path: "/ptsd-test/test", price: 39, currency: "SEK" },

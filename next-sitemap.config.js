@@ -10,6 +10,7 @@ module.exports = {
     '/adhd-test/test',
     '/autism-test/test',
     '/audhd-test/test',
+    '/iq-test/test',
     '/hsp-test/test',
     '/ptsd-test/test',
     '/anknytningstest/test',
