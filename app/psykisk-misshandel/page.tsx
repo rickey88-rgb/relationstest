@@ -1,6 +1,7 @@
 import EditorialSurface from "../_components/EditorialSurface";
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { EditorialArticleJsonLd, getEditorialArticleSchema, getEditorialMetadata } from "../_seo/editorialSeo";
 
 const title = "Psykisk misshandel – tecken, exempel & vad du kan göra";
@@ -119,6 +120,10 @@ export default function Page() {
           begåtts.
         </p>
       </section>
+
+      <figure style={{ margin: "32px 0 0", overflow: "hidden", borderRadius: 18, border: "1px solid #e5e5e5", background: "#fafafa" }}>
+        <Image src="/seo-images/psykisk-misshandel-discover.png" alt="Illustration om psykisk misshandel och återkommande relationsmönster" width={1672} height={941} sizes="(max-width: 768px) calc(100vw - 2.5rem), 780px" className="h-auto w-full" />
+      </figure>
 
       <section style={{ marginTop: 42 }}>
         <h2 style={{ fontSize: 30 }}>Vad är psykisk misshandel?</h2>

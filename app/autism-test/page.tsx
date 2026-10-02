@@ -1,6 +1,7 @@
 import EditorialSurface from "../_components/EditorialSurface";
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { GuideLinks, GuideSection, textLink } from "../_components/ContentGuide";
 import { EditorialArticleJsonLd, getEditorialArticleSchema, getEditorialMetadata } from "../_seo/editorialSeo";
 import guides from "../../content/autism-guides.json";
@@ -41,6 +42,9 @@ export default function AutismLanding() {
       <p className="mt-4 leading-7 text-neutral-700">Testet tittar inte bara på sociala situationer. Det väger även in kommunikation, behov av förutsägbarhet, sensorisk känslighet, fokuserade intressen, flexibilitet och hur mönstren påverkar vardagen.</p>
       <div className="mt-6"><Link data-rv="button" href="/autism-test/test" className={cta}>Starta autismtestet</Link></div><p className="mt-3 text-sm text-neutral-600">Tar cirka 5 minuter · För vuxna · Ingen registrering</p>
     </header>
+    <figure className="mt-8 overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50">
+      <Image src="/seo-images/autism-test-discover.png" alt="Illustration för autismtest för vuxna" width={1672} height={941} sizes="(max-width: 768px) calc(100vw - 2rem), 768px" className="h-auto w-full" />
+    </figure>
     <GuideSection title="Känner du igen både autism- och ADHD-drag?"><p>Vissa beskriver en kombination av behov av förutsägbarhet och sensorisk återhämtning, tillsammans med rastlöshet, igångsättningssvårigheter eller starkt stimulansbehov.</p><p><Link href="/audhd-test" className={textLink}>Läs om och gör vårt AuDHD-test för vuxna.</Link></p></GuideSection>
     <GuideSection title="Sensorisk känslighet kan ha flera förklaringar"><p>Starka reaktioner på ljud, ljus eller social belastning kan förekomma vid autism, men också vid hög känslighet och i andra sammanhang. <Link href="/hsp-test" className={textLink}>Gör HSP-testet</Link> om du vill kartlägga känslighet, återhämtning och intryck separat.</p></GuideSection>
     <GuideSection title="Ett autismtest ska inte försöka övertyga dig om att du har autism">

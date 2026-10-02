@@ -1,6 +1,7 @@
 import EditorialSurface from "../_components/EditorialSurface";
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { EditorialArticleJsonLd, getEditorialArticleSchema, getEditorialMetadata } from "../_seo/editorialSeo";
 
 const title = "Narcissist i en relation – tecken, beteenden och varningssignaler";
@@ -84,6 +85,9 @@ export default function NarcissistRelationPage() {
           <p className="mt-4 text-sm leading-6 text-neutral-700">Undrar du istället över dina egna narcissistiska drag? <Link href="/narcissism-sjalvtest" className="underline underline-offset-4">Gör vårt narcissism självtest.</Link></p>
         </header>
 
+        <figure className="mt-8 overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50">
+          <Image src="/seo-images/narcissist-i-en-relation-discover.png" alt="Illustration om narcissistiska mönster i en relation" width={1672} height={941} sizes="(max-width: 768px) calc(100vw - 3rem), 768px" className="h-auto w-full" />
+        </figure>
 
 
         <section className="space-y-5">

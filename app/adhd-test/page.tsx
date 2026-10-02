@@ -1,6 +1,7 @@
 import EditorialSurface from "../_components/EditorialSurface";
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { GuideLinks, GuideSection, textLink } from "../_components/ContentGuide";
 import { EditorialArticleJsonLd, getEditorialArticleSchema, getEditorialMetadata } from "../_seo/editorialSeo";
 import adhdGuides from "../../content/adhd-guides.json";
@@ -117,6 +118,9 @@ export default function ADHDLanding() {
       <p className="mt-4 leading-7 text-neutral-700">Inte bara koncentration. Testet tittar även på organisation, impulsivitet, inre rastlöshet, tidsuppfattning och hur svårigheterna påverkar vardagen.</p>
       <div className="mt-6"><Link data-rv="button" href="/adhd-test/test" className={cta}>Starta ADHD-testet</Link></div><p className="mt-3 text-sm text-neutral-600">Tar cirka 5 minuter · För vuxna · Ingen registrering</p>
     </header>
+    <figure className="mt-8 overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50">
+      <Image src="/seo-images/adhd-test-discover.png" alt="Illustration för ADHD-test för vuxna" width={1672} height={941} sizes="(max-width: 768px) calc(100vw - 2rem), 768px" className="h-auto w-full" />
+    </figure>
     <GuideSection title="Känner du igen både ADHD- och autismdrag?"><p>När uppmärksamhet, igångsättning eller rastlöshet finns tillsammans med behov av förutsägbarhet, sensorisk känslighet eller mycket social anpassning kan det vara hjälpsamt att titta på hur områdena samspelar.</p><p><Link href="/audhd-test" className={textLink}>Läs om och gör vårt AuDHD-test för vuxna.</Link></p></GuideSection>
     <GuideSection title="Överstimulering kan ha flera förklaringar"><p>Att bli trött av många intryck, ljud eller krav samtidigt kan förekomma vid ADHD, men också vid hög känslighet och av andra skäl. <Link href="/hogkanslig-eller-adhd" className={textLink}>Läs om skillnaden mellan högkänslighet och ADHD</Link> om du vill sätta upplevelserna i ett bredare sammanhang.</p></GuideSection>
     {sections.slice(0,2).map((s,i) => <GuideSection key={s.title} title={s.title}>{s.paragraphs.map(p => <p key={p}>{p}</p>)}{i===1 && <Link data-rv="button" href="/adhd-test/test" className={cta}>Gör ADHD-testet</Link>}</GuideSection>)}

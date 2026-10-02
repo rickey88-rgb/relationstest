@@ -1,5 +1,6 @@
 import EditorialSurface from "../_components/EditorialSurface";
 import Link from "next/link";
+import Image from "next/image";
 import { EditorialArticleJsonLd, getEditorialArticleSchema, getEditorialMetadata } from "../_seo/editorialSeo";
 
 const title = "Kontrollerande partner – tecken på kontrollerande beteende";
@@ -65,6 +66,10 @@ export default function Page() {
           </Link>
           .
         </p>
+
+        <figure className="overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50">
+          <Image src="/seo-images/kontrollerande-relation-discover.png" alt="Illustration om kontrollerande beteenden i en relation" width={1672} height={941} sizes="(max-width: 768px) calc(100vw - 3rem), 768px" className="h-auto w-full" />
+        </figure>
 
         <h2 className="text-2xl font-semibold">
           Tecken på att du lever med en kontrollerande partner
