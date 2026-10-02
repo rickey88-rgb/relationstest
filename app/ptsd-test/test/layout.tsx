@@ -5,7 +5,7 @@ import TestShell from "../../_components/TestShell";
 export const metadata: Metadata = {
   title: "PTSD-test – självskattning av traumarelaterade reaktioner",
   description: "Besvara 30 frågor om traumarelaterade reaktioner och få ett personligt självskattningsresultat.",
-  alternates: { canonical: "https://www.relationsvarning.se/ptsd-test/test" },
+  alternates: { canonical: "https://www.relationsvarning.se/ptsd-test" },
   robots: { index: false, follow: true, googleBot: { index: false, follow: true } },
 };
 
