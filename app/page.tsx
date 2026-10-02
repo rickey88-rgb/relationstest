@@ -182,6 +182,12 @@ export default function Landing() {
               När relationen känns fel — men du kan inte sätta fingret på varför.
             </h1>
 
+            <div className="mt-4">
+              <p className={styles.heroBridge}>
+                Ibland handlar det om relationen till någon annan. Ibland handlar det om relationen till dig själv.
+              </p>
+            </div>
+
             <p className="mt-5 text-base leading-relaxed text-neutral-700">
               Utforska dina relationer, beteendemönster och hur du fungerar i vardagen.
               Här hittar du självtester och guider om relationer, ADHD, autism, AuDHD,
