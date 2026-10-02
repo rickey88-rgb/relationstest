@@ -192,11 +192,6 @@ const areaDescriptions: Record<Area, string> = {
 
 const LS_KEY = "gaslightingtest_state_v1";
 
-/*
-  STRIPE:
-  Ersätt endast REPLACE_WITH_STRIPE_LINK nedan
-  när Stripe Payment Link är skapad.
-*/
 const CHECKOUT_URL: string = "https://buy.stripe.com/14A4gyb97bYBfkX7UQ0gw0l";
 
 function clamp(value: number, min: number, max: number) {

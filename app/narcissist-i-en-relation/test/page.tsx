@@ -245,8 +245,6 @@ const weights: Record<Area, number> = {
 
 const LS_KEY = "narcissist_relation_test_state_v1";
 
-// Vi kopplar in en separat Stripe Payment Link i nästa steg.
-// Lägg INTE psykiskt-våld-testets betalningslänk här.
 const CHECKOUT_URL = "https://buy.stripe.com/cNi3cu6SRd2FegT0so0gw0h";
 
 function clamp(n: number, min: number, max: number) {

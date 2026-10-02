@@ -192,12 +192,6 @@ const areaDescriptions: Record<Area, string> = {
 
 const LS_KEY = "medberoendetest_state_v1";
 
-/*
-  STRIPE:
-  När Payment Link är skapad, ersätt ENDAST texten
-  REPLACE_WITH_STRIPE_LINK
-  mellan citationstecknen nedan.
-*/
 const CHECKOUT_URL = "https://buy.stripe.com/aFa14m2CBd2F3Cf8YU0gw0k";
 
 function clamp(value: number, min: number, max: number) {

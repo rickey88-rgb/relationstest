@@ -36,12 +36,6 @@ type AreaInfo = {
 
 const LS_KEY = "psykiskt_vald_test_state_v1";
 
-/*
-  Betalningslänken konfigureras separat.
-
-  I Stripe ska success redirect så småningom peka på:
-  https://relationsvarning.se/psykisk-misshandel-relation/test?paid=true
-*/
 const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/cNifZg0ut9Qt0q3grm0gw0i";
 
 const answerLabels = [

@@ -78,7 +78,6 @@ export const questions: Question[] = Array.from({ length: 6 }, (_, i) =>
 
 export const answerLabels = ["Aldrig", "Sällan", "Ibland", "Ofta", "Mycket ofta"];
 export const SCREENING_CHECKOUT_URL = "https://buy.stripe.com/dRm14m5ONaUxegT4IE0gw0f";
-// Launch dependency: replace the legacy Payment Link with the verified 79 SEK link.
 export const SCREENING_PRICE_SEK = 39;
 export const STORAGE_KEY = "relationstest_screening_state_v2";
 export const STATE_VERSION = 2;
