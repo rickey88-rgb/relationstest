@@ -5,6 +5,10 @@ module.exports = {
   sitemapSize: 5000,
   autoLastmod: false,
   changefreq: undefined,
+  transform: async (_config, path) => {
+    if (path === '/icon.png') return null;
+    return { loc: path };
+  },
   exclude: [
     '/angest-test/test',
     '/adhd-test/test',

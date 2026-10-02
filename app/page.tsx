@@ -66,6 +66,13 @@ const selfTests = [
     description: "Utforska dina egna narcissistiska drag och få en personlig profil inom sex områden.",
     cta: "Gör självtestet",
   },
+  {
+    href: "/iq-test",
+    title: "IQ-test",
+    category: "Kognitivt självtest",
+    description: "40 frågor inom fem kognitiva områden. Få ett orienterande IQ-estimat och se din kognitiva profil.",
+    cta: "Gör självtestet",
+  },
 ];
 
 const relationTests = [

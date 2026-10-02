@@ -5,6 +5,14 @@ const load = require("../../autism-test/test/test-loader.cjs")();
 const model = load(path.join(__dirname, "model.ts"));
 
 assert.equal(model.questions.length, 40);
+assert.equal(new Set(model.questions.map(question => question.id)).size, 40);
+assert(model.questions.every(question => question.options.length === 4 && question.correct >= 0 && question.correct < question.options.length));
+assert.equal(model.questions.find(question => question.id === "m3")?.prompt, "Vilket tal saknas?");
+assert.deepEqual(model.questions.find(question => question.id === "m6"), {
+  id: "m6", area: "matrices", difficulty: "medium", weight: 1.25,
+  prompt: "Vilken figur saknas i matrisen?", options: ["△△△", "▲▲▲", "△△", "○○○"], correct: 0,
+  visual: { size: 2, cells: ["●", "○○", "▲▲", "?"], options: ["△△△", "▲▲▲", "△△", "○○○"] },
+});
 assert.deepEqual(Object.fromEntries(model.areas.map(area => [area, model.questions.filter(question => question.area === area).length])), { matrices: 10, logic: 8, numeric: 8, verbal: 7, spatial: 7 });
 assert.deepEqual(Object.fromEntries(["easy", "medium", "hard"].map(difficulty => [difficulty, model.questions.filter(question => question.difficulty === difficulty).length])), { easy: 12, medium: 16, hard: 12 });
 assert.equal(model.maxWeightedRaw, 50);

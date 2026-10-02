@@ -4,8 +4,18 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        source: "/autism",
+        destination: "/autism-test",
+        permanent: true,
+      },
+      {
         source: "/audhdtest",
         destination: "/audhd-test",
+        permanent: true,
+      },
+      {
+        source: "/adhd",
+        destination: "/adhd-test",
         permanent: true,
       },
     ];

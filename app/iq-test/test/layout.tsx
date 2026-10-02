@@ -5,7 +5,7 @@ import TestShell from "../../_components/TestShell";
 export const metadata: Metadata = {
   title: "IQ-test – 40 frågor om logik och kognitiv förmåga | Relationsvarning",
   description: "Gör ett IQ-test med 40 frågor om mönster, logik, siffror, språk och spatial förmåga. Få ett IQ-estimat direkt.",
-  alternates: { canonical: "https://www.relationsvarning.se/iq-test/test" },
+  alternates: { canonical: "https://www.relationsvarning.se/iq-test" },
   robots: { index: false, follow: true, googleBot: { index: false, follow: true } },
 };
 export default function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
