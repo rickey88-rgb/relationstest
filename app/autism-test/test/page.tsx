@@ -28,6 +28,7 @@ export default function AutismSelfTestPage() {
   const [editing, setEditing] = useState(false);
   const [storageUnavailable, setStorageUnavailable] = useState(false);
   const [checkoutUnavailable, setCheckoutUnavailable] = useState(false);
+  const [recoveryLinkInvalid, setRecoveryLinkInvalid] = useState(false);
   const [transitioning, setTransitioning] = useState(false);
   const answerLock = useRef(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -59,6 +60,43 @@ export default function AutismSelfTestPage() {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
     setHydrated(true);
+  }, []);
+
+  // A support-recovery unlock is verified only by the HttpOnly cookie issued by the server.
+  // It intentionally does not use the public paid-return query parameter.
+  useEffect(() => {
+    let cancelled = false;
+
+    async function restoreSupportRecovery() {
+      const recovery = new URLSearchParams(window.location.search).get("recovery");
+      let recoveryUnlocked = false;
+
+      try {
+        const response = await fetch("/api/autism-recovery/status", { cache: "no-store" });
+        const body: unknown = response.ok ? await response.json() : null;
+        recoveryUnlocked = typeof body === "object" && body !== null && (body as { unlocked?: unknown }).unlocked === true;
+      } catch {
+        // A failed status check must never unlock a result.
+      }
+
+      if (cancelled) return;
+
+      if (recovery === "invalid" || (recovery === "success" && !recoveryUnlocked)) {
+        setRecoveryLinkInvalid(true);
+        return;
+      }
+
+      if (!recoveryUnlocked) return;
+
+      setUnlocked(true);
+      if (recovery === "success") {
+        window.history.replaceState({}, "", window.location.pathname);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    }
+
+    void restoreSupportRecovery();
+    return () => { cancelled = true; };
   }, []);
 
   useEffect(() => {
@@ -115,6 +153,7 @@ export default function AutismSelfTestPage() {
   if (!hydrated) return <p className="mt-6" role="status">Laddar testet...</p>;
   return <>
       {unlocked && <div data-flow="inset" role="status" style={{ margin: "20px 0", padding: 16, border: "1px solid #ddd", borderRadius: 12, lineHeight: 1.6 }}><strong>Ditt test är upplåst – du behöver inte betala igen.</strong>{answers.every(answer => answer >= 0) ? <p>Din fullständiga analys visas nedan.</p> : <p>Tidigare svar saknas eller är ofullständiga i den här webbläsaren. Öppna testet i samma webbläsare som före betalningen, eller svara på frågorna här utan att köpa igen. Behöver du hjälp? Kontakta <a href="mailto:support@relationsvarning.se">support@relationsvarning.se</a>.</p>}</div>}
+      {recoveryLinkInvalid && <p role="alert" style={{ margin: "20px 0", lineHeight: 1.6 }}>Recovery-länken är ogiltig eller har gått ut. Inget har låsts upp. Kontakta <a href="mailto:support@relationsvarning.se">support@relationsvarning.se</a> om du behöver hjälp.</p>}
       {payment.checkoutError && <p role="alert" style={{ margin: "20px 0", lineHeight: 1.6 }}>{payment.checkoutError}</p>}
 
     {storageUnavailable && <p role="status" className="mt-6 rounded-xl border border-neutral-300 bg-neutral-50 p-4 text-sm leading-6">Webbläsaren kan inte spara testet. Du kan svara här, men återupptagning och betalning behöver fungerande lokal lagring. Lämna inte sidan om du vill behålla svaren.</p>}
