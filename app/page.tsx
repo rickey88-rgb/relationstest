@@ -1,5 +1,6 @@
 import Brand from "./_components/Brand";
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import styles from "./home.module.css";
 import adhdGuides from "../content/adhd-guides.json";
@@ -197,7 +198,7 @@ export default function Landing() {
 
             <p className="mt-5 text-base leading-relaxed text-neutral-700">
               Utforska dina relationer, beteendemönster och hur du fungerar i vardagen.
-              Här hittar du självtester och guider om relationer, ADHD, autism, AuDHD,
+              Här hittar du självtester, guider och <Link href="#bocker" className="underline decoration-neutral-400 underline-offset-4 hover:decoration-neutral-700">böcker</Link> om relationer, ADHD, autism, AuDHD,
               ångest, trauma och andra områden inom psykisk hälsa och självreflektion.
             </p>
             <HomeScrollLink targetId="self-tests" className={styles.primary}>Utforska våra självtester <span aria-hidden="true">→</span></HomeScrollLink>
@@ -260,6 +261,28 @@ export default function Landing() {
             snarare än om en partner eller relation.
           </p>
           <TestCards items={selfTests} />
+        </div>
+      </section>
+
+      <section id="bocker" aria-labelledby="audhd-book-heading" className={`${styles.section} ${styles.bookSection}`}>
+        <div className={styles.bookPromo}>
+          <div className={styles.bookCopy}>
+            <p className={styles.eyebrow}>Ny digital bok</p>
+            <h2 id="audhd-book-heading">Världens bästa bok om AuDHD</h2>
+            <p>10 konkreta sätt att få livet att fungera när ADHD och autism drar åt varsitt håll.</p>
+            <div className={styles.bookActions}>
+              <span className={styles.bookPrice}>149 kr</span>
+              <Link href="/audhd-bok" className={styles.bookLink}>Läs mer om boken <span aria-hidden="true">→</span></Link>
+            </div>
+          </div>
+          <Image
+            src="/audhd-bok-mockup.png"
+            alt="Världens bästa bok om AuDHD av Elias Voss"
+            width={1312}
+            height={1199}
+            sizes="(max-width: 700px) min(100vw - 7rem, 320px), 360px"
+            className={styles.bookMockup}
+          />
         </div>
       </section>
 

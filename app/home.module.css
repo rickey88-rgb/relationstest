@@ -69,6 +69,17 @@
 .home .cardLink { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 48px; margin-top: 12px; padding: 11px 16px; border: 1px solid #d9babb; border-radius: 12px; background: #f3e6e3; color: #824452; font-size: .85rem; font-weight: 600; }
 .home .cardLink:hover { background: var(--rv-rose-soft); border-color: #b77e87; color: #693643; }
 .cardLink svg { width: 18px; height: 18px; flex-shrink: 0; }
+.bookSection { padding-top: 0; }
+.bookPromo { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(220px, .85fr); gap: 32px 48px; align-items: center; padding: 36px 44px; background: #f8eee7; border: 1px solid #e3d9ce; border-radius: 28px; }
+.bookCopy { min-width: 0; }
+.bookCopy h2 { margin-top: 12px; max-width: 570px; }
+.bookCopy > p:not(.eyebrow) { max-width: 550px; margin-top: 18px; color: #405045; font-size: 1rem; line-height: 1.75; }
+.bookActions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; margin-top: 24px; }
+.bookPrice { font-size: 1.35rem; font-weight: 600; letter-spacing: -.025em; color: var(--rv-text); }
+.home .bookLink { display: inline-flex; align-items: center; gap: 14px; min-height: 48px; padding: 11px 18px; border: 1px solid #d9babb; border-radius: 12px; background: #f3e6e3; color: #824452; font-size: .85rem; font-weight: 600; text-decoration: none; }
+.home .bookLink:hover { background: var(--rv-rose-soft); border-color: #b77e87; color: #693643; }
+.bookLink span { font: 400 1.3rem/1 Georgia, serif; }
+.bookMockup { justify-self: center; width: min(100%, 360px); height: auto; }
 .about > div { max-width: none; }
 .about > div > div { padding: 36px; border-color: var(--rv-border); border-radius: 28px; background: #eee8e0; box-shadow: none; }
 .about h2 { font-size: 1.9rem; }
@@ -109,6 +120,12 @@
   .safety { margin-top: -8px; }
   .cards { grid-template-columns: 1fr; gap: 16px; }
   .card { padding: 26px; }
+  .bookPromo { grid-template-columns: 1fr; gap: 28px; padding: 28px; }
+  .bookCopy > p:not(.eyebrow) { font-size: .95rem; line-height: 1.7; }
+  .bookActions { align-items: stretch; gap: 16px; margin-top: 22px; }
+  .bookPrice { font-size: 1.2rem; }
+  .home .bookLink { justify-content: space-between; width: 100%; }
+  .bookMockup { width: min(100%, 280px); }
   .section { padding-top: 24px; padding-bottom: 32px; }
   .about > div > div { padding: 26px; }
   .about h2 + div { grid-template-columns: 1fr; gap: 28px; }

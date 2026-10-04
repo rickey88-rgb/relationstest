@@ -22,7 +22,9 @@ export default async function AudhdBookThankYouPage() {
             <h1 className="mt-3">Tack för ditt köp</h1>
             <p className="mt-4 text-lg leading-8 text-neutral-700">Din åtkomst till {AUDHD_BOOK.name} är klar i den här webbläsaren.</p>
             <a href="/api/books/audhd-bok/download" className="mt-7 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[#9d5663] px-5 py-3 text-center font-semibold text-white transition hover:bg-[#844451] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#576f60] sm:w-auto">Ladda ner boken</a>
-            <p className="mt-4 text-sm leading-6 text-neutral-600">Spara gärna PDF-filen efter nedladdningen. Om du byter webbläsare eller rensar cookies kan support hjälpa dig att återställa åtkomsten manuellt.</p>
+            <p className="mt-4 text-sm leading-6 text-neutral-700">På mobilen: När boken öppnas, tryck på Dela och välj Spara i Filer eller Böcker för att behålla den på telefonen.</p>
+            <p className="mt-2 text-xs leading-5 text-neutral-600">Tips: Spara boken på din enhet när den öppnas så har du den kvar och kan läsa den när du vill.</p>
+            <p className="mt-4 text-sm leading-6 text-neutral-600">Om du byter webbläsare eller rensar cookies kan support hjälpa dig att återställa åtkomsten manuellt.</p>
           </> : <>
             <p className="text-sm font-semibold uppercase tracking-[.16em] text-[#9d5663]">Åtkomst saknas</p>
             <h1 className="mt-3">Vi kunde inte bekräfta bokåtkomsten</h1>
