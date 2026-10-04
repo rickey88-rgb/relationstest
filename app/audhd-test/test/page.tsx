@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useMemo, useRef, useState } from "react";
+import Image from "next/image";
 import PaywallCheckoutCTA from "../../_components/PaywallCheckoutCTA";
 import PostPurchaseRecommendation from "../../_components/PostPurchaseRecommendation";
 import type { TestId } from "../../_analytics/config";
@@ -259,11 +260,16 @@ export default function AudhdTestPage() {
 function AudhdBookRecommendation() {
   return <section aria-label="Erbjudande på AuDHD-boken" className="mt-10 rounded-2xl border border-[#e6d9d7] bg-[#fffaf8] p-5 text-neutral-900 sm:p-6">
     <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#9d5663]">Exklusivt för dig som gjort testet</p>
-    <h2 className="mt-2 text-xl font-semibold tracking-tight">Världens bästa bok om AuDHD</h2>
-    <p className="mt-3 max-w-2xl leading-7 text-neutral-700">10 konkreta sätt att få livet att fungera när ADHD och autism drar åt varsitt håll.</p>
-    <div className="mt-5 flex flex-wrap items-center gap-4">
-      <span className="text-2xl font-semibold tracking-tight">79 kr</span>
-      <a href={AUDHD_BOOK_RETURNING_CUSTOMER_URL} className="inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[#9d5663] px-5 py-3 text-center font-semibold text-white transition-colors hover:bg-[#844451] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#9d5663] sm:w-auto">Köp boken för 79 kr</a>
+    <div className="mt-4 grid gap-5 sm:grid-cols-[minmax(0,1fr)_150px] sm:items-center">
+      <div className="order-2 sm:order-1">
+        <h2 className="text-xl font-semibold tracking-tight">Världens bästa bok om AuDHD</h2>
+        <p className="mt-3 max-w-2xl leading-7 text-neutral-700">10 konkreta sätt att få livet att fungera när ADHD och autism drar åt varsitt håll.</p>
+        <div className="mt-5 flex flex-wrap items-center gap-4">
+          <span className="text-2xl font-semibold tracking-tight">79 kr</span>
+          <a href={AUDHD_BOOK_RETURNING_CUSTOMER_URL} className="inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[#9d5663] px-5 py-3 text-center font-semibold text-white transition-colors hover:bg-[#844451] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#9d5663] sm:w-auto">Köp boken för 79 kr</a>
+        </div>
+      </div>
+      <Image src="/audhd-bok-mockup.png" alt="Världens bästa bok om AuDHD av Elias Voss" width={1312} height={1199} sizes="(max-width: 640px) 160px, 150px" className="order-1 mx-auto h-auto w-40 sm:order-2 sm:w-[150px]" />
     </div>
     <p className="mt-3 text-sm text-neutral-600">Digital bok · Direkt tillgång efter betalning</p>
   </section>;
