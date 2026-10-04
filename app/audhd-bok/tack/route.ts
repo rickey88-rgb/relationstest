@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const response = redirectWithoutCaching(new URL("/audhd-bok/tack/klar", request.url));
+    const response = redirectWithoutCaching(new URL("/audhd-bok/tack/klart", request.url));
     response.cookies.set(BOOK_ACCESS_COOKIE, issueBookAccessToken(AUDHD_BOOK.id), bookAccessCookieOptions());
     return response;
   } catch {
