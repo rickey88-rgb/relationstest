@@ -11,7 +11,6 @@ import { useAudhdAnalytics } from "./analytics";
 
 const card = "mt-7 space-y-5 rounded-[26px] border border-neutral-200 bg-white p-5 leading-7 shadow-sm sm:p-7";
 const btn = "inline-flex min-h-12 items-center justify-center rounded-xl px-5 py-3 font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900";
-const AUDHD_BOOK_RETURNING_CUSTOMER_URL = "https://buy.stripe.com/8x23cu0ut5Adgp11ws0gw0u";
 
 function freeMainResult(profileType: Report["profileType"]) {
   if (profileType === "Kombinerat dragmönster" || profileType === "Mycket framträdande kombinationsmönster") return "Dina svar visar tydliga drag från både ADHD- och autismrelaterade områden.";
@@ -266,7 +265,7 @@ function AudhdBookRecommendation() {
         <p className="mt-3 max-w-2xl leading-7 text-neutral-700">10 konkreta sätt att få livet att fungera när ADHD och autism drar åt varsitt håll.</p>
         <div className="mt-5 flex flex-wrap items-center gap-4">
           <span className="text-2xl font-semibold tracking-tight">79 kr</span>
-          <a href={AUDHD_BOOK_RETURNING_CUSTOMER_URL} className="inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[#9d5663] px-5 py-3 text-center font-semibold text-white transition-colors hover:bg-[#844451] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#9d5663] sm:w-auto">Köp boken för 79 kr</a>
+          <a href="/audhd-bok?offer=analysis" className="inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[#9d5663] px-5 py-3 text-center font-semibold text-white transition-colors hover:bg-[#844451] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#9d5663] sm:w-auto">Läs om boken · 79 kr</a>
         </div>
       </div>
       <Image src="/audhd-bok-mockup.png" alt="Världens bästa bok om AuDHD av Elias Voss" width={1312} height={1199} sizes="(max-width: 640px) 160px, 150px" className="order-1 mx-auto h-auto w-40 sm:order-2 sm:w-[150px]" />

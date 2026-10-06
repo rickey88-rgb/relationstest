@@ -9,6 +9,10 @@ module.exports = {
     if (path === '/icon.png') return null;
     return { loc: path };
   },
+  additionalPaths: async () => [
+    { loc: '/audhd-bok' },
+    { loc: '/autism-bok' },
+  ],
   exclude: [
     '/angest-test/test',
     '/adhd-test/test',

@@ -3,8 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import EditorialSurface from "../_components/EditorialSurface";
 import { AUTISM_BOOK } from "../_lib/bookProducts.server";
+import { getAutismBookOffer, type BookOffer } from "../_lib/bookOffers";
 
-const stripePaymentLink = "https://buy.stripe.com/5kQ28q0ut5Adb4H5MI0gw0v";
 const pageUrl = "https://www.relationsvarning.se/autism-bok";
 const title = "På mitt sätt – bok om autism och vardag | Relationsvarning";
 const description = "På mitt sätt är en konkret bok om autism, vardag och praktiska verktyg för vuxna som vill förstå sina behov och få vardagen att fungera på sitt sätt.";
@@ -24,11 +24,12 @@ const structuredData = [
   { "@context": "https://schema.org", "@type": "Product", "@id": `${pageUrl}#product`, name: AUTISM_BOOK.name, description, brand: { "@type": "Brand", name: "Relationsvarning" }, offers: { "@type": "Offer", url: pageUrl, price: "149", priceCurrency: "SEK", availability: "https://schema.org/InStock", itemCondition: "https://schema.org/NewCondition" } },
 ];
 
-function BuyButton({ children = "Köp boken · 149 kr" }: { children?: string }) {
-  return <a data-rv="button" href={stripePaymentLink} className={primaryButton}>{children}</a>;
+function BuyButton({ offer, children }: { offer: BookOffer; children?: string }) {
+  return <a data-rv="button" href={offer.paymentLink} className={primaryButton}>{children ?? `Köp boken · ${offer.price} kr`}</a>;
 }
 
-export default function AutismBookPage() {
+export default async function AutismBookPage({ searchParams }: { searchParams: Promise<{ offer?: string | string[] }> }) {
+  const offer = getAutismBookOffer((await searchParams).offer);
   return (
     <EditorialSurface>
       <main className="overflow-x-hidden text-neutral-900">
@@ -38,12 +39,13 @@ export default function AutismBookPage() {
           <nav aria-label="Brödsmulor" className="text-sm text-neutral-600"><Link href="/" className="underline underline-offset-4 decoration-neutral-300 hover:decoration-neutral-700">Relationsvarning</Link><span aria-hidden="true"> / </span><span aria-current="page">Autism-bok</span></nav>
           <div className="mt-5 grid gap-8 rounded-[32px] border border-[#d7e0d6] bg-[#f7fbf6] px-5 py-8 shadow-sm sm:mt-7 sm:px-8 sm:py-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(260px,.85fr)] lg:items-center lg:gap-12 lg:px-12 lg:py-14">
             <div className="max-w-2xl">
+              {offer.isAnalysisOffer && <p className="text-sm font-semibold uppercase tracking-[.16em] text-[#576f60]">Specialpris efter testet</p>}
               <p className="text-sm font-semibold uppercase tracking-[.16em] text-[#576f60]">Ny digital bok</p>
               <h1 className="mt-3 text-4xl font-semibold leading-[1.04] tracking-tight text-neutral-950 sm:text-5xl">På mitt sätt</h1>
               <p className="mt-5 font-serif text-2xl leading-8 text-[#405045] sm:text-[1.7rem] sm:leading-9">En konkret bok om autism och att få vardagen att fungera på ditt sätt.</p>
               <p className="mt-5 text-lg leading-8 text-neutral-700">För dig som vill förstå dina behov bättre och skapa vardagsverktyg som faktiskt går att använda — utan att försöka passa in i någon annans system.</p>
-              <div className="mt-7 flex flex-wrap items-end gap-x-5 gap-y-3"><p className="text-3xl font-semibold tracking-tight text-neutral-950">149 kr</p><p className="pb-1 text-sm font-medium text-neutral-600">48 sidor · praktiska arbetsblad</p></div>
-              <div className="mt-5"><BuyButton /></div><p className="mt-3 text-sm text-neutral-600">Digital bok (PDF) · Direkt tillgång efter betalning</p>
+              <div className="mt-7 flex flex-wrap items-end gap-x-5 gap-y-3">{offer.isAnalysisOffer ? <><p className="text-3xl font-semibold tracking-tight text-neutral-950">Ditt pris: {offer.price} kr</p><p className="pb-1 text-sm font-medium text-neutral-600"><span className="line-through">149 kr</span> · 48 sidor · praktiska arbetsblad</p></> : <><p className="text-3xl font-semibold tracking-tight text-neutral-950">{offer.price} kr</p><p className="pb-1 text-sm font-medium text-neutral-600">48 sidor · praktiska arbetsblad</p></>}</div>
+              <div className="mt-5"><BuyButton offer={offer} /></div><p className="mt-3 text-sm text-neutral-600">Digital bok (PDF) · Direkt tillgång efter betalning</p>
             </div>
             <div className="space-y-5">
               <div className="mx-auto w-full max-w-[640px]"><Image src="/autism-bok-mockup.png" alt="På mitt sätt – bok om autism av Elias Voss" width={1312} height={1199} priority sizes="(max-width: 1024px) min(100vw - 2.5rem, 640px), 55vw" className="h-auto w-full" /></div>
@@ -66,7 +68,7 @@ export default function AutismBookPage() {
 
         <section className="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:px-6 sm:py-20 lg:grid-cols-2 lg:items-start"><div><p className="text-sm font-semibold uppercase tracking-[.16em] text-[#576f60]">För vem?</p><h2 className={`mt-3 ${sectionHeading}`}>För dig som vill förstå dig själv bättre — på ditt sätt.</h2><p className="mt-5 max-w-xl text-lg leading-8 text-neutral-700">Boken är inte behandling, diagnostik eller en ersättning för professionell vård. Den är ett vardagsnära stöd för reflektion och praktiska verktyg.</p></div><div className="space-y-3">{["Dig som har autism", "Dig som känner igen dig i autismrelaterade behov och erfarenheter", "Dig som vill förstå intryck, återhämtning och vardagsstruktur bättre", "Dig som vill ha konkreta arbetsblad snarare än fler allmänna råd", "Någon som vill förstå en närstående bättre"].map((item) => <p key={item} className="rounded-xl border border-[#d7e0d6] bg-[#f7fbf6] px-5 py-4 font-medium leading-6 text-neutral-800"><span aria-hidden="true" className="mr-3 text-[#576f60]">✓</span>{item}</p>)}</div></section>
 
-        <section className="bg-[#576f60] text-white"><div className="mx-auto max-w-4xl px-4 py-14 text-center sm:px-6 sm:py-20"><h2 className="font-serif text-4xl leading-tight sm:text-5xl">Du får skapa en vardag som fungerar för dig.</h2><p className="mx-auto mt-4 max-w-2xl text-lg leading-8 text-white/90">Börja med ett konkret verktyg, ett behov och ett litet nästa steg.</p><p className="mt-7 text-3xl font-semibold">149 kr</p><div className="mt-5"><BuyButton>Köp På mitt sätt</BuyButton></div><p className="mt-3 text-sm text-white/85">Digital bok (PDF) · Direkt tillgång efter betalning</p></div></section>
+        <section className="bg-[#576f60] text-white"><div className="mx-auto max-w-4xl px-4 py-14 text-center sm:px-6 sm:py-20"><h2 className="font-serif text-4xl leading-tight sm:text-5xl">Du får skapa en vardag som fungerar för dig.</h2><p className="mx-auto mt-4 max-w-2xl text-lg leading-8 text-white/90">Börja med ett konkret verktyg, ett behov och ett litet nästa steg.</p>{offer.isAnalysisOffer && <p className="mt-7 text-sm font-semibold uppercase tracking-[.16em] text-white/85">Specialpris efter testet</p>}<p className="mt-2 text-3xl font-semibold">{offer.isAnalysisOffer ? `Ditt pris: ${offer.price} kr` : `${offer.price} kr`}</p><div className="mt-5"><BuyButton offer={offer}>{`Köp På mitt sätt · ${offer.price} kr`}</BuyButton></div><p className="mt-3 text-sm text-white/85">Digital bok (PDF) · Direkt tillgång efter betalning</p></div></section>
 
         <section className="mx-auto max-w-4xl px-4 py-14 sm:px-6 sm:py-20"><p className="text-sm font-semibold uppercase tracking-[.16em] text-[#576f60]">Vanliga frågor</p><h2 className={`mt-3 ${sectionHeading}`}>Innan du köper</h2><div className="mt-7 divide-y divide-neutral-200 border-y border-neutral-200">{[["Är det en fysisk bok?", "Nej, det är en digital bok i PDF-format."], ["Hur får jag boken?", "Efter genomförd betalning verifieras köpet och du får direkt tillgång till nedladdningen."], ["Behöver jag ha en autismdiagnos?", "Nej. Boken är för personer som vill förstå autism och vardag bättre. Den ersätter inte professionell utredning eller vård."], ["Kan jag läsa den i mobilen?", "Ja. PDF-filen kan läsas på mobil, surfplatta och dator."], ["Finns det arbetsblad?", "Ja, boken innehåller praktiska arbetsblad och övningar kopplade till de tio områdena."]].map(([question, answer]) => <details key={question} className="group py-5"><summary className="cursor-pointer list-none pr-8 font-semibold text-neutral-950 marker:content-none"><span>{question}</span><span aria-hidden="true" className="float-right text-[#576f60] transition group-open:rotate-45">+</span></summary><p className="mt-3 max-w-3xl leading-7 text-neutral-700">{answer}</p></details>)}</div></section>
       </main>

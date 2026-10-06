@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import PaywallCheckoutCTA from "../../_components/PaywallCheckoutCTA";
 import PostPurchaseRecommendation from "../../_components/PostPurchaseRecommendation";
 import { hasPaidReturn, usePaymentRecovery } from "../../_components/usePaymentRecovery";
@@ -18,7 +19,6 @@ const button = "inline-flex min-h-12 items-center justify-center rounded-xl px-5
 const secondary = button + " border border-neutral-300 bg-white text-neutral-900 hover:bg-neutral-100";
 const link = "underline underline-offset-4 decoration-neutral-400 focus-visible:outline-2 focus-visible:outline-offset-4";
 const section = "mt-8 space-y-4 rounded-2xl border border-neutral-200 p-5 leading-7 sm:p-6";
-const AUTISM_BOOK_RETURNING_CUSTOMER_URL = "https://buy.stripe.com/9B600i0utaUx7Sv5MI0gw0w";
 
 export default function AutismSelfTestPage() {
   const [index, setIndex] = useState(0);
@@ -216,11 +216,16 @@ export default function AutismSelfTestPage() {
 function AutismBookRecommendation() {
   return <section aria-label="Erbjudande på autismboken" className="mt-10 rounded-2xl border border-[#d7e0d6] bg-[#f7fbf6] p-5 text-neutral-900 sm:p-6">
     <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#576f60]">Exklusivt för dig som gjort testet</p>
-    <h2 className="mt-2 text-xl font-semibold tracking-tight">På mitt sätt</h2>
-    <p className="mt-3 max-w-2xl leading-7 text-neutral-700">En konkret bok som hjälper dig att omsätta förståelsen från analysen till vardagsverktyg som fungerar på ditt sätt.</p>
-    <div className="mt-5 flex flex-wrap items-center gap-4">
-      <span className="text-2xl font-semibold tracking-tight">99 kr</span>
-      <a href={AUTISM_BOOK_RETURNING_CUSTOMER_URL} className="inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[#576f60] px-5 py-3 text-center font-semibold text-white transition-colors hover:bg-[#455b4c] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#576f60] sm:w-auto">Köp boken för 99 kr</a>
+    <div className="mt-4 grid gap-5 sm:grid-cols-[minmax(0,1fr)_150px] sm:items-center">
+      <div className="order-2 sm:order-1">
+        <h2 className="text-xl font-semibold tracking-tight">På mitt sätt</h2>
+        <p className="mt-3 max-w-2xl leading-7 text-neutral-700">En konkret bok som hjälper dig att omsätta förståelsen från analysen till vardagsverktyg som fungerar på ditt sätt.</p>
+        <div className="mt-5 flex flex-wrap items-center gap-4">
+          <span className="text-2xl font-semibold tracking-tight">99 kr</span>
+          <a href="/autism-bok?offer=analysis" className="inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[#576f60] px-5 py-3 text-center font-semibold text-white transition-colors hover:bg-[#455b4c] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#576f60] sm:w-auto">Läs om boken · 99 kr</a>
+        </div>
+      </div>
+      <Image src="/autism-bok-mockup.png" alt="På mitt sätt – bok om autism av Elias Voss" width={1312} height={1199} sizes="(max-width: 640px) 180px, 150px" className="order-1 mx-auto h-auto w-44 sm:order-2 sm:w-[150px]" />
     </div>
     <p className="mt-3 text-sm text-neutral-600">Digital bok · Direkt tillgång efter betalning</p>
   </section>;

@@ -3,9 +3,9 @@ import Image from "next/image";
 import Link from "next/link";
 import EditorialSurface from "../_components/EditorialSurface";
 import { AUDHD_BOOK } from "../_lib/bookProducts.server";
+import { getAudhdBookOffer, type BookOffer } from "../_lib/bookOffers";
 import styles from "./page.module.css";
 
-const stripePaymentLink = "https://buy.stripe.com/8x2aEWgtr2o1gp13EA0gw0t";
 const pageUrl = "https://www.relationsvarning.se/audhd-bok";
 const mockupUrl = "https://www.relationsvarning.se/audhd-bok-mockup.png";
 const title = "Världens bästa bok om AuDHD – ADHD och autism i vardagen | Relationsvarning";
@@ -42,11 +42,12 @@ const structuredData = [
   { "@context": "https://schema.org", "@type": "Product", "@id": `${pageUrl}#product`, name: AUDHD_BOOK.name, description, image: mockupUrl, brand: { "@type": "Brand", name: "Relationsvarning" }, offers: { "@type": "Offer", url: pageUrl, price: "149", priceCurrency: "SEK", availability: "https://schema.org/InStock", itemCondition: "https://schema.org/NewCondition" } },
 ];
 
-function BuyButton({ children = "Köp boken · 149 kr" }: { children?: string }) {
-  return <a data-rv="button" href={stripePaymentLink} className={primaryButton}>{children}</a>;
+function BuyButton({ offer, children }: { offer: BookOffer; children?: string }) {
+  return <a data-rv="button" href={offer.paymentLink} className={primaryButton}>{children ?? `Köp boken · ${offer.price} kr`}</a>;
 }
 
-export default function AudhdBookPage() {
+export default async function AudhdBookPage({ searchParams }: { searchParams: Promise<{ offer?: string | string[] }> }) {
+  const offer = getAudhdBookOffer((await searchParams).offer);
   return (
     <EditorialSurface>
       <main className="overflow-x-hidden text-neutral-900">
@@ -56,12 +57,13 @@ export default function AudhdBookPage() {
           <nav aria-label="Brödsmulor" className="text-sm text-neutral-600"><Link href="/" className="underline underline-offset-4 decoration-neutral-300 hover:decoration-neutral-700">Relationsvarning</Link><span aria-hidden="true"> / </span><span aria-current="page">AuDHD-bok</span></nav>
           <div className="mt-5 grid items-center gap-8 rounded-[32px] border border-[#e6d9d7] bg-[#fffaf8] px-5 py-8 shadow-sm sm:mt-7 sm:px-8 sm:py-10 lg:grid-cols-[minmax(0,.88fr)_minmax(0,1.12fr)] lg:gap-10 lg:px-12 lg:py-14">
             <div className="max-w-xl">
+              {offer.isAnalysisOffer && <p className="text-sm font-semibold uppercase tracking-[.16em] text-[#9d5663]">Specialpris efter testet</p>}
               <p className="text-sm font-semibold uppercase tracking-[.16em] text-[#9d5663]">Ny digital bok</p>
               <h1 className="mt-3 text-4xl font-semibold leading-[1.04] tracking-tight text-neutral-950 sm:text-5xl">Världens bästa bok om AuDHD</h1>
               <p className="mt-5 font-serif text-2xl leading-8 text-[#553b3f] sm:text-[1.7rem] sm:leading-9">10 konkreta sätt att få livet att fungera när ADHD och autism drar åt varsitt håll.</p>
               <p className="mt-5 text-lg leading-8 text-neutral-700">För dig som är trött på allmänna råd och vill skapa vardagssystem som går att använda när behoven drar åt olika håll.</p>
-              <div className="mt-7 flex flex-wrap items-end gap-x-5 gap-y-3"><p className="text-3xl font-semibold tracking-tight text-neutral-950">149 kr</p><p className="pb-1 text-sm font-medium text-neutral-600">37 sidor · praktiska arbetsblad</p></div>
-              <div className="mt-5"><BuyButton /></div><p className="mt-3 text-sm text-neutral-600">Digital bok · Direkt tillgång efter betalning</p>
+              <div className="mt-7 flex flex-wrap items-end gap-x-5 gap-y-3">{offer.isAnalysisOffer ? <><p className="text-3xl font-semibold tracking-tight text-neutral-950">Ditt pris: {offer.price} kr</p><p className="pb-1 text-sm font-medium text-neutral-600"><span className="line-through">149 kr</span> · 37 sidor · praktiska arbetsblad</p></> : <><p className="text-3xl font-semibold tracking-tight text-neutral-950">{offer.price} kr</p><p className="pb-1 text-sm font-medium text-neutral-600">37 sidor · praktiska arbetsblad</p></>}</div>
+              <div className="mt-5"><BuyButton offer={offer} /></div><p className="mt-3 text-sm text-neutral-600">Digital bok · Direkt tillgång efter betalning</p>
             </div>
             <div className="mx-auto w-full max-w-[640px]"><Image src="/audhd-bok-mockup.png" alt="3D-mockup av Världens bästa bok om AuDHD av Elias Voss" width={1312} height={1199} priority sizes="(max-width: 1024px) min(100vw - 2.5rem, 640px), 55vw" className="h-auto w-full" /></div>
           </div>
@@ -77,9 +79,9 @@ export default function AudhdBookPage() {
 
         <section className="border-y border-[#d7e0d6] bg-[#f3f7f2]"><div className="mx-auto grid max-w-6xl gap-8 px-4 py-14 sm:px-6 sm:py-20 lg:grid-cols-[.9fr_1.1fr]"><div><p className="text-sm font-semibold uppercase tracking-[.16em] text-[#576f60]">För vem?</p><h2 className={`mt-3 ${sectionHeading}`}>Boken är för dig som vill få vardagen att hänga ihop på ditt sätt.</h2></div><div className="space-y-3">{["Dig som har AuDHD", "Dig som känner igen dig i kombinationen ADHD + autism", "Dig som försöker förstå varför vanliga produktivitetsråd inte alltid fungerar", "Dig som vill ha konkreta vardagsverktyg", "Någon som vill förstå en närstående bättre"].map((item) => <p key={item} className="rounded-xl border border-[#d7e0d6] bg-white px-5 py-4 font-medium leading-6 text-neutral-800"><span aria-hidden="true" className="mr-3 text-[#576f60]">✓</span>{item}</p>)}<p className="pt-2 text-sm leading-6 text-neutral-600">Boken ersätter inte vård, behandling eller en professionell utredning.</p></div></div></section>
 
-        <section className="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:px-6 sm:py-20 lg:grid-cols-2 lg:items-start"><div><p className="text-sm font-semibold uppercase tracking-[.16em] text-[#9d5663]">Om författaren</p><h2 className={`mt-3 ${sectionHeading}`}>Elias Voss</h2><p className="mt-5 max-w-xl text-lg leading-8 text-neutral-700">Boken är skriven ur egen erfarenhet av ADHD, autism och AuDHD – med fokus på vardagsnära, praktiska strategier snarare än på att passa in i ett enda sätt att fungera.</p></div><div className="rounded-[28px] border border-[#e6d9d7] bg-[#fffaf8] p-6 sm:p-8"><p className="text-sm font-semibold uppercase tracking-[.16em] text-[#9d5663]">Digital leverans</p><h2 className="mt-3 text-2xl font-semibold tracking-tight text-neutral-950">Allt du behöver veta</h2><ul className="mt-5 space-y-3 leading-7 text-neutral-700"><li>Digital bok i PDF-format</li><li>37 sidor med praktiska arbetsblad</li><li>Direkt tillgång efter genomförd betalning</li><li>Kan läsas på mobil, surfplatta och dator</li><li className="font-semibold text-neutral-950">Pris: 149 kr</li></ul></div></section>
+        <section className="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:px-6 sm:py-20 lg:grid-cols-2 lg:items-start"><div><p className="text-sm font-semibold uppercase tracking-[.16em] text-[#9d5663]">Om författaren</p><h2 className={`mt-3 ${sectionHeading}`}>Elias Voss</h2><p className="mt-5 max-w-xl text-lg leading-8 text-neutral-700">Boken är skriven ur egen erfarenhet av ADHD, autism och AuDHD – med fokus på vardagsnära, praktiska strategier snarare än på att passa in i ett enda sätt att fungera.</p></div><div className="rounded-[28px] border border-[#e6d9d7] bg-[#fffaf8] p-6 sm:p-8"><p className="text-sm font-semibold uppercase tracking-[.16em] text-[#9d5663]">Digital leverans</p><h2 className="mt-3 text-2xl font-semibold tracking-tight text-neutral-950">Allt du behöver veta</h2><ul className="mt-5 space-y-3 leading-7 text-neutral-700"><li>Digital bok i PDF-format</li><li>37 sidor med praktiska arbetsblad</li><li>Direkt tillgång efter genomförd betalning</li><li>Kan läsas på mobil, surfplatta och dator</li><li className="font-semibold text-neutral-950">{offer.isAnalysisOffer ? `Ditt pris: ${offer.price} kr` : `Pris: ${offer.price} kr`}</li></ul></div></section>
 
-        <section className={`bg-[#9d5663] text-white ${styles.onRose}`}><div className="mx-auto max-w-4xl px-4 py-14 text-center sm:px-6 sm:py-20"><h2 className="font-serif text-4xl leading-tight sm:text-5xl">Du behöver inte göra om hela ditt liv.</h2><p className="mx-auto mt-4 max-w-2xl text-lg leading-8 text-white/90">Börja med ett system som faktiskt fungerar för din hjärna.</p><p className="mt-7 text-3xl font-semibold">149 kr</p><div className="mt-5"><BuyButton>Köp Världens bästa bok om AuDHD</BuyButton></div><p className="mt-3 text-sm text-white/85">Digital bok · Direkt tillgång efter betalning</p></div></section>
+        <section className={`bg-[#9d5663] text-white ${styles.onRose}`}><div className="mx-auto max-w-4xl px-4 py-14 text-center sm:px-6 sm:py-20"><h2 className="font-serif text-4xl leading-tight sm:text-5xl">Du behöver inte göra om hela ditt liv.</h2><p className="mx-auto mt-4 max-w-2xl text-lg leading-8 text-white/90">Börja med ett system som faktiskt fungerar för din hjärna.</p>{offer.isAnalysisOffer && <p className="mt-7 text-sm font-semibold uppercase tracking-[.16em] text-white/85">Specialpris efter testet</p>}<p className="mt-2 text-3xl font-semibold">{offer.isAnalysisOffer ? `Ditt pris: ${offer.price} kr` : `${offer.price} kr`}</p><div className="mt-5"><BuyButton offer={offer}>{`Köp Världens bästa bok om AuDHD · ${offer.price} kr`}</BuyButton></div><p className="mt-3 text-sm text-white/85">Digital bok · Direkt tillgång efter betalning</p></div></section>
 
         <section className="mx-auto max-w-4xl px-4 py-14 sm:px-6 sm:py-20"><p className="text-sm font-semibold uppercase tracking-[.16em] text-[#576f60]">Vanliga frågor</p><h2 className={`mt-3 ${sectionHeading}`}>Innan du köper</h2><div className="mt-7 divide-y divide-neutral-200 border-y border-neutral-200">{faqs.map(([question, answer]) => <details key={question} className="group py-5"><summary className="cursor-pointer list-none pr-8 font-semibold text-neutral-950 marker:content-none"><span>{question}</span><span aria-hidden="true" className="float-right text-[#9d5663] transition group-open:rotate-45">+</span></summary><p className="mt-3 max-w-3xl leading-7 text-neutral-700">{answer}</p></details>)}</div></section>
       </main>
