@@ -2,14 +2,13 @@
 
 import PaywallCheckoutCTA from "../../_components/PaywallCheckoutCTA";
 import PostPurchaseRecommendation from "../../_components/PostPurchaseRecommendation";
-import { buildPaywallTeaser } from "../../_lib/paywallTeaser";
 
 import { hasPaidReturn, usePaymentRecovery } from "../../_components/usePaymentRecovery";
 
 import { useTestAnalytics } from "../../_analytics/useTestAnalytics";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { answerLabels, calculate, areaNames, areas, emptyAnswers, formatPercent, parseState, questions, PRICE_SEK, STATE_VERSION, STORAGE_KEY } from "./model";
+import { answerLabels, calculate, areaNames, areas, emptyAnswers, formatPercent, parseState, questions, PRICE_SEK, STATE_VERSION, STORAGE_KEY, type Result } from "./model";
 import { ADHD_STRIPE_URL } from "./payment";
 
 import { describeArea, impactText, standoutText } from "./interpretation";
@@ -19,6 +18,40 @@ const button = "inline-flex min-h-12 items-center justify-center rounded-xl px-5
 const secondary = button + " border border-neutral-300 bg-white text-neutral-900 hover:bg-neutral-100";
 const link = "underline underline-offset-4 decoration-neutral-400 focus-visible:outline-2 focus-visible:outline-offset-4";
 const section = "mt-8 space-y-4 rounded-2xl border border-neutral-200 p-5 leading-7 sm:p-6";
+
+function formatAreaList(names: string[]) {
+  if (names.length < 2) return names[0] ?? "";
+  if (names.length === 2) return `${names[0]} och ${names[1]}`;
+  return `${names.slice(0, -1).join(", ")} och ${names[names.length - 1]}`;
+}
+
+function freeFinding(result: Result) {
+  const topScore = result.scores[result.ranked[0]];
+  const topAreas = result.ranked.filter((area) => result.scores[area] === topScore);
+
+  if (topScore === 0) {
+    return {
+      title: "Inget enskilt område sticker ut",
+      finding: "Du har inte angett några svårigheter i de fem ADHD-relaterade områden som testet mäter.",
+      explanation: "Dina svar är jämna och låga i dessa områden, så det går inte att peka ut ett område som är mer framträdande än de andra.",
+    };
+  }
+
+  if (topAreas.length > 1) {
+    return {
+      title: "Flera områden framträder lika mycket",
+      finding: `${formatAreaList(topAreas.map((area) => areaNames[area]))} ligger på samma högsta nivå i dina svar.`,
+      explanation: "Därför går det inte att peka ut ett enda tydligaste område i din profil.",
+    };
+  }
+
+  const area = topAreas[0];
+  return {
+    title: "Det som framträder mest",
+    finding: `${areaNames[area]} är det område som framträder mest i dina svar.`,
+    explanation: describeArea(area, result.scores[area]),
+  };
+}
 
 export default function ADHDSelfTestPage() {
   const [index, setIndex] = useState(0);
@@ -72,8 +105,7 @@ export default function ADHDSelfTestPage() {
   const showResult = complete && !editing;
   const answeredCount = answers.filter((answer) => answer >= 0).length;
   const result = useMemo(() => complete ? calculate(answers) : null, [complete, answers]);
-  const previewScores = result ? Object.values(result.scores).sort((a, b) => b - a) : [];
-  const preview = buildPaywallTeaser(previewScores);
+  const freeResult = result ? freeFinding(result) : null;
   useEffect(() => {
     if (moveFocus.current) { heading.current?.focus({ preventScroll: true }); moveFocus.current = false; }
   }, [index, showResult, hydrated, analyzing]);
@@ -139,13 +171,22 @@ export default function ADHDSelfTestPage() {
     </section>}
     {showResult && (!analyzing || unlocked) && result && <div data-adhd-result>
       {!unlocked ? <section data-flow="paywall" ref={tracking.paywallRef} className="mt-8 space-y-5 rounded-[20px] bg-[#0d0d0d] px-[18px] py-6 leading-7 text-white" aria-labelledby="result-heading">
-        <h2 id="result-heading" ref={heading} tabIndex={-1} className="text-2xl font-semibold outline-none">{preview.title}</h2>
-        <p className="text-neutral-200">{preview.body}</p>
+        <div className="space-y-3">
+          <h2 id="result-heading" ref={heading} tabIndex={-1} className="text-2xl font-semibold outline-none">Din samlade bild</h2>
+          <p className="text-xl font-semibold text-white">{result.level}</p>
+          <p className="text-neutral-200">{levelTexts[result.level]}</p>
+        </div>
+        {freeResult && <div className="space-y-2 rounded-xl bg-white/10 p-4">
+          <h3 className="font-semibold text-white">{freeResult.title}</h3>
+          <p className="font-medium text-white">{freeResult.finding}</p>
+          <p className="text-neutral-200">{freeResult.explanation}</p>
+        </div>}
+        <p className="text-sm leading-6 text-neutral-300">Det här är ett självtest, inte en diagnos. Liknande svårigheter kan ha flera orsaker, och en professionell bedömning kan vara relevant om de påverkar vardagen tydligt.</p>
         <div className="space-y-4 border-t border-white/15 pt-5">
-          <h3 className="text-xl font-semibold">I din fullständiga analys ser du</h3>
-          <ul className="space-y-2 text-neutral-200"><li>✓ vad som väger tyngst i dina svar</li><li>✓ hur fokus, planering och tempo samspelar</li><li>✓ vad som förstärker eller nyanserar bilden i vardagen</li></ul>
-          <div><p className="font-semibold">{PRICE_SEK} kr</p><p className="text-sm text-neutral-300">Engångsbetalning · Ingen prenumeration</p><p className="text-sm text-neutral-300">Resultatet visas direkt efter betalning</p></div>
-          <PaywallCheckoutCTA onClick={checkout} />
+          <h3 className="text-xl font-semibold">Fördjupa ditt resultat</h3>
+          <ul className="space-y-2 text-neutral-200"><li>✓ dina sex områden med nivåer och förklaringar</li><li>✓ din profiltyp och hur områdena samspelar</li><li>✓ vardagspåverkan och vad som stärker eller nyanserar resultatet</li><li>✓ andra möjliga förklaringar och en djupare tolkning</li></ul>
+          <div><p className="text-sm text-neutral-300">Engångsbetalning · Ingen prenumeration</p><p className="text-sm text-neutral-300">Resultatet visas direkt efter betalning</p></div>
+          <PaywallCheckoutCTA onClick={checkout} label={<>Fördjupa mitt resultat · {PRICE_SEK} kr</>} />
           <button type="button" onClick={restart} className="min-h-11 w-full text-sm text-neutral-300 underline underline-offset-4 hover:text-white">Gör om testet</button>
           {checkoutUnavailable && <p role="status" className="text-neutral-300">Köp är inte tillgängligt just nu. Dina svar finns kvar i den här webbläsaren.</p>}
         </div>
