@@ -18,6 +18,7 @@ const button = "inline-flex min-h-12 items-center justify-center rounded-xl px-5
 const secondary = button + " border border-neutral-300 bg-white text-neutral-900 hover:bg-neutral-100";
 const link = "underline underline-offset-4 decoration-neutral-400 focus-visible:outline-2 focus-visible:outline-offset-4";
 const section = "mt-8 space-y-4 rounded-2xl border border-neutral-200 p-5 leading-7 sm:p-6";
+const AUTISM_BOOK_RETURNING_CUSTOMER_URL = "https://buy.stripe.com/9B600i0utaUx7Sv5MI0gw0w";
 
 export default function AutismSelfTestPage() {
   const [index, setIndex] = useState(0);
@@ -200,9 +201,23 @@ export default function AutismSelfTestPage() {
         <section data-flow="card" className={section}><h2 className="text-2xl font-semibold">Vad som gör bilden mindre tydlig</h2>{result.lessClear.length ? <ul className="list-disc space-y-3 pl-5">{result.lessClear.map(text => <li key={text}>{text}</li>)}</ul> : <p>Inga av modellens särskilda dämpande faktorer framträder i dina svar. Det betyder inte att andra förklaringar har uteslutits.</p>}</section>
         <section data-flow="card" className={section}><h2 className="text-2xl font-semibold">Andra möjliga förklaringar</h2><p>Liknande svårigheter och egenskaper kan även förekomma av andra skäl, exempelvis ADHD, social ångest, långvarig stress, sömnbrist eller annan belastning. Resultatet bör därför ses som en strukturerad självskattning och inte som en diagnos.</p><p>Även depression, personlighetsdrag och sensorisk känslighet utan autism kan vara relevanta för en bred bedömning. Detta förklarar inte bort dina upplevelser; ett webbtest kan inte avgöra orsaken.</p></section>
         <p className="mt-8 text-sm leading-6 text-neutral-600">Det här resultatet ställer ingen diagnos. En autismbedömning behöver väga in utvecklingshistoria, funktion över tid, flera delar av livet och alternativa förklaringar. <a href="https://www.1177.se/sjukdomar--besvar/hjarna-och-nerver/neuropsykiatriska-funktionsnedsattningar/autism/" className={link}>Läs om autism och att söka stöd på 1177.</a></p>
+        <AutismBookRecommendation />
       </>}
       <div className="mt-6 flex flex-wrap gap-3"><button type="button" onClick={() => { moveFocus.current = true; setEditing(true); setIndex(0); }} className={secondary}>Granska mina svar</button><button type="button" onClick={restart} className={secondary}>Börja om</button></div>
       {unlocked && <PostPurchaseRecommendation sourceTest="autism_test" recommendedTest="audhd_test" />}
     </div>}
   </>;
+}
+
+function AutismBookRecommendation() {
+  return <section aria-label="Erbjudande på autismboken" className="mt-10 rounded-2xl border border-[#d7e0d6] bg-[#f7fbf6] p-5 text-neutral-900 sm:p-6">
+    <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#576f60]">Exklusivt för dig som gjort testet</p>
+    <h2 className="mt-2 text-xl font-semibold tracking-tight">På mitt sätt</h2>
+    <p className="mt-3 max-w-2xl leading-7 text-neutral-700">En konkret bok som hjälper dig att omsätta förståelsen från analysen till vardagsverktyg som fungerar på ditt sätt.</p>
+    <div className="mt-5 flex flex-wrap items-center gap-4">
+      <span className="text-2xl font-semibold tracking-tight">99 kr</span>
+      <a href={AUTISM_BOOK_RETURNING_CUSTOMER_URL} className="inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[#576f60] px-5 py-3 text-center font-semibold text-white transition-colors hover:bg-[#455b4c] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#576f60] sm:w-auto">Köp boken för 99 kr</a>
+    </div>
+    <p className="mt-3 text-sm text-neutral-600">Digital bok · Direkt tillgång efter betalning</p>
+  </section>;
 }

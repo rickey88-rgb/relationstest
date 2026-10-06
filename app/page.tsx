@@ -284,6 +284,25 @@ export default function Landing() {
             className={styles.bookMockup}
           />
         </div>
+        <div className={`${styles.bookPromo} ${styles.bookPromoAutism}`}>
+          <div className={styles.bookCopy}>
+            <p className={styles.eyebrow}>Ny digital bok</p>
+            <h2 id="autism-book-heading">På mitt sätt</h2>
+            <p>En konkret bok om autism och att få vardagen att fungera på ditt sätt.</p>
+            <div className={styles.bookActions}>
+              <span className={styles.bookPrice}>149 kr</span>
+              <Link href="/autism-bok" className={styles.bookLink}>Läs mer om boken <span aria-hidden="true">→</span></Link>
+            </div>
+          </div>
+          <Image
+            src="/autism-bok-mockup.png"
+            alt="På mitt sätt – bok om autism av Elias Voss"
+            width={1312}
+            height={1199}
+            sizes="(max-width: 700px) min(100vw - 7rem, 320px), 360px"
+            className={styles.bookMockup}
+          />
+        </div>
       </section>
 
       <section aria-labelledby="about-tests-heading" className={`${styles.section} ${styles.about}`}>

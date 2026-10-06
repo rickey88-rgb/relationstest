@@ -7,8 +7,9 @@ const TOKEN_KIND = "book-access";
 // A customer who changes browser or clears cookies still needs manual support.
 export const bookAccessMaxAge = 60 * 60 * 24 * 180;
 export const BOOK_ACCESS_COOKIE = "rv_book_access";
+export const AUTISM_BOOK_ACCESS_COOKIE = "rv_autism_book_access";
 
-export type BookProductId = "audhd-bok";
+export type BookProductId = "audhd-bok" | "autism-bok";
 type BookAccessPayload = {
   v: number;
   product: BookProductId;

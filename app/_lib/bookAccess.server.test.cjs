@@ -9,7 +9,12 @@ const access = createLoader()(path.join(__dirname, "bookAccess.server.ts"));
 
 const issued = access.issueBookAccessToken("audhd-bok");
 assert(access.verifyBookAccessToken(issued, "audhd-bok"));
+assert.equal(access.verifyBookAccessToken(issued, "autism-bok"), null);
 assert.equal(access.verifyBookAccessToken(`${issued}x`, "audhd-bok"), null);
+
+const autismIssued = access.issueBookAccessToken("autism-bok");
+assert(access.verifyBookAccessToken(autismIssued, "autism-bok"));
+assert.equal(access.verifyBookAccessToken(autismIssued, "audhd-bok"), null);
 
 const expiredPayload = Buffer.from(JSON.stringify({
   v: 1,
