@@ -6,6 +6,7 @@ import { AUTISM_BOOK } from "../_lib/bookProducts.server";
 import { getAutismBookOffer, type BookOffer } from "../_lib/bookOffers";
 
 const pageUrl = "https://www.relationsvarning.se/autism-bok";
+const mockupUrl = "https://www.relationsvarning.se/autism-bok-mockup.png";
 const title = "På mitt sätt – bok om autism och vardag | Relationsvarning";
 const description = "På mitt sätt är en konkret bok om autism, vardag och praktiska verktyg för vuxna som vill förstå sina behov och få vardagen att fungera på sitt sätt.";
 
@@ -21,7 +22,7 @@ const sectionHeading = "text-3xl font-semibold tracking-tight text-neutral-950 s
 const primaryButton = "inline-flex min-h-[52px] w-full items-center justify-center rounded-xl bg-[#576f60] px-6 py-3.5 text-center font-semibold text-white transition hover:bg-[#455b4c] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#576f60] sm:w-auto";
 const structuredData = [
   { "@context": "https://schema.org", "@type": "Book", "@id": `${pageUrl}#book`, name: AUTISM_BOOK.name, author: { "@type": "Person", name: AUTISM_BOOK.author }, bookFormat: "EBook", inLanguage: "sv", numberOfPages: 48, url: pageUrl },
-  { "@context": "https://schema.org", "@type": "Product", "@id": `${pageUrl}#product`, name: AUTISM_BOOK.name, description, brand: { "@type": "Brand", name: "Relationsvarning" }, offers: { "@type": "Offer", url: pageUrl, price: "149", priceCurrency: "SEK", availability: "https://schema.org/InStock", itemCondition: "https://schema.org/NewCondition" } },
+  { "@context": "https://schema.org", "@type": "Product", "@id": `${pageUrl}#product`, name: AUTISM_BOOK.name, description, image: mockupUrl, brand: { "@type": "Brand", name: "Relationsvarning" }, offers: { "@type": "Offer", url: pageUrl, price: "149", priceCurrency: "SEK", availability: "https://schema.org/InStock", itemCondition: "https://schema.org/NewCondition" } },
 ];
 
 function BuyButton({ offer, children }: { offer: BookOffer; children?: string }) {
