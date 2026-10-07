@@ -214,15 +214,15 @@ export default function AutismSelfTestPage() {
 }
 
 function AutismBookRecommendation() {
-  return <section aria-label="Erbjudande på autismboken" className="mt-10 rounded-2xl border border-[#d7e0d6] bg-[#f7fbf6] p-5 text-neutral-900 sm:p-6">
-    <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#576f60]">Exklusivt för dig som gjort testet</p>
+  return <section aria-label="Erbjudande på autismboken" className="mt-10 rounded-2xl border border-[#DDE8E3] bg-[#EFF5F2] p-5 text-neutral-900 sm:p-6">
+    <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#27666A]">Exklusivt för dig som gjort testet</p>
     <div className="mt-4 grid gap-5 sm:grid-cols-[minmax(0,1fr)_150px] sm:items-center">
       <div className="order-2 sm:order-1">
         <h2 className="text-xl font-semibold tracking-tight">På mitt sätt</h2>
         <p className="mt-3 max-w-2xl leading-7 text-neutral-700">En konkret bok som hjälper dig att omsätta förståelsen från analysen till vardagsverktyg som fungerar på ditt sätt.</p>
         <div className="mt-5 flex flex-wrap items-center gap-4">
           <span className="text-2xl font-semibold tracking-tight">99 kr</span>
-          <a href="/autism-bok?offer=analysis" className="inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[#576f60] px-5 py-3 text-center font-semibold text-white transition-colors hover:bg-[#455b4c] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#576f60] sm:w-auto">Läs om boken · 99 kr</a>
+          <a href="/autism-bok?offer=analysis" className="inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[#27666A] px-5 py-3 text-center font-semibold text-white transition-colors hover:bg-[#1F5357] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#27666A] sm:w-auto">Läs om boken · 99 kr</a>
         </div>
       </div>
       <Image src="/autism-bok-mockup.png" alt="På mitt sätt – bok om autism av Elias Voss" width={1312} height={1199} sizes="(max-width: 640px) 180px, 150px" className="order-1 mx-auto h-auto w-44 sm:order-2 sm:w-[150px]" />

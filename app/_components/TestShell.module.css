@@ -24,7 +24,7 @@
 }
 .flow :global(.question-box), .flow :global(.question-box) * { color: var(--rv-text) !important; -webkit-text-fill-color: var(--rv-text) !important; }
 .flow [data-flow="inset"] { background: var(--rv-beige) !important; border-color: var(--rv-border) !important; border-radius: 16px !important; color: var(--rv-text) !important; box-shadow: none !important; min-width: 0; }
-.flow [data-flow="inset"] :where(p, li) { color: #405045 !important; }
+.flow [data-flow="inset"] :where(p, li) { color: #35444A !important; }
 .flow [data-flow="grid"] { grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr)) !important; }
 .flow button, .flow [data-flow="cta"] {
   min-height: var(--rv-button-height) !important; max-width: 100%;
@@ -49,7 +49,7 @@
 .flow [data-flow="analysis"] { background: var(--rv-beige) !important; padding-block: 36px !important; }
 .flow [data-flow="analysis"]::before { content: ""; display: block; width: 30px; height: 30px; margin-bottom: 24px; border: 2px solid var(--rv-rose-soft); border-top-color: var(--rv-rose); border-radius: 50%; animation: turn 1.6s linear infinite; }
 .flow [data-flow="paywall"] { background: var(--rv-rose-soft) !important; padding: 32px !important; }
-.flow [data-flow="paywall"] :where(p, li, span, div, button) { color: var(--rv-text) !important; border-color: #c5aaa9 !important; }
+.flow [data-flow="paywall"] :where(p, li, span, div, button) { color: var(--rv-text) !important; border-color: #B9D0CE !important; }
 .flow [data-audhd-paywall] {
   /* The shared shell deliberately turns paywalls off-white. Resolve the original
      dark-card/light-text utility clash here, at the product boundary, rather
@@ -61,37 +61,37 @@
   -webkit-text-fill-color: var(--rv-text) !important;
 }
 .flow [data-audhd-paywall] [data-audhd-kicker] {
-  color: #713744 !important;
-  -webkit-text-fill-color: #713744 !important;
+  color: #27666A !important;
+  -webkit-text-fill-color: #27666A !important;
 }
 .flow [data-audhd-paywall] [data-audhd-locked-card] {
-  background: #f4e7e2 !important;
-  border-color: #c5aaa9 !important;
+  background: #EAF1EE !important;
+  border-color: #B9D0CE !important;
 }
 .flow [data-audhd-paywall] [data-audhd-locked-card] :where(p, div) {
-  color: #46554d !important;
-  -webkit-text-fill-color: #46554d !important;
+  color: #435156 !important;
+  -webkit-text-fill-color: #435156 !important;
 }
 .flow [data-audhd-paywall] [data-audhd-locked-card] :where([class*="h-1.5"], [class*="bg-white"]) {
-  background-color: #c7a8a6 !important;
+  background-color: #AFC8C5 !important;
 }
 .flow [data-audhd-paywall] [data-audhd-free-area] {
-  background: #fffdf8 !important;
-  border-color: #c5aaa9 !important;
+  background: #FFFEFC !important;
+  border-color: #B9D0CE !important;
 }
 .flow [data-audhd-paywall] [data-audhd-free-area] :where(span, strong) {
   color: var(--rv-text) !important;
   -webkit-text-fill-color: var(--rv-text) !important;
 }
-.flow [data-audhd-paywall] [data-audhd-free-track] { background: #eadbd6 !important; }
+.flow [data-audhd-paywall] [data-audhd-free-track] { background: #D8E6E2 !important; }
 .flow [data-audhd-paywall] [data-audhd-free-fill] { background: var(--rv-rose) !important; }
 .flow [data-audhd-paywall] [data-audhd-locked-area] {
-  background: #e8d8d3 !important;
-  border-color: #c5aaa9 !important;
+  background: #DDE8E3 !important;
+  border-color: #B9D0CE !important;
 }
 .flow [data-audhd-paywall] [data-audhd-locked-area] :where(span) {
-  color: #58635d !important;
-  -webkit-text-fill-color: #58635d !important;
+  color: #52605F !important;
+  -webkit-text-fill-color: #52605F !important;
 }
 .flow [data-audhd-paywall] [data-audhd-locked-title] {
   overflow-wrap: normal !important;
@@ -99,17 +99,17 @@
   hyphens: none !important;
 }
 .flow [data-audhd-paywall] [data-audhd-locked-panel] {
-  background: #e8d8d3 !important;
-  border-color: #c5aaa9 !important;
+  background: #DDE8E3 !important;
+  border-color: #B9D0CE !important;
 }
 .flow [data-audhd-paywall] [data-audhd-locked-chip] {
   display: inline-flex;
   max-width: 100%;
   align-items: flex-start;
-  border: 1px solid #c5aaa9;
+  border: 1px solid #B9D0CE;
   border-radius: 999px;
-  background: #f4e7e2;
-  color: #58635d !important;
+  background: #EAF1EE;
+  color: #52605F !important;
   padding: .25rem .5rem;
   font-size: .75rem;
   line-height: 1.35;
@@ -118,7 +118,7 @@
   hyphens: none;
 }
 .flow [data-audhd-paywall] [data-audhd-cta-wrap] [data-flow="cta"] { white-space: normal !important; }
-.flow [data-audhd-paywall] [data-audhd-locked-track] { background: #c7a8a6 !important; }
+.flow [data-audhd-paywall] [data-audhd-locked-track] { background: #AFC8C5 !important; }
 .flow [data-flow="paywall"] h2 { max-width: 25ch; }
 .flow [data-flow="paywall"] [data-flow="cta"] { position: relative; isolation: isolate; overflow: visible; color: var(--rv-surface) !important; }
 .flow [data-flow="paywall"] [data-flow="cta"]::before {
@@ -128,12 +128,12 @@
   padding: 2.5px;
   border-radius: inherit;
   pointer-events: none;
-  background: conic-gradient(from var(--rv-paywall-glow-angle), rgb(142 79 91 / .12) 0deg, rgb(157 86 99 / .16) 250deg, rgb(213 143 151 / .38) 292deg, rgb(244 200 196 / .72) 318deg, #fffdf8 332deg, rgb(239 187 184 / .68) 344deg, rgb(157 86 99 / .12) 360deg);
+  background: conic-gradient(from var(--rv-paywall-glow-angle), rgb(39 102 106 / .12) 0deg, rgb(39 102 106 / .16) 250deg, rgb(112 137 163 / .38) 292deg, rgb(204 223 216 / .72) 318deg, #FFFEFC 332deg, rgb(184 211 203 / .68) 344deg, rgb(39 102 106 / .12) 360deg);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   mask-composite: exclude;
-  filter: drop-shadow(0 0 6px rgb(157 86 99 / .34));
+  filter: drop-shadow(0 0 6px rgb(39 102 106 / .34));
   opacity: .88;
   animation: paywall-glow 3s linear infinite;
   transition: opacity 160ms ease;
@@ -162,10 +162,10 @@
 .flow :global(.bg-neutral-500) { background: var(--rv-rose) !important; }
 .flow :global(.bg-neutral-200) { background: var(--rv-beige) !important; }
 .flow :global(.bg-amber-700) { background: var(--rv-rose) !important; }
-.flow [class*="bg-[#2F6B4F]"]:not(button) { background: var(--rv-focus) !important; }
+.flow [class*="bg-[#27666A]"]:not(button) { background: var(--rv-focus) !important; }
 /* The footer sits outside EditorialSurface. Only test routes opt in here;
    fallbacks mirror the existing tokens without changing the shared footer. */
-:global(body):has(.flow) > footer { background: var(--rv-bg, #f7f3ef); color: var(--rv-muted, #626d66); border-color: var(--rv-border, #ddd5cd); font-family: var(--rv-sans, Arial, Helvetica, sans-serif); }
+:global(body):has(.flow) > footer { background: var(--rv-bg, #F7F5F2); color: var(--rv-muted, #56615D); border-color: var(--rv-border, #D7D9D8); font-family: var(--rv-sans, Arial, Helvetica, sans-serif); }
 @keyframes turn { to { transform: rotate(360deg); } }
 @property --rv-paywall-glow-angle { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
 @keyframes paywall-glow { to { --rv-paywall-glow-angle: 360deg; } }

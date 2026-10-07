@@ -9,7 +9,7 @@ const description = "Gör ett omfattande AuDHD-test för vuxna med 48 frågor om
 export const metadata: Metadata = { title, description, ...getEditorialMetadata({ route: "/audhd-test", title, description, datePublished: "2026-09-26T10:00:00+02:00", dateModified: "2026-09-28T10:00:00+02:00" }) };
 
 const article = getEditorialArticleSchema({ route: "/audhd-test", title, description, datePublished: "2026-09-26T10:00:00+02:00", dateModified: "2026-09-28T10:00:00+02:00" });
-const cta = "inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[#9d5663] px-5 py-3 text-center font-semibold text-white transition hover:bg-[#844451] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#576f60] sm:w-auto";
+const cta = "inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[#27666A] px-5 py-3 text-center font-semibold text-white transition hover:bg-[#1F5357] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#27666A] sm:w-auto";
 
 const areas = [
   ["Uppmärksamhet & exekutiv funktion", "Igångsättning, fokus, arbetsminne, tid och att hålla ihop vardagens steg."],
@@ -54,10 +54,10 @@ export default function AudhdLanding() {
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData.slice(1)).replace(/</g, "\\u003c") }} />
     <nav aria-label="Brödsmulor" className="text-sm text-neutral-600"><Link href="/" className={textLink}>Relationsvarning</Link> / <span aria-current="page">AuDHD-test</span></nav>
     <article>
-      <header className="mt-6 rounded-[28px] border border-[#e6d9d7] bg-[#fffaf8] px-5 py-8 shadow-sm sm:px-9 sm:py-12">
-        <p className="text-sm font-semibold uppercase tracking-[.16em] text-[#9d5663]">Självtest för vuxna</p>
+      <header className="mt-6 rounded-[28px] border border-[#D6E1DD] bg-[#FFFEFC] px-5 py-8 shadow-sm sm:px-9 sm:py-12">
+        <p className="text-sm font-semibold uppercase tracking-[.16em] text-[#27666A]">Självtest för vuxna</p>
         <h1 className="mt-3 max-w-3xl">AuDHD-test för vuxna</h1>
-        <p className="mt-4 text-xl font-semibold leading-8 text-[#553b3f]">Ett av Sveriges första och mest omfattande AuDHD-självtest för vuxna</p>
+        <p className="mt-4 text-xl font-semibold leading-8 text-[#364A4B]">Ett av Sveriges första och mest omfattande AuDHD-självtest för vuxna</p>
         <p className="mt-5 max-w-2xl text-lg leading-8 text-neutral-700">48 frågor som kartlägger ADHD-relaterade drag, autismrelaterade drag och hur de kan överlappa i vardagen. Testet är utvecklat för vuxna som känner igen sig i båda områdena och vill förstå sitt mönster bättre.</p>
         <div className="mt-7"><Link data-rv="button" href="/audhd-test/test" className={cta}>Starta AuDHD-testet</Link></div>
         <p className="mt-3 text-sm font-semibold text-neutral-700">48 frågor · cirka 8 minuter · första resultatet direkt</p>
@@ -66,7 +66,7 @@ export default function AudhdLanding() {
 
       <GuideSection title="Varför ett kombinerat AuDHD-test?"><div className="max-w-3xl space-y-4"><p>ADHD och autism är separata tillstånd som kan förekomma samtidigt. Ett vanligt ADHD-test fokuserar främst på ADHD-relaterade drag, medan ett autismtest fokuserar på autismrelaterade drag.</p><p>Det här testet låter båda områdena få plats och tittar också på hur svarsmönstret mellan dem kan se ut. <Link href="/audhd" className={textLink}>Läs mer om vad AuDHD innebär</Link>.</p></div></GuideSection>
 
-      <GuideSection title="Vad testet tittar på"><p className="max-w-3xl">Åtta tydligt avgränsade områden ger ett bredare underlag än en enda totalsiffra.</p><div className="mt-5 grid gap-3 sm:grid-cols-2">{areas.map(([name, copy], index) => <div data-rv="card" key={name} className="min-w-0 rounded-2xl border border-neutral-200 bg-neutral-50 p-5"><div className="flex gap-3"><span aria-hidden="true" className="font-serif text-xl text-[#9d5663]">{String(index + 1).padStart(2, "0")}</span><div><h3 className="font-semibold text-neutral-950">{name}</h3><p className="mt-2 text-sm leading-6 text-neutral-700">{copy}</p></div></div></div>)}</div></GuideSection>
+      <GuideSection title="Vad testet tittar på"><p className="max-w-3xl">Åtta tydligt avgränsade områden ger ett bredare underlag än en enda totalsiffra.</p><div className="mt-5 grid gap-3 sm:grid-cols-2">{areas.map(([name, copy], index) => <div data-rv="card" key={name} className="min-w-0 rounded-2xl border border-neutral-200 bg-neutral-50 p-5"><div className="flex gap-3"><span aria-hidden="true" className="font-serif text-xl text-[#27666A]">{String(index + 1).padStart(2, "0")}</span><div><h3 className="font-semibold text-neutral-950">{name}</h3><p className="mt-2 text-sm leading-6 text-neutral-700">{copy}</p></div></div></div>)}</div></GuideSection>
 
       <GuideSection title="Mer än bara en totalsiffra"><div className="max-w-3xl space-y-4"><p>Två personer kan känna igen sig i både ADHD- och autismrelaterade drag men ändå ha mycket olika profiler. Därför ser resultatet på hur svaren fördelar sig mellan områden, inte bara på ett enda sammanlagt värde.</p><p>Resultatet skiljer bland annat mellan ADHD- och autismrelaterade områden, och håller masking, upplevd friktion och vardagspåverkan som egna delar av profilen. Det är en självskattning, inte ett diagnostiskt besked.</p></div><div className="mt-6"><Link data-rv="button" href="/audhd-test/test" className={cta}>Starta AuDHD-testet</Link></div></GuideSection>
 
@@ -78,7 +78,7 @@ export default function AudhdLanding() {
 
       <GuideSection title="Vanliga frågor om AuDHD-testet"><div className="divide-y divide-neutral-200 border-y border-neutral-200">{faqs.map(([question, answer]) => <div key={question} className="py-5"><h3 className="font-semibold text-neutral-950">{question}</h3><p className="mt-2 max-w-3xl text-sm leading-6 text-neutral-700">{answer}</p></div>)}</div></GuideSection>
 
-      <section data-rv="panel" className="mt-12 rounded-[28px] border border-[#e6d9d7] bg-[#fffaf8] px-5 py-8 text-center sm:px-9 sm:py-10"><h2 className="text-3xl font-semibold tracking-tight text-neutral-950">Redo att se hur ditt mönster ser ut?</h2><p className="mx-auto mt-3 max-w-xl leading-7 text-neutral-700">Svara på 48 frågor och få ett första resultat direkt i webbläsaren.</p><div className="mt-6"><Link data-rv="button" href="/audhd-test/test" className={cta}>Starta AuDHD-testet</Link></div><p className="mt-3 text-sm font-semibold text-neutral-700">48 frågor · första resultatet direkt</p></section>
+      <section data-rv="panel" className="mt-12 rounded-[28px] border border-[#D6E1DD] bg-[#FFFEFC] px-5 py-8 text-center sm:px-9 sm:py-10"><h2 className="text-3xl font-semibold tracking-tight text-neutral-950">Redo att se hur ditt mönster ser ut?</h2><p className="mx-auto mt-3 max-w-xl leading-7 text-neutral-700">Svara på 48 frågor och få ett första resultat direkt i webbläsaren.</p><div className="mt-6"><Link data-rv="button" href="/audhd-test/test" className={cta}>Starta AuDHD-testet</Link></div><p className="mt-3 text-sm font-semibold text-neutral-700">48 frågor · första resultatet direkt</p></section>
     </article>
   </main></EditorialSurface>;
 }

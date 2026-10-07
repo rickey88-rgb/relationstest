@@ -124,7 +124,7 @@ export default function Quickcheck() {
       <h2 ref={heading} tabIndex={-1} id="analysis-heading" className="text-2xl font-semibold outline-none">Vi analyserar dina svar</h2>
       <p className="mt-3 leading-7 text-neutral-700">Vi jämför mönstren i dina svar och sammanställer vilka områden som verkar mest framträdande.</p>
       <ol className="mt-6 space-y-3" aria-live="polite">
-        {["Sammanställer svar", "Jämför mönster", "Förbereder resultat"].map((label, step) => <li key={label} className={`flex items-center gap-3 ${step <= analysisStep ? "text-neutral-950" : "text-neutral-400"}`}><span aria-hidden="true" className={`h-3 w-3 rounded-full ${step <= analysisStep ? "bg-[#2F6B4F]" : "bg-neutral-200"}`} />{label}</li>)}
+        {["Sammanställer svar", "Jämför mönster", "Förbereder resultat"].map((label, step) => <li key={label} className={`flex items-center gap-3 ${step <= analysisStep ? "text-neutral-950" : "text-neutral-400"}`}><span aria-hidden="true" className={`h-3 w-3 rounded-full ${step <= analysisStep ? "bg-[#27666A]" : "bg-neutral-200"}`} />{label}</li>)}
       </ol>
     </section>
   );
@@ -135,7 +135,7 @@ export default function Quickcheck() {
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-neutral-500">Ditt resultat</p>
         <h2 ref={heading} tabIndex={-1} id="quickcheck-result-heading" className="mt-2 text-2xl font-semibold tracking-tight outline-none sm:text-3xl">{result.title}</h2>
         <p className="mt-4 leading-7 text-neutral-700">{result.category === "low" ? "Dina svar visar inte något tydligt genomgående mönster av de beteenden som snabbchecken undersöker. Det utesluter inte att enskilda situationer kan vara viktiga att ta på allvar." : "Resultatet visar vilka områden som fått högst poäng i just dina svar. Det beskriver återkommande signaler, inte en diagnos, juridisk bedömning eller ett facit över relationen."}</p>
-        {result.prominent.length ? <div className="mt-6 space-y-4">{result.prominent.map((dimension) => <div data-flow="inset" key={dimension} className="rounded-xl bg-neutral-50 p-4"><div className="flex items-center justify-between gap-4"><h3 className="font-semibold">{dimensionLabels[dimension]}</h3><span className="shrink-0 text-sm tabular-nums text-neutral-600">{result.scores[dimension]} av 6</span></div><div className="mt-3 h-2 overflow-hidden rounded-full bg-neutral-200" aria-hidden="true"><div data-flow="fill" className="h-full rounded-full bg-[#2F6B4F]" style={{ width: `${result.scores[dimension] / 6 * 100}%` }} /></div><p className="mt-3 text-sm leading-6 text-neutral-700">{dimensionDescriptions[dimension]}</p></div>)}</div> : null}
+        {result.prominent.length ? <div className="mt-6 space-y-4">{result.prominent.map((dimension) => <div data-flow="inset" key={dimension} className="rounded-xl bg-neutral-50 p-4"><div className="flex items-center justify-between gap-4"><h3 className="font-semibold">{dimensionLabels[dimension]}</h3><span className="shrink-0 text-sm tabular-nums text-neutral-600">{result.scores[dimension]} av 6</span></div><div className="mt-3 h-2 overflow-hidden rounded-full bg-neutral-200" aria-hidden="true"><div data-flow="fill" className="h-full rounded-full bg-[#27666A]" style={{ width: `${result.scores[dimension] / 6 * 100}%` }} /></div><p className="mt-3 text-sm leading-6 text-neutral-700">{dimensionDescriptions[dimension]}</p></div>)}</div> : null}
       </section>
 
       <section data-flow="card" className={panel} aria-labelledby="recommendations-heading">
@@ -161,7 +161,7 @@ export default function Quickcheck() {
   return (
     <section data-flow="question" data-nosnippet className={`${panel} mt-8`} aria-labelledby="question-heading">
       <div className="flex items-center justify-between gap-3 text-sm text-neutral-600"><span>Fråga {index + 1} av {questions.length}</span><span>{answeredCount} besvarade</span></div>
-      <progress aria-label="Besvarade frågor" value={answeredCount} max={questions.length} className="mt-4 h-2 w-full accent-[#2F6B4F]" />
+      <progress aria-label="Besvarade frågor" value={answeredCount} max={questions.length} className="mt-4 h-2 w-full accent-[#27666A]" />
       <h2 ref={heading} tabIndex={-1} id="question-heading" className="mt-6 text-xl font-semibold leading-snug outline-none sm:text-2xl">{questions[index].text}</h2>
       <p className="mt-3 text-sm text-neutral-600">Välj det svar som bäst beskriver ett återkommande mönster.</p>
       <div role="group" aria-labelledby="question-heading" className="mt-5 grid gap-3">{answerLabels.map((label, value) => <button key={label} type="button" disabled={transitioning} aria-pressed={answers[index] === value} onClick={() => selectAnswer(value)} onKeyDown={(event) => { if (event.repeat) event.preventDefault(); }} className={`min-h-14 w-full rounded-xl border px-5 py-4 text-left font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900 disabled:cursor-wait ${answers[index] === value ? "border-neutral-900 bg-neutral-100" : "border-neutral-300 bg-white hover:bg-neutral-50"}`}>{label}</button>)}</div>

@@ -1,16 +1,18 @@
 /* The approved homepage palette. Opt-in: never applied to :root or body. */
 .tokens {
-  --rv-bg: #f7f3ef;
-  --rv-surface: #fffdfb;
-  --rv-text: #24312b;
-  --rv-muted: #626d66;
-  --rv-rose: #9d5663;
-  --rv-rose-hover: #844451;
-  --rv-rose-soft: #e9d1cf;
-  --rv-sage-soft: #d7e0d6;
-  --rv-beige: #ede4db;
-  --rv-border: #ddd5cd;
-  --rv-focus: #576f60;
+  --rv-bg: #F7F5F2;
+  --rv-surface: #FFFEFC;
+  --rv-text: #202124;
+  --rv-muted: #56615D;
+  --rv-rose: #27666A;
+  --rv-rose-hover: #1F5357;
+  --rv-rose-soft: #DDE8E3;
+  --rv-sage-soft: #DDE8E3;
+  --rv-beige: #F1E8E2;
+  --rv-border: #D7D9D8;
+  --rv-focus: #27666A;
+  --rv-secondary: #7089A3;
+  --rv-terracotta: #C98F72;
   --rv-serif: Georgia, "Times New Roman", serif;
   --rv-sans: Arial, Helvetica, sans-serif;
   --rv-card-radius: 26px;
@@ -19,8 +21,8 @@
   --rv-button-height: 52px;
 }
 
-.brand { font-size: 1.1rem; font-weight: 600; letter-spacing: -.035em; display: flex; align-items: center; gap: 12px; color: var(--rv-text, #24312b); }
-.brandMark { width: 35px; height: 39px; flex-shrink: 0; color: var(--rv-text, #24312b); }
+.brand { font-size: 1.1rem; font-weight: 600; letter-spacing: -.035em; display: flex; align-items: center; gap: 12px; color: var(--rv-text, #202124); }
+.brandMark { width: 35px; height: 39px; flex-shrink: 0; color: var(--rv-text, #202124); }
 @media (max-width: 700px) {
   .brand { font-size: 1rem; }
 }

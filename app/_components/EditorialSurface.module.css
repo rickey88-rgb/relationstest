@@ -22,7 +22,7 @@
   padding: 52px 32px 72px !important;
 }
 .surface [data-rv="wide-container"] { max-width: 1152px; margin-inline: auto; }
-.surface [data-rv="dot"] { background: #68796a; flex-shrink: 0; }
+.surface [data-rv="dot"] { background: #708F8D; flex-shrink: 0; }
 
 .surface :where(h1, h2, h3) {
   font-family: var(--rv-serif);
@@ -49,7 +49,7 @@
 .surface nav[aria-label="Brödsmulor"] { font-size: .8rem; color: var(--rv-muted); line-height: 1.7; }
 .surface nav[aria-label="Brödsmulor"] a { display: inline-flex; align-items: center; min-height: 44px; }
 .surface :where(a, button, summary) { transition: color 160ms, background-color 160ms, border-color 160ms; }
-.surface a:not([data-rv]) { text-decoration-color: #b8b9aa; text-underline-offset: 4px; }
+.surface a:not([data-rv]) { text-decoration-color: #AAB9B7; text-underline-offset: 4px; }
 .surface a:not([data-rv]):hover { color: var(--rv-rose); }
 .surface :where(a, button, summary):focus-visible { outline: 3px solid var(--rv-focus); outline-offset: 5px; }
 .surface :where(section[id], h2[id], h3[id]) { scroll-margin-top: 24px; }
@@ -65,12 +65,12 @@
   box-shadow: none;
 }
 .surface [data-rv="callout"] { background: var(--rv-beige) !important; border-radius: var(--rv-panel-radius) !important; }
-.surface [data-rv="panel"] { background: var(--rv-sage-soft) !important; border-color: #c7d3c7 !important; border-radius: var(--rv-panel-radius) !important; }
+.surface [data-rv="panel"] { background: var(--rv-sage-soft) !important; border-color: #C7D8D2 !important; border-radius: var(--rv-panel-radius) !important; }
 .surface aside[data-rv="callout"] { background: var(--rv-rose-soft) !important; }
 .surface :is([data-rv="panel"], [data-rv="callout"]) :where([class*="text-neutral-5"], [class*="text-neutral-6"], [class*="text-neutral-7"]) { color: var(--rv-text) !important; }
-.surface :is([data-rv="panel"], [data-rv="callout"]) :where(p, li):not([class*="uppercase"]) { color: #405045 !important; }
+.surface :is([data-rv="panel"], [data-rv="callout"]) :where(p, li):not([class*="uppercase"]) { color: #35444A !important; }
 .surface a:is([data-rv="card"], [class~="rv-card"]) { display: block; min-height: 48px; text-decoration: none; }
-.surface a:is([data-rv="card"], [class~="rv-card"]):hover { border-color: #9ead9f !important; background: #e4eae1 !important; }
+.surface a:is([data-rv="card"], [class~="rv-card"]):hover { border-color: #A5C0BA !important; background: #EAF1EE !important; }
 .surface :is([data-rv="card"], [class~="rv-card"]) :where(h2, h3) { font-size: 1.4rem !important; }
 .surface :where(h3, p)[class*="uppercase"] { font-family: var(--rv-sans); font-size: .65rem !important; font-weight: 600; letter-spacing: .16em; line-height: 1.7; }
 

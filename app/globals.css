@@ -1,13 +1,24 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #F7F5F2;
+  --foreground: #202124;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-neutral-50: #F7F5F2;
+  --color-neutral-100: #F0EFEC;
+  --color-neutral-200: #DDE1DF;
+  --color-neutral-300: #C7CDCA;
+  --color-neutral-400: #89938F;
+  --color-neutral-500: #68736F;
+  --color-neutral-600: #56615D;
+  --color-neutral-700: #3F4946;
+  --color-neutral-800: #2B3331;
+  --color-neutral-900: #202124;
+  --color-neutral-950: #161918;
 }
 
 
@@ -32,7 +43,7 @@ body {
 /* MVP: Force light theme regardless of system dark mode */
 :root {
   color-scheme: light;
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #F7F5F2;
+  --foreground: #202124;
 }
 
