@@ -1,9 +1,9 @@
 import { testConfig, type TestId } from "../_analytics/config";
 import { BOOK_OFFER_PRICES } from "../_lib/bookOffers";
 
-export type ProductType = "test" | "book" | "product";
-export type BookProductId = "audhd_book" | "autism_book";
-export type ProductId = TestId | BookProductId | "adhd_deluxe";
+export type ProductType = "test" | "book";
+export type BookProductId = "audhd_book" | "autism_book" | "adhd_deluxe";
+export type ProductId = TestId | BookProductId;
 export type OfferPosition = "primary" | "secondary";
 
 type ProductDefinition = {
@@ -77,16 +77,17 @@ export const productCatalog = {
     analyticsId: "autism_book",
     image: { src: "/autism-bok-mockup.png", alt: "På mitt sätt – bok om autism av Elias Voss", width: 1312, height: 1199 },
   },
-  // Prepared only. It has no route, payment link, checkout or delivery flow.
   adhd_deluxe: {
     id: "adhd_deluxe",
-    type: "product",
+    type: "book",
     name: "ADHD Deluxe",
-    price: 99,
-    ordinaryPrice: 149,
+    path: "/adhd-deluxe?offer=analysis",
+    price: BOOK_OFFER_PRICES.adhdDeluxe.analysis,
+    ordinaryPrice: BOOK_OFFER_PRICES.adhdDeluxe.ordinary,
     currency: "SEK",
-    enabled: false,
+    enabled: true,
     analyticsId: "adhd_deluxe",
+    image: { src: "/adhd-bok-mockup.png", alt: "ADHD Deluxe – bok om ADHD av Elias Voss", width: 1448, height: 1086 },
   },
 } satisfies Record<ProductId, ProductDefinition>;
 
@@ -129,13 +130,14 @@ function bookOffer(productId: BookProductId, position: OfferPosition, priority: 
   const descriptions: Record<BookProductId, string> = {
     autism_book: "En konkret bok som hjälper dig att omsätta förståelsen från analysen till vardagsverktyg som fungerar på ditt sätt.",
     audhd_book: "10 konkreta sätt att få livet att fungera när ADHD och autism drar åt varsitt håll.",
+    adhd_deluxe: "En konkret bok om att förstå var vardagen fastnar och bygga smartare runt det.",
   };
   return { productId, position, priority, title: product.name, description: descriptions[productId], label: `Läs om boken · ${product.price} kr` };
 }
 
 export const crossSellOffers: Partial<Record<ProductId, readonly ConfiguredOffer[]>> = {
   adhd_test: [
-    { productId: "adhd_deluxe", position: "primary", priority: 10, title: "ADHD Deluxe", description: "En fördjupning med konkreta verktyg för vardagen.", label: "Upptäck ADHD Deluxe" },
+    bookOffer("adhd_deluxe", "primary", 10),
     testOffer("adhd_test", "audhd_test", "secondary", 20, { path: "/audhd-test" }),
   ],
   autism_test: [

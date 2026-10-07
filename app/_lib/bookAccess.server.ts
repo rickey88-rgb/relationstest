@@ -8,8 +8,9 @@ const TOKEN_KIND = "book-access";
 export const bookAccessMaxAge = 60 * 60 * 24 * 180;
 export const BOOK_ACCESS_COOKIE = "rv_book_access";
 export const AUTISM_BOOK_ACCESS_COOKIE = "rv_autism_book_access";
+export const ADHD_DELUXE_BOOK_ACCESS_COOKIE = "rv_adhd_deluxe_book_access";
 
-export type BookProductId = "audhd-bok" | "autism-bok";
+export type BookProductId = "audhd-bok" | "autism-bok" | "adhd-deluxe";
 type BookAccessPayload = {
   v: number;
   product: BookProductId;

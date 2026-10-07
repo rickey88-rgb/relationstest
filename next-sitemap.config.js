@@ -12,6 +12,7 @@ module.exports = {
   additionalPaths: async () => [
     { loc: '/audhd-bok' },
     { loc: '/autism-bok' },
+    { loc: '/adhd-deluxe' },
   ],
   exclude: [
     '/angest-test/test',
@@ -24,5 +25,6 @@ module.exports = {
     '/anknytningstest/test',
     '/medberoendetest/test',
     '/narcissism-sjalvtest/test',
+    '/adhd-deluxe/tack/fel',
   ],
 };

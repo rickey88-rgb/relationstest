@@ -9,6 +9,7 @@ export type BookOffer = {
 export const BOOK_OFFER_PRICES = {
   audhd: { ordinary: 149, analysis: 79 },
   autism: { ordinary: 149, analysis: 99 },
+  adhdDeluxe: { ordinary: 149, analysis: 99 },
 } as const;
 
 const AUDHD_STANDARD: BookOffer = {
@@ -35,10 +36,26 @@ const AUTISM_ANALYSIS: BookOffer = {
   isAnalysisOffer: true,
 };
 
+const ADHD_DELUXE_STANDARD: BookOffer = {
+  price: BOOK_OFFER_PRICES.adhdDeluxe.ordinary,
+  paymentLink: "https://buy.stripe.com/9B614melj8Mp5Kngrm0gw0x",
+  isAnalysisOffer: false,
+};
+
+const ADHD_DELUXE_ANALYSIS: BookOffer = {
+  price: BOOK_OFFER_PRICES.adhdDeluxe.analysis,
+  paymentLink: "https://buy.stripe.com/6oU28q3GF3s5fkXa2Y0gw0y",
+  isAnalysisOffer: true,
+};
+
 export function getAudhdBookOffer(offer: unknown): BookOffer {
   return offer === "analysis" ? AUDHD_ANALYSIS : AUDHD_STANDARD;
 }
 
 export function getAutismBookOffer(offer: unknown): BookOffer {
   return offer === "analysis" ? AUTISM_ANALYSIS : AUTISM_STANDARD;
+}
+
+export function getAdhdDeluxeBookOffer(offer: unknown): BookOffer {
+  return offer === "analysis" ? ADHD_DELUXE_ANALYSIS : ADHD_DELUXE_STANDARD;
 }

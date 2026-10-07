@@ -14,6 +14,20 @@ export const AUTISM_BOOK = {
   downloadFilename: "Pa-mitt-satt_Elias-Voss.pdf",
 } as const;
 
+export const ADHD_DELUXE_BOOK = {
+  id: "adhd-deluxe",
+  name: "ADHD Deluxe",
+  author: "Elias Voss",
+  downloadFilename: "ADHD-Deluxe_Elias-Voss.pdf",
+} as const;
+
+// Price IDs are non-secret Stripe product identifiers. ADHD Deluxe verifies
+// line items rather than trusting a client value or Payment Link reference.
+export const ADHD_DELUXE_ALLOWED_PRICE_IDS = new Set([
+  "price_1UO3C0AgF4ugWkEkkIryPLKO",
+  "price_1UO3F6AgF4ugWkEkRCM7L9yX",
+]);
+
 type PaymentLinkReference = string | { id: string } | null;
 
 function required(name: string) {
@@ -92,6 +106,28 @@ export async function verifyAutismBookCheckoutSession(sessionId: string) {
   }
 }
 
+function lineItemPriceId(price: string | { id: string } | null | undefined) {
+  return typeof price === "string" ? price : price?.id ?? null;
+}
+
+export async function verifyAdhdDeluxeBookCheckoutSession(sessionId: string) {
+  if (!isStripeCheckoutSessionId(sessionId)) return false;
+
+  try {
+    const stripe = new Stripe(required("STRIPE_SECRET_KEY"));
+    const session = await stripe.checkout.sessions.retrieve(sessionId);
+    if (session.status !== "complete" || session.payment_status !== "paid") return false;
+
+    const lineItems = await stripe.checkout.sessions.listLineItems(sessionId, { limit: 100, expand: ["data.price"] });
+    return lineItems.data.some((lineItem) => {
+      const priceId = lineItemPriceId(lineItem.price);
+      return priceId !== null && ADHD_DELUXE_ALLOWED_PRICE_IDS.has(priceId);
+    });
+  } catch {
+    return false;
+  }
+}
+
 export function audhdBookR2Config() {
   const endpoint = required("R2_ENDPOINT");
   if (!/^https:\/\//.test(endpoint)) throw new Error("R2_ENDPOINT must use HTTPS");
@@ -115,6 +151,21 @@ export function autismBookR2Config() {
     endpoint,
     bucket: required("R2_BUCKET_NAME"),
     key: required("AUTISM_BOOK_R2_KEY"),
+    credentials: {
+      accessKeyId: required("R2_ACCESS_KEY_ID"),
+      secretAccessKey: required("R2_SECRET_ACCESS_KEY"),
+    },
+  };
+}
+
+export function adhdDeluxeBookR2Config() {
+  const endpoint = required("R2_ENDPOINT");
+  if (!/^https:\/\//.test(endpoint)) throw new Error("R2_ENDPOINT must use HTTPS");
+
+  return {
+    endpoint,
+    bucket: required("R2_BUCKET_NAME"),
+    key: required("ADHD_DELUXE_BOOK_R2_KEY"),
     credentials: {
       accessKeyId: required("R2_ACCESS_KEY_ID"),
       secretAccessKey: required("R2_SECRET_ACCESS_KEY"),

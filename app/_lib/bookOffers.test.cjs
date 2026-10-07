@@ -9,10 +9,13 @@ assert.deepEqual(offers.getAutismBookOffer(undefined), { price: 149, paymentLink
 assert.deepEqual(offers.getAutismBookOffer("analysis"), { price: 99, paymentLink: "https://buy.stripe.com/9B600i0utaUx7Sv5MI0gw0w", isAnalysisOffer: true });
 assert.deepEqual(offers.getAudhdBookOffer(undefined), { price: 149, paymentLink: "https://buy.stripe.com/8x2aEWgtr2o1gp13EA0gw0t", isAnalysisOffer: false });
 assert.deepEqual(offers.getAudhdBookOffer("analysis"), { price: 79, paymentLink: "https://buy.stripe.com/8x23cu0ut5Adgp11ws0gw0u", isAnalysisOffer: true });
+assert.deepEqual(offers.getAdhdDeluxeBookOffer(undefined), { price: 149, paymentLink: "https://buy.stripe.com/9B614melj8Mp5Kngrm0gw0x", isAnalysisOffer: false });
+assert.deepEqual(offers.getAdhdDeluxeBookOffer("analysis"), { price: 99, paymentLink: "https://buy.stripe.com/6oU28q3GF3s5fkXa2Y0gw0y", isAnalysisOffer: true });
 
 for (const value of ["other", ["analysis"], null, true]) {
   assert.equal(offers.getAutismBookOffer(value).isAnalysisOffer, false);
   assert.equal(offers.getAudhdBookOffer(value).isAnalysisOffer, false);
+  assert.equal(offers.getAdhdDeluxeBookOffer(value).isAnalysisOffer, false);
 }
 
 console.log("PASS: book offers use the analysis price only for the exact offer=analysis value.");

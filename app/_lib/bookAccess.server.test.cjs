@@ -16,6 +16,10 @@ const autismIssued = access.issueBookAccessToken("autism-bok");
 assert(access.verifyBookAccessToken(autismIssued, "autism-bok"));
 assert.equal(access.verifyBookAccessToken(autismIssued, "audhd-bok"), null);
 
+const adhdDeluxeIssued = access.issueBookAccessToken("adhd-deluxe");
+assert(access.verifyBookAccessToken(adhdDeluxeIssued, "adhd-deluxe"));
+assert.equal(access.verifyBookAccessToken(adhdDeluxeIssued, "audhd-bok"), null);
+
 const expiredPayload = Buffer.from(JSON.stringify({
   v: 1,
   product: "audhd-bok",
