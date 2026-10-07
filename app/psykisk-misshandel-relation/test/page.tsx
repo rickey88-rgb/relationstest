@@ -1936,7 +1936,7 @@ export default function Page() {
           </div>
         </section>
       )}
-      {isFinished && unlocked && <PostPurchaseRecommendation sourceTest="psychological_abuse_test" recommendedTest="screening_test" />}
+      {isFinished && unlocked && <PostPurchaseRecommendation sourceProduct="psychological_abuse_test" />}
 
       <nav aria-label="Fördjupning om psykiskt våld" style={{ marginTop: 28, fontSize: 13, lineHeight: 1.7 }}>
         Läs vidare om{" "}

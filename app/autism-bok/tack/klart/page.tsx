@@ -4,6 +4,7 @@ import Link from "next/link";
 import { AUTISM_BOOK_ACCESS_COOKIE, verifyBookAccessToken } from "../../../_lib/bookAccess.server";
 import { AUTISM_BOOK } from "../../../_lib/bookProducts.server";
 import EditorialSurface from "../../../_components/EditorialSurface";
+import PostPurchaseRecommendation from "../../../_components/PostPurchaseRecommendation";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -25,6 +26,7 @@ export default async function AutismBookThankYouPage() {
             <p className="mt-4 text-sm leading-6 text-neutral-700">På mobilen: När boken öppnas, tryck på Dela och välj Spara i Filer eller Böcker för att behålla den på telefonen.</p>
             <p className="mt-2 text-xs leading-5 text-neutral-600">Tips: Spara boken på din enhet när den öppnas så har du den kvar och kan läsa den när du vill.</p>
             <p className="mt-4 text-sm leading-6 text-neutral-600">Om du byter webbläsare eller rensar cookies kan support hjälpa dig att återställa åtkomsten manuellt.</p>
+            <PostPurchaseRecommendation sourceProduct="autism_book" />
           </> : <>
             <p className="text-sm font-semibold uppercase tracking-[.16em] text-[#27666A]">Åtkomst saknas</p>
             <h1 className="mt-3">Vi kunde inte bekräfta bokåtkomsten</h1>

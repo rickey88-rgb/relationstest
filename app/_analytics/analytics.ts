@@ -22,7 +22,7 @@ let initialized = false;
 const initialUrl = typeof window === "undefined" ? "" : window.location.href;
 const initialReferrer = typeof document === "undefined" ? "" : document.referrer;
 let lastPage = "";
-const allowedParams = new Set(["test_id", "test_name", "attempt_id", "page_path", "progress_percent", "current_question", "total_questions", "completion_time_seconds", "price", "value", "currency", "transaction_id", "items", "page_location", "page_referrer", "page_title", "source_test", "recommended_test", "source_page", "destination_page", "position", "destination_test", "cta_label", "target_route", "dominant_dimension", "weakest_dimension", "recommendation_position", "share_method", "teaser_type"]);
+const allowedParams = new Set(["test_id", "test_name", "attempt_id", "page_path", "progress_percent", "current_question", "total_questions", "completion_time_seconds", "price", "value", "currency", "transaction_id", "items", "page_location", "page_referrer", "page_title", "source_test", "recommended_test", "source_product", "source_product_type", "recommended_product", "recommended_product_type", "offer_position", "source_page", "destination_page", "position", "destination_test", "cta_label", "target_route", "dominant_dimension", "weakest_dimension", "recommendation_position", "share_method", "teaser_type"]);
 const campaignKeys = ["gclid", "dclid", "gbraid", "wbraid", "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "utm_id"];
 
 export function consent(): Consent {

@@ -165,7 +165,7 @@ export default function ScreeningPage() {
         })}</div></section>
       </>}</>}
       <section className="mt-8 space-y-2 text-sm leading-6 text-neutral-600"><h2 className="font-semibold text-neutral-900">Om resultatet</h2><p>Screeningen är ett reflektionsverktyg baserat på dina egna svar. Den ställer inte diagnoser och avgör inte juridiskt om ett brott har begåtts.</p><Link href="/metodik" className={link}>Läs om metodiken</Link></section>
-      {unlocked && <PostPurchaseRecommendation sourceTest="screening_test" recommendedTest={recommendedTest} />}
+      {unlocked && <PostPurchaseRecommendation sourceProduct="screening_test" activeProductIds={recommendedTest ? [recommendedTest] : []} />}
       <div className="mt-6 flex flex-wrap gap-3"><button type="button" onClick={() => { moveFocus.current = true; setEditing(true); setIndex(0); }} className={secondary}>Granska mina svar</button><button type="button" onClick={restart} className={secondary}>Börja om</button></div>
     </div>}
     <nav aria-label="Stöd och vidare läsning" className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-sm"><Link href="/" className={link + " inline-flex min-h-11 items-center"}>Till startsidan</Link>{(!showResult || !profile.safety) && <Link href="/psykiskt-vald/hjalp" className={link + " inline-flex min-h-11 items-center"}>Stöd och hjälp</Link>}</nav>

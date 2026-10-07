@@ -1262,7 +1262,7 @@ export default function Page() {
           </div>
         </section>
       )}
-      {isFinished && unlocked && <PostPurchaseRecommendation sourceTest="attachment_test" recommendedTest="codependency_test" />}
+      {isFinished && unlocked && <PostPurchaseRecommendation sourceProduct="attachment_test" />}
 
       <style jsx>{`
         .answer-button {

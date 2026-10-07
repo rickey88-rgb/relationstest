@@ -207,7 +207,7 @@ export default function ADHDSelfTestPage() {
         <p className="mt-8 text-sm leading-6 text-neutral-600">Det här resultatet ställer ingen diagnos. Om svårigheterna påverkar vardagen tydligt och har funnits under lång tid kan en professionell bedömning vara relevant. <a href="https://www.1177.se/sjukdomar--besvar/hjarna-och-nerver/neuropsykiatriska-funktionsnedsattningar/adhd/" className={link}>Läs om ADHD och att söka stöd på 1177.</a></p>
       </>}
       <div className="mt-6 flex flex-wrap gap-3"><button type="button" onClick={() => { moveFocus.current = true; setEditing(true); setIndex(0); }} className={secondary}>Granska mina svar</button><button type="button" onClick={restart} className={secondary}>Börja om</button></div>
-      {unlocked && <PostPurchaseRecommendation sourceTest="adhd_test" recommendedTest="audhd_test" />}
+      {unlocked && <PostPurchaseRecommendation sourceProduct="adhd_test" />}
     </div>}
   </>;
 }

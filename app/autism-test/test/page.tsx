@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import PaywallCheckoutCTA from "../../_components/PaywallCheckoutCTA";
 import PostPurchaseRecommendation from "../../_components/PostPurchaseRecommendation";
 import { hasPaidReturn, usePaymentRecovery } from "../../_components/usePaymentRecovery";
@@ -205,28 +204,9 @@ export default function AutismSelfTestPage() {
         <section data-flow="card" className={section}><h2 className="text-2xl font-semibold">Vad som gör bilden mindre tydlig</h2>{result.lessClear.length ? <ul className="list-disc space-y-3 pl-5">{result.lessClear.map(text => <li key={text}>{text}</li>)}</ul> : <p>Inga av modellens särskilda dämpande faktorer framträder i dina svar. Det betyder inte att andra förklaringar har uteslutits.</p>}</section>
         <section data-flow="card" className={section}><h2 className="text-2xl font-semibold">Andra möjliga förklaringar</h2><p>Liknande svårigheter och egenskaper kan även förekomma av andra skäl, exempelvis ADHD, social ångest, långvarig stress, sömnbrist eller annan belastning. Resultatet bör därför ses som en strukturerad självskattning och inte som en diagnos.</p><p>Även depression, personlighetsdrag och sensorisk känslighet utan autism kan vara relevanta för en bred bedömning. Detta förklarar inte bort dina upplevelser; ett webbtest kan inte avgöra orsaken.</p></section>
         <p className="mt-8 text-sm leading-6 text-neutral-600">Det här resultatet ställer ingen diagnos. En autismbedömning behöver väga in utvecklingshistoria, funktion över tid, flera delar av livet och alternativa förklaringar. <a href="https://www.1177.se/sjukdomar--besvar/hjarna-och-nerver/neuropsykiatriska-funktionsnedsattningar/autism/" className={link}>Läs om autism och att söka stöd på 1177.</a></p>
-        <AutismBookRecommendation />
+        <PostPurchaseRecommendation sourceProduct="autism_test" />
       </>}
       <div className="mt-6 flex flex-wrap gap-3"><button type="button" onClick={() => { moveFocus.current = true; setEditing(true); setIndex(0); }} className={secondary}>Granska mina svar</button><button type="button" onClick={restart} className={secondary}>Börja om</button></div>
-      {unlocked && <PostPurchaseRecommendation sourceTest="autism_test" recommendedTest="audhd_test" />}
     </div>}
   </>;
-}
-
-function AutismBookRecommendation() {
-  return <section aria-label="Erbjudande på autismboken" className="mt-10 rounded-2xl border border-[#DDE8E3] bg-[#EFF5F2] p-5 text-neutral-900 sm:p-6">
-    <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#27666A]">Exklusivt för dig som gjort testet</p>
-    <div className="mt-4 grid gap-5 sm:grid-cols-[minmax(0,1fr)_150px] sm:items-center">
-      <div className="order-2 sm:order-1">
-        <h2 className="text-xl font-semibold tracking-tight">På mitt sätt</h2>
-        <p className="mt-3 max-w-2xl leading-7 text-neutral-700">En konkret bok som hjälper dig att omsätta förståelsen från analysen till vardagsverktyg som fungerar på ditt sätt.</p>
-        <div className="mt-5 flex flex-wrap items-center gap-4">
-          <span className="text-2xl font-semibold tracking-tight">99 kr</span>
-          <a href="/autism-bok?offer=analysis" className="inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[#27666A] px-5 py-3 text-center font-semibold text-white transition-colors hover:bg-[#1F5357] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#27666A] sm:w-auto">Läs om boken · 99 kr</a>
-        </div>
-      </div>
-      <Image src="/autism-bok-mockup.png" alt="På mitt sätt – bok om autism av Elias Voss" width={1312} height={1199} sizes="(max-width: 640px) 180px, 150px" className="order-1 mx-auto h-auto w-44 sm:order-2 sm:w-[150px]" />
-    </div>
-    <p className="mt-3 text-sm text-neutral-600">Digital bok · Direkt tillgång efter betalning</p>
-  </section>;
 }

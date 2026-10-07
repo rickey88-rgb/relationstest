@@ -1,0 +1,27 @@
+import InformationGuide, { informationGuideMetadata, type InformationGuideData } from "../_components/InformationGuide";
+
+const data: InformationGuideData = {
+  slug: "dissociation",
+  title: "Dissociation – vad det är och hur det kan kännas | Relationsvarning",
+  description: "Vad dissociation kan innebära, hur upplevelsen kan kännas, vanliga former och när professionellt stöd kan vara relevant.",
+  h1: "Vad är dissociation?",
+  eyebrow: "Stress, upplevelse och stöd",
+  intro: "Dissociation är ett samlingsnamn för upplevelser av frånkoppling. Det kan till exempel handla om att känna sig avskärmad från sig själv, sin kropp eller omgivningen. Upplevelserna kan vara kortvariga och ha flera möjliga förklaringar; en webbsida kan inte avgöra vad som ligger bakom dem.",
+  datePublished: "2026-10-07T12:00:00+02:00", dateModified: "2026-10-07T12:00:00+02:00",
+  sections: [
+    { title: "Hur dissociation kan kännas", paragraphs: ["Människor beskriver upplevelsen på olika sätt. Vissa känner sig tomma, avstängda eller som om de observerar sig själva på avstånd. Andra beskriver att omvärlden känns främmande, dimmig eller mindre verklig.", "En upplevelse i sig avgör inte varför den uppstår. Trötthet, stress, ångest, svåra erfarenheter och kroppsliga tillstånd kan påverka hur närvarande man känner sig."] },
+    { title: "Vanliga former av frånkoppling", paragraphs: ["Orden används ibland för att beskriva olika upplevelser. De är beskrivningar, inte något man kan självdiagnostisera utifrån en enskild känsla."], bullets: ["Frånkoppling eller avstängdhet: att känna sig mindre i kontakt med känslor, kropp eller omgivning.", "Derealisation: att omgivningen upplevs overklig, avlägsen eller förändrad.", "Depersonalisation: att känna sig främmande inför sig själv, sin kropp eller sina tankar.", "Minnesluckor: att ha svårt att minnas delar av en händelse eller tid. Det kan ha flera orsaker och bör bedömas professionellt om det återkommer eller oroar."] },
+    { title: "Dissociation, stress och trauma", paragraphs: ["Dissociativa upplevelser kan förekomma i samband med stark stress eller trauma, men dissociation är inte samma sak som PTSD och betyder inte automatiskt att någon har varit med om trauma.", "Om du försöker förstå traumarelaterade reaktioner kan information om PTSD ge ett bredare sammanhang. Ett självtest kan inte avgöra om en diagnos eller förklaring passar."] },
+    { title: "Dissociation och ångest", paragraphs: ["Vid stark ångest eller panik kan en del uppleva att de blir avskärmade eller att omvärlden känns märklig. Det kan kännas skrämmande, men upplevelsen behöver bedömas i sitt sammanhang – särskilt om den är ny, intensiv eller återkommande."] },
+    { title: "Vad kan hjälpa i stunden?", paragraphs: ["När du känner dig frånkopplad kan det vara hjälpsamt att försiktigt rikta uppmärksamheten mot nuet. Välj sådant som känns tryggt och avbryt om det ökar obehaget."], bullets: ["Lägg märke till några konkreta saker du ser, hör eller känner mot huden.", "Sätt ord på var du är och vad som händer just nu.", "Ta en lugn paus från intryck och kontakta någon du litar på om det känns möjligt.", "Anteckna när upplevelsen kommer och vad som verkar föregå den, utan att försöka diagnostisera dig själv."] },
+    { title: "När professionell hjälp kan vara relevant", paragraphs: ["Sök professionell hjälp om upplevelserna återkommer, blir starka, påverkar din trygghet eller vardag, eller om du har minnesluckor som oroar dig. Vårdcentralen kan hjälpa till att bedöma nästa steg. Ring 112 vid akut fara."] },
+  ],
+  cta: { title: "Vill du sortera andra reaktioner?", text: "Om du också känner igen tydliga trauma- eller ångestsymtom kan våra självtester hjälpa dig att strukturera dina upplevelser. De ersätter inte professionell bedömning och kan inte avgöra om du har PTSD eller någon annan diagnos.", href: "/ptsd-test", label: "Läs om PTSD-testet" },
+  related: [{ href: "/ptsd", label: "Vad är PTSD?", description: "Om traumarelaterade reaktioner och stöd." }, { href: "/ptsd-symtom", label: "PTSD-symtom", description: "Om vanliga reaktioner efter trauma." }, { href: "/angest-test", label: "Ångesttest", description: "En självskattning om oro och ångest." }, { href: "/ptsd-triggers", label: "PTSD-triggers", description: "När påminnelser väcker starka reaktioner." }],
+  faqs: [{ question: "Är dissociation samma sak som PTSD?", answer: "Nej. Dissociation kan förekomma vid PTSD, men är inte samma sak som PTSD och kan ha flera möjliga sammanhang. En upplevelse eller ett självtest kan inte avgöra vad den beror på." }, { question: "Hur känns dissociation?", answer: "Det kan kännas som avstängdhet, avstånd till sig själv eller att omgivningen känns overklig. Upplevelsen varierar och kan ha olika orsaker." }, { question: "När bör man söka hjälp för dissociation?", answer: "Sök vård om upplevelserna återkommer, är starka, påverkar vardagen eller tryggheten, eller om du har minnesluckor som oroar dig. Vid akut fara, ring 112." }],
+  sources: [{ href: "https://mind.se/stod-kunskap/fakta/trauma-och-dissociation/", label: "Mind – trauma och dissociation" }, { href: "https://www.1177.se/Varmland/sjukdomar--besvar/psykiska-sjukdomar-och-besvar/angest/traumapodden/", label: "1177 – Traumapodden om bland annat dissociation" }],
+  careNote: "Vid akut fara eller om du riskerar att skada dig själv eller någon annan, ring 112. För sjukvårdsrådgivning kan du ringa 1177.",
+};
+
+export const metadata = informationGuideMetadata(data);
+export default function Page() { return <InformationGuide data={data} />; }

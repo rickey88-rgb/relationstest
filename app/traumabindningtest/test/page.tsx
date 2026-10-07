@@ -1058,7 +1058,7 @@ export default function Page() {
           </div>
         </section>
       )}
-      {isFinished && unlocked && <PostPurchaseRecommendation sourceTest="trauma_bond_test" recommendedTest="screening_test" />}
+      {isFinished && unlocked && <PostPurchaseRecommendation sourceProduct="trauma_bond_test" />}
 
       <style jsx>{`
         .answer-button {

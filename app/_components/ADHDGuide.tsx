@@ -28,6 +28,8 @@ export function adhdMetadata(slug: string): Metadata {
 export default function ADHDGuide({ slug }: { slug: string }) {
   const guide = getGuide(slug);
   const audhdRelevant = ["adhd-vuxna", "adhd-i-vardagen", "adhd-symtom-vuxna", "adhd-kvinnor"].includes(slug);
+  const procrastinationRelevant = ["adhd-symtom-vuxna", "adhd-i-vardagen", "har-jag-adhd"].includes(slug);
+  const executiveRelevant = ["adhd-symtom-vuxna", "adhd-i-vardagen", "adhd-vuxna"].includes(slug);
   return <ContentGuide title={guide.h1} intro={guide.intro}>
     {guide.sections.map((section, index) => <GuideSection key={section.heading} title={section.heading}>
       {section.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
@@ -35,6 +37,8 @@ export default function ADHDGuide({ slug }: { slug: string }) {
       {index === 1 && <p>{guide.context}{" "}<Link href="/adhd-test" className={textLink}>{guide.anchor}</Link>.</p>}
       {index === 1 && <p>Om frågan främst gäller samspelet med en partner finns också guiden om <Link href="/adhd-och-relationer" className={textLink}>ADHD och relationer</Link>.</p>}
       {index === 1 && audhdRelevant && <p>Om du också känner igen behov av förutsägbarhet, sensorisk känslighet eller mycket anpassning kan <Link href="/audhd-test" className={textLink}>AuDHD-testet för vuxna</Link> ge ett bredare reflektionsunderlag.</p>}
+      {index === 1 && procrastinationRelevant && <p>Om det främst är svårt att börja eller du ofta skjuter upp sådant du vill få gjort kan du läsa vår breda guide om <Link href="/prokrastinering" className={textLink}>prokrastinering</Link>.</p>}
+      {index === 1 && executiveRelevant && <p>För en bredare förklaring av planering, arbetsminne, igångsättning och självreglering, läs om <Link href="/exekutiva-funktioner" className={textLink}>exekutiva funktioner</Link>.</p>}
     </GuideSection>)}
     <GuideSection title="Källor och vidare läsning">
       <p className="text-sm">Vårdkällorna beskriver ADHD och bedömning. Vardagsexemplen i guiden är illustrationer, inte diagnostiska kriterier.</p>

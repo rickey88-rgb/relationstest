@@ -174,7 +174,7 @@ export default function PtsdTestPage() {
         <section data-flow="card" className={section}><h2 className="text-2xl font-semibold">Det som påverkar dig mest</h2><p>{impactCopy(result)}</p><p>{result.scores.dailyImpact >= 45 ? "Påverkan på vardagen är en tydlig del av ditt resultat. Det kan vara värdefullt att ge den delen extra utrymme när du funderar på stöd och återhämtning." : "Vardagspåverkan är mindre framträdande i just dina svar, men behöver alltid förstås utifrån din egen situation."}</p></section>
         <section data-flow="card" className={section}><h2 className="text-2xl font-semibold">Nästa steg</h2><p>{nextStep(result)}</p><p className="text-sm text-neutral-600">Testet undersöker inte suicidtankar och säger därför inget om suicidrisk.</p></section>
         <div className="mt-6 flex flex-wrap gap-3"><button type="button" onClick={() => { moveFocus.current = true; setEditing(true); setIndex(0); }} className={secondary}>Granska mina svar</button><button type="button" onClick={restart} className={secondary}>Börja om</button></div>
-        <PostPurchaseRecommendation sourceTest="ptsd_test" recommendedTest="angest_test" />
+        <PostPurchaseRecommendation sourceProduct="ptsd_test" />
       </>}
     </div>}
   </>;

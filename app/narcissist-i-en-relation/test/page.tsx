@@ -1164,7 +1164,7 @@ export default function Page() {
           </div>
         </section>
       )}
-      {isFinished && unlocked && <PostPurchaseRecommendation sourceTest="narcissist_partner" recommendedTest="screening_test" />}
+      {isFinished && unlocked && <PostPurchaseRecommendation sourceProduct="narcissist_partner" />}
 
       <p style={{ marginTop: 26, fontSize: 12, lineHeight: 1.6, color: "#777" }}>
         Testet är ett orienteringsverktyg och kan inte avgöra om en person
