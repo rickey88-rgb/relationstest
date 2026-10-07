@@ -303,6 +303,25 @@ export default function Landing() {
             className={styles.bookMockup}
           />
         </div>
+        <div className={styles.bookPromo}>
+          <div className={styles.bookCopy}>
+            <p className={styles.eyebrow}>Ny digital bok</p>
+            <h2>ADHD Deluxe</h2>
+            <p>En personlig och praktisk bok om ADHD i verkliga livet. 16 kapitel om kaos, misstag och strategier som faktiskt hjälper.</p>
+            <div className={styles.bookActions}>
+              <span className={styles.bookPrice}>149 kr</span>
+              <Link href="/adhd-deluxe" className={styles.bookLink}>Läs mer om boken <span aria-hidden="true">→</span></Link>
+            </div>
+          </div>
+          <Image
+            src="/adhd-bok-mockup.png"
+            alt="ADHD Deluxe – bok om ADHD av Elias Voss"
+            width={1448}
+            height={1086}
+            sizes="(max-width: 700px) min(100vw - 7rem, 320px), 360px"
+            className={styles.bookMockup}
+          />
+        </div>
       </section>
 
       <section aria-labelledby="about-tests-heading" className={`${styles.section} ${styles.about}`}>
