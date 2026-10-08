@@ -119,6 +119,10 @@
   -webkit-text-fill-color: #101827;
   box-shadow: 0 8px 22px rgb(0 0 0 / .24) !important;
 }
+.flow [data-adhd-paywall] [data-adhd-checkout] [data-flow="cta"] :is([data-adhd-cta-copy], [data-adhd-cta-price]) {
+  color: #101827 !important;
+  -webkit-text-fill-color: #101827;
+}
 .flow [data-adhd-paywall] [data-adhd-checkout] [data-flow="cta"]::before { display: none; }
 .flow [data-adhd-paywall] [data-adhd-checkout] [data-flow="cta"]:hover:not(:disabled) {
   border-color: #F2D797 !important;
@@ -375,6 +379,23 @@
   .flow [data-adhd-paywall] [data-adhd-checkout] [data-flow="cta"] {
     font-size: .8125rem !important;
     letter-spacing: -.01em;
+  }
+}
+/* Resolve shared paywall rules at the ADHD product boundary. */
+.flow [data-flow="paywall"][data-adhd-paywall] button[data-adhd-restart] {
+  color: #E5E7EB !important;
+  -webkit-text-fill-color: #E5E7EB;
+}
+.flow [data-flow="paywall"][data-adhd-paywall] button[data-adhd-restart]:hover:not(:disabled) {
+  color: #F8FAFC !important;
+  -webkit-text-fill-color: #F8FAFC;
+}
+@media (min-width: 1024px) {
+  .flow [data-flow="paywall"][data-adhd-paywall] button[data-flow="cta"]:is(:hover, :active):not(:disabled) {
+    border-color: #F2D797 !important;
+    background: #F2D797 !important;
+    color: #101827 !important;
+    -webkit-text-fill-color: #101827;
   }
 }
 @media (prefers-reduced-motion: reduce) {
