@@ -1,5 +1,6 @@
 import { testConfig, type TestId } from "../_analytics/config";
 import { BOOK_OFFER_PRICES } from "../_lib/bookOffers";
+import { ADHD_DELUXE_SALE_ENABLED } from "../_lib/featureFlags";
 
 export type ProductType = "test" | "book";
 export type BookProductId = "audhd_book" | "autism_book" | "adhd_deluxe";
@@ -85,7 +86,7 @@ export const productCatalog = {
     price: BOOK_OFFER_PRICES.adhdDeluxe.analysis,
     ordinaryPrice: BOOK_OFFER_PRICES.adhdDeluxe.ordinary,
     currency: "SEK",
-    enabled: true,
+    enabled: ADHD_DELUXE_SALE_ENABLED,
     analyticsId: "adhd_deluxe",
     image: { src: "/adhd-bok-mockup.png", alt: "ADHD Deluxe – bok om ADHD av Elias Voss", width: 1448, height: 1086 },
   },

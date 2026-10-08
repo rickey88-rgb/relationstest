@@ -7,6 +7,7 @@ import adhdGuides from "../content/adhd-guides.json";
 import autismGuides from "../content/autism-guides.json";
 import HomeGuideDirectory, { type HomeGuide } from "./_components/HomeGuideDirectory";
 import HomeScrollLink from "./_components/HomeScrollLink";
+import { ADHD_DELUXE_SALE_ENABLED } from "./_lib/featureFlags";
 
 export const metadata: Metadata = {
   title: "Relationsvarning – tester för destruktiva relationer",
@@ -309,8 +310,7 @@ export default function Landing() {
             <h2>ADHD Deluxe</h2>
             <p>En personlig och praktisk bok om ADHD i verkliga livet. 16 kapitel om kaos, misstag och strategier som faktiskt hjälper.</p>
             <div className={styles.bookActions}>
-              <span className={styles.bookPrice}>149 kr</span>
-              <Link href="/adhd-deluxe" className={styles.bookLink}>Läs mer om boken <span aria-hidden="true">→</span></Link>
+              {ADHD_DELUXE_SALE_ENABLED ? <><span className={styles.bookPrice}>149 kr</span><Link href="/adhd-deluxe" className={styles.bookLink}>Läs mer om boken <span aria-hidden="true">→</span></Link></> : <span className={styles.bookPrice}>Kommer snart</span>}
             </div>
           </div>
           <Image
