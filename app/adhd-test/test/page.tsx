@@ -144,8 +144,7 @@ export default function ADHDSelfTestPage() {
     } catch { setStorageUnavailable(true); return; }
     if (!ADHD_STRIPE_URL.startsWith("https://buy.stripe.com/")) { setCheckoutUnavailable(true); return; }
     if (!payment.prepareCheckout({ version: STATE_VERSION, index, answers, unlocked })) return;
-    tracking.checkout();
-    window.location.href = ADHD_STRIPE_URL;
+    tracking.checkout(() => { window.location.href = ADHD_STRIPE_URL; });
   }
 
   if (!hydrated) return <p className="mt-6" role="status">Laddar testet...</p>;

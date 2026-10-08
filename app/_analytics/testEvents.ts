@@ -1,8 +1,9 @@
-import { ATTEMPT_PREFIX, consent, trackEvent, type EcommerceItem } from "./analytics";
+import { ATTEMPT_PREFIX, consent, trackEvent, trackEventBeforeNavigation, type EcommerceItem } from "./analytics";
 import { ANALYTICS_RELEASE_ID, testConfig, type TestId } from "./config";
 
 type Attempt = { version: 1; updatedAt: number; id: string; startedAt: number | null; completedAt: number | null; started: boolean; milestones: number[]; complete: boolean; teaser?: boolean; paywall: boolean; purchase: boolean };
 const memory = new Map<TestId, Attempt>();
+let checkoutNavigationInFlight = false;
 // Bump a test's value only when its pre-purchase presentation changes. These labels
 // contain no answer or result data, and let the standard funnel be compared safely.
 const paywallVersion: Partial<Record<TestId, string>> = {
@@ -70,11 +71,22 @@ export function diagnosticEvent(id: TestId, name: "analysis_view" | "result_view
   try { if (consent() === "granted") { const attempt = read(id); trackEvent(name, identity(id, attempt)); save(id, attempt); } }
   catch { /* Optional diagnostics never change the test flow. */ }
 }
-export function checkoutEvent(id: TestId) {
-  try { if (consent() !== "granted") return; const attempt=read(id); save(id,attempt);
+export function checkoutEvent(id: TestId, navigate?: () => void) {
+  if (checkoutNavigationInFlight) return false;
+  checkoutNavigationInFlight = true;
+  const finish = () => {
+    try { navigate?.(); }
+    finally { if (!navigate) checkoutNavigationInFlight = false; }
+  };
+  try {
+    if (consent() !== "granted") { finish(); return false; }
+    const attempt=read(id); save(id,attempt);
     const params = commerce(id,attempt);
-    trackEvent("begin_checkout",params);
-  } catch { /* Synchronous and non-blocking; never wait for GA or a network response. */ }
+    if (navigate) return trackEventBeforeNavigation("begin_checkout",params,finish);
+    const tracked = trackEvent("begin_checkout",params);
+    checkoutNavigationInFlight = false;
+    return tracked;
+  } catch { finish(); return false; }
 }
 export function purchaseEvent(id: TestId) {
   try { if (consent() !== "granted") return; const attempt=read(id); if (attempt.purchase) return;
@@ -86,4 +98,4 @@ export function purchaseEvent(id: TestId) {
 export function restartEvents(id: TestId) {
   try { memory.delete(id); for (const storage of ["localStorage","sessionStorage"] as const) { try { window[storage].removeItem(ATTEMPT_PREFIX+id); } catch { /* Optional store. */ } } if (consent() === "granted") save(id,fresh()); } catch { /* Never affect restart. */ }
 }
-export function clearAttemptMemory() { memory.clear(); }
+export function clearAttemptMemory() { memory.clear(); checkoutNavigationInFlight = false; }

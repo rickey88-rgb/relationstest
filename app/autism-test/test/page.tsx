@@ -146,8 +146,7 @@ export default function AutismSelfTestPage() {
   function checkout() {
     if (!payment.prepareCheckout({ version: STATE_VERSION, index, answers, unlocked })) return;
     if (!AUTISM_STRIPE_URL.startsWith("https://buy.stripe.com/")) { setCheckoutUnavailable(true); return; }
-    tracking.checkout();
-    window.location.assign(AUTISM_STRIPE_URL);
+    tracking.checkout(() => { window.location.assign(AUTISM_STRIPE_URL); });
   }
 
   if (!hydrated) return <p className="mt-6" role="status">Laddar testet...</p>;

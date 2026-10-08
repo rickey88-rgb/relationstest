@@ -23,6 +23,6 @@ export function useTestAnalytics(id: TestId, total: number) {
   },[id,paywall]);
   return useMemo(() => ({ paywallRef,
     answer: (answered: number, currentQuestion: number) => answerEvent(id,answered,currentQuestion,total),
-    checkout: () => checkoutEvent(id), purchase: () => purchaseEvent(id), teaser: () => teaserEvent(id), analysisView: () => diagnosticEvent(id, "analysis_view"), resultView: () => diagnosticEvent(id, "result_view"), restart: () => restartEvents(id),
+    checkout: (navigate: () => void) => checkoutEvent(id, navigate), purchase: () => purchaseEvent(id), teaser: () => teaserEvent(id), analysisView: () => diagnosticEvent(id, "analysis_view"), resultView: () => diagnosticEvent(id, "result_view"), restart: () => restartEvents(id),
   }), [id, paywallRef, total]);
 }

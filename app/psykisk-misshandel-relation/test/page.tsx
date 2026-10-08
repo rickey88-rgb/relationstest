@@ -728,10 +728,7 @@ export default function Page() {
     }
 
     if (!payment.prepareCheckout({ index, answers, unlocked })) return;
-    tracking.checkout();
-
-    window.location.href =
-      STRIPE_PAYMENT_LINK;
+    tracking.checkout(() => { window.location.href = STRIPE_PAYMENT_LINK; });
   }
 
   function startTest() {

@@ -113,8 +113,7 @@ export default function NarcissismSelfTestPage() {
     } catch { setStorageUnavailable(true); return; }
     if (!NARCISSISM_SELFTEST_STRIPE_URL.startsWith("https://buy.stripe.com/")) { setCheckoutUnavailable(true); return; }
     if (!payment.prepareCheckout({ version: STATE_VERSION, index, answers, unlocked })) return;
-    tracking.checkout();
-    window.location.href = NARCISSISM_SELFTEST_STRIPE_URL;
+    tracking.checkout(() => { window.location.href = NARCISSISM_SELFTEST_STRIPE_URL; });
   }
 
   if (!hydrated) return <p className="mt-6" role="status">Laddar testet...</p>;

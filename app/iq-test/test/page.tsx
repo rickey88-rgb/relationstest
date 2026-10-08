@@ -61,7 +61,7 @@ export default function IqTestPage() {
     const checkoutState = { version: STATE_VERSION, index, answers, unlocked, responseTimes };
     if (!payment.prepareCheckout(checkoutState)) return;
     if (!IQ_TEST_STRIPE_URL.startsWith("https://buy.stripe.com/")) { setCheckoutUnavailable(true); return; }
-    tracking.checkout(); window.location.assign(IQ_TEST_STRIPE_URL);
+    tracking.checkout(() => { window.location.assign(IQ_TEST_STRIPE_URL); });
   }
 
   if (!hydrated) return <p className="mt-6" role="status">Laddar testet…</p>;

@@ -115,8 +115,7 @@ export default function ScreeningPage() {
       if (!parseState(localStorage.getItem(STORAGE_KEY))) throw new Error("storage unavailable");
     } catch { setStorageUnavailable(true); return; }
     if (!payment.prepareCheckout({ version: STATE_VERSION, index, answers, unlocked })) return;
-    tracking.checkout();
-    window.location.href = SCREENING_CHECKOUT_URL;
+    tracking.checkout(() => { window.location.href = SCREENING_CHECKOUT_URL; });
   }
 
   if (!hydrated) return <p className="mt-6" role="status">Laddar testet...</p>;

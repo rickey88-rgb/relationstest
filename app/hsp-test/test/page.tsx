@@ -73,7 +73,7 @@ export default function HspTestPage() {
   function checkout() {
     if (!payment.prepareCheckout({ version: STATE_VERSION, index, answers, unlocked })) return;
     if (!HSP_STRIPE_URL.startsWith("https://buy.stripe.com/")) { setCheckoutUnavailable(true); return; }
-    tracking.checkout(); window.location.assign(HSP_STRIPE_URL);
+    tracking.checkout(() => { window.location.assign(HSP_STRIPE_URL); });
   }
 
   if (!hydrated) return <p className="mt-6" role="status">Laddar testet…</p>;

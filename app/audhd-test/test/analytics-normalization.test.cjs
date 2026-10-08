@@ -6,7 +6,7 @@ const path = require("node:path");
 const source = fs.readFileSync(path.join(__dirname, "page.tsx"), "utf8");
 assert(source.includes('useTestAnalytics("audhd_test", questions.length + contextQuestions.length)'));
 assert(source.includes("standardAnalytics.answer(questions.length + count, questions.length + contextIndex + 1)"));
-assert(source.includes("standardAnalytics.checkout()"));
+assert(source.includes("standardAnalytics.checkout(() => { window.location.href = AUDHD_STRIPE_URL; });"));
 assert(source.includes("standardAnalytics.purchase()"));
 assert(!source.includes("useAudhdAnalytics"));
 assert(!source.includes("analytics.checkout()"));

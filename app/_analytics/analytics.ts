@@ -18,6 +18,7 @@ declare global {
 let memoryConsent: Consent | undefined;
 const pending: { name: EventName; params: EventParams }[] = [];
 let initialized = false;
+export const CHECKOUT_NAVIGATION_TIMEOUT_MS = 500;
 // Captured before any test effect removes paid=true/other query parameters.
 const initialUrl = typeof window === "undefined" ? "" : window.location.href;
 const initialReferrer = typeof document === "undefined" ? "" : document.referrer;
@@ -34,19 +35,23 @@ export function safeLocation(raw: string) {
   try { const url = new URL(raw); const query = new URLSearchParams(); for (const key of campaignKeys) { const value = url.searchParams.get(key); if (value) query.set(key,value); } return url.origin + url.pathname + (query.size ? "?" + query.toString() : ""); } catch { return ""; }
 }
 function referrer(raw: string) { try { const url = new URL(raw); return url.origin + url.pathname; } catch { return ""; } }
+function safeEventParams(params: EventParams): EventParams {
+  // Never accept answers, test scores, profile types, question text or arbitrary parameters.
+  const safe: EventParams = {};
+  for (const [key, value] of Object.entries(params)) {
+    if (!allowedParams.has(key) || value === undefined) continue;
+    if (key === "items") {
+      if (!Array.isArray(value)) continue;
+      const items = value.filter((item): item is EcommerceItem => Boolean(item) && typeof item.item_id === "string" && typeof item.item_name === "string" && Number.isFinite(item.price) && Number.isFinite(item.quantity));
+      if (items.length) safe.items = items;
+    } else if (typeof value === "string" || typeof value === "boolean" || (typeof value === "number" && Number.isFinite(value))) safe[key] = value;
+  }
+  return safe;
+}
 export function trackEvent(name: EventName, params: EventParams = {}): boolean {
   try {
     if (typeof window === "undefined" || consent() !== "granted") return false;
-    // Never accept answers, test scores, profile types, question text or arbitrary parameters.
-    const safe: EventParams = {};
-    for (const [key, value] of Object.entries(params)) {
-      if (!allowedParams.has(key) || value === undefined) continue;
-      if (key === "items") {
-        if (!Array.isArray(value)) continue;
-        const items = value.filter((item): item is EcommerceItem => Boolean(item) && typeof item.item_id === "string" && typeof item.item_name === "string" && Number.isFinite(item.price) && Number.isFinite(item.quantity));
-        if (items.length) safe.items = items;
-      } else if (typeof value === "string" || typeof value === "boolean" || (typeof value === "number" && Number.isFinite(value))) safe[key] = value;
-    }
+    const safe = safeEventParams(params);
     if (typeof window.gtag !== "function" || !initialized) {
       if (pending.length >= 100) return false;
       pending.push({name,params:safe});
@@ -54,6 +59,34 @@ export function trackEvent(name: EventName, params: EventParams = {}): boolean {
     if (process.env.NODE_ENV === "development") console.debug("[GA4]",name,safe);
     return true;
   } catch { return false; }
+}
+export function trackEventBeforeNavigation(name: EventName, params: EventParams, navigate: () => void): boolean {
+  let completed = false;
+  let timeout: number | undefined;
+  const finish = () => {
+    if (completed) return;
+    completed = true;
+    if (timeout !== undefined) window.clearTimeout(timeout);
+    try { navigate(); } catch { /* A failed navigation must not break the page. */ }
+  };
+  try {
+    if (typeof window === "undefined" || consent() !== "granted" || typeof window.gtag !== "function" || !initialized) {
+      finish();
+      return false;
+    }
+    timeout = window.setTimeout(finish, CHECKOUT_NAVIGATION_TIMEOUT_MS);
+    window.gtag("event", name, {
+      ...safeEventParams(params),
+      send_to: GA_MEASUREMENT_ID,
+      transport_type: "beacon",
+      event_callback: finish,
+      event_timeout: CHECKOUT_NAVIGATION_TIMEOUT_MS,
+    });
+    return true;
+  } catch {
+    finish();
+    return false;
+  }
 }
 export function initializeAnalytics() {
   try {

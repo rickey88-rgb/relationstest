@@ -145,8 +145,7 @@ export default function PtsdTestPage() {
   function checkout() {
     if (!payment.prepareCheckout({ version: STATE_VERSION, index, answers, unlocked })) return;
     if (!PTSD_STRIPE_URL.startsWith("https://buy.stripe.com/")) { setCheckoutUnavailable(true); return; }
-    tracking.checkout();
-    window.location.assign(PTSD_STRIPE_URL);
+    tracking.checkout(() => { window.location.assign(PTSD_STRIPE_URL); });
   }
 
   if (!hydrated) return <p className="mt-6" role="status">Laddar testet…</p>;

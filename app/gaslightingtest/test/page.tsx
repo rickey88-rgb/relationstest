@@ -465,9 +465,7 @@ export default function Page() {
     }
 
     if (!payment.prepareCheckout({ index, answers, unlocked })) return;
-    tracking.checkout();
-
-    window.location.href = CHECKOUT_URL;
+    tracking.checkout(() => { window.location.href = CHECKOUT_URL; });
   }
 
   if (!hydrated) {
