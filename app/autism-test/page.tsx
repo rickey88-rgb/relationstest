@@ -13,9 +13,9 @@ const description = "Gör ett autismtest för vuxna med 30 frågor. Kartlägg so
 export const metadata: Metadata = {
   title,
   description,
-  ...getEditorialMetadata({ route: "/autism-test", title, description, datePublished: "2026-09-15T19:27:30+02:00", dateModified: "2026-09-15T19:27:30+02:00" }),
+  ...getEditorialMetadata({ route: "/autism-test", title, description, datePublished: "2026-09-15T19:27:30+02:00", dateModified: "2026-10-08T00:00:00+02:00" }),
 };
-const articleJsonLd = getEditorialArticleSchema({ route: "/autism-test", title, description, datePublished: "2026-09-15T19:27:30+02:00", dateModified: "2026-09-15T19:27:30+02:00" });
+const articleJsonLd = getEditorialArticleSchema({ route: "/autism-test", title, description, datePublished: "2026-09-15T19:27:30+02:00", dateModified: "2026-10-08T00:00:00+02:00" });
 const cta = "inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-neutral-900 px-5 py-3 text-center font-semibold text-white hover:bg-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900 sm:w-auto";
 const descriptions = [
   "Aktiv analys av sociala situationer, förväntningar och samspelet i samtal.",
@@ -31,6 +31,7 @@ const faq = [
   ["Kan testet diagnostisera autism?", "Nej. Det är Relationsvarnings egen strukturerade självskattning, inte ett kliniskt validerat diagnosinstrument."],
   ["Kan resultatet visa att mina svar inte är särskilt typiska för autism?", "Ja. Analysen kan beskriva ett svagt eller ospecifikt mönster. Modellen är inte utformad för att alltid bekräfta autism."],
   ["Vad är skillnaden mellan autism och Aspergers syndrom?", "Aspergers syndrom är äldre diagnostisk terminologi. I modern diagnostik ingår sådana presentationsformer inom autismspektrumet. Personer med en tidigare Aspergerdiagnos kan ha olika erfarenheter och stödbehov; benämningen gör dem inte identiska."],
+  ["Är detta test relevant om jag söker på ASD eller AST?", "Ja. ASD är den engelska förkortningen för Autism Spectrum Disorder och AST används ofta för autismspektrumtillstånd. För den som söker ett ASD-test eller AST-test för vuxna är detta autismtest en vägledande självskattning av flera relevanta områden. Det kan inte ställa eller bekräfta en diagnos."],
   ["Kan ADHD och autism förekomma samtidigt?", "Ja. Vissa upplevelser kan överlappa, men det är olika tillstånd som också kan förekomma tillsammans. Ett webbaserat självtest kan inte avgöra diagnos."],
 ];
 export default function AutismLanding() {
@@ -45,6 +46,7 @@ export default function AutismLanding() {
     <figure className="mt-8 overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50">
       <Image src="/seo-images/autism-test-discover.png" alt="Illustration för autismtest för vuxna" width={1672} height={941} sizes="(max-width: 768px) calc(100vw - 2rem), 768px" className="h-auto w-full" />
     </figure>
+    <GuideSection title="ASD och AST är olika förkortningar för samma område"><p>ASD står för Autism Spectrum Disorder, en engelsk benämning. I svensk vård och information används ofta AST, autismspektrumtillstånd. I vardagligt språk talar många helt enkelt om autism.</p><p>Oavsett benämning behöver en professionell bedömning se till mönster över tid, vardagspåverkan och andra möjliga förklaringar. Det här testet är ett stöd för egen reflektion, inte en diagnos.</p></GuideSection>
     <GuideSection title="Känner du igen både autism- och ADHD-drag?"><p>Vissa beskriver en kombination av behov av förutsägbarhet och sensorisk återhämtning, tillsammans med rastlöshet, igångsättningssvårigheter eller starkt stimulansbehov.</p><p><Link href="/audhd-test" className={textLink}>Läs om och gör vårt AuDHD-test för vuxna.</Link></p></GuideSection>
     <GuideSection title="Sensorisk känslighet kan ha flera förklaringar"><p>Starka reaktioner på ljud, ljus eller social belastning kan förekomma vid autism, men också vid hög känslighet och i andra sammanhang. <Link href="/hsp-test" className={textLink}>Gör HSP-testet</Link> om du vill kartlägga känslighet, återhämtning och intryck separat.</p></GuideSection>
     <GuideSection title="Ett autismtest ska inte försöka övertyga dig om att du har autism">
