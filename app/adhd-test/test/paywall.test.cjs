@@ -16,6 +16,8 @@ assert(paywall.includes("freeResult.sentences"));
 assert(paywall.includes("Dina svar är analyserade. Nu återstår den viktigaste frågan."));
 assert(paywall.includes("Din samlade ADHD-profil"));
 assert(paywall.includes("Visa min fullständiga analys"));
+assert(paywall.includes("data-adhd-cta-price"), "The CTA price needs its own element so it can remain intact on narrow screens.");
+assert(paywall.includes("{PRICE_SEK}&nbsp;kr"), "The CTA must keep the price and currency together when it wraps.");
 assert(paywall.includes("Engångsbetalning · Ingen prenumeration."));
 assert(!paywall.includes("{result.level}"), "Overall level must remain locked.");
 assert(!paywall.includes("levelTexts[result.level]"), "Overall level explanation must remain locked.");

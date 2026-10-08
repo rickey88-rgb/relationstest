@@ -169,7 +169,7 @@ export default function ADHDSelfTestPage() {
           </div>
         </section>
         <div data-adhd-checkout className="space-y-4">
-          <PaywallCheckoutCTA onClick={checkout} label={<>Visa min fullständiga analys · {PRICE_SEK} kr</>} trustText="Engångsbetalning · Ingen prenumeration." />
+          <PaywallCheckoutCTA onClick={checkout} label={<><span data-adhd-cta-copy>Visa min fullständiga analys</span><span data-adhd-cta-price> · {PRICE_SEK}&nbsp;kr</span></>} trustText="Engångsbetalning · Ingen prenumeration." />
         </div>
         <p data-adhd-paywall-disclaimer>Det här är ett självtest, inte en diagnos. Det kan inte fastställa eller utesluta ADHD, och liknande svårigheter kan ha flera orsaker.</p>
         <button data-adhd-restart type="button" onClick={restart}>Gör om testet</button>

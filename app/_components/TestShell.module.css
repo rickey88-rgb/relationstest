@@ -325,16 +325,56 @@
   }
   .flow [data-adhd-paywall] {
     margin-bottom: 0 !important;
-    padding: 24px !important;
+    padding: 18px !important;
   }
-  .flow [data-adhd-paywall] [data-adhd-checkout] { padding: 16px !important; }
-  .flow [data-adhd-paywall] [data-adhd-restart] {
+  .flow [data-adhd-paywall] > * + * { margin-top: 16px !important; }
+  .flow [data-adhd-paywall] [data-adhd-paywall-intro] > * + * { margin-top: 8px !important; }
+  .flow [data-adhd-paywall] [data-adhd-finding],
+  .flow [data-adhd-paywall] [data-adhd-locked-profile] { padding: 14px !important; }
+  .flow [data-adhd-paywall] :is([data-adhd-finding], [data-adhd-locked-profile]) > * + * { margin-top: 9px !important; }
+  .flow [data-adhd-paywall] [data-adhd-finding] p { line-height: 1.55; }
+  .flow [data-adhd-paywall] [data-adhd-locked-profile] > p { line-height: 1.55; }
+  .flow [data-adhd-paywall] [data-adhd-report-preview] { gap: 6px; padding-top: 0; }
+  .flow [data-adhd-paywall] [data-adhd-report-preview] p {
+    padding: .625rem .75rem;
+    font-size: .875rem;
+    line-height: 1.4;
+  }
+  .flow [data-adhd-paywall] [data-adhd-checkout] { padding: 12px !important; }
+  .flow [data-adhd-paywall] [data-adhd-checkout] [data-flow="cta"] {
+    flex-wrap: wrap;
+    column-gap: .25rem;
+    row-gap: 2px;
+    padding-inline: 8px !important;
+    font-size: .875rem !important;
+    line-height: 1.25 !important;
+  }
+  .flow [data-adhd-paywall] [data-adhd-cta-price] { white-space: nowrap; }
+  .flow [data-adhd-paywall] [data-adhd-checkout] [data-flow="cta"] + p {
+    margin-top: 8px !important;
+    font-size: .75rem;
+    line-height: 1.45;
+  }
+  .flow [data-adhd-paywall] [data-adhd-checkout] [data-flow="cta"] + p + div { margin-top: 6px !important; }
+  .flow [data-flow="paywall"][data-adhd-paywall] button[data-adhd-restart] {
     position: static !important;
-    display: flex !important;
+    display: inline-flex !important;
     width: fit-content !important;
-    margin: .25rem 0 0 auto !important;
+    min-height: 44px !important;
+    margin: 0 0 0 auto !important;
+    padding: 0 0 0 12px !important;
     background: transparent !important;
-    border: 0 !important;
+    background-color: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+}
+@media (min-width: 350px) and (max-width: 700px) {
+  .flow [data-adhd-paywall] [data-adhd-checkout] [data-flow="cta"] {
+    font-size: .8125rem !important;
+    letter-spacing: -.01em;
   }
 }
 @media (prefers-reduced-motion: reduce) {
