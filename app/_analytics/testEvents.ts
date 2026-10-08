@@ -1,11 +1,11 @@
 import { ATTEMPT_PREFIX, consent, trackEvent, type EcommerceItem } from "./analytics";
-import { testConfig, type TestId } from "./config";
+import { ANALYTICS_RELEASE_ID, testConfig, type TestId } from "./config";
 
 type Attempt = { version: 1; updatedAt: number; id: string; startedAt: number | null; completedAt: number | null; started: boolean; milestones: number[]; complete: boolean; teaser?: boolean; paywall: boolean; purchase: boolean };
 const memory = new Map<TestId, Attempt>();
 // Bump a test's value only when its pre-purchase presentation changes. These labels
 // contain no answer or result data, and let the standard funnel be compared safely.
-const paywallVariant: Partial<Record<TestId, string>> = {
+const paywallVersion: Partial<Record<TestId, string>> = {
   adhd_test: "personal-finding-v2",
   autism_test: "personal-finding-v2",
   audhd_test: "personal-finding-v2",
@@ -29,7 +29,7 @@ function save(id: TestId, attempt: Attempt) {
     try { window[storage].setItem(ATTEMPT_PREFIX+id,JSON.stringify(attempt)); return; } catch { /* Try next store. */ }
   }
 }
-const identity = (id: TestId, attempt: Attempt) => ({ test_id:id, test_name:testConfig[id].name, attempt_id:attempt.id, paywall_variant:paywallVariant[id] ?? "default" });
+const identity = (id: TestId, attempt: Attempt) => ({ test_id:id, test_name:testConfig[id].name, attempt_id:attempt.id, paywall_version:paywallVersion[id] ?? "default", release_id:ANALYTICS_RELEASE_ID });
 const commerce = (id: TestId, attempt: Attempt) => ({
   ...identity(id, attempt),
   value: testConfig[id].price,
@@ -66,10 +66,13 @@ export function teaserEvent(id: TestId) {
     attempt.teaser = trackEvent("teaser_view", { ...identity(id,attempt) }); save(id, attempt);
   } catch { /* Optional measurement never changes the result flow. */ }
 }
+export function diagnosticEvent(id: TestId, name: "analysis_view" | "result_view") {
+  try { if (consent() === "granted") { const attempt = read(id); trackEvent(name, identity(id, attempt)); save(id, attempt); } }
+  catch { /* Optional diagnostics never change the test flow. */ }
+}
 export function checkoutEvent(id: TestId) {
   try { if (consent() !== "granted") return; const attempt=read(id); save(id,attempt);
     const params = commerce(id,attempt);
-    trackEvent("checkout_start",params);
     trackEvent("begin_checkout",params);
   } catch { /* Synchronous and non-blocking; never wait for GA or a network response. */ }
 }

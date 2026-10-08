@@ -6,7 +6,6 @@ import type { TestId } from "../../_analytics/config";
 import { useTestAnalytics } from "../../_analytics/useTestAnalytics";
 import { AUDHD_STRIPE_URL } from "./payment";
 import { answerLabels, calculateReport, contextQuestions, descriptiveLevel, dimensionNames, dimensions, emptyAnswers, emptyContextAnswers, formatPercent, parseState, PRICE_SEK, questions, REPORT_VERSION, STORAGE_KEY, type Report } from "./model";
-import { useAudhdAnalytics } from "./analytics";
 
 const card = "mt-7 space-y-5 rounded-[26px] border border-neutral-200 bg-white p-5 leading-7 shadow-sm sm:p-7";
 const btn = "inline-flex min-h-12 items-center justify-center rounded-xl px-5 py-3 font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900";
@@ -68,7 +67,7 @@ export default function AudhdTestPage() {
   const [answers, setAnswers] = useState<number[]>(emptyAnswers); const [context, setContext] = useState<number[]>(emptyContextAnswers);
   const [questionIndex, setQuestionIndex] = useState(0); const [contextIndex, setContextIndex] = useState(0); const [phase, setPhase] = useState<"questions" | "context" | "analysis" | "result">("questions");
   const [unlocked, setUnlocked] = useState(false); const [hydrated, setHydrated] = useState(false); const [transitioning, setTransitioning] = useState(false); const [analysisStep, setAnalysisStep] = useState(0); const [checkoutUnavailable, setCheckoutUnavailable] = useState(false); const [storageError, setStorageError] = useState(false); const [paymentRecoveryRequired, setPaymentRecoveryRequired] = useState(false); const [recoveryNotice, setRecoveryNotice] = useState(false); const [recoveryLinkInvalid, setRecoveryLinkInvalid] = useState(false);
-  const lock = useRef(false); const checkoutPending = useRef(false); const analytics = useAudhdAnalytics(); const standardAnalytics = useTestAnalytics("audhd_test", questions.length + contextQuestions.length); const complete = answers.every(v => v >= 0) && context.every(v => v >= 0);
+  const lock = useRef(false); const checkoutPending = useRef(false); const standardAnalytics = useTestAnalytics("audhd_test", questions.length + contextQuestions.length); const complete = answers.every(v => v >= 0) && context.every(v => v >= 0);
   const report = useMemo(() => complete ? calculateReport(answers, context) : null, [answers, context, complete]);
   useEffect(() => {
     let disposed = false;
@@ -129,7 +128,6 @@ export default function AudhdTestPage() {
             if (!parseState(localStorage.getItem(STORAGE_KEY))?.unlocked) throw new Error("Paid state could not be persisted");
           }
           if (paidReturn) {
-            analytics.purchase();
             standardAnalytics.purchase();
             window.history.replaceState({}, "", window.location.pathname);
           }
@@ -143,12 +141,12 @@ export default function AudhdTestPage() {
     }
     void hydrate();
     return () => { disposed = true; };
-  }, []);
+  }, [standardAnalytics]);
   useEffect(() => { if (!hydrated || paymentRecoveryRequired) return; try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ reportVersion: REPORT_VERSION, answers, contextAnswers: context, questionIndex, contextIndex, unlocked, report })); } catch { setStorageError(true); } }, [answers, context, questionIndex, contextIndex, unlocked, report, hydrated, paymentRecoveryRequired]);
-  useEffect(() => { if (unlocked && report) analytics.result(); }, [unlocked, report]);
-  useEffect(() => { if (phase !== "analysis" || !report) return; const timers = [setTimeout(() => setAnalysisStep(1), 1200), setTimeout(() => setAnalysisStep(2), 2500), setTimeout(() => { analytics.analysis(); setPhase("result"); analytics.paywall(report.teaser.type); }, 4000)]; return () => timers.forEach(clearTimeout); }, [phase, report]);
-  function answer(value: number) { if (lock.current) return; lock.current = true; setTransitioning(true); if (phase === "questions") { const next = answers.map((item, i) => i === questionIndex ? value : item); setAnswers(next); const count = next.filter(item => item >= 0).length; standardAnalytics.answer(count, questionIndex + 1); analytics.progress(count); if (count === 1) analytics.start(); setTimeout(() => { if (questionIndex < 47) setQuestionIndex(questionIndex + 1); else { analytics.complete(); setPhase("context"); } lock.current = false; setTransitioning(false); }, 180); } else { const next = context.map((item, i) => i === contextIndex ? value : item); setContext(next); const count = next.filter(item => item >= 0).length; standardAnalytics.answer(questions.length + count, questions.length + contextIndex + 1); setTimeout(() => { if (contextIndex < 5) setContextIndex(contextIndex + 1); else setPhase("analysis"); lock.current = false; setTransitioning(false); }, 180); } }
-  function checkout() { if (!report || unlocked) { setUnlocked(true); return; } if (checkoutPending.current) return; try { const checkoutState = { reportVersion: REPORT_VERSION, answers, contextAnswers: context, questionIndex, contextIndex, unlocked: false, report }; localStorage.setItem(STORAGE_KEY, JSON.stringify(checkoutState)); const persisted = parseState(localStorage.getItem(STORAGE_KEY)); if (!hasCompleteSavedState(persisted) || persisted?.unlocked) throw new Error("Checkout state could not be persisted"); } catch { setStorageError(true); return; } if (!AUDHD_STRIPE_URL.startsWith("https://buy.stripe.com/")) { setCheckoutUnavailable(true); return; } checkoutPending.current = true; analytics.cta(report.teaser.type); analytics.checkout(); standardAnalytics.checkout(); window.location.href = AUDHD_STRIPE_URL; }
+  useEffect(() => { if (unlocked && report) standardAnalytics.resultView(); }, [unlocked, report, standardAnalytics]);
+  useEffect(() => { if (phase !== "analysis" || !report) return; const timers = [setTimeout(() => setAnalysisStep(1), 1200), setTimeout(() => setAnalysisStep(2), 2500), setTimeout(() => { standardAnalytics.analysisView(); setPhase("result"); }, 4000)]; return () => timers.forEach(clearTimeout); }, [phase, report, standardAnalytics]);
+  function answer(value: number) { if (lock.current) return; lock.current = true; setTransitioning(true); if (phase === "questions") { const next = answers.map((item, i) => i === questionIndex ? value : item); setAnswers(next); const count = next.filter(item => item >= 0).length; standardAnalytics.answer(count, questionIndex + 1); setTimeout(() => { if (questionIndex < 47) setQuestionIndex(questionIndex + 1); else setPhase("context"); lock.current = false; setTransitioning(false); }, 180); } else { const next = context.map((item, i) => i === contextIndex ? value : item); setContext(next); const count = next.filter(item => item >= 0).length; standardAnalytics.answer(questions.length + count, questions.length + contextIndex + 1); setTimeout(() => { if (contextIndex < 5) setContextIndex(contextIndex + 1); else setPhase("analysis"); lock.current = false; setTransitioning(false); }, 180); } }
+  function checkout() { if (!report || unlocked) { setUnlocked(true); return; } if (checkoutPending.current) return; try { const checkoutState = { reportVersion: REPORT_VERSION, answers, contextAnswers: context, questionIndex, contextIndex, unlocked: false, report }; localStorage.setItem(STORAGE_KEY, JSON.stringify(checkoutState)); const persisted = parseState(localStorage.getItem(STORAGE_KEY)); if (!hasCompleteSavedState(persisted) || persisted?.unlocked) throw new Error("Checkout state could not be persisted"); } catch { setStorageError(true); return; } if (!AUDHD_STRIPE_URL.startsWith("https://buy.stripe.com/")) { setCheckoutUnavailable(true); return; } checkoutPending.current = true; standardAnalytics.checkout(); window.location.href = AUDHD_STRIPE_URL; }
   function restart() { standardAnalytics.restart(); setAnswers(emptyAnswers()); setContext(emptyContextAnswers()); setQuestionIndex(0); setContextIndex(0); setPhase("questions"); setCheckoutUnavailable(false); try { localStorage.removeItem(STORAGE_KEY); } catch { setStorageError(true); } }
   if (!hydrated) return <p className="mt-8" role="status">Laddar testet…</p>;
   const storageNotice = storageError ? <p role="status" className="mt-6 rounded-xl border border-neutral-300 bg-[#F1E8E2] p-4 text-sm leading-6">Webbläsaren kan inte spara testet säkert. Du kan fortsätta här, men lämna inte sidan om du vill behålla svaren.</p> : null;

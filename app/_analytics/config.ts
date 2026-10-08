@@ -1,4 +1,7 @@
 export const GA_MEASUREMENT_ID = "G-XWVSHHNY7G";
+// Set this explicitly for each production deployment when a funnel-affecting
+// release needs to be compared in GA4. It is intentionally build-stable.
+export const ANALYTICS_RELEASE_ID = process.env.NEXT_PUBLIC_ANALYTICS_RELEASE_ID || "rv-ga4-2026-10-08-etapp-1";
 export const testConfig = {
   iq_test: { name: "IQ-test", path: "/iq-test/test", price: 79, currency: "SEK" },
   audhd_test: { name: "AuDHD-test för vuxna", path: "/audhd-test/test", price: 79, currency: "SEK" },

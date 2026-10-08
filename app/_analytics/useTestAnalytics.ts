@@ -1,8 +1,8 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { CONSENT_EVENT } from "./analytics";
-import { answerEvent, checkoutEvent, paywallEvent, purchaseEvent, restartEvents, teaserEvent } from "./testEvents";
+import { answerEvent, checkoutEvent, diagnosticEvent, paywallEvent, purchaseEvent, restartEvents, teaserEvent } from "./testEvents";
 import type { TestId } from "./config";
 
 export function useTestAnalytics(id: TestId, total: number) {
@@ -21,8 +21,8 @@ export function useTestAnalytics(id: TestId, total: number) {
     window.addEventListener(CONSENT_EVENT,record);
     return () => { observer?.disconnect(); document.removeEventListener("visibilitychange",record); window.removeEventListener(CONSENT_EVENT,record); };
   },[id,paywall]);
-  return { paywallRef,
+  return useMemo(() => ({ paywallRef,
     answer: (answered: number, currentQuestion: number) => answerEvent(id,answered,currentQuestion,total),
-    checkout: () => checkoutEvent(id), purchase: () => purchaseEvent(id), teaser: () => teaserEvent(id), restart: () => restartEvents(id),
-  };
+    checkout: () => checkoutEvent(id), purchase: () => purchaseEvent(id), teaser: () => teaserEvent(id), analysisView: () => diagnosticEvent(id, "analysis_view"), resultView: () => diagnosticEvent(id, "result_view"), restart: () => restartEvents(id),
+  }), [id, paywallRef, total]);
 }

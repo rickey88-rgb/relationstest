@@ -7,7 +7,6 @@ import { buildPaywallTeaser } from "../../_lib/paywallTeaser";
 import { hasPaidReturn, usePaymentRecovery } from "../../_components/usePaymentRecovery";
 
 import { useTestAnalytics } from "../../_analytics/useTestAnalytics";
-import { trackEvent } from "../../_analytics/analytics";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 
@@ -736,11 +735,6 @@ export default function Page() {
   }
 
   function startTest() {
-    trackEvent("start_test", {
-      test_id: "psychological_abuse_test",
-      test_name: "Psykisk misshandel-test",
-      page_path: "/psykisk-misshandel-relation/test",
-    });
     setShowIntro(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
