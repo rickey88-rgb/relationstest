@@ -6,6 +6,7 @@ const createLoader = require("../autism-test/test/test-loader.cjs");
 
 process.env.BOOK_ACCESS_TOKEN_SECRET = "test-book-secret-that-is-longer-than-thirty-two-characters";
 const access = createLoader()(path.join(__dirname, "bookAccess.server.ts"));
+assert.equal(access.hasBookAccessTokenSecret(), true);
 
 const issued = access.issueBookAccessToken("audhd-bok");
 assert(access.verifyBookAccessToken(issued, "audhd-bok"));
@@ -29,5 +30,11 @@ const expiredPayload = Buffer.from(JSON.stringify({
 })).toString("base64url");
 const expiredToken = `${expiredPayload}.${createHmac("sha256", process.env.BOOK_ACCESS_TOKEN_SECRET).update(expiredPayload).digest("base64url")}`;
 assert.equal(access.verifyBookAccessToken(expiredToken, "audhd-bok"), null);
+
+const originalSecret = process.env.BOOK_ACCESS_TOKEN_SECRET;
+process.env.BOOK_ACCESS_TOKEN_SECRET = "too-short";
+assert.equal(access.hasBookAccessTokenSecret(), false);
+assert.throws(() => access.issueBookAccessToken("adhd-deluxe"), /BOOK_ACCESS_TOKEN_SECRET/);
+process.env.BOOK_ACCESS_TOKEN_SECRET = originalSecret;
 
 console.log("PASS: only signed, unexpired tokens unlock the matching book product.");

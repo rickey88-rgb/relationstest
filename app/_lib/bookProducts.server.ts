@@ -110,22 +110,41 @@ function lineItemPriceId(price: string | { id: string } | null | undefined) {
   return typeof price === "string" ? price : price?.id ?? null;
 }
 
-export async function verifyAdhdDeluxeBookCheckoutSession(sessionId: string) {
-  if (!isStripeCheckoutSessionId(sessionId)) return false;
+export type AdhdDeluxeCheckoutVerification =
+  | { verified: true }
+  | {
+    verified: false;
+    reason: "invalid_session_id" | "session_not_paid_or_complete" | "line_item_price_not_allowed" | "stripe_request_failed";
+    // Stripe Price IDs identify price configuration, not a customer. This is
+    // deliberately bounded diagnostic data for comparing a Payment Link with
+    // the explicit server allowlist; session IDs and personal data stay out.
+    observedPriceIds?: string[];
+  };
+
+export async function inspectAdhdDeluxeBookCheckoutSession(sessionId: string): Promise<AdhdDeluxeCheckoutVerification> {
+  if (!isStripeCheckoutSessionId(sessionId)) return { verified: false, reason: "invalid_session_id" };
 
   try {
     const stripe = new Stripe(required("STRIPE_SECRET_KEY"));
     const session = await stripe.checkout.sessions.retrieve(sessionId);
-    if (session.status !== "complete" || session.payment_status !== "paid") return false;
+    if (session.status !== "complete" || session.payment_status !== "paid") {
+      return { verified: false, reason: "session_not_paid_or_complete" };
+    }
 
     const lineItems = await stripe.checkout.sessions.listLineItems(sessionId, { limit: 100, expand: ["data.price"] });
-    return lineItems.data.some((lineItem) => {
-      const priceId = lineItemPriceId(lineItem.price);
-      return priceId !== null && ADHD_DELUXE_ALLOWED_PRICE_IDS.has(priceId);
-    });
+    const observedPriceIds = Array.from(new Set(lineItems.data
+      .map((lineItem) => lineItemPriceId(lineItem.price))
+      .filter((priceId): priceId is string => priceId !== null)))
+      .slice(0, 10);
+    if (observedPriceIds.some((priceId) => ADHD_DELUXE_ALLOWED_PRICE_IDS.has(priceId))) return { verified: true };
+    return { verified: false, reason: "line_item_price_not_allowed", observedPriceIds };
   } catch {
-    return false;
+    return { verified: false, reason: "stripe_request_failed" };
   }
+}
+
+export async function verifyAdhdDeluxeBookCheckoutSession(sessionId: string) {
+  return (await inspectAdhdDeluxeBookCheckoutSession(sessionId)).verified;
 }
 
 export function audhdBookR2Config() {

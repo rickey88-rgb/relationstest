@@ -24,12 +24,16 @@ function secret() {
   return value.length >= 32 ? value : "";
 }
 
+export function hasBookAccessTokenSecret() {
+  return Boolean(secret());
+}
+
 function encode(value: string) { return Buffer.from(value).toString("base64url"); }
 function decode(value: string) { return Buffer.from(value, "base64url").toString("utf8"); }
 function sign(value: string) { return createHmac("sha256", secret()).update(value).digest("base64url"); }
 
 export function issueBookAccessToken(product: BookProductId) {
-  if (!secret()) throw new Error("BOOK_ACCESS_TOKEN_SECRET is not configured");
+  if (!hasBookAccessTokenSecret()) throw new Error("BOOK_ACCESS_TOKEN_SECRET is not configured");
   const payload: BookAccessPayload = {
     v: TOKEN_VERSION,
     product,

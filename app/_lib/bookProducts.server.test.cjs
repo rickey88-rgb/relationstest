@@ -65,16 +65,24 @@ assert.equal(products.adhdDeluxeBookR2Config().key, "books/adhd-deluxe/ADHD-Delu
   StripeMock.session = { status: "complete", payment_status: "paid" };
   StripeMock.lineItems = [{ price: { id: "price_1UO3C0AgF4ugWkEkkIryPLKO" } }];
   assert.equal(await products.verifyAdhdDeluxeBookCheckoutSession("cs_test_adhddeluxe149"), true);
+  assert.deepEqual(await products.inspectAdhdDeluxeBookCheckoutSession("cs_test_adhddeluxe149"), { verified: true });
 
-  StripeMock.lineItems = [{ price: { id: "price_1UO3F6AgF4ugWkEkRCM7L9yX" } }];
+  StripeMock.lineItems = [{ price: "price_1UO3F6AgF4ugWkEkRCM7L9yX" }];
   assert.equal(await products.verifyAdhdDeluxeBookCheckoutSession("cs_test_adhddeluxe99"), true);
 
   StripeMock.lineItems = [{ price: { id: "price_other_book" } }];
   assert.equal(await products.verifyAdhdDeluxeBookCheckoutSession("cs_test_adhddeluxewrong"), false);
+  assert.deepEqual(await products.inspectAdhdDeluxeBookCheckoutSession("cs_test_adhddeluxewrong"), {
+    verified: false,
+    reason: "line_item_price_not_allowed",
+    observedPriceIds: ["price_other_book"],
+  });
 
   StripeMock.session = { status: "complete", payment_status: "unpaid" };
   StripeMock.lineItems = [{ price: { id: "price_1UO3C0AgF4ugWkEkkIryPLKO" } }];
   assert.equal(await products.verifyAdhdDeluxeBookCheckoutSession("cs_test_adhddeluxeunpaid"), false);
+  assert.deepEqual(await products.inspectAdhdDeluxeBookCheckoutSession("cs_test_adhddeluxeunpaid"), { verified: false, reason: "session_not_paid_or_complete" });
   assert.equal(await products.verifyAdhdDeluxeBookCheckoutSession("not-a-checkout-session"), false);
+  assert.deepEqual(await products.inspectAdhdDeluxeBookCheckoutSession("not-a-checkout-session"), { verified: false, reason: "invalid_session_id" });
   console.log("PASS: only completed, paid sessions from configured book Payment Links and ADHD Deluxe Price IDs are accepted.");
 })().catch((error) => { console.error(error); process.exitCode = 1; });
