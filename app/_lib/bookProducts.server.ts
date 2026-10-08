@@ -24,7 +24,7 @@ export const ADHD_DELUXE_BOOK = {
 // Price IDs are non-secret Stripe product identifiers. ADHD Deluxe verifies
 // line items rather than trusting a client value or Payment Link reference.
 export const ADHD_DELUXE_ALLOWED_PRICE_IDS = new Set([
-  "price_1UO3C0AgF4ugWkEkkIryPLKO",
+  "price_1UO3C0AgF4ugWkEkklryPLKO",
   "price_1UO3F6AgF4ugWkEkRCM7L9yX",
 ]);
 

@@ -76,7 +76,7 @@ assert.equal(products.adhdDeluxeBookR2Config().key, "books/adhd-deluxe/ADHD-Delu
   assert.equal(await products.verifyAutismBookCheckoutSession("not-a-checkout-session"), false);
 
   StripeMock.session = { status: "complete", payment_status: "paid", livemode: true };
-  StripeMock.lineItems = [{ price: { id: "price_1UO3C0AgF4ugWkEkkIryPLKO" } }];
+  StripeMock.lineItems = [{ price: { id: "price_1UO3C0AgF4ugWkEkklryPLKO" } }];
   assert.equal(await products.verifyAdhdDeluxeBookCheckoutSession("cs_test_adhddeluxe149"), true);
   assert.deepEqual(await products.inspectAdhdDeluxeBookCheckoutSession("cs_test_adhddeluxe149"), { verified: true });
 
@@ -90,7 +90,7 @@ assert.equal(products.adhdDeluxeBookR2Config().key, "books/adhd-deluxe/ADHD-Delu
     reason: "line_item_price_not_allowed",
     diagnostic: {
       stage: "price_allowlist",
-      allowedPriceIds: ["price_1UO3C0AgF4ugWkEkkIryPLKO", "price_1UO3F6AgF4ugWkEkRCM7L9yX"],
+      allowedPriceIds: ["price_1UO3C0AgF4ugWkEkklryPLKO", "price_1UO3F6AgF4ugWkEkRCM7L9yX"],
       sessionLivemode: true,
       sessionStatus: "complete",
       paymentStatus: "paid",
@@ -102,14 +102,14 @@ assert.equal(products.adhdDeluxeBookR2Config().key, "books/adhd-deluxe/ADHD-Delu
   });
 
   StripeMock.session = { status: "complete", payment_status: "unpaid", livemode: true };
-  StripeMock.lineItems = [{ price: { id: "price_1UO3C0AgF4ugWkEkkIryPLKO" } }];
+  StripeMock.lineItems = [{ price: { id: "price_1UO3C0AgF4ugWkEkklryPLKO" } }];
   assert.equal(await products.verifyAdhdDeluxeBookCheckoutSession("cs_test_adhddeluxeunpaid"), false);
   assert.deepEqual(await products.inspectAdhdDeluxeBookCheckoutSession("cs_test_adhddeluxeunpaid"), {
     verified: false,
     reason: "session_not_paid_or_complete",
     diagnostic: {
       stage: "session_status",
-      allowedPriceIds: ["price_1UO3C0AgF4ugWkEkkIryPLKO", "price_1UO3F6AgF4ugWkEkRCM7L9yX"],
+      allowedPriceIds: ["price_1UO3C0AgF4ugWkEkklryPLKO", "price_1UO3F6AgF4ugWkEkRCM7L9yX"],
       sessionLivemode: true,
       sessionStatus: "complete",
       paymentStatus: "unpaid",
@@ -125,7 +125,7 @@ assert.equal(products.adhdDeluxeBookR2Config().key, "books/adhd-deluxe/ADHD-Delu
     reason: "invalid_session_id",
     diagnostic: {
       stage: "session_id",
-      allowedPriceIds: ["price_1UO3C0AgF4ugWkEkkIryPLKO", "price_1UO3F6AgF4ugWkEkRCM7L9yX"],
+      allowedPriceIds: ["price_1UO3C0AgF4ugWkEkklryPLKO", "price_1UO3F6AgF4ugWkEkRCM7L9yX"],
       sessionLivemode: null,
       sessionStatus: null,
       paymentStatus: null,
@@ -143,7 +143,7 @@ assert.equal(products.adhdDeluxeBookR2Config().key, "books/adhd-deluxe/ADHD-Delu
     reason: "stripe_request_failed",
     diagnostic: {
       stage: "session_retrieve",
-      allowedPriceIds: ["price_1UO3C0AgF4ugWkEkkIryPLKO", "price_1UO3F6AgF4ugWkEkRCM7L9yX"],
+      allowedPriceIds: ["price_1UO3C0AgF4ugWkEkklryPLKO", "price_1UO3F6AgF4ugWkEkRCM7L9yX"],
       sessionLivemode: null,
       sessionStatus: null,
       paymentStatus: null,
