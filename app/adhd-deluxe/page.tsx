@@ -31,7 +31,7 @@ const highlights = [
 ] as const;
 const faqs = [
   ["Är det en fysisk bok?", "Nej, ADHD Deluxe är en digital bok i PDF-format."],
-  ["När kan jag få boken?", "ADHD Deluxe kommer snart. Håll utkik här när försäljningen öppnar igen."],
+  ["När kan jag få boken?", "Du får tillgång till ADHD Deluxe direkt efter betalning."],
   ["Kan jag läsa den i mobilen?", "Ja. PDF-filen kan läsas på mobil, surfplatta och dator."],
   ["Är boken en ersättning för vård eller utredning?", "Nej. Boken är ett vardagsnära stöd och ersätter inte vård, behandling eller professionell utredning."],
 ] as const;
