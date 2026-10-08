@@ -18,8 +18,21 @@ process.env.ADHD_DELUXE_BOOK_R2_KEY = "books/adhd-deluxe/ADHD-Deluxe_Elias-Voss.
 class StripeMock {
   static session = null;
   static lineItems = [];
+  static retrieveError = null;
+  static lineItemsError = null;
   constructor() {
-    this.checkout = { sessions: { retrieve: async () => StripeMock.session, listLineItems: async () => ({ data: StripeMock.lineItems }) } };
+    this.checkout = {
+      sessions: {
+        retrieve: async () => {
+          if (StripeMock.retrieveError) throw StripeMock.retrieveError;
+          return StripeMock.session;
+        },
+        listLineItems: async () => {
+          if (StripeMock.lineItemsError) throw StripeMock.lineItemsError;
+          return { data: StripeMock.lineItems };
+        },
+      },
+    };
   }
 }
 
@@ -62,7 +75,7 @@ assert.equal(products.adhdDeluxeBookR2Config().key, "books/adhd-deluxe/ADHD-Delu
   assert.equal(await products.verifyAutismBookCheckoutSession("cs_test_autismbook123"), false);
   assert.equal(await products.verifyAutismBookCheckoutSession("not-a-checkout-session"), false);
 
-  StripeMock.session = { status: "complete", payment_status: "paid" };
+  StripeMock.session = { status: "complete", payment_status: "paid", livemode: true };
   StripeMock.lineItems = [{ price: { id: "price_1UO3C0AgF4ugWkEkkIryPLKO" } }];
   assert.equal(await products.verifyAdhdDeluxeBookCheckoutSession("cs_test_adhddeluxe149"), true);
   assert.deepEqual(await products.inspectAdhdDeluxeBookCheckoutSession("cs_test_adhddeluxe149"), { verified: true });
@@ -75,14 +88,73 @@ assert.equal(products.adhdDeluxeBookR2Config().key, "books/adhd-deluxe/ADHD-Delu
   assert.deepEqual(await products.inspectAdhdDeluxeBookCheckoutSession("cs_test_adhddeluxewrong"), {
     verified: false,
     reason: "line_item_price_not_allowed",
-    observedPriceIds: ["price_other_book"],
+    diagnostic: {
+      stage: "price_allowlist",
+      allowedPriceIds: ["price_1UO3C0AgF4ugWkEkkIryPLKO", "price_1UO3F6AgF4ugWkEkRCM7L9yX"],
+      sessionLivemode: true,
+      sessionStatus: "complete",
+      paymentStatus: "paid",
+      lineItemCount: 1,
+      observedPriceIds: ["price_other_book"],
+      observedPriceIdLengths: [16],
+      priceMatch: false,
+    },
   });
 
-  StripeMock.session = { status: "complete", payment_status: "unpaid" };
+  StripeMock.session = { status: "complete", payment_status: "unpaid", livemode: true };
   StripeMock.lineItems = [{ price: { id: "price_1UO3C0AgF4ugWkEkkIryPLKO" } }];
   assert.equal(await products.verifyAdhdDeluxeBookCheckoutSession("cs_test_adhddeluxeunpaid"), false);
-  assert.deepEqual(await products.inspectAdhdDeluxeBookCheckoutSession("cs_test_adhddeluxeunpaid"), { verified: false, reason: "session_not_paid_or_complete" });
+  assert.deepEqual(await products.inspectAdhdDeluxeBookCheckoutSession("cs_test_adhddeluxeunpaid"), {
+    verified: false,
+    reason: "session_not_paid_or_complete",
+    diagnostic: {
+      stage: "session_status",
+      allowedPriceIds: ["price_1UO3C0AgF4ugWkEkkIryPLKO", "price_1UO3F6AgF4ugWkEkRCM7L9yX"],
+      sessionLivemode: true,
+      sessionStatus: "complete",
+      paymentStatus: "unpaid",
+      lineItemCount: null,
+      observedPriceIds: [],
+      observedPriceIdLengths: [],
+      priceMatch: null,
+    },
+  });
   assert.equal(await products.verifyAdhdDeluxeBookCheckoutSession("not-a-checkout-session"), false);
-  assert.deepEqual(await products.inspectAdhdDeluxeBookCheckoutSession("not-a-checkout-session"), { verified: false, reason: "invalid_session_id" });
+  assert.deepEqual(await products.inspectAdhdDeluxeBookCheckoutSession("not-a-checkout-session"), {
+    verified: false,
+    reason: "invalid_session_id",
+    diagnostic: {
+      stage: "session_id",
+      allowedPriceIds: ["price_1UO3C0AgF4ugWkEkkIryPLKO", "price_1UO3F6AgF4ugWkEkRCM7L9yX"],
+      sessionLivemode: null,
+      sessionStatus: null,
+      paymentStatus: null,
+      lineItemCount: null,
+      observedPriceIds: [],
+      observedPriceIdLengths: [],
+      priceMatch: null,
+    },
+  });
+
+  StripeMock.session = null;
+  StripeMock.retrieveError = { type: "StripeInvalidRequestError", statusCode: 404 };
+  assert.deepEqual(await products.inspectAdhdDeluxeBookCheckoutSession("cs_test_adhddeluxeforeign"), {
+    verified: false,
+    reason: "stripe_request_failed",
+    diagnostic: {
+      stage: "session_retrieve",
+      allowedPriceIds: ["price_1UO3C0AgF4ugWkEkkIryPLKO", "price_1UO3F6AgF4ugWkEkRCM7L9yX"],
+      sessionLivemode: null,
+      sessionStatus: null,
+      paymentStatus: null,
+      lineItemCount: null,
+      observedPriceIds: [],
+      observedPriceIdLengths: [],
+      priceMatch: null,
+      stripeErrorType: "StripeInvalidRequestError",
+      stripeHttpStatus: 404,
+    },
+  });
+  StripeMock.retrieveError = null;
   console.log("PASS: only completed, paid sessions from configured book Payment Links and ADHD Deluxe Price IDs are accepted.");
 })().catch((error) => { console.error(error); process.exitCode = 1; });

@@ -24,7 +24,8 @@ export async function GET(request: NextRequest) {
   if (!verification.verified) {
     console.error("adhd_deluxe_checkout_verification_failed", {
       reason: verification.reason,
-      observedPriceIds: verification.observedPriceIds,
+      vercelCommitSha: process.env.VERCEL_GIT_COMMIT_SHA ?? null,
+      ...verification.diagnostic,
     });
     return redirectWithoutCaching(errorDestination);
   }

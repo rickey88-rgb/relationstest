@@ -115,31 +115,86 @@ export type AdhdDeluxeCheckoutVerification =
   | {
     verified: false;
     reason: "invalid_session_id" | "session_not_paid_or_complete" | "line_item_price_not_allowed" | "stripe_request_failed";
-    // Stripe Price IDs identify price configuration, not a customer. This is
-    // deliberately bounded diagnostic data for comparing a Payment Link with
-    // the explicit server allowlist; session IDs and personal data stay out.
-    observedPriceIds?: string[];
+    diagnostic: AdhdDeluxeCheckoutDiagnostic;
   };
 
-export async function inspectAdhdDeluxeBookCheckoutSession(sessionId: string): Promise<AdhdDeluxeCheckoutVerification> {
-  if (!isStripeCheckoutSessionId(sessionId)) return { verified: false, reason: "invalid_session_id" };
+export type AdhdDeluxeCheckoutDiagnostic = {
+  stage: "session_id" | "session_retrieve" | "session_status" | "line_items_retrieve" | "price_allowlist";
+  allowedPriceIds: string[];
+  sessionLivemode: boolean | null;
+  sessionStatus: string | null;
+  paymentStatus: string | null;
+  lineItemCount: number | null;
+  observedPriceIds: string[];
+  observedPriceIdLengths: number[];
+  priceMatch: boolean | null;
+  stripeErrorType?: string;
+  stripeHttpStatus?: number;
+};
 
+function checkoutDiagnostic(stage: AdhdDeluxeCheckoutDiagnostic["stage"], values: Partial<Omit<AdhdDeluxeCheckoutDiagnostic, "stage" | "allowedPriceIds">> = {}): AdhdDeluxeCheckoutDiagnostic {
+  return {
+    stage,
+    allowedPriceIds: Array.from(ADHD_DELUXE_ALLOWED_PRICE_IDS),
+    sessionLivemode: null,
+    sessionStatus: null,
+    paymentStatus: null,
+    lineItemCount: null,
+    observedPriceIds: [],
+    observedPriceIdLengths: [],
+    priceMatch: null,
+    ...values,
+  };
+}
+
+function stripeErrorDetails(error: unknown) {
+  if (!error || typeof error !== "object") return {};
+  const candidate = error as { type?: unknown; statusCode?: unknown };
+  return {
+    ...(typeof candidate.type === "string" ? { stripeErrorType: candidate.type } : {}),
+    ...(typeof candidate.statusCode === "number" && Number.isInteger(candidate.statusCode) ? { stripeHttpStatus: candidate.statusCode } : {}),
+  };
+}
+
+export async function inspectAdhdDeluxeBookCheckoutSession(sessionId: string): Promise<AdhdDeluxeCheckoutVerification> {
+  if (!isStripeCheckoutSessionId(sessionId)) {
+    return { verified: false, reason: "invalid_session_id", diagnostic: checkoutDiagnostic("session_id") };
+  }
+
+  let stage: AdhdDeluxeCheckoutDiagnostic["stage"] = "session_retrieve";
   try {
     const stripe = new Stripe(required("STRIPE_SECRET_KEY"));
     const session = await stripe.checkout.sessions.retrieve(sessionId);
+    const sessionDetails = {
+      sessionLivemode: session.livemode,
+      sessionStatus: session.status,
+      paymentStatus: session.payment_status,
+    };
     if (session.status !== "complete" || session.payment_status !== "paid") {
-      return { verified: false, reason: "session_not_paid_or_complete" };
+      return { verified: false, reason: "session_not_paid_or_complete", diagnostic: checkoutDiagnostic("session_status", sessionDetails) };
     }
 
+    stage = "line_items_retrieve";
     const lineItems = await stripe.checkout.sessions.listLineItems(sessionId, { limit: 100, expand: ["data.price"] });
     const observedPriceIds = Array.from(new Set(lineItems.data
       .map((lineItem) => lineItemPriceId(lineItem.price))
       .filter((priceId): priceId is string => priceId !== null)))
       .slice(0, 10);
-    if (observedPriceIds.some((priceId) => ADHD_DELUXE_ALLOWED_PRICE_IDS.has(priceId))) return { verified: true };
-    return { verified: false, reason: "line_item_price_not_allowed", observedPriceIds };
-  } catch {
-    return { verified: false, reason: "stripe_request_failed" };
+    const priceMatch = observedPriceIds.some((priceId) => ADHD_DELUXE_ALLOWED_PRICE_IDS.has(priceId));
+    if (priceMatch) return { verified: true };
+    return {
+      verified: false,
+      reason: "line_item_price_not_allowed",
+      diagnostic: checkoutDiagnostic("price_allowlist", {
+        ...sessionDetails,
+        lineItemCount: lineItems.data.length,
+        observedPriceIds,
+        observedPriceIdLengths: observedPriceIds.map((priceId) => priceId.length),
+        priceMatch,
+      }),
+    };
+  } catch (error) {
+    return { verified: false, reason: "stripe_request_failed", diagnostic: checkoutDiagnostic(stage, stripeErrorDetails(error)) };
   }
 }
 
