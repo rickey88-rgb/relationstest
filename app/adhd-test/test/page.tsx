@@ -8,10 +8,10 @@ import { hasPaidReturn, usePaymentRecovery } from "../../_components/usePaymentR
 import { useTestAnalytics } from "../../_analytics/useTestAnalytics";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { answerLabels, calculate, areaNames, areas, emptyAnswers, formatPercent, parseState, questions, PRICE_SEK, STATE_VERSION, STORAGE_KEY, type Result } from "./model";
+import { answerLabels, calculate, areaNames, areas, emptyAnswers, formatPercent, parseState, questions, PRICE_SEK, STATE_VERSION, STORAGE_KEY } from "./model";
 import { ADHD_STRIPE_URL } from "./payment";
 
-import { describeArea, impactText, standoutText } from "./interpretation";
+import { describeArea, impactText, personalFinding, standoutText } from "./interpretation";
 import { levelTexts, profileTexts } from "./copy";
 
 const button = "inline-flex min-h-12 items-center justify-center rounded-xl px-5 py-3 text-center font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900";
@@ -19,39 +19,13 @@ const secondary = button + " border border-neutral-300 bg-white text-neutral-900
 const link = "underline underline-offset-4 decoration-neutral-400 focus-visible:outline-2 focus-visible:outline-offset-4";
 const section = "mt-8 space-y-4 rounded-2xl border border-neutral-200 p-5 leading-7 sm:p-6";
 
-function formatAreaList(names: string[]) {
-  if (names.length < 2) return names[0] ?? "";
-  if (names.length === 2) return `${names[0]} och ${names[1]}`;
-  return `${names.slice(0, -1).join(", ")} och ${names[names.length - 1]}`;
-}
-
-function freeFinding(result: Result) {
-  const topScore = result.scores[result.ranked[0]];
-  const topAreas = result.ranked.filter((area) => result.scores[area] === topScore);
-
-  if (topScore === 0) {
-    return {
-      title: "Inget enskilt område sticker ut",
-      finding: "Du har inte angett några svårigheter i de fem ADHD-relaterade områden som testet mäter.",
-      explanation: "Dina svar är jämna och låga i dessa områden, så det går inte att peka ut ett område som är mer framträdande än de andra.",
-    };
-  }
-
-  if (topAreas.length > 1) {
-    return {
-      title: "Flera områden framträder lika mycket",
-      finding: `${formatAreaList(topAreas.map((area) => areaNames[area]))} ligger på samma högsta nivå i dina svar.`,
-      explanation: "Därför går det inte att peka ut ett enda tydligaste område i din profil.",
-    };
-  }
-
-  const area = topAreas[0];
-  return {
-    title: "Det som framträder mest",
-    finding: `${areaNames[area]} är det område som framträder mest i dina svar.`,
-    explanation: describeArea(area, result.scores[area]),
-  };
-}
+const analysisSteps = [
+  "Sammanställer dina svar…",
+  "Jämför de fem ADHD-relaterade områdena…",
+  "Väger in vardagspåverkan och återkommande mönster…",
+  "Identifierar det personliga fynd som stöds av dina svar…",
+  "Förbereder din profil…",
+];
 
 export default function ADHDSelfTestPage() {
   const [index, setIndex] = useState(0);
@@ -72,10 +46,15 @@ export default function ADHDSelfTestPage() {
   const analyzing = analysisStep !== null;
   useEffect(() => {
     if (!analyzing) return;
-    const second = setTimeout(() => setAnalysisStep(1), 1000);
-    const third = setTimeout(() => setAnalysisStep(2), 2000);
-    const finish = setTimeout(() => { moveFocus.current = true; setAnalysisStep(null); }, 3000);
-    return () => { clearTimeout(second); clearTimeout(third); clearTimeout(finish); };
+    const delay = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 1000;
+    const steps = [
+      setTimeout(() => setAnalysisStep(1), delay),
+      setTimeout(() => setAnalysisStep(2), delay * 2),
+      setTimeout(() => setAnalysisStep(3), delay * 3),
+      setTimeout(() => setAnalysisStep(4), delay * 4),
+      setTimeout(() => { moveFocus.current = true; setAnalysisStep(null); }, delay * 5),
+    ];
+    return () => { steps.forEach(clearTimeout); };
   }, [analyzing]);
 
   useEffect(() => {
@@ -105,7 +84,7 @@ export default function ADHDSelfTestPage() {
   const showResult = complete && !editing;
   const answeredCount = answers.filter((answer) => answer >= 0).length;
   const result = useMemo(() => complete ? calculate(answers) : null, [complete, answers]);
-  const freeResult = result ? freeFinding(result) : null;
+  const freeResult = result ? personalFinding(result) : null;
   useEffect(() => {
     if (moveFocus.current) { heading.current?.focus({ preventScroll: true }); moveFocus.current = false; }
   }, [index, showResult, hydrated, analyzing]);
@@ -166,23 +145,35 @@ export default function ADHDSelfTestPage() {
     </section>}
     {showResult && analyzing && !unlocked && <section data-flow="analysis" className={section} aria-labelledby="analysis-heading" aria-busy="true">
       <h2 id="analysis-heading" ref={heading} tabIndex={-1} className="text-xl font-semibold outline-none">Vi sammanställer din profil</h2>
-      <p role="status" aria-live="polite">{["Analyserar dina svar…", "Jämför mönster mellan sex områden…", "Sammanställer din profil…"][analysisStep ?? 0]}</p>
+      <p role="status" aria-live="polite">{analysisSteps[analysisStep ?? 0]}</p>
     </section>}
     {showResult && (!analyzing || unlocked) && result && <div data-adhd-result>
-      {!unlocked ? <section data-flow="paywall" ref={tracking.paywallRef} className="mt-8 space-y-5 rounded-[20px] bg-[#0d0d0d] px-[18px] py-6 leading-7 text-white" aria-labelledby="result-heading">
-        {freeResult && <div className="space-y-2 rounded-xl bg-white/10 p-4">
-          <h2 id="result-heading" ref={heading} tabIndex={-1} className="text-xl font-semibold text-white outline-none">{freeResult.title}</h2>
-          <p className="font-medium text-white">{freeResult.finding}</p>
-          <p className="text-neutral-200">{freeResult.explanation}</p>
-        </div>}
-        <p className="text-sm leading-6 text-neutral-300">Det här är ett självtest, inte en diagnos. Liknande svårigheter kan ha flera orsaker, och en professionell bedömning kan vara relevant om de påverkar vardagen tydligt.</p>
-        <div className="space-y-4 border-t border-white/15 pt-5">
-          <h3 className="text-xl font-semibold">Din låsta analys innehåller</h3>
-          <ul className="space-y-2 text-neutral-200"><li>🔒 Din övergripande nivå och vad den bygger på</li><li>🔒 Sex delområden med nivåer och förklaringar</li><li>🔒 Din profiltyp och vardagspåverkan</li><li>🔒 Nyanser, stödjande faktorer och andra möjliga förklaringar</li></ul>
-          <PaywallCheckoutCTA onClick={checkout} label={<>Se min fullständiga analys · {PRICE_SEK} kr</>} trustText="Engångsbetalning · Ingen prenumeration." />
-          <button type="button" onClick={restart} className="min-h-11 w-full text-sm text-neutral-300 underline underline-offset-4 hover:text-white">Gör om testet</button>
-          {checkoutUnavailable && <p role="status" className="text-neutral-300">Köp är inte tillgängligt just nu. Dina svar finns kvar i den här webbläsaren.</p>}
+      {!unlocked ? <section data-flow="paywall" data-adhd-paywall ref={tracking.paywallRef} className="mt-8 space-y-6 rounded-[20px] px-[18px] py-7 leading-7" aria-labelledby="result-heading">
+        <div data-adhd-paywall-intro className="space-y-3">
+          <p data-adhd-paywall-kicker>ANALYSEN ÄR KLAR</p>
+          <h2 id="result-heading" ref={heading} tabIndex={-1} className="text-2xl font-semibold leading-tight outline-none sm:text-3xl">Dina svar är analyserade. Nu återstår den viktigaste frågan.</h2>
+          <p data-adhd-paywall-subtitle>Hur väl stämmer din samlade profil överens med vanliga ADHD-drag?</p>
         </div>
+        {freeResult && <section data-adhd-finding aria-labelledby="personal-finding-heading" className="space-y-3 rounded-2xl p-5">
+          <h3 id="personal-finding-heading" data-adhd-finding-label>DITT PERSONLIGA FYND</h3>
+          {freeResult.sentences.map((sentence) => <p key={sentence}>{sentence}</p>)}
+        </section>}
+        <section data-adhd-locked-profile className="space-y-4 rounded-2xl p-5" aria-labelledby="locked-profile-heading">
+          <h3 id="locked-profile-heading" className="text-xl font-semibold">Din samlade ADHD-profil <span aria-hidden="true">🔒</span></h3>
+          <p className="italic">Hur stark är den samlade överensstämmelsen? Vilka svar stärker bedömningen – och vilka nyanserar den?</p>
+          <p>Den fullständiga analysen ger dig helhetsbilden.</p>
+          <div data-adhd-report-preview aria-label="Förhandsvisning av innehållet i den låsta analysen">
+            <p><span>🔒</span> Samlad bedömning och förklaring</p>
+            <p><span>🔒</span> Sex områden och deras nivåer</p>
+            <p><span>🔒</span> Vardagspåverkan, stödjande faktorer och nyanser</p>
+          </div>
+        </section>
+        <div data-adhd-checkout className="space-y-4">
+          <PaywallCheckoutCTA onClick={checkout} label={<>Visa min fullständiga analys · {PRICE_SEK} kr</>} trustText="Engångsbetalning · Ingen prenumeration." />
+        </div>
+        <p data-adhd-paywall-disclaimer>Det här är ett självtest, inte en diagnos. Det kan inte fastställa eller utesluta ADHD, och liknande svårigheter kan ha flera orsaker.</p>
+        <button data-adhd-restart type="button" onClick={restart}>Gör om testet</button>
+        {checkoutUnavailable && <p role="status" data-adhd-checkout-error>Köp är inte tillgängligt just nu. Dina svar finns kvar i den här webbläsaren.</p>}
       </section> : <>
         <section data-flow="card" className={section} aria-labelledby="result-heading"><h2 id="result-heading" ref={heading} tabIndex={-1} className="text-2xl font-semibold outline-none">Din samlade profil</h2>
           <p className="text-xl font-semibold">{result.level}</p><p className="text-4xl font-semibold tabular-nums">{formatPercent(result.symptomIndex)} / 100</p>

@@ -7,7 +7,7 @@ let checkoutNavigationInFlight = false;
 // Bump a test's value only when its pre-purchase presentation changes. These labels
 // contain no answer or result data, and let the standard funnel be compared safely.
 const paywallVersion: Partial<Record<TestId, string>> = {
-  adhd_test: "personal-finding-v2",
+  adhd_test: "personal-finding-v3",
   autism_test: "personal-finding-v2",
   audhd_test: "personal-finding-v2",
 };
