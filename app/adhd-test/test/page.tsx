@@ -19,6 +19,7 @@ const secondary = button + " border border-neutral-300 bg-white text-neutral-900
 const link = "underline underline-offset-4 decoration-neutral-400 focus-visible:outline-2 focus-visible:outline-offset-4";
 const section = "mt-8 space-y-4 rounded-2xl border border-neutral-200 p-5 leading-7 sm:p-6";
 
+// These labels are shown only while the existing client-side analysis sequence is active.
 const analysisSteps = [
   "Sammanställer dina svar…",
   "Jämför de fem ADHD-relaterade områdena…",
