@@ -43,6 +43,7 @@ for(let count=1;count<=30;count++)tracking.answerEvent('autism_test',count,count
 tracking.paywallEvent('autism_test');tracking.paywallEvent('autism_test');tracking.checkoutEvent('autism_test');tracking.purchaseEvent('autism_test');tracking.purchaseEvent('autism_test');
 assert.deepEqual(events.map(e=>e.name),['test_start','test_progress','test_progress','test_progress','test_complete','paywall_view','checkout_start','begin_checkout','purchase']);
 for(const event of events){assert.equal(event.params.test_id,'autism_test');assert.equal(event.params.test_name,'Autismtest för vuxna');assert(!('answers' in event.params));assert(!('score' in event.params));}
+for(const name of ['test_complete','paywall_view','checkout_start'])assert.equal(events.find(event=>event.name===name).params.paywall_variant,'personal-finding-v2');
 assert.deepEqual(events.filter(e=>e.name==='test_progress').map(e=>e.params.progress_percent),[25,50,75]);
 assert.equal(events.at(-1).params.value,39);assert.equal(events.at(-1).params.currency,'SEK');
 assert.equal(events.at(-1).params.attempt_id,events[0].params.attempt_id);
@@ -50,4 +51,12 @@ assert.deepEqual(events.at(-1).params.items,[{item_id:'autism_test',item_name:'A
 assert.deepEqual(events.find(e=>e.name==='begin_checkout').params.items,events.at(-1).params.items);
 assert(events.at(-1).params.transaction_id.startsWith('rv-autism_test-'));
 const before=events.length;consent='denied';tracking.restartEvents('autism_test');tracking.answerEvent('autism_test',1,1,30);tracking.checkoutEvent('autism_test');tracking.purchaseEvent('autism_test');assert.equal(events.length,before);
-console.log('PASS: recovery, old tab, persisted unlock, duplicate checkout, blocked/silent storage, paid return fallback, test isolation; all analytics events, consent, purchase 39 SEK and deduplication.');
+consent='granted';
+for(const [id,total] of [['adhd_test',30],['audhd_test',54]]){
+  tracking.restartEvents(id);
+  for(let count=1;count<=total;count++)tracking.answerEvent(id,count,count,total);
+  tracking.paywallEvent(id);tracking.checkoutEvent(id);
+  const standard=events.filter(event=>event.params.test_id===id);
+  for(const name of ['test_complete','paywall_view','checkout_start'])assert.equal(standard.find(event=>event.name===name).params.paywall_variant,'personal-finding-v2');
+}
+console.log('PASS: recovery, old tab, persisted unlock, duplicate checkout, blocked/silent storage, paid return fallback, test isolation; all analytics events, consent, purchase 39 SEK, variant labels and deduplication.');

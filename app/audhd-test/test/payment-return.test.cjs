@@ -60,6 +60,14 @@ const isReportView = environment => environment.nodes().some(node => node.type?.
   let checkout = await ready({ stored: complete });
   const checkoutCta = checkout.nodes().find(node => node.type === checkout.PaywallCheckoutCTA);
   assert(checkoutCta);
+  const paywallText = checkout.text(checkout.tree);
+  assert(paywallText.includes("Ett första fynd"));
+  assert(paywallText.includes("Din låsta AuDHD-analys innehåller"));
+  assert(!paywallText.includes("Ditt huvudresultat"));
+  assert(!paywallText.includes("4 av 8 områden"));
+  assert(!paywallText.includes("Din huvudprofil"));
+  assert.equal(checkout.text(checkoutCta.props.label), "Lås upp min AuDHD-profil · 79 kr");
+  assert.equal(checkoutCta.props.trustText, "Engångsbetalning · Ingen prenumeration.");
   checkoutCta.props.onClick();
   assert(window.location.href.startsWith("https://buy.stripe.com/"));
   let saved = JSON.parse(checkout.data.get(key));

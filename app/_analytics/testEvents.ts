@@ -3,6 +3,13 @@ import { testConfig, type TestId } from "./config";
 
 type Attempt = { version: 1; updatedAt: number; id: string; startedAt: number | null; completedAt: number | null; started: boolean; milestones: number[]; complete: boolean; teaser?: boolean; paywall: boolean; purchase: boolean };
 const memory = new Map<TestId, Attempt>();
+// Bump a test's value only when its pre-purchase presentation changes. These labels
+// contain no answer or result data, and let the standard funnel be compared safely.
+const paywallVariant: Partial<Record<TestId, string>> = {
+  adhd_test: "personal-finding-v2",
+  autism_test: "personal-finding-v2",
+  audhd_test: "personal-finding-v2",
+};
 function fresh(): Attempt {
   return {version:1,updatedAt:Date.now(),id:typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`,startedAt:null,completedAt:null,started:false,milestones:[],complete:false,paywall:false,purchase:false};
 }
@@ -22,7 +29,7 @@ function save(id: TestId, attempt: Attempt) {
     try { window[storage].setItem(ATTEMPT_PREFIX+id,JSON.stringify(attempt)); return; } catch { /* Try next store. */ }
   }
 }
-const identity = (id: TestId, attempt: Attempt) => ({ test_id:id, test_name:testConfig[id].name, attempt_id:attempt.id });
+const identity = (id: TestId, attempt: Attempt) => ({ test_id:id, test_name:testConfig[id].name, attempt_id:attempt.id, paywall_variant:paywallVariant[id] ?? "default" });
 const commerce = (id: TestId, attempt: Attempt) => ({
   ...identity(id, attempt),
   value: testConfig[id].price,
@@ -68,7 +75,8 @@ export function checkoutEvent(id: TestId) {
 }
 export function purchaseEvent(id: TestId) {
   try { if (consent() !== "granted") return; const attempt=read(id); if (attempt.purchase) return;
-    // This is a paid=true return, not a Stripe-verified transaction. Stable ID also enables GA4 deduplication.
+    // This is a paid=true return, not a Stripe-verified transaction. Stripe Dashboard/webhooks
+    // remain the source of truth for actual purchases; this stable ID only enables GA4 deduplication.
     attempt.purchase=trackEvent("purchase",{...commerce(id,attempt),transaction_id:`rv-${id}-${attempt.id}`}); save(id,attempt);
   } catch { /* Never affect unlock. */ }
 }

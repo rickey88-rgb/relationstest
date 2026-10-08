@@ -11,22 +11,22 @@ import { useAudhdAnalytics } from "./analytics";
 const card = "mt-7 space-y-5 rounded-[26px] border border-neutral-200 bg-white p-5 leading-7 shadow-sm sm:p-7";
 const btn = "inline-flex min-h-12 items-center justify-center rounded-xl px-5 py-3 font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900";
 
-function freeMainResult(profileType: Report["profileType"]) {
-  if (profileType === "Kombinerat dragmönster" || profileType === "Mycket framträdande kombinationsmönster") return "Dina svar visar tydliga drag från både ADHD- och autismrelaterade områden.";
-  if (profileType === "ADHD-dominerat kombinationsmönster" || profileType === "Främst ADHD-liknande profil") return "Din profil lutar främst åt ADHD-relaterade drag, med vissa autismrelaterade inslag.";
-  if (profileType === "Autismdominerat kombinationsmönster" || profileType === "Främst autismrelaterad profil") return "Dina svar visar främst autismrelaterade drag, medan ADHD-delen är mindre framträdande.";
-  if (profileType === "Vissa drag från båda områdena") return "Dina svar visar vissa drag från både ADHD- och autismrelaterade områden.";
-  if (profileType === "Gränsnära/ojämn profil") return "Dina svar visar ett ojämnt eller gränsnära mönster som behöver tolkas försiktigt.";
-  return "Dina svar visar inget tydligt kombinerat mönster.";
-}
-
-function secondaryTeaser(report: Report) {
-  const hasStrongPeak = report.outliers.some(item => item.kind === "stark topp");
-  if (report.teaser.type === "friction" && hasStrongPeak) return "Ett av dina åtta områden ligger tydligt högre än resten av profilen.";
-  if (hasStrongPeak) return "Din individuella kombination visar ett tydligt mönster som inte syns om man bara tittar på ADHD och autism var för sig.";
-  if (Math.abs(report.indices.adhdIndex - report.indices.autismIndex) >= 15) return "Det finns mer att förstå i hur de två huvudområdena samspelar än i en totalsiffra.";
-  if (report.indices.frictionIndex >= 50 || report.indices.maskingIndex >= 60) return "Flera viktiga mönster framträder först när hela din individuella kombination sätts i sammanhang.";
-  return "Din fullständiga analys visar hur flera områden hänger ihop i just din profil.";
+function freeFinding(report: Report) {
+  // Keep masking, friction and impact/history fully premium, even when one of
+  // them is the report's strongest signal. The free finding is drawn only from
+  // the five core ADHD/autism dimensions and contains no level or score.
+  const findingDimensions = ["A", "B", "C", "D", "E"] as const;
+  const highest = [...findingDimensions].sort((left, right) => report.scores[right] - report.scores[left] || findingDimensions.indexOf(left) - findingDimensions.indexOf(right));
+  const first = highest[0];
+  const second = highest[1];
+  const tied = report.scores[first] === report.scores[second];
+  return {
+    title: tied ? "Två områden framträder mest i dina svar." : "Ett område framträder mest i dina svar.",
+    body: tied
+      ? `${dimensionNames[first]} och ${dimensionNames[second]} ligger lika högt i din självskattning.`
+      : `${dimensionNames[first]} framträder mest i din självskattning.`,
+    teaser: "Den fullständiga analysen undersöker hur ADHD- och autismrelaterade svar samspelar, utan att dra diagnostiska slutsatser.",
+  };
 }
 
 function audhdRecommendations(report: Report): [TestId, TestId] {
@@ -34,61 +34,6 @@ function audhdRecommendations(report: Report): [TestId, TestId] {
   return difference <= -15 ? ["autism_test", "adhd_test"] : ["adhd_test", "autism_test"];
 }
 
-function primaryTeaser(report: Report) {
-  // Masking and friction remain premium-only even when they determine teaser priority.
-  if (report.teaser.type === "friction" || report.teaser.type === "masking") return {
-    title: "Flera intressanta mönster framträder i din profil.",
-    body: "Den fullständiga analysen visar hur de olika delarna hänger ihop utan att reducera resultatet till en totalsiffra.",
-  };
-  if (report.teaser.type === "sensory_peak") return {
-    title: "Ett av dina åtta områden ligger tydligt högre än resten av profilen.",
-    body: "I den fullständiga analysen ser du vilket område det gäller och vad som nyanserar bilden.",
-  };
-  if (report.teaser.type === "generic") return {
-    title: "Din individuella kombination rymmer mer än en totalsiffra.",
-    body: "Den fullständiga analysen visar hur de åtta områdena kan hänga ihop i just din profil.",
-  };
-  return report.teaser;
-}
-
-function mapAreasToUnlock(report: Report) {
-  // This is presentation-only prioritisation. It uses existing report signals and
-  // never changes scores, the report model, or which answers are saved.
-  const priority = Object.fromEntries(dimensions.map(key => [key, 0])) as Record<typeof dimensions[number], number>;
-  const keyFindings = report.keyFindings.join(" ").toLocaleLowerCase("sv-SE");
-
-  for (const outlier of report.outliers) {
-    priority[outlier.key] += outlier.kind === "stark topp" ? 60 : outlier.kind === "tydlig topp" ? 40 : 30;
-  }
-
-  if (report.indices.adhdIndex >= 25) {
-    priority.A += report.scores.A * .6;
-    priority.B += report.scores.B * .4;
-  }
-  if (report.indices.autismIndex >= 25) {
-    priority.C += report.scores.C * .4;
-    priority.D += report.scores.D * .35;
-    priority.E += report.scores.E * .25;
-  }
-  if (Math.abs(report.adhd.difference) >= 12) priority[report.adhd.difference > 0 ? "A" : "B"] += 35;
-  if (report.autism.difference >= 10) priority[report.autism.ranked[0]] += 35;
-  if (report.indices.maskingIndex >= 50) priority.F += 45;
-  else if (report.indices.maskingIndex >= 25) priority.F += 15;
-  if (report.indices.frictionIndex >= 50) priority.G += 45;
-  else if (report.indices.frictionIndex >= 25) priority.G += 15;
-  if (report.impact.combined >= 35) priority.H += 25;
-
-  for (const key of dimensions) {
-    if (keyFindings.includes(dimensionNames[key].toLocaleLowerCase("sv-SE"))) priority[key] += 30;
-  }
-  if (keyFindings.includes("friktion")) priority.G += 30;
-  if (keyFindings.includes("anpassning")) priority.F += 30;
-  if (keyFindings.includes("vardagspåverkan")) priority.H += 30;
-
-  return new Set([...dimensions]
-    .sort((left, right) => priority[left] - priority[right] || dimensions.indexOf(left) - dimensions.indexOf(right))
-    .slice(0, 4));
-}
 
 function hasCompleteSavedState(state: ReturnType<typeof parseState>) {
   return Boolean(state && state.answers.every(value => value >= 0) && state.contextAnswers.every(value => value >= 0));
@@ -213,42 +158,25 @@ export default function AudhdTestPage() {
   if (phase === "questions" || phase === "context") { const isContext = phase === "context"; const item = isContext ? contextQuestions[contextIndex] : questions[questionIndex]; const selected = isContext ? context[contextIndex] : answers[questionIndex]; const current = isContext ? contextIndex + 1 : questionIndex + 1; const total = isContext ? 6 : 48; const options = isContext ? contextQuestions[contextIndex].options : answerLabels; return <>{storageNotice}{recoveryMessage}{invalidRecoveryMessage}<section className={card} aria-labelledby="question"><div className="text-sm text-neutral-600"><span>{isContext ? "Sista frågor" : `Fråga ${current} av 48`}</span></div><progress className="h-2 w-full accent-[#27666A]" value={current - (selected >= 0 ? 0 : 1)} max={total} aria-label="Testets förlopp" /><h2 id="question" className="text-2xl font-semibold leading-snug">{isContext && contextIndex === 0 ? "Några sista frågor hjälper oss sätta dina svar i sammanhang." : item.text}</h2>{isContext && contextIndex === 0 && <p className="text-neutral-600">De ändrar inte dina index. De hjälper bara rapporten att använda ett mer försiktigt och relevant språk.</p>}<div role="group" aria-labelledby="question" className="space-y-2">{options.map((label, value) => <button key={label} type="button" disabled={transitioning} aria-pressed={selected === value} onClick={() => answer(value)} className={`flex min-h-12 w-full items-center rounded-xl border p-3 text-left ${selected === value ? "border-[#202124] bg-[#F1E8E2] font-semibold" : "border-neutral-300 bg-white hover:bg-neutral-50"}`}>{label}</button>)}</div><div className="flex gap-3"><button className={`${btn} border border-neutral-300 bg-white`} type="button" disabled={transitioning || (isContext ? contextIndex === 0 : questionIndex === 0)} onClick={() => isContext ? setContextIndex(contextIndex - 1) : setQuestionIndex(questionIndex - 1)}>Tillbaka</button></div><p className="text-sm text-neutral-600">Dina svar sparas lokalt i den här webbläsaren.</p></section></>; }
   if (phase === "analysis") return <section className={card} aria-busy="true" aria-live="polite"><p className="text-sm uppercase tracking-[.16em] text-neutral-600">Din profil är på väg</p><h2 className="text-3xl font-semibold">Vi analyserar dina svar</h2><div className="space-y-3">{["Analyserar dina svar inom 8 områden…", "Jämför ADHD- och autismrelaterade mönster…", "Identifierar hur områdena samspelar hos dig…"].map((text, i) => <p key={text} className={i <= analysisStep ? "text-neutral-900" : "text-neutral-400"}>✓ {text}</p>)}</div></section>;
   if (!report) return null;
-  const unlockedMapAreas = mapAreasToUnlock(report);
-  const unlockedDimensions = dimensions.filter(key => unlockedMapAreas.has(key));
-  const lockedDimensions = dimensions.filter(key => !unlockedMapAreas.has(key));
-  const rankedUnlockedDimensions = [...unlockedDimensions].sort((left, right) => report.scores[right] - report.scores[left]);
-  const unlockedMapInsight = `I den upplåsta delen är ${dimensionNames[rankedUnlockedDimensions[0]].toLocaleLowerCase("sv-SE")} och ${dimensionNames[rankedUnlockedDimensions[1]].toLocaleLowerCase("sv-SE")} mest framträdande.`;
+  const finding = freeFinding(report);
   if (!unlocked) return <><section ref={standardAnalytics.paywallRef} data-audhd-paywall className={`${card} bg-[#202124] text-white`}>
     <div>
-      <p data-audhd-kicker className="text-sm uppercase tracking-[.16em] text-[#DDE8E3]">Ditt huvudresultat</p>
-      <h2 className="text-3xl font-semibold">{report.profileType}</h2>
-      <p>{freeMainResult(report.profileType)}</p>
-    </div>
-    <div>
       <p data-audhd-kicker className="text-sm uppercase tracking-[.16em] text-[#DDE8E3]">Ett första fynd</p>
-      <h3 className="text-xl font-semibold">{primaryTeaser(report).title}</h3>
-      <p>{primaryTeaser(report).body}</p>
-    </div>
-    <div data-audhd-locked-card className="rounded-2xl border border-white/20 bg-white/10 p-4">
-      <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1"><p className="font-semibold">Din AuDHD-karta</p><p className="text-sm"><span className="sm:hidden">4 av 8 områden upplåsta</span><span className="hidden sm:inline">4 av 8 områden är upplåsta</span></p></div>
-      <p className="mt-2 text-sm"><span className="sm:hidden">Här är den del av profilen du får direkt. De fyra återstående områdena innehåller några av analysens tydligaste samband.</span><span className="hidden sm:inline">Du kan redan se halva din profil. De återstående områdena innehåller några av de tydligaste sambanden och avvikelserna i din analys.</span></p>
-      <div data-audhd-mobile-map className="sm:hidden"><div className="mt-3 grid grid-cols-2 gap-2 text-sm">{unlockedDimensions.map(key => <div data-audhd-free-area key={key} className="rounded-lg border bg-white p-2"><span className="block text-[13px] leading-5">{dimensionNames[key]}</span><strong className="mt-1 block text-xs leading-4">{descriptiveLevel(report.scores[key])}</strong><div data-audhd-free-track className="mt-2 h-1.5 overflow-hidden rounded"><div data-audhd-free-fill className="h-full rounded" style={{ width: `${report.scores[key]}%` }} /></div></div>)}</div><p data-audhd-free-insight className="mt-3 text-xs leading-5">{unlockedMapInsight}</p><div data-audhd-locked-panel className="mt-3 rounded-xl border p-3"><p className="font-semibold"><span aria-hidden="true">🔒</span> 4 områden återstår</p><p className="mt-1 text-xs leading-5">De innehåller några av de tydligaste avvikelserna och sambanden i din profil.</p><div className="mt-3 flex flex-wrap gap-2">{lockedDimensions.map(key => <span data-audhd-locked-chip key={key}><span aria-hidden="true">🔒</span> {dimensionNames[key]}</span>)}</div></div></div>
-      <div data-audhd-desktop-map className="mt-3 hidden grid-cols-2 gap-2 text-sm sm:grid">{dimensions.map(key => unlockedMapAreas.has(key) ? <div data-audhd-free-area key={key} className="min-h-[5.5rem] rounded-lg border bg-white p-2"><div className="space-y-1"><span className="block">{dimensionNames[key]}</span><strong className="block text-xs">{descriptiveLevel(report.scores[key])}</strong></div><div data-audhd-free-track className="mt-2 h-1.5 overflow-hidden rounded"><div data-audhd-free-fill className="h-full rounded" style={{ width: `${report.scores[key]}%` }} /></div></div> : <div data-audhd-locked-area key={key} className="relative min-w-0 min-h-[5.5rem] rounded-lg border p-2"><span data-audhd-locked-title className="block min-w-0 pr-[4.75rem]">{dimensionNames[key]}</span><span data-audhd-lock-status className="absolute right-2 top-2 inline-flex items-center gap-1 whitespace-nowrap text-[11px] font-semibold leading-none"><span aria-hidden="true">🔒</span><span>Låst</span></span><div data-audhd-locked-track className="mt-2 h-1.5 rounded" /></div>)}</div>
+      <h2 className="text-xl font-semibold">{finding.title}</h2>
+      <p>{finding.body}</p>
+      <p className="text-sm text-neutral-200">{finding.teaser}</p>
     </div>
     <div>
-      <p data-audhd-kicker className="text-sm uppercase tracking-[.16em] text-[#DDE8E3]">Fortsatt analys</p>
-      <p>{secondaryTeaser(report)}</p>
-    </div>
-    <div>
-      <h3 className="text-xl font-semibold">I din fullständiga analys ingår</h3>
-      <ul className="mt-3 grid gap-3">
-        <li><strong>Huvudmönster och åtta områden</strong> – se exakt vilka delar som är mest framträdande.</li>
-        <li><strong>Interna konflikter och masking</strong> – förstå hur olika behov förstärker eller motverkar varandra.</li>
-        <li><strong>Vardagspåverkan och utvecklingsmönster</strong> – se hur profilen passar ihop med din vardag och historik.</li>
-        <li><strong>Individuell tolkning</strong> – vad som talar för och emot ett tydligt kombinerat mönster.</li>
+      <h3 className="text-xl font-semibold">Din låsta AuDHD-analys innehåller</h3>
+      <ul className="mt-3 grid gap-3 text-neutral-100">
+        <li>🔒 Profiltyp, ADHD- och autismindex samt AuDHD-karta</li>
+        <li>🔒 Samtliga åtta områden och deras nivåer</li>
+        <li>🔒 Masking, friktion, vardagspåverkan och historik</li>
+        <li>🔒 Sammanvägd tolkning och rapport som PDF</li>
       </ul>
     </div>
-    <div data-audhd-cta-wrap className="pt-6 sm:pt-0"><PaywallCheckoutCTA onClick={checkout} label={<>Lås upp hela analysen – {PRICE_SEK}{"\u00a0"}kr</>} belowCta={<p className="mt-2 text-center text-sm">Engångsbetalning · resultatet öppnas direkt</p>} /></div>
+    <p className="text-sm leading-6 text-neutral-300">AuDHD är ett informellt begrepp för samtidig ADHD och autism. Det här självtestet kan inte fastställa en diagnos.</p>
+    <div data-audhd-cta-wrap className="pt-2 sm:pt-0"><PaywallCheckoutCTA onClick={checkout} label={<>Lås upp min AuDHD-profil · {PRICE_SEK} kr</>} trustText="Engångsbetalning · Ingen prenumeration." /></div>
     {checkoutUnavailable && <p role="alert">Betalning är inte konfigurerad ännu. Dina svar finns kvar lokalt.</p>}
   </section><div data-audhd-restart className="mt-3"><button type="button" className="text-sm underline" onClick={restart}>Gör om testet</button></div></>;
   const [recommendedTest, fallbackTest] = audhdRecommendations(report);

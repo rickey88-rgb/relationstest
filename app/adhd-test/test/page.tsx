@@ -171,22 +171,16 @@ export default function ADHDSelfTestPage() {
     </section>}
     {showResult && (!analyzing || unlocked) && result && <div data-adhd-result>
       {!unlocked ? <section data-flow="paywall" ref={tracking.paywallRef} className="mt-8 space-y-5 rounded-[20px] bg-[#0d0d0d] px-[18px] py-6 leading-7 text-white" aria-labelledby="result-heading">
-        <div className="space-y-3">
-          <h2 id="result-heading" ref={heading} tabIndex={-1} className="text-2xl font-semibold outline-none">Din samlade bild</h2>
-          <p className="text-xl font-semibold text-white">{result.level}</p>
-          <p className="text-neutral-200">{levelTexts[result.level]}</p>
-        </div>
         {freeResult && <div className="space-y-2 rounded-xl bg-white/10 p-4">
-          <h3 className="font-semibold text-white">{freeResult.title}</h3>
+          <h2 id="result-heading" ref={heading} tabIndex={-1} className="text-xl font-semibold text-white outline-none">{freeResult.title}</h2>
           <p className="font-medium text-white">{freeResult.finding}</p>
           <p className="text-neutral-200">{freeResult.explanation}</p>
         </div>}
         <p className="text-sm leading-6 text-neutral-300">Det här är ett självtest, inte en diagnos. Liknande svårigheter kan ha flera orsaker, och en professionell bedömning kan vara relevant om de påverkar vardagen tydligt.</p>
         <div className="space-y-4 border-t border-white/15 pt-5">
-          <h3 className="text-xl font-semibold">Fördjupa ditt resultat</h3>
-          <ul className="space-y-2 text-neutral-200"><li>✓ dina sex områden med nivåer och förklaringar</li><li>✓ din profiltyp och hur områdena samspelar</li><li>✓ vardagspåverkan och vad som stärker eller nyanserar resultatet</li><li>✓ andra möjliga förklaringar och en djupare tolkning</li></ul>
-          <div><p className="text-sm text-neutral-300">Engångsbetalning · Ingen prenumeration</p><p className="text-sm text-neutral-300">Resultatet visas direkt efter betalning</p></div>
-          <PaywallCheckoutCTA onClick={checkout} label={<>Fördjupa mitt resultat · {PRICE_SEK} kr</>} />
+          <h3 className="text-xl font-semibold">Din låsta analys innehåller</h3>
+          <ul className="space-y-2 text-neutral-200"><li>🔒 Din övergripande nivå och vad den bygger på</li><li>🔒 Sex delområden med nivåer och förklaringar</li><li>🔒 Din profiltyp och vardagspåverkan</li><li>🔒 Nyanser, stödjande faktorer och andra möjliga förklaringar</li></ul>
+          <PaywallCheckoutCTA onClick={checkout} label={<>Se min fullständiga analys · {PRICE_SEK} kr</>} trustText="Engångsbetalning · Ingen prenumeration." />
           <button type="button" onClick={restart} className="min-h-11 w-full text-sm text-neutral-300 underline underline-offset-4 hover:text-white">Gör om testet</button>
           {checkoutUnavailable && <p role="status" className="text-neutral-300">Köp är inte tillgängligt just nu. Dina svar finns kvar i den här webbläsaren.</p>}
         </div>

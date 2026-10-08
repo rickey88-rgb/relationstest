@@ -174,18 +174,15 @@ export default function AutismSelfTestPage() {
     </section>}
     {showResult && (!analyzing || unlocked) && result && <div data-autism-result>
       {!unlocked ? <section data-flow="paywall" data-autism-paywall ref={paywallRef} className="mt-8 space-y-3 rounded-[20px] bg-[#0d0d0d] px-[18px] py-5 leading-6 text-white sm:px-6" aria-labelledby="result-heading">
-        <h2 id="result-heading" ref={heading} tabIndex={-1} className="text-2xl font-semibold leading-tight outline-none sm:text-[28px]">Din samlade bild</h2>
-        <p className="text-lg font-semibold leading-7 text-white">{result.level}</p>
-        <p className="text-neutral-200">{levelTexts[result.level]}</p>
-        <h3 className="pt-1 text-xl font-semibold leading-tight text-white">{teaserFinding?.title}</h3>
+        <h2 id="result-heading" ref={heading} tabIndex={-1} className="pt-1 text-xl font-semibold leading-tight text-white outline-none">{teaserFinding?.title}</h2>
         <p className="font-medium text-white">{teaserFinding?.body}</p>
-        <p className="text-sm leading-6 text-neutral-200">Men det är inte det enda som påverkar ditt resultat.</p>
+        <p className="text-sm leading-6 text-neutral-200">Den fullständiga analysen visar hur resten av dina svar påverkar bilden.</p>
         <p className="text-sm leading-6 text-neutral-300">Det här är ett självtest, inte en diagnos. Det kan inte bekräfta eller utesluta autism.</p>
         <div className="h-px bg-white/15" aria-hidden="true" />
         <div className="space-y-3 pt-1 lg:space-y-4">
-          <p className="text-sm font-semibold text-white">Fördjupa ditt resultat</p>
-          <ul className="space-y-3.5 text-sm leading-6 text-neutral-200 lg:space-y-4"><li>🔒 Mönstret som sticker ut mest</li><li>🔒 Dina starkaste områden – och hur tydliga de är</li><li>🔒 Svarskombinationen som förändrar tolkningen</li><li>🔒 Vad som stärker eller tonar ner resultatet</li><li>🔒 Vad dina 30 svar faktiskt pekar mot tillsammans</li></ul>
-          <div className="pt-2"><PaywallCheckoutCTA onClick={checkout} label={<>Fördjupa mitt resultat · {PRICE_SEK} kr</>} trustText="Säker betalning · Engångsbetalning · Ingen prenumeration" trustClassName="text-xs leading-5" /></div>
+          <p className="text-sm font-semibold text-white">Din låsta analys innehåller</p>
+          <ul className="space-y-3.5 text-sm leading-6 text-neutral-200 lg:space-y-4"><li>🔒 Övergripande nivå och förklaring</li><li>🔒 Sex delområden med nivåer och förklaringar</li><li>🔒 Din profil och den sammanvägda tolkningen</li><li>🔒 Vardagspåverkan, långvarighet och nyanser</li></ul>
+          <div className="pt-2"><PaywallCheckoutCTA onClick={checkout} label={<>Se min fullständiga analys · {PRICE_SEK} kr</>} trustText="Engångsbetalning · Ingen prenumeration." trustClassName="text-xs leading-5" /></div>
           {checkoutUnavailable && <p role="status" className="text-neutral-300">Köp är inte tillgängligt just nu. Dina svar finns kvar i den här webbläsaren.</p>}
         </div>
         <button data-flow="restart" type="button" onClick={restart} className="text-sm underline underline-offset-4">Gör om testet</button>
