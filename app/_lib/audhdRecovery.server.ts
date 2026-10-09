@@ -4,6 +4,7 @@ const TOKEN_VERSION = 1;
 const PRODUCT = "audhd";
 const SUPPORT_TOKEN_KIND = "support-recovery";
 const BROWSER_TOKEN_KIND = "browser-unlock";
+const SUPPORT_RECOVERY_SECONDS = 60 * 60 * 48;
 const BROWSER_UNLOCK_SECONDS = 60 * 60 * 24 * 365;
 
 type TokenPayload = { v: number; product: string; kind: string; exp: number; nonce: string };
@@ -41,5 +42,6 @@ function issue(kind: string, expiresInSeconds: number) {
 export const AUDHD_RECOVERY_COOKIE = "rv_audhd_recovery";
 export const audhdBrowserUnlockMaxAge = BROWSER_UNLOCK_SECONDS;
 export function verifyAudhdSupportRecoveryToken(token: string | null) { return verify(token, SUPPORT_TOKEN_KIND); }
+export function issueAudhdSupportRecoveryToken() { return issue(SUPPORT_TOKEN_KIND, SUPPORT_RECOVERY_SECONDS); }
 export function issueAudhdBrowserUnlockToken() { return issue(BROWSER_TOKEN_KIND, BROWSER_UNLOCK_SECONDS); }
 export function verifyAudhdBrowserUnlockToken(token: string | null) { return verify(token, BROWSER_TOKEN_KIND); }

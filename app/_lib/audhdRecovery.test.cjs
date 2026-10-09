@@ -20,6 +20,14 @@ assert.equal(recovery.verifyAudhdSupportRecoveryToken(`${valid}x`), null);
 assert.equal(recovery.verifyAudhdSupportRecoveryToken(supportToken({ v: 1, product: "adhd", kind: "support-recovery", exp: future, nonce: "support-case-sara-123" })), null);
 assert.equal(recovery.verifyAudhdSupportRecoveryToken(supportToken({ v: 1, product: "audhd", kind: "support-recovery", exp: future - 60 * 60 - 1, nonce: "support-case-sara-123" })), null);
 
+const issuedAt = Math.floor(Date.now() / 1000);
+const issuedSupportRecovery = recovery.issueAudhdSupportRecoveryToken();
+const issuedSupportPayload = recovery.verifyAudhdSupportRecoveryToken(issuedSupportRecovery);
+assert(issuedSupportPayload);
+assert(issuedSupportPayload.exp >= issuedAt + (48 * 60 * 60));
+assert(issuedSupportPayload.exp <= issuedAt + (48 * 60 * 60) + 1);
+assert.equal(recovery.verifyAudhdBrowserUnlockToken(issuedSupportRecovery), null);
+
 const browserUnlock = recovery.issueAudhdBrowserUnlockToken();
 assert(recovery.verifyAudhdBrowserUnlockToken(browserUnlock));
 assert.equal(recovery.verifyAudhdSupportRecoveryToken(browserUnlock), null);
