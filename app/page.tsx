@@ -113,7 +113,9 @@ export default function Landing() {
                 <QuickLink href="/adhd-test" label="ADHD-test" />
                 <QuickLink href="/autism-test" label="Autismtest" />
                 <QuickLink href="/audhd-test" label="AuDHD-test" />
-                <QuickLink href="/test" label="Relationstester" />
+                <HomeScrollLink targetId="relationship-tests" className={styles.quickLink}>
+                  Relationstester <span className={styles.quickArrow} aria-hidden="true">→</span>
+                </HomeScrollLink>
               </div>
             </nav>
             <HomeScrollLink targetId="relationship-tests" className={styles.allTestsLink}>Utforska fler tester <span aria-hidden="true">→</span></HomeScrollLink>
@@ -207,7 +209,7 @@ export default function Landing() {
 }
 
 function QuickLink({ href, label }: { href: string; label: string }) {
-  return <Link href={href} className={styles.quickLink}>{label}<span aria-hidden="true">→</span></Link>;
+  return <Link href={href} className={styles.quickLink}>{label}<span className={styles.quickArrow} aria-hidden="true">→</span></Link>;
 }
 
 function TestLinks({ tests }: { tests: Test[] }) {
