@@ -1,6 +1,6 @@
 import { testConfig, type TestId } from "../_analytics/config";
 import { BOOK_OFFER_PRICES } from "../_lib/bookOffers";
-import { ADHD_DELUXE_SALE_ENABLED } from "../_lib/featureFlags";
+import { ADHD_DELUXE_SALE_ENABLED, AUTISM_BOOK_SALE_ENABLED } from "../_lib/featureFlags";
 
 export type ProductType = "test" | "book";
 export type BookProductId = "audhd_book" | "autism_book" | "adhd_deluxe";
@@ -74,7 +74,7 @@ export const productCatalog = {
     price: BOOK_OFFER_PRICES.autism.analysis,
     ordinaryPrice: BOOK_OFFER_PRICES.autism.ordinary,
     currency: "SEK",
-    enabled: true,
+    enabled: AUTISM_BOOK_SALE_ENABLED,
     analyticsId: "autism_book",
     image: { src: "/autism-bok-mockup.png", alt: "På mitt sätt – bok om autism av Elias Voss", width: 1312, height: 1199 },
   },

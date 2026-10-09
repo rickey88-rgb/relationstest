@@ -7,7 +7,6 @@ import adhdGuides from "../content/adhd-guides.json";
 import autismGuides from "../content/autism-guides.json";
 import HomeGuideDirectory, { type HomeGuide } from "./_components/HomeGuideDirectory";
 import HomeScrollLink from "./_components/HomeScrollLink";
-import { ADHD_DELUXE_SALE_ENABLED } from "./_lib/featureFlags";
 
 export const metadata: Metadata = {
   title: "Relationsvarning – tester för destruktiva relationer",
@@ -281,43 +280,6 @@ export default function Landing() {
             alt="Världens bästa bok om AuDHD av Elias Voss"
             width={1312}
             height={1199}
-            sizes="(max-width: 700px) min(100vw - 7rem, 320px), 360px"
-            className={styles.bookMockup}
-          />
-        </div>
-        <div className={`${styles.bookPromo} ${styles.bookPromoAutism}`}>
-          <div className={styles.bookCopy}>
-            <p className={styles.eyebrow}>Ny digital bok</p>
-            <h2 id="autism-book-heading">På mitt sätt</h2>
-            <p>En konkret bok om autism och att få vardagen att fungera på ditt sätt.</p>
-            <div className={styles.bookActions}>
-              <span className={styles.bookPrice}>149 kr</span>
-              <Link href="/autism-bok" className={styles.bookLink}>Läs mer om boken <span aria-hidden="true">→</span></Link>
-            </div>
-          </div>
-          <Image
-            src="/autism-bok-mockup.png"
-            alt="På mitt sätt – bok om autism av Elias Voss"
-            width={1312}
-            height={1199}
-            sizes="(max-width: 700px) min(100vw - 7rem, 320px), 360px"
-            className={styles.bookMockup}
-          />
-        </div>
-        <div className={styles.bookPromo}>
-          <div className={styles.bookCopy}>
-            <p className={styles.eyebrow}>Ny digital bok</p>
-            <h2>ADHD Deluxe</h2>
-            <p>En personlig och praktisk bok om ADHD i verkliga livet. 16 kapitel om kaos, misstag och strategier som faktiskt hjälper.</p>
-            <div className={styles.bookActions}>
-              {ADHD_DELUXE_SALE_ENABLED ? <><span className={styles.bookPrice}>149 kr</span><Link href="/adhd-deluxe" className={styles.bookLink}>Läs mer om boken <span aria-hidden="true">→</span></Link></> : <span className={styles.bookPrice}>Kommer snart</span>}
-            </div>
-          </div>
-          <Image
-            src="/adhd-bok-mockup.png"
-            alt="ADHD Deluxe – bok om ADHD av Elias Voss"
-            width={1448}
-            height={1086}
             sizes="(max-width: 700px) min(100vw - 7rem, 320px), 360px"
             className={styles.bookMockup}
           />
