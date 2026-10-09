@@ -7,14 +7,9 @@ import styles from "./HomeGuideDirectory.module.css";
 export type HomeGuide = { href: string; label: string; group: string };
 
 const featuredHrefs = [
+  "/audhd",
   "/psykiskt-vald",
-  "/kontrollerande-relation",
-  "/gaslighting-relation",
-  "/silent-treatment-relation",
-  "/love-bombing-relation",
-  "/destruktivt-forhallande",
-  "/manipulativ-partner",
-  "/traumabindning-i-relation",
+  "/dissociation",
 ];
 
 export default function HomeGuideDirectory({ guides }: { guides: HomeGuide[] }) {

@@ -17,403 +17,204 @@ export const metadata: Metadata = {
   },
 };
 
-const selfTests = [
-  {
-    href: "/angest-test",
-    title: "Ångesttest för vuxna",
-    category: "Självtest för vuxna",
-    description: "Utforska ständig oro, kroppslig spänning, sömn, koncentration och vardagspåverkan med 30 frågor.",
-    cta: "Gör självtestet",
-  },
-  {
-    href: "/autism-test",
-    title: "Autismtest för vuxna",
-    category: "Självtest för vuxna",
-    description: "Utforska socialt samspel, kommunikation, sensorik, förutsägbarhet, intressen och vardagspåverkan med 30 frågor.",
-    cta: "Gör självtestet",
-  },
-  {
-    href: "/audhd-test",
-    title: "AuDHD-test",
-    category: "ADHD OCH AUTISM SAMTIDIGT",
-    description: "Utforska hur ADHD- och autismrelaterade drag samspelar hos dig – och om olika behov förstärker eller motverkar varandra.",
-    cta: "Gör självtestet",
-  },
-  {
-    href: "/hsp-test",
-    title: "HSP-test",
-    category: "Självtest för vuxna",
-    description: "Utforska överstimulering, sinnesintryck, känslor och återhämtning med 30 frågor om högkänslighet.",
-    cta: "Gör självtestet",
-  },
-  {
-    href: "/ptsd-test",
-    title: "PTSD-test",
-    category: "Självtest för vuxna",
-    description: "30 frågor om återupplevande, undvikande, vaksamhet och andra reaktioner efter svåra upplevelser.",
-    cta: "Gör självtestet",
-  },
-  {
-    href: "/adhd-test",
-    title: "ADHD-test för vuxna",
-    category: "Självtest för vuxna",
-    description: "Utforska uppmärksamhet, organisation, impulsivitet, inre rastlöshet, tid och vardagspåverkan med 30 frågor.",
-    cta: "Gör självtestet",
-  },
-  {
-    href: "/narcissism-sjalvtest",
-    title: "Narcissism – självtest",
-    category: "Självtest om egna drag",
-    description: "Utforska dina egna narcissistiska drag och få en personlig profil inom sex områden.",
-    cta: "Gör självtestet",
-  },
-  {
-    href: "/iq-test",
-    title: "IQ-test",
-    category: "Kognitivt självtest",
-    description: "40 frågor inom fem kognitiva områden. Få ett orienterande IQ-estimat och se din kognitiva profil.",
-    cta: "Gör självtestet",
-  },
+type Test = {
+  href: string;
+  title: string;
+  description: string;
+  label?: string;
+};
+
+const neurodiversityTests: Test[] = [
+  { href: "/adhd-test", title: "ADHD-test för vuxna", description: "Utforska uppmärksamhet, organisation, impulsivitet, inre rastlöshet, tid och vardagspåverkan med 30 frågor." },
+  { href: "/autism-test", title: "Autismtest för vuxna", description: "Utforska socialt samspel, kommunikation, sensorik, förutsägbarhet, intressen och vardagspåverkan med 30 frågor." },
+  { href: "/audhd-test", title: "AuDHD-test", label: "ADHD och autism samtidigt", description: "Utforska hur ADHD- och autismrelaterade drag samspelar hos dig – och om olika behov förstärker eller motverkar varandra." },
 ];
 
-const relationTests = [
-  {
-    href: "/test",
-    title: "Relationstest – varningssignaler",
-    category: "Fördjupningstest",
-    description:
-      "42 frågor om kontroll, manipulation, psykisk misshandel och andra återkommande mönster i en relation.",
-  },
-  {
-    href: "/psykisk-misshandel-relation/test",
-    title: "Psykisk misshandel-test",
-    category: "Fördjupningstest",
-    description:
-      "Undersök återkommande mönster av kontroll, hot, förnedring och psykisk nedbrytning.",
-  },
-  {
-    href: "/narcissist-i-en-relation",
-    title: "Lever du med en narcissist?",
-    category: "Fördjupningstest",
-    description:
-      "Undersök narcissistiska relationsmönster som manipulation, empatibrist, nedvärdering och starka reaktioner på kritik.",
-  },
-  {
-    href: "/anknytningstest",
-    title: "Anknytningstest",
-    category: "Fördjupningstest",
-    description:
-      "Utforska hur du reagerar på närhet, osäkerhet och känslomässigt avstånd i romantiska relationer.",
-  },
-   {
-    href: "/medberoendetest",
-    title: "Medberoendetest",
-    category: "Fördjupningstest",
-    description:
-      "Undersök mönster av självuppoffring, överansvar, svårigheter med gränser och starkt fokus på partnerns behov.",
-  },
-  {
-  href: "/gaslightingtest/test",
-  title: "Gaslightingtest",
-  category: "Fördjupningstest",
-  description:
-    "Undersök återkommande mönster av förnekande, skuldvändning och ifrågasättande som kan få dig att tvivla på din egen upplevelse.",
-},
-  {
-    href: "/traumabindningtest/test",
-    title: "Traumabindningstest",
-    category: "Fördjupningstest",
-    description:
-      "Utforska starka känsloband trots smärta, hopp om förändring och svårigheter att skapa avstånd i en relation.",
-  },
+const relationshipTests: Test[] = [
+  { href: "/test", title: "Relationstest – varningssignaler", description: "42 frågor om kontroll, manipulation, psykisk misshandel och andra återkommande mönster i en relation." },
+  { href: "/psykisk-misshandel-relation/test", title: "Psykisk misshandel-test", description: "Undersök återkommande mönster av kontroll, hot, förnedring och psykisk nedbrytning." },
+  { href: "/narcissist-i-en-relation", title: "Narcissist i en relation", description: "Undersök relationsmönster som manipulation, empatibrist, nedvärdering och starka reaktioner på kritik." },
+  { href: "/anknytningstest", title: "Anknytningstest", description: "Utforska hur du reagerar på närhet, osäkerhet och känslomässigt avstånd i romantiska relationer." },
+  { href: "/medberoendetest", title: "Medberoendetest", description: "Undersök mönster av självuppoffring, överansvar, svårigheter med gränser och fokus på partnerns behov." },
+  { href: "/gaslightingtest/test", title: "Gaslightingtest", description: "Undersök mönster av förnekande, skuldvändning och ifrågasättande som kan få dig att tvivla på din upplevelse." },
+  { href: "/traumabindningtest/test", title: "Traumabindningstest", description: "Utforska starka känsloband trots smärta, hopp om förändring och svårigheter att skapa avstånd i en relation." },
+];
+
+const wellbeingTests: Test[] = [
+  { href: "/angest-test", title: "Ångesttest för vuxna", description: "Utforska ständig oro, kroppslig spänning, sömn, koncentration och vardagspåverkan med 30 frågor." },
+  { href: "/ptsd-test", title: "PTSD-test", description: "30 frågor om återupplevande, undvikande, vaksamhet och andra reaktioner efter svåra upplevelser." },
+  { href: "/hsp-test", title: "HSP-test", description: "Utforska överstimulering, sinnesintryck, känslor och återhämtning med 30 frågor om högkänslighet." },
+  { href: "/iq-test", title: "IQ-test", label: "Kognitivt självtest", description: "40 frågor inom fem kognitiva områden. Få ett orienterande IQ-estimat och se din kognitiva profil." },
+  { href: "/narcissism-sjalvtest", title: "Narcissism – självtest", label: "Självtest om egna drag", description: "Utforska egna narcissistiska drag och få en personlig profil inom sex områden." },
+];
+
+const testGroups = [
+  { id: "npf-tests", eyebrow: "NPF och neurodiversitet", title: "ADHD, autism och AuDHD", description: "Utforska återkommande drag och behov kring fokus, vardag, socialt samspel och återhämtning.", tests: neurodiversityTests },
+  { id: "relationship-tests", eyebrow: "Relationer och beteenden", title: "Mönster i nära relationer", description: "Få hjälp att sätta ord på det som känns otydligt, svårt eller återkommer i en relation.", tests: relationshipTests },
+  { id: "wellbeing-tests", eyebrow: "Psykisk hälsa och självkännedom", title: "Vardag, mående och återhämtning", description: "Självtester om upplevelser, belastning och hur du fungerar i vardagen.", tests: wellbeingTests },
 ];
 
 const homeGuides: HomeGuide[] = [
-  { href: "/audhd", label: "Vad är AuDHD? ADHD och autism samtidigt", group: "NPF & självtest" },
-  ...autismGuides.map((guide) => ({ href: `/${guide.slug}`, label: guide.label, group: "NPF & självtest" })),
-  ...adhdGuides.map((guide) => ({ href: `/${guide.slug}`, label: guide.label, group: "NPF & självtest" })),
-  { href: "/anknytning", label: "Anknytning i relationer", group: "Relationer & mönster" },
-  { href: "/medberoende", label: "Medberoende – överansvar och gränser", group: "Relationer & mönster" },
-  { href: "/psykisk-misshandel", label: "Psykisk misshandel — tecken, exempel och hjälp", group: "Psykiskt våld & stöd" },
-  { href: "/psykiskt-vald", label: "Psykiskt våld — guide till beteenden, lagen och stöd", group: "Psykiskt våld & stöd" },
-  { href: "/tecken-pa-psykopat", label: "Tecken på att du lever med en psykopat", group: "Relationer & mönster" },
-  { href: "/gaslighting-relation", label: "Gaslighting i relationer — tecken, exempel och vad du kan göra", group: "Manipulation & påverkan" },
-  { href: "/narcissist-i-en-relation", label: "Narcissist i en relation — tecken, beteenden och varningssignaler", group: "Relationer & mönster" },
-  { href: "/manipulativ-partner", label: "Hur vet man om någon är manipulativ?", group: "Manipulation & påverkan" },
-  { href: "/kontrollerande-relation", label: "Varför känner jag mig kontrollerad i min relation?", group: "Relationer & mönster" },
-  { href: "/psykopatiska-drag-relation", label: "Psykopatiska drag i relation — tidiga signaler", group: "Relationer & mönster" },
-  { href: "/silent-treatment-relation", label: "Silent treatment i relation — när tystnad blir makt", group: "Manipulation & påverkan" },
-  { href: "/love-bombing-relation", label: "Love bombing i relation — när intensitet blir manipulation", group: "Manipulation & påverkan" },
-  { href: "/destruktivt-forhallande", label: "Destruktivt förhållande — tecken och mönster", group: "Relationer & mönster" },
-  { href: "/skillnad-psykopat-narcissist", label: "Skillnad på psykopat och narcissist", group: "Relationer & mönster" },
-  { href: "/psykisk-misshandel-relation", label: "Psykisk misshandel i relation — tecken, mönster och konsekvenser", group: "Psykiskt våld & stöd" },
-  { href: "/vald-i-nara-relation", label: "Våld i nära relation — tecken och var du kan få hjälp", group: "Psykiskt våld & stöd" },
-  { href: "/jag-ar-radd-att-min-partner-ska-sla-mig", label: "Jag är rädd att min partner ska slå mig — vad kan jag göra?", group: "Psykiskt våld & stöd" },
-  { href: "/traumabindning-i-relation", label: "Traumabindning i en relation — tecken och varför det är svårt att lämna", group: "Manipulation & påverkan" },
-  { href: "/svartsjuk-partner", label: "Svartsjuk partner — när oro blir kontroll", group: "Relationer & mönster" },
-  { href: "/stanna-eller-ga", label: "Stanna eller gå — strukturera dina frågor", group: "Relationer & mönster" },
-  { href: "/granser-i-relation", label: "Gränser i relationer", group: "Relationer & mönster" },
-  { href: "/stonewalling-relation", label: "Stonewalling och känslomässig nedstängning", group: "Manipulation & påverkan" },
-  { href: "/adhd-och-relationer", label: "ADHD och relationer", group: "NPF & självtest" },
+  { href: "/audhd", label: "Vad är AuDHD? ADHD och autism samtidigt", group: "NPF och neurodiversitet" },
+  ...autismGuides.map((guide) => ({ href: `/${guide.slug}`, label: guide.label, group: "NPF och neurodiversitet" })),
+  ...adhdGuides.map((guide) => ({ href: `/${guide.slug}`, label: guide.label, group: "NPF och neurodiversitet" })),
+  { href: "/dissociation", label: "Dissociation – vad det är och hur det kan kännas", group: "Psykisk hälsa och välmående" },
+  { href: "/prokrastinering", label: "Prokrastinering – varför vi skjuter upp", group: "Psykisk hälsa och välmående" },
+  { href: "/exekutiva-funktioner", label: "Exekutiva funktioner – planering, arbetsminne och självreglering", group: "Psykisk hälsa och välmående" },
+  { href: "/anknytning", label: "Anknytning i relationer", group: "Relationer och mönster" },
+  { href: "/medberoende", label: "Medberoende – överansvar och gränser", group: "Relationer och mönster" },
+  { href: "/psykisk-misshandel", label: "Psykisk misshandel — tecken, exempel och hjälp", group: "Psykiskt våld och stöd" },
+  { href: "/psykiskt-vald", label: "Psykiskt våld — guide till beteenden, lagen och stöd", group: "Psykiskt våld och stöd" },
+  { href: "/tecken-pa-psykopat", label: "Tecken på att du lever med en psykopat", group: "Relationer och mönster" },
+  { href: "/gaslighting-relation", label: "Gaslighting i relationer — tecken, exempel och vad du kan göra", group: "Manipulation och påverkan" },
+  { href: "/narcissist-i-en-relation", label: "Narcissist i en relation — tecken, beteenden och varningssignaler", group: "Relationer och mönster" },
+  { href: "/manipulativ-partner", label: "Hur vet man om någon är manipulativ?", group: "Manipulation och påverkan" },
+  { href: "/kontrollerande-relation", label: "Varför känner jag mig kontrollerad i min relation?", group: "Relationer och mönster" },
+  { href: "/psykopatiska-drag-relation", label: "Psykopatiska drag i relation — tidiga signaler", group: "Relationer och mönster" },
+  { href: "/silent-treatment-relation", label: "Silent treatment i relation — när tystnad blir makt", group: "Manipulation och påverkan" },
+  { href: "/love-bombing-relation", label: "Love bombing i relation — när intensitet blir manipulation", group: "Manipulation och påverkan" },
+  { href: "/destruktivt-forhallande", label: "Destruktivt förhållande — tecken och mönster", group: "Relationer och mönster" },
+  { href: "/skillnad-psykopat-narcissist", label: "Skillnad på psykopat och narcissist", group: "Relationer och mönster" },
+  { href: "/psykisk-misshandel-relation", label: "Psykisk misshandel i relation — tecken, mönster och konsekvenser", group: "Psykiskt våld och stöd" },
+  { href: "/vald-i-nara-relation", label: "Våld i nära relation — tecken och var du kan få hjälp", group: "Psykiskt våld och stöd" },
+  { href: "/jag-ar-radd-att-min-partner-ska-sla-mig", label: "Jag är rädd att min partner ska slå mig — vad kan jag göra?", group: "Psykiskt våld och stöd" },
+  { href: "/traumabindning-i-relation", label: "Traumabindning i en relation — tecken och varför det är svårt att lämna", group: "Manipulation och påverkan" },
+  { href: "/svartsjuk-partner", label: "Svartsjuk partner — när oro blir kontroll", group: "Relationer och mönster" },
+  { href: "/stanna-eller-ga", label: "Stanna eller gå — strukturera dina frågor", group: "Relationer och mönster" },
+  { href: "/granser-i-relation", label: "Gränser i relationer", group: "Relationer och mönster" },
+  { href: "/stonewalling-relation", label: "Stonewalling och känslomässig nedstängning", group: "Manipulation och påverkan" },
+  { href: "/adhd-och-relationer", label: "ADHD och relationer", group: "NPF och neurodiversitet" },
 ];
 
 export default function Landing() {
   return (
     <main className={styles.home}>
-      {/* Topbar */}
       <header className={styles.header}>
         <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
           <Brand className={styles.brand} markClassName={styles.brandMark} />
           <div className="flex items-center gap-3 text-xs text-neutral-600">
-            <span className="inline-flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-neutral-900" />
-              Anonymt
-            </span>
-            <span className="hidden sm:inline">•</span>
-            <span className="hidden sm:inline">Ingen registrering</span>
-            <span className="hidden sm:inline">•</span>
-            <span className="hidden sm:inline">Direkt resultat</span>
+            <span className="inline-flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-neutral-900" />Anonymt</span>
+            <span className="hidden sm:inline">•</span><span className="hidden sm:inline">Ingen registrering</span>
+            <span className="hidden sm:inline">•</span><span className="hidden sm:inline">Direkt resultat</span>
           </div>
         </div>
       </header>
 
-      {/* Home-only editorial hero */}
-      <section className={styles.hero}>
+      <section className={styles.hero} aria-labelledby="home-heading">
         <div className={styles.heroGrid}>
-          {/* Left: Editorial copy */}
           <div className={styles.heroCopy}>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-neutral-500">
-              Relationer • NPF • psykisk hälsa
-            </p>
+            <p className={styles.heroEyebrow}>Självtester, guider och verktyg</p>
+            <h1 id="home-heading">Förstå dig själv. Förstå dina relationer.</h1>
+            <p className={styles.heroIntro}>Självtester och guider som hjälper dig att förstå mönster i vardagen, i nära relationer och i hur du fungerar.</p>
 
-            <h1 className="mt-4 text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
-              När relationen känns fel — men du kan inte sätta fingret på varför.
-            </h1>
-
-            <div className="mt-4">
-              <p className={styles.heroBridge}>
-                Ibland handlar det om relationen till någon annan. Ibland handlar det om relationen till dig själv.
-              </p>
-            </div>
-
-            <p className="mt-5 text-base leading-relaxed text-neutral-700">
-              Utforska dina relationer, beteendemönster och hur du fungerar i vardagen.
-              Här hittar du självtester, guider och <Link href="#bocker" className="underline decoration-neutral-400 underline-offset-4 hover:decoration-neutral-700">böcker</Link> om relationer, ADHD, autism, AuDHD,
-              ångest, trauma och andra områden inom psykisk hälsa och självreflektion.
-            </p>
-            <HomeScrollLink targetId="self-tests" className={styles.primary}>Utforska våra självtester <span aria-hidden="true">→</span></HomeScrollLink>
-            <p className="mt-3 text-sm text-neutral-600">eller bläddra vidare till våra <HomeScrollLink targetId="relation-tests" className="underline underline-offset-4">relationstester</HomeScrollLink> <span aria-hidden="true">↓</span></p>
-            <p className="mt-3 flex flex-wrap items-center gap-x-2 text-sm text-neutral-600">
-              <Link href="/metodik" className="inline-flex min-h-11 items-center underline underline-offset-4">Forskning och metodik</Link>
-              <span aria-hidden="true">•</span><span>Anonymt</span>
-              <span aria-hidden="true">•</span><span>Ingen registrering</span>
-            </p>
-
+            <nav className={styles.quickStart} aria-label="Hitta rätt test direkt">
+              <p>Hitta rätt direkt</p>
+              <div>
+                <QuickLink href="/adhd-test" label="ADHD-test" />
+                <QuickLink href="/autism-test" label="Autismtest" />
+                <QuickLink href="/audhd-test" label="AuDHD-test" />
+                <QuickLink href="/test" label="Relationstester" />
+              </div>
+            </nav>
+            <HomeScrollLink targetId="relationship-tests" className={styles.allTestsLink}>Utforska fler tester <span aria-hidden="true">→</span></HomeScrollLink>
           </div>
 
           <div className={styles.heroArt} aria-hidden="true">
             <span className={styles.artLabel}>Relationsvarning / Självreflektion</span>
             <svg viewBox="0 0 400 330" fill="none" focusable="false">
-              <ellipse cx="200" cy="290" rx="145" ry="12" fill="#24312B" opacity=".05" />
-              {/* Two inward-facing profiles, with a shared space for reflection. */}
-              <path d="M52 278c0-50 25-75 66-85v-24c-19-10-29-28-29-53 0-31 19-54 46-54 26 0 43 20 43 47l13 22-16 7v21c0 15-13 23-28 23v15c34 12 55 39 55 81Z" fill="#D7E0D6" />
-              <path d="M348 278c0-44-24-65-62-77v-25c18-10 28-28 28-52 0-30-18-52-44-52-25 0-42 19-42 46l-13 21 16 7v20c0 15 12 23 27 23v15c-32 12-52 35-52 74Z" fill="#E9D1CF" />
-              <path d="M145 85c18 5 26 17 26 34l12 16-15 6v17c0 12-11 17-24 17m112-80c-16 5-22 18-22 31l-12 16 15 6v16c0 11 10 17 23 17" stroke="#68796A" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M155 124h6m80 8h6" stroke="#24312B" strokeWidth="2" strokeLinecap="round" />
+              <ellipse cx="200" cy="290" rx="145" ry="12" fill="#17263D" opacity=".05" />
+              <path d="M52 278c0-50 25-75 66-85v-24c-19-10-29-28-29-53 0-31 19-54 46-54 26 0 43 20 43 47l13 22-16 7v21c0 15-13 23-28 23v15c34 12 55 39 55 81Z" fill="#DCE6EF" />
+              <path d="M348 278c0-44-24-65-62-77v-25c18-10 28-28 28-52 0-30-18-52-44-52-25 0-42 19-42 46l-13 21 16 7v20c0 15 12 23 27 23v15c-32 12-52 35-52 74Z" fill="#F0E4D1" />
+              <path d="M145 85c18 5 26 17 26 34l12 16-15 6v17c0 12-11 17-24 17m112-80c-16 5-22 18-22 31l-12 16 15 6v16c0 11 10 17 23 17" stroke="#526075" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M155 124h6m80 8h6" stroke="#17263D" strokeWidth="2" strokeLinecap="round" />
               <circle cx="200" cy="231" r="43" fill="#FFFDFB" fillOpacity=".85" stroke="#B8B9AA" />
-              <path d="m200 250-19-19c-13-13 4-28 19-13 15-15 32 0 19 13Z" stroke="#9D5663" strokeWidth="2" strokeLinejoin="round" />
-              <path d="M108 244c22 20 40 18 59 5m126 0c-20 16-41 14-59 0" stroke="#68796A" strokeWidth="1.8" strokeLinecap="round" />
-              <path d="M200 63v12m-6-6h12" stroke="#9D5663" strokeWidth="1.5" strokeLinecap="round" />
+              <path d="m200 250-19-19c-13-13 4-28 19-13 15-15 32 0 19 13Z" stroke="#C69B60" strokeWidth="2" strokeLinejoin="round" />
+              <path d="M108 244c22 20 40 18 59 5m126 0c-20 16-41 14-59 0" stroke="#526075" strokeWidth="1.8" strokeLinecap="round" />
+              <path d="M200 63v12m-6-6h12" stroke="#C69B60" strokeWidth="1.5" strokeLinecap="round" />
             </svg>
             <p>Ett stöd för att se<br /><em>mönster tydligare.</em></p>
             <span className={styles.artLabel}>Beteenden. Upplevelser. Förståelse.</span>
           </div>
-          <div className={styles.trust}>
-            <p><span aria-hidden="true">01</span> Strukturerade frågor</p>
-            <p><span aria-hidden="true">02</span> Direkt resultat</p>
-            <p><span aria-hidden="true">03</span> Ingen registrering</p>
+        </div>
+      </section>
+
+      <section id="test-directory" aria-labelledby="tests-heading" className={`${styles.section} ${styles.testDirectory} scroll-mt-24`}>
+        <p className={styles.eyebrow}>Utforska testerna</p>
+        <h2 id="tests-heading">Välj det du vill förstå bättre</h2>
+        <p className={styles.sectionIntro}>Alla tester är anonyma och leder direkt till en egen testlandning. Välj ett område som känns relevant för dig just nu.</p>
+        <div className={styles.testGroups}>
+          {testGroups.map((group) => (
+            <section key={group.id} id={group.id} className={styles.testGroup} aria-labelledby={`${group.id}-heading`}>
+              <p className={styles.eyebrow}>{group.eyebrow}</p>
+              <h3 id={`${group.id}-heading`}>{group.title}</h3>
+              <p>{group.description}</p>
+              <TestLinks tests={group.tests} />
+            </section>
+          ))}
+        </div>
+      </section>
+
+      <section id="bocker" aria-labelledby="books-heading" className={`${styles.section} ${styles.books}`}>
+        <div className={styles.booksHeading}>
+          <p className={styles.eyebrow}>Böcker och verktyg</p>
+          <h2 id="books-heading">För dig som vill använda det du lärt dig</h2>
+          <p>Konkreta och lättlästa böcker för vardagen, när du vill förstå mer och pröva verktyg i din egen takt.</p>
+        </div>
+        <div className={styles.bookGrid}>
+          <article className={styles.bookCard}>
+            <Image src="/audhd-bok-mockup.png" alt="Världens bästa bok om AuDHD av Elias Voss" width={1312} height={1199} sizes="(max-width: 700px) min(100vw - 5rem, 250px), 280px" className={styles.bookMockup} />
+            <p className={styles.eyebrow}>Digital bok · 149 kr</p><h3>Världens bästa bok om AuDHD</h3><p>10 konkreta sätt att få livet att fungera när ADHD och autism drar åt varsitt håll.</p>
+            <Link href="/audhd-bok" className={styles.bookLink}>Läs mer om boken <span aria-hidden="true">→</span></Link>
+          </article>
+          <article className={styles.bookCard}>
+            <Image src="/adhd-bok-mockup.png" alt="ADHD Deluxe – bok om ADHD av Elias Voss" width={1448} height={1086} sizes="(max-width: 700px) min(100vw - 5rem, 250px), 280px" className={styles.bookMockup} />
+            <p className={styles.eyebrow}>Digital bok</p><h3>ADHD Deluxe</h3><p>En personlig och praktisk bok om ADHD i verkliga livet.</p>
+            <span className={styles.comingSoon}>Kommer snart</span>
+          </article>
+          <article className={styles.bookCard}>
+            <Image src="/autism-bok-mockup.png" alt="På mitt sätt – bok om autism av Elias Voss" width={1312} height={1199} sizes="(max-width: 700px) min(100vw - 5rem, 250px), 280px" className={styles.bookMockup} />
+            <p className={styles.eyebrow}>Digital bok</p><h3>På mitt sätt</h3><p>En varm och praktisk bok om autism, behov och vardag på egna villkor.</p>
+            <span className={styles.comingSoon}>Kommer snart</span>
+          </article>
+        </div>
+      </section>
+
+      <section aria-labelledby="method-heading" className={`${styles.section} ${styles.method}`}>
+        <div className={styles.methodPanel}>
+          <div className={styles.methodIntro}>
+            <p className={styles.eyebrow}>Metodik och kunskapsbas</p>
+            <h2 id="method-heading">Mer än bara en poängsumma.</h2>
+            <p>Våra tester bygger på etablerad kunskap och strukturerade analysmodeller. Dina svar analyseras inom flera områden och vägs samman för att identifiera personliga mönster, styrkor och svårigheter.</p>
+            <Link href="/metodik" className={styles.textLink}>Så bygger vi våra tester <span aria-hidden="true">→</span></Link>
           </div>
-          {/* Short safety note after the main test */}
-          <aside className={styles.safety}>
-            <p className="text-xs leading-relaxed text-neutral-500">
-              Om du känner dig akut hotad eller i fara, ring 112 eller kontakta någon du litar på.
-            </p>
-          </aside>
         </div>
       </section>
 
-      <section id="relation-tests" aria-labelledby="tests-heading" className={`${styles.section} scroll-mt-24`}>
-        <h2 id="tests-heading" className="text-2xl font-semibold tracking-tight">Relationstester</h2>
-        <p className="mt-3 max-w-3xl leading-relaxed text-neutral-700">
-          Vill du undersöka ett specifikt mönster i relationen? Välj ett fördjupat test nedan.
-        </p>
-        <TestCards items={relationTests} />
-      </section>
-
-      <section id="self-tests" aria-labelledby="self-tests-heading" className={`${styles.section} scroll-mt-24`}>
-        <div className="border-t border-neutral-200/70 pt-10 sm:pt-12">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-neutral-500">
-            Fokus på dig själv
-          </p>
-          <h2 id="self-tests-heading" className="mt-3 text-2xl font-semibold tracking-tight">Självtester</h2>
-          <p className="mt-3 max-w-3xl leading-relaxed text-neutral-700">
-            Självtesterna handlar om dina egna drag, upplevelser och mönster,
-            snarare än om en partner eller relation.
-          </p>
-          <TestCards items={selfTests} />
-        </div>
-      </section>
-
-      <section id="bocker" aria-labelledby="audhd-book-heading" className={`${styles.section} ${styles.bookSection}`}>
-        <div className={styles.bookPromo}>
-          <div className={styles.bookCopy}>
-            <p className={styles.eyebrow}>Ny digital bok</p>
-            <h2 id="audhd-book-heading">Världens bästa bok om AuDHD</h2>
-            <p>10 konkreta sätt att få livet att fungera när ADHD och autism drar åt varsitt håll.</p>
-            <div className={styles.bookActions}>
-              <span className={styles.bookPrice}>149 kr</span>
-              <Link href="/audhd-bok" className={styles.bookLink}>Läs mer om boken <span aria-hidden="true">→</span></Link>
-            </div>
-          </div>
-          <Image
-            src="/audhd-bok-mockup.png"
-            alt="Världens bästa bok om AuDHD av Elias Voss"
-            width={1312}
-            height={1199}
-            sizes="(max-width: 700px) min(100vw - 7rem, 320px), 360px"
-            className={styles.bookMockup}
-          />
-        </div>
-      </section>
-
-      <section aria-labelledby="about-tests-heading" className={`${styles.section} ${styles.about}`}>
-        <div className="max-w-3xl">
-            <div className="rounded-2xl border border-neutral-200/70 p-6 shadow-[0_1px_0_rgba(0,0,0,0.02)]">
-              <h2 id="about-tests-heading" className="text-sm font-semibold tracking-tight">
-                Vad våra tester är — och inte är
-              </h2>
-
-              <div className="mt-4 space-y-5">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-neutral-500">
-                    Testerna är
-                  </p>
-                  <ul className="mt-2 space-y-2 text-sm text-neutral-700">
-                    <li className="flex gap-3">
-                      <span className="mt-1 h-1.5 w-1.5 rounded-full bg-neutral-900" />
-                      Ett stöd för att se mönster tydligare
-                    </li>
-                    <li className="flex gap-3">
-                      <span className="mt-1 h-1.5 w-1.5 rounded-full bg-neutral-900" />
-                      Byggda kring strukturerade frågor om beteenden, upplevelser eller drag
-                    </li>
-                    <li className="flex gap-3">
-                      <span className="mt-1 h-1.5 w-1.5 rounded-full bg-neutral-900" />
-                      Anonyma och enkla att genomföra
-                    </li>
-                  </ul>
-                </div>
-
-                <div className="border-t border-neutral-200/70 pt-5">
-                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-neutral-500">
-                    Testerna är inte
-                  </p>
-                  <ul className="mt-2 space-y-2 text-sm text-neutral-700">
-                    <li className="flex gap-3">
-                      <span className="mt-1 h-1.5 w-1.5 rounded-full bg-neutral-300" />
-                      Diagnoser eller medicinska bedömningar
-                    </li>
-                    <li className="flex gap-3">
-                      <span className="mt-1 h-1.5 w-1.5 rounded-full bg-neutral-300" />
-                      Juridisk rådgivning
-                    </li>
-                    <li className="flex gap-3">
-                      <span className="mt-1 h-1.5 w-1.5 rounded-full bg-neutral-300" />
-                      Ett facit över vad du måste göra
-                    </li>
-                  </ul>
-                </div>
-
-                <div className="rounded-xl bg-neutral-50 p-4">
-                  <p className="text-sm font-semibold text-neutral-900">
-                    Efter testet
-                  </p>
-                  <p className="mt-1 text-sm leading-relaxed text-neutral-700">
-                    Du får en sammanställning baserad på dina svar. Beroende på
-                    test kan du också få en fördjupad analys av de mönster
-                    som framträder.
-                  </p>
-                  <p className="mt-3 text-xs text-neutral-600">
-                    Fördjupning:{" "}
-                    <span className="font-semibold">
-                      Kan finnas beroende på test och dina svar
-                    </span>
-                  </p>
-                </div>
-              </div>
-            </div>
-
-        </div>
-      </section>
-
-      {/* Read more (SEO, minimal) */}
-      <section className={styles.section}>
-        <div className="border-t border-neutral-200/70 pt-6">
-          <p className={styles.eyebrow}>Kunskap & perspektiv</p><h2>Läs mer</h2>
-
-          <div className="text-sm text-neutral-700">
-            <HomeGuideDirectory guides={homeGuides} />
-          </div>
-
-        </div>
+      <section aria-labelledby="guides-heading" className={`${styles.section} ${styles.guides}`}>
+        <p className={styles.eyebrow}>Guider och kunskap</p>
+        <h2 id="guides-heading">Läs vidare i din egen takt</h2>
+        <p className={styles.sectionIntro}>Fördjupa dig i NPF, relationer och psykisk hälsa med guider som ger sammanhang, begrepp och nästa steg.</p>
+        <HomeGuideDirectory guides={homeGuides} />
       </section>
 
       <section className={styles.closing} aria-labelledby="closing-heading">
-        <p className={styles.eyebrow}>Ett stöd för självreflektion</p>
-        <h2 id="closing-heading">Vill du förstå dina<br />relationsmönster bättre?</h2>
-        <Link href="/test" className={styles.primary}>Gör screeningtestet <span aria-hidden="true">→</span></Link>
-        <p className={styles.closingMeta}>Anonymt · Ingen registrering</p>
+        <p className={styles.eyebrow}>Ett stöd för självreflektion</p><h2 id="closing-heading">Börja där det känns mest relevant för dig.</h2><p>Välj ett test, läs en guide eller ta ett steg i taget.</p>
+        <HomeScrollLink targetId="test-directory" className={styles.primary}>Se alla tester <span aria-hidden="true">→</span></HomeScrollLink>
+        <p className={styles.closingMeta}>Anonymt · Ingen registrering · Direkt resultat</p>
       </section>
     </main>
   );
 }
 
-function TestCards({
-  items,
-}: {
-  items: { href: string; title: string; category: string; description: string; meta?: string; cta?: string }[];
-}) {
-  return (
-    <ul className={styles.cards}>
-      {items.map((test, index) => (
-        <li key={test.href} className={styles.card}>
-          <svg className={styles.symbol} viewBox="0 0 48 48" fill="none" aria-hidden="true">
-            {index % 3 === 0 ? <><path d="M13 33V22a11 11 0 0 1 22 0v11" /><path d="M20 33V23a4 4 0 0 1 8 0v10" /></> : index % 3 === 1 ? <><circle cx="19" cy="24" r="10" /><circle cx="29" cy="24" r="10" /></> : <path d="M24 37V14m0 15c-10 0-14-6-14-14 9 0 14 5 14 14Zm0-5c9 0 13-6 13-13-8 0-13 5-13 13Z" />}
-          </svg>
-          <p className={styles.eyebrow}>
-            {test.category}
-          </p>
-          <h3 className="mt-2 text-lg font-semibold leading-snug tracking-tight text-neutral-900">
-            {test.title}
-          </h3>
-          <p className="mt-2 text-sm leading-relaxed text-neutral-700">
-            {test.description}
-          </p>
-          {test.meta && <p className="mt-3 text-xs font-semibold tracking-[0.08em] text-neutral-600">{test.meta}</p>}
-          <div className="mt-auto pt-4">
-            <Link
-              href={test.href}
-              aria-label={`${test.cta ?? "Starta testet"}: ${test.title}`}
-              className={styles.cardLink}
-            >
-              {test.cta ?? "Starta testet"}
-              <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false">
-                <path d="M4 10h12m-5-5 5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </Link>
-          </div>
-        </li>
-      ))}
-    </ul>
-  );
+function QuickLink({ href, label }: { href: string; label: string }) {
+  return <Link href={href} className={styles.quickLink}>{label}<span aria-hidden="true">→</span></Link>;
+}
+
+function TestLinks({ tests }: { tests: Test[] }) {
+  return <ul className={styles.testLinks}>{tests.map((test) => (
+    <li key={test.href}><Link href={test.href} className={styles.testLink}>
+      <span>{test.label && <span className={styles.testLabel}>{test.label}</span>}<strong>{test.title}</strong><span className={styles.testDescription}>{test.description}</span></span>
+      <span className={styles.testArrow} aria-hidden="true">→</span>
+    </Link></li>
+  ))}</ul>;
 }

@@ -3,6 +3,48 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ContentGuide, GuideSection, GuideLinks, textLink } from "../_components/ContentGuide";
 
+type MethodTest = {
+  href: string;
+  title: string;
+  description: string;
+};
+
+const testMethodGroups: { title: string; description: string; tests: MethodTest[] }[] = [
+  {
+    title: "NPF och neurodiversitet",
+    description: "Flera områden vägs samman till en profil som visar både mönster och variation.",
+    tests: [
+      { href: "/adhd-test/test", title: "ADHD-test", description: "Sex områden räknas om till jämförbara nivåer. Fasta regler jämför exekutiva, ouppmärksamma och rastlösa/impulsiva mönster, medan vardagspåverkan läses som kontext." },
+      { href: "/autism-test/test", title: "Autismtest", description: "Sex områden räknas om till jämförbara nivåer. Fasta regler läser socialt samspel, kommunikation, flexibilitet, sensorik, intressen och vardag som en samlad profil." },
+      { href: "/audhd-test/test", title: "AuDHD-test", description: "Åtta områden analyseras i två sammansatta index för ADHD- och autismrelaterade drag, med viktning för de delar som ingår i respektive index." },
+      { href: "/hsp-test/test", title: "HSP-test", description: "Sex lika stora områden jämförs för att visa om känslighet, återhämtning och bearbetning är jämna, tydliga eller kontrasterande." },
+      { href: "/iq-test/test", title: "IQ-test", description: "Fem kognitiva områden och tre svårighetsnivåer ger ett orienterande estimat och en profil av relativa styrkor och svagheter." },
+    ],
+  },
+  {
+    title: "Relationer och beteendemönster",
+    description: "Svar delas upp i konkreta beteenden och relationella mönster, så att viktiga områden inte försvinner i en totalsiffra.",
+    tests: [
+      { href: "/test", title: "Relationstest – varningssignaler", description: "Åtta områden jämförs, och svar om hot eller stark rädsla lyfts separat från den övriga områdesprofilen." },
+      { href: "/psykisk-misshandel-relation/test", title: "Psykisk misshandel", description: "Åtta områden normaliseras och vägs samman, med större betydelse för bland annat upprepning, påverkan och hot." },
+      { href: "/narcissist-i-en-relation/test", title: "Narcissistiska relationsmönster", description: "Åtta områden jämförs och viktas för att synliggöra exempelvis exploatering, empati, kritikreaktioner och påverkan." },
+      { href: "/anknytningstest/test", title: "Anknytningstest", description: "Två direktpoängsatta dimensioner – anknytningsångest och anknytningsundvikande – räknas om till sex delskalor och en förenklad profil." },
+      { href: "/medberoendetest/test", title: "Medberoendetest", description: "Sex områden om bland annat överansvar, gränser och självuppoffring jämförs och sammanfattas i ett helhetsindex." },
+      { href: "/gaslightingtest/test", title: "Gaslightingtest", description: "Helhet och sex områden räknas var för sig så att det går att se vilka mönster – som förnekande eller skuldvändning – som framträder mest." },
+      { href: "/traumabindningtest/test", title: "Traumabindningstest", description: "Sex områden jämförs för att skilja stark anknytning från möjliga återkommande mönster av smärta, hopp och svårigheter att skapa avstånd." },
+    ],
+  },
+  {
+    title: "Psykisk hälsa och självkännedom",
+    description: "Områdesprofiler visar var belastning eller återkommande drag är mest framträdande i just dina svar.",
+    tests: [
+      { href: "/angest-test/test", title: "Ångesttest", description: "Sex områden om oro, spänning, sömn, koncentration och vardagspåverkan jämförs tillsammans med stödjande och nyanserande signaler." },
+      { href: "/ptsd-test/test", title: "PTSD-test", description: "Fem områden om återupplevande, undvikande, tankar och känslor, vaksamhet och vardagspåverkan analyseras tillsammans." },
+      { href: "/narcissism-sjalvtest/test", title: "Narcissism – självtest", description: "Sex områden bildar två beskrivande index för grandiosa och sårbara drag; empatifrågorna poängsätts i omvänd riktning." },
+    ],
+  },
+];
+
 export const metadata: Metadata = {
   title: "Metodik – så bygger Relationsvarning sina tester",
   description: "Så fungerar Relationsvarnings frågor, poäng och automatiska resultat. Läs om kunskapsbakgrund, källor och gränserna för självreflektionstesterna.",
@@ -21,16 +63,32 @@ export default function MethodologyPage() {
       <p>Relationsvarnings egna frågeformuleringar, viktningar och resultatnivåer ska inte likställas med ett publicerat, validerat instrument. Det finns ingen redovisad klinisk validering av dessa tester eller fullständig källkoppling för varje enskild fråga. Forskningsbakgrunden visar vilka ämnen vi anknyter till, inte att testernas träffsäkerhet har bevisats.</p>
     </GuideSection>
     <GuideSection title="Så sammanställs svaren">
-      <p>Testerna använder fasta frågor, svarsalternativ och beräkningsregler. Frågorna grupperas efter ämne. Beräkningen skiljer sig mellan testerna:</p>
-      <ul className="list-disc space-y-3 pl-5">
-        <li><strong>Screeningtestet för relationen:</strong> 42 frågor fördelas på åtta områden som räknas om till 0–100 internt. Fyra heuristiska nivåer används: 0–24 få signaler, 25–44 vissa signaler, 45–64 förhöjda signaler och 65–100 tydliga signaler. Det är inte validerade kliniska gränser. Enskilda svar om hot eller stark rädsla kan visa stöd oavsett områdets genomsnitt.</li>
-        <li><strong>Psykisk misshandel och narcissistiska relationsmönster:</strong> områdespoäng räknas om till en skala 0–100 och vägs samman med olika områdesvikter.</li>
-        <li><strong>Gaslighting och traumabindning:</strong> svarssumman jämförs med högsta möjliga poäng för både helheten och delområdena.</li>
-        <li><strong>Medberoende:</strong> helhetsindexet är ett medelvärde av delområdenas poäng på skalan 0–100.</li>
-        <li><strong>Anknytning:</strong> ångest och undvikande redovisas separat tillsammans med delskalor. Vissa frågor poängsätts i omvänd riktning. Kombinationen av dimensionerna används för en förenklad profil.</li>
-        <li><strong>PTSD-testet:</strong> Relationsvarnings egna frågor är grupperade i återupplevande, undvikande, tankar och känslor, vaksamhet och stressreaktioner samt vardagspåverkan. Varje område räknas om till 0–100 för att beskriva svarsmönstret, inte sannolikheten för en PTSD-diagnos. Testet är inte PCL-5, CAPS-5 eller ett kliniskt validerat diagnostiskt instrument.</li>
-      </ul>
-      <p>Resultattexter väljs automatiskt utifrån poäng, områden och förinställda nivåer. Ingen individuell bedömning av en yrkesperson sker genom testet. Ett värde på 70 av 100 betyder inte 70 procents sannolikhet för en diagnos, ett brott eller framtida våld.</p>
+      <p>Testerna använder fasta frågor, svarsalternativ och beräkningsregler. Svaren grupperas i delområden, delskalor eller domäner. När områden innehåller olika många frågor räknas de om till jämförbara nivåer, ofta på en skala från 0 till 100.</p>
+      <p>Varje modell har förutbestämda regler för hur områden, kombinationer och tydliga kontraster ska läsas. Vissa modeller använder också uttryckliga områdesvikter i sina sammansatta index; andra jämför områden utan viktning. Resultattexter väljs automatiskt utifrån dessa regler och dina svar.</p>
+      <p>Ingen individuell bedömning av en yrkesperson sker genom testet. Ett värde på 70 av 100 betyder inte 70 procents sannolikhet för en diagnos, ett brott eller framtida våld.</p>
+    </GuideSection>
+    <GuideSection title="Så arbetar de 15 huvudtesterna">
+      <p>Här är den korta, konkreta beskrivningen av vad som analyseras i varje test.</p>
+      <div className="space-y-9">
+        {testMethodGroups.map((group) => (
+          <section key={group.title} aria-labelledby={`${group.title.replaceAll(" ", "-").toLowerCase()}-heading`}>
+            <h3 id={`${group.title.replaceAll(" ", "-").toLowerCase()}-heading`} className="text-xl font-semibold tracking-tight text-neutral-900">{group.title}</h3>
+            <p className="mt-2">{group.description}</p>
+            <ul className="mt-4 space-y-4">
+              {group.tests.map((test) => (
+                <li key={test.href}><Link href={test.href} className={textLink}><strong>{test.title}</strong></Link> – {test.description}</li>
+              ))}
+            </ul>
+          </section>
+        ))}
+      </div>
+      <section className="border-t border-neutral-200 pt-7" aria-labelledby="quick-checks-heading">
+        <h3 id="quick-checks-heading" className="text-xl font-semibold tracking-tight text-neutral-900">Kostnadsfria snabbtester</h3>
+        <ul className="mt-4 space-y-4">
+          <li><Link href="/ar-min-relation-sund" className={textLink}><strong>Är min relation sund?</strong></Link> – tittar på trygghet, respekt, kommunikation, autonomi, ömsesidighet och stabilitet.</li>
+          <li><Link href="/roda-flaggor-relation-test" className={textLink}><strong>Röda flaggor i relation – snabbcheck</strong></Link> – lyfter de mest framträdande områdena inom kontroll, gaslighting, nedvärdering, gränser, instabilitet och otrygghet.</li>
+        </ul>
+      </section>
     </GuideSection>
     <GuideSection title="Vad resultatet inte kan avgöra">
       <p>Poäng, profiler och benämningar som ”förhöjd” eller ”hög risk” är testets egna orienteringsverktyg. Nivågränserna är inte redovisade som kliniskt validerade gränsvärden. Resultat mellan olika tester ska därför inte jämföras som om de mätte samma sak.</p>
