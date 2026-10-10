@@ -8,14 +8,50 @@ import autismGuides from "../content/autism-guides.json";
 import HomeGuideDirectory, { type HomeGuide } from "./_components/HomeGuideDirectory";
 import HomeScrollLink from "./_components/HomeScrollLink";
 
+const pageUrl = "https://www.relationsvarning.se/";
+const title = "Relationsvarning – ADHD, autism, AuDHD och relationer";
+const description = "Anonyma självtester, guider och digitala böcker om ADHD, autism, AuDHD, relationer och psykisk hälsa. Utforska dina resultat utan registrering.";
+
 export const metadata: Metadata = {
-  title: "Relationsvarning – tester för destruktiva relationer",
-  description:
-    "Forskningsbaserade relationstester om kontroll, manipulation, psykiskt våld, gaslighting och destruktiva relationsmönster. Anonymt och utan registrering.",
+  title,
+  description,
   alternates: {
-    canonical: "https://www.relationsvarning.se/",
+    canonical: pageUrl,
+  },
+  openGraph: {
+    title,
+    description,
+    url: pageUrl,
+    type: "website",
+    siteName: "Relationsvarning",
+    locale: "sv_SE",
+  },
+  twitter: {
+    card: "summary",
+    title,
+    description,
   },
 };
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": `${pageUrl}#website`,
+    name: "Relationsvarning",
+    url: pageUrl,
+    inLanguage: "sv",
+    description,
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": `${pageUrl}#organization`,
+    name: "Relationsvarning",
+    url: pageUrl,
+    description,
+  },
+];
 
 type Test = {
   href: string;
@@ -89,6 +125,7 @@ const homeGuides: HomeGuide[] = [
 export default function Landing() {
   return (
     <main className={styles.home}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData).replace(/</g, "\\u003c") }} />
       <header className={styles.header}>
         <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
           <Brand className={styles.brand} markClassName={styles.brandMark} />
@@ -105,7 +142,7 @@ export default function Landing() {
           <div className={styles.heroCopy}>
             <p className={styles.heroEyebrow}>Självtester, guider och verktyg</p>
             <h1 id="home-heading">Förstå dig själv. Förstå dina relationer.</h1>
-            <p className={styles.heroIntro}>Självtester och guider som hjälper dig att förstå mönster i vardagen, i nära relationer och i hur du fungerar.</p>
+            <p className={styles.heroIntro}>Utforska självtester, guider och böcker om ADHD, autism, AuDHD, relationer och psykisk hälsa. Våra självtester är anonyma och ger direkt resultat.</p>
 
             <nav className={styles.quickStart} aria-label="Hitta rätt test direkt">
               <p>Hitta rätt direkt</p>

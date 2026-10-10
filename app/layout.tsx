@@ -5,9 +5,9 @@ import SiteFooter from "./_components/SiteFooter";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.relationsvarning.se"),
-  title: "Relationsvarning – anonymt test om varningssignaler i relationer",
+  title: "Relationsvarning – självtester, guider och kunskap",
   description:
-    "Gör ett anonymt relationsbaserat test och få en tydlig riskindikator. Ingen registrering.",
+    "Självtester, guider och verktyg om ADHD, autism, psykisk hälsa och relationer.",
   icons: {
     icon: "/icon.png",
   },
