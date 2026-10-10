@@ -63,7 +63,7 @@ for(const [id,total] of [['adhd_test',30],['audhd_test',54]]){
   const standard=events.filter(event=>event.params.test_id===id);
   for(const name of ['test_start','test_complete','paywall_view','begin_checkout']) {
     const params=standard.find(event=>event.name===name).params;
-    assert.equal(params.paywall_version,'personal-finding-v2');
+    assert.equal(params.paywall_version,id==='adhd_test'?'personal-finding-v3':'personal-finding-v2');
     assert.equal(params.release_id,'rv-ga4-2026-10-08-etapp-1');
   }
 }

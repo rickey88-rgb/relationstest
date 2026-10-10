@@ -10,7 +10,8 @@ function environment({ paid = false, paidMarker = false, recovery = null, recove
   const data = new Map(stored ? [[key, stored]] : []);
   const slots = [], pending = [];
   let cursor = 0, dirty = true, tree;
-  const standardTracking = { purchaseCount: 0, paywallRef: () => {}, answer: () => {}, checkout: () => {}, restart: () => {}, analysisView: () => {}, resultView: () => {}, purchase() { this.purchaseCount += 1; } };
+  const checkoutNavigations = [];
+  const standardTracking = { purchaseCount: 0, paywallRef: () => {}, answer: () => {}, checkout: navigate => checkoutNavigations.push(navigate), restart: () => {}, analysisView: () => {}, resultView: () => {}, purchase() { this.purchaseCount += 1; } };
   if (paidMarker) data.set(key + ":paid", "true");
   global.localStorage = { getItem: item => data.get(item) ?? null, setItem: (item, value) => data.set(item, value), removeItem: item => data.delete(item) };
   const query = paid ? "?paid=true" : recovery ? `?recovery=${recovery}` : "";
@@ -44,7 +45,8 @@ function environment({ paid = false, paidMarker = false, recovery = null, recove
   function nodes(node = tree) { if (!node || typeof node !== "object") return []; if (Array.isArray(node)) return node.flatMap(nodes); return [node, ...nodes(node.props?.children ?? null)]; }
   function text(node) { if (node == null || typeof node === "boolean") return ""; if (typeof node !== "object") return String(node); if (Array.isArray(node)) return node.map(text).join(""); return text(node.props?.children ?? null); }
   renderOnce();
-  return { data, standardTracking, PaywallCheckoutCTA, get tree() { return tree; }, flush, nodes, text, runEffects };
+  function completeCheckout() { const navigate = checkoutNavigations.shift(); assert(navigate, "checkout navigation callback"); navigate(); }
+  return { data, standardTracking, PaywallCheckoutCTA, get tree() { return tree; }, flush, nodes, text, completeCheckout, runEffects };
 }
 
 const incomplete = JSON.stringify({ ...completeState(false), answers: Array(48).fill(-1) });
@@ -68,6 +70,8 @@ const isReportView = environment => environment.nodes().some(node => node.type?.
   assert.equal(checkout.text(checkoutCta.props.label), "Lås upp min AuDHD-profil · 79 kr");
   assert.equal(checkoutCta.props.trustText, "Engångsbetalning · Ingen prenumeration.");
   checkoutCta.props.onClick();
+  assert(!window.location.href.startsWith("https://buy.stripe.com/"), "GA callback may defer Stripe navigation");
+  checkout.completeCheckout();
   assert(window.location.href.startsWith("https://buy.stripe.com/"));
   let saved = JSON.parse(checkout.data.get(key));
   assert.equal(saved.unlocked, false); assert.equal(saved.answers.length, 48); assert.equal(saved.contextAnswers.length, 6);

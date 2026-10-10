@@ -6,7 +6,7 @@ const assert = require('node:assert/strict');
 const path = require('node:path');
 const key='relationsvarning_autism_state_v1';
 function mount({data=new Map(),paid=false,blocked=false,recovery=null,recoveryUnlocked=false}={}) {
-  const slots=[],pending=[],timers=new Map(),listeners=new Map(),events=[];
+  const slots=[],pending=[],timers=new Map(),listeners=new Map(),events=[],checkoutNavigations=[];
   let cursor=0,dirty=true,tree,clock=0,sequence=0;
   const env={data,blocked,events,calculations:[]};
   global.localStorage={getItem:k=>{if(env.blocked)throw Error('blocked');return data.get(k)??null;},setItem:(k,v)=>{if(env.blocked)throw Error('blocked');data.set(k,v);},removeItem:k=>{if(env.blocked)throw Error('blocked');data.delete(k);}};
@@ -22,7 +22,7 @@ function mount({data=new Map(),paid=false,blocked=false,recovery=null,recoveryUn
     useMemo:fn=>fn(),
     useEffect:(fn,deps)=>{const index=cursor++;const old=slots[index];if(!old||!deps||deps.some((d,i)=>!Object.is(d,old.deps[i]))){slots[index]={deps,cleanup:old?.cleanup};pending.push(()=>{slots[index].cleanup?.();slots[index].cleanup=fn();});}},
   };
-  const tracking={answer:(...args)=>events.push(['answer',...args]),purchase:()=>events.push(['purchase']),checkout:()=>events.push(['checkout']),restart:()=>events.push(['restart']),paywallRef:()=>{}};
+  const tracking={answer:(...args)=>events.push(['answer',...args]),purchase:()=>events.push(['purchase']),checkout:navigate=>{events.push(['checkout']);checkoutNavigations.push(navigate);},restart:()=>events.push(['restart']),paywallRef:()=>{}};
   function PaywallCheckoutCTA({onClick,label,trustText}){return{type:'div',props:{children:[{type:'button',props:{onClick,children:label}},{type:'p',props:{children:`🔒 ${trustText}`}}]}};}
   const model=require('./test-loader.cjs')()(path.join(__dirname,'model.ts'));
   const load=require('./test-loader.cjs')({react,'./model':{...model,calculate:answers=>{env.calculations.push([...answers]);return model.calculate(answers);}},'../../_analytics/useTestAnalytics':{useTestAnalytics:(id,total)=>{assert.equal(id,'autism_test');assert.equal(total,30);return tracking;}},'../../_components/PaywallCheckoutCTA':{default:PaywallCheckoutCTA}});
@@ -34,7 +34,8 @@ function mount({data=new Map(),paid=false,blocked=false,recovery=null,recoveryUn
   function button(label){const found=nodes().find(n=>n.type==='button'&&text(n).trim()===label);assert(found,'Button: '+label);return found;}
   function click(label,detail=1){const b=button(label);assert(!b.props.disabled);b.props.onClick({detail});render();}
   async function settleRecovery(){await Promise.resolve();await Promise.resolve();render();}
-  render();return {...env,env,render,advance,nodes,text,button,click,listeners,settleRecovery};
+  function completeCheckout(){const navigate=checkoutNavigations.shift();assert(navigate,'checkout navigation callback');navigate();}
+  render();return {...env,env,render,advance,nodes,text,button,click,completeCheckout,listeners,settleRecovery};
 }
 const labels=['Aldrig','Sällan','Ibland','Ofta','Mycket ofta'];
 function complete(app,answers){for(let n=0;n<30;n++){
@@ -54,6 +55,8 @@ assert(a.text().includes('🔒 Engångsbetalning · Ingen prenumeration.'));
 for(const forbidden of ['50 / 100','Socialt samspel','Bred kombinerad profil','Din övergripande profil','Måttligt autismrelaterat mönster'])assert(!a.text().includes(forbidden),forbidden+' leaked before payment');
 const checkout=a.button('Se min fullständiga analys · 39 kr');checkout.props.onClick();checkout.props.onClick();a.render();
 assert.equal(a.events.filter(e=>e[0]==='checkout').length,1);
+assert.equal(window.location.href,'https://relationsvarning.se/autism-test/test');
+a.completeCheckout();
 assert.equal(window.location.href,'https://buy.stripe.com/7sY6oG5ON6Eh0q3b720gw0n');
 assert.deepEqual(JSON.parse(a.data.get(key)).answers,Array(30).fill(2));
 a=mount({data:a.data,paid:true});assert(a.text().includes('Ditt test är upplåst'));assert(a.text().includes('Din övergripande profil'));assert(a.text().includes('50 / 100'));
