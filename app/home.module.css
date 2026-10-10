@@ -79,9 +79,12 @@
 .testLink { align-items: flex-start; background: var(--rv-surface); border: 1px solid var(--rv-border); border-radius: 16px; color: var(--rv-text); display: flex; gap: 16px; height: 100%; justify-content: space-between; min-height: 128px; padding: 18px 20px; text-decoration: none; }
 .testLink:hover { background: #F8F4ED; border-color: #C69B60; transform: translateY(-1px); }
 .testLink > span:first-child { display: block; min-width: 0; }
-.testLink strong, .testDescription, .testLabel { display: block; }
-.testLink strong { font-family: var(--rv-serif); font-size: 1.15rem; font-weight: 400; letter-spacing: -.015em; line-height: 1.2; }
-.testDescription { color: var(--rv-muted); font-size: .82rem; line-height: 1.55; margin-top: 7px; }
+.testTitle, .testDescription, .testLabel { display: block; }
+.testTitle { background: #EDF3F7; border: 1px solid #D6E1E8; border-radius: 8px; color: #17263D; font-family: var(--rv-serif); font-size: 1.15rem; font-weight: 400; letter-spacing: -.015em; line-height: 1.2; max-width: 100%; padding: 5px 9px 6px; width: fit-content; }
+.testLinks li:nth-child(4n + 2) .testTitle { background: #F5EAD7; border-color: #E4D1AF; }
+.testLinks li:nth-child(4n + 3) .testTitle { background: #E8F0EA; border-color: #CFDED3; }
+.testLinks li:nth-child(4n) .testTitle { background: #F0EBF5; border-color: #DDD2E7; }
+.testDescription { color: #3E4D62; font-size: .82rem; line-height: 1.55; margin-top: 9px; }
 .testLabel { color: var(--rv-muted); font-size: .58rem; font-weight: 600; letter-spacing: .12em; line-height: 1.4; margin-bottom: 7px; text-transform: uppercase; }
 .testArrow { color: var(--rv-rose); flex-shrink: 0; font: 400 1.4rem/1 Georgia, serif; margin-top: 2px; }
 
@@ -152,7 +155,7 @@
   .testGroup { padding-block: 28px; }
   .testLinks { gap: 10px; grid-template-columns: 1fr; margin-top: 18px; }
   .testLink { min-height: 0; padding: 16px; }
-  .testLink strong { font-size: 1.08rem; }
+  .testTitle { font-size: 1.08rem; }
   .testDescription { font-size: .79rem; }
 
   .method { padding-top: 28px; }

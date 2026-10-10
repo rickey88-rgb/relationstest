@@ -215,7 +215,7 @@ function QuickLink({ href, label }: { href: string; label: string }) {
 function TestLinks({ tests }: { tests: Test[] }) {
   return <ul className={styles.testLinks}>{tests.map((test) => (
     <li key={test.href}><Link href={test.href} className={styles.testLink}>
-      <span>{test.label && <span className={styles.testLabel}>{test.label}</span>}<strong>{test.title}</strong><span className={styles.testDescription}>{test.description}</span></span>
+      <span>{test.label && <span className={styles.testLabel}>{test.label}</span>}<strong className={styles.testTitle}>{test.title}</strong><span className={styles.testDescription}>{test.description}</span></span>
       <span className={styles.testArrow} aria-hidden="true">→</span>
     </Link></li>
   ))}</ul>;
