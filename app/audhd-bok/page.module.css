@@ -1,6 +1,6 @@
 .onDark :is(h1, h2, h3) { color: #fff !important; }
-.onDark li { color: #202124 !important; }
-.onDark li span { color: #27666A !important; }
+.onDark li { color: #fff !important; }
+.onDark li span { color: #DDE8E3 !important; }
 .onRose :is(h1, h2, h3) { color: #fff !important; }
 .onRose a[data-rv="button"] { background: #fff !important; color: #364A4B !important; }
 .onRose a[data-rv="button"]:hover { background: #F7F5F2 !important; }
