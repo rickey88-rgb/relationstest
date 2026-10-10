@@ -78,6 +78,9 @@ web_modules/
 .next
 out
 
+# Local visual QA captures
+.artifacts/
+
 # Nuxt.js build / generate output
 .nuxt
 dist
@@ -137,3 +140,5 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+.vercel
+.env*
