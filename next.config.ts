@@ -18,6 +18,26 @@ const nextConfig: NextConfig = {
         destination: "/adhd-test",
         permanent: true,
       },
+      {
+        source: "/adhdtest",
+        destination: "/adhd-test",
+        permanent: true,
+      },
+      {
+        source: "/autismtest",
+        destination: "/autism-test",
+        permanent: true,
+      },
+      {
+        source: "/autsim-test",
+        destination: "/autism-test",
+        permanent: true,
+      },
+      {
+        source: "/audhd-bok/tack/klar",
+        destination: "/audhd-bok/tack",
+        permanent: true,
+      },
     ];
   },
   async headers() {
