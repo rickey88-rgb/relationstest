@@ -64,6 +64,8 @@ const isReportView = environment => environment.nodes().some(node => node.type?.
   const paywallText = checkout.text(checkout.tree);
   assert(paywallText.includes("Ett första fynd"));
   assert(paywallText.includes("Din låsta AuDHD-analys innehåller"));
+  assert(paywallText.includes("Viktigt efter betalningen"));
+  assert(paywallText.includes("Du skickas automatiskt tillbaka till din personliga analys. Det kan ta några sekunder. Vänta kvar och stäng inte sidan."));
   assert(!paywallText.includes("Ditt huvudresultat"));
   assert(!paywallText.includes("4 av 8 områden"));
   assert(!paywallText.includes("Din huvudprofil"));

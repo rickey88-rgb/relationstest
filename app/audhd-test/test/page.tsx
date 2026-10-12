@@ -174,7 +174,18 @@ export default function AudhdTestPage() {
       </ul>
     </div>
     <p className="text-sm leading-6 text-neutral-300">AuDHD är ett informellt begrepp för samtidig ADHD och autism. Det här självtestet kan inte fastställa en diagnos.</p>
-    <div data-audhd-cta-wrap className="pt-2 sm:pt-0"><PaywallCheckoutCTA onClick={checkout} label={<>Lås upp min AuDHD-profil · {PRICE_SEK} kr</>} trustText="Engångsbetalning · Ingen prenumeration." /></div>
+    <div data-audhd-cta-wrap className="pt-2 sm:pt-0">
+      <aside data-audhd-payment-return-notice aria-label="Viktigt efter betalningen" className="mb-4 rounded-2xl border border-white/20 bg-white/[0.08] px-4 py-3.5 shadow-inner shadow-black/10 sm:px-5">
+        <div className="flex items-start gap-3">
+          <span aria-hidden="true" className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-[#DDE8E3] text-sm font-bold text-[#1F5357]">i</span>
+          <div>
+            <p className="text-sm font-semibold tracking-[0.01em] text-white">Viktigt efter betalningen</p>
+            <p className="mt-1 text-sm leading-6 text-neutral-200">Du skickas automatiskt tillbaka till din personliga analys. Det kan ta några sekunder. Vänta kvar och stäng inte sidan.</p>
+          </div>
+        </div>
+      </aside>
+      <PaywallCheckoutCTA onClick={checkout} label={<>Lås upp min AuDHD-profil · {PRICE_SEK} kr</>} trustText="Engångsbetalning · Ingen prenumeration." />
+    </div>
     {checkoutUnavailable && <p role="alert">Betalning är inte konfigurerad ännu. Dina svar finns kvar lokalt.</p>}
   </section><div data-audhd-restart className="mt-3"><button type="button" className="text-sm underline" onClick={restart}>Gör om testet</button></div></>;
   const [recommendedTest, fallbackTest] = audhdRecommendations(report);
