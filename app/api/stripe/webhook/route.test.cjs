@@ -8,6 +8,15 @@ process.env.STRIPE_SECRET_KEY = "local-stripe-test-placeholder";
 process.env.STRIPE_WEBHOOK_SECRET = "local-webhook-test-placeholder";
 let signatureAccepted = true;
 let processed = 0;
+let processingFailure = null;
+class StripeWebhookProcessingError extends Error {
+  constructor(stage, source) {
+    super("Stripe webhook processing failed");
+    this.name = "StripeWebhookProcessingError";
+    this.stage = stage;
+    this.source = source;
+  }
+}
 class StripeMock {
   constructor() {
     this.webhooks = { constructEvent: () => {
@@ -19,7 +28,7 @@ class StripeMock {
 }
 const route = createLoader({
   stripe: { default: StripeMock },
-  "../../../_lib/stripeWebhook.server": { processStripeWebhookEvent: async () => { processed += 1; return { kind: "recorded", duplicate: false }; } },
+  "../../../_lib/stripeWebhook.server": { StripeWebhookProcessingError, processStripeWebhookEvent: async () => { processed += 1; if (processingFailure) throw processingFailure; return { kind: "recorded", duplicate: false }; } },
   "../../../_lib/paymentsDb.server": { recordVerifiedStripePayment: async () => ({ duplicate: false }) },
 })(path.join(__dirname, "route.ts"));
 
@@ -45,5 +54,18 @@ function request(signature = "test-signature") {
   assert.equal(response.status, 200);
   assert.equal(processed, 1);
   assert.equal(response.headers.get("cache-control"), "no-store");
+
+  const originalConsoleError = console.error;
+  const logs = [];
+  console.error = message => logs.push(message);
+  const databaseError = Object.assign(new Error("postgres://must-not-appear@example.test"), { code: "42P01" });
+  processingFailure = new StripeWebhookProcessingError("database_ledger", databaseError);
+  response = await route.POST(request());
+  console.error = originalConsoleError;
+  processingFailure = null;
+  assert.equal(response.status, 500);
+  assert.equal(logs.length, 1);
+  assert.equal(logs[0], JSON.stringify({ event: "stripe_webhook_processing_failed", stage: "database_ledger", error_class: "Error", error_code: "42P01" }));
+  assert(!logs[0].includes("postgres://"), "diagnostics must not log raw database connection details");
   console.log("PASS: the webhook rejects missing or invalid signatures before processing and accepts a verified event.");
 })().catch(error => { console.error(error); process.exitCode = 1; });

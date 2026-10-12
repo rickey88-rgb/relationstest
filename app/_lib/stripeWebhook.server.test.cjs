@@ -42,5 +42,26 @@ const dependencies = {
 
   result = await webhook.processStripeWebhookEvent({ ...event, type: "customer.created" }, dependencies);
   assert.deepEqual(result, { kind: "ignored" });
+
+  for (const [stage, failedDependencies] of [
+    ["session_retrieve", { ...dependencies, retrieveSession: async () => { const error = new Error("not logged"); error.code = "ECONNREFUSED"; throw error; } }],
+    ["line_items_retrieve", { ...dependencies, listLineItems: async () => { const error = new Error("not logged"); error.code = "ECONNRESET"; throw error; } }],
+    ["database_ledger", { ...dependencies, recordPayment: async () => { const error = new Error("not logged"); error.code = "42P01"; throw error; } }],
+  ]) {
+    await assert.rejects(
+      () => webhook.processStripeWebhookEvent(event, failedDependencies),
+      error => error && error.name === "StripeWebhookProcessingError" && error.stage === stage,
+      `${stage} failures are classified without changing the underlying operation`,
+    );
+  }
+
+  const productMap = process.env.STRIPE_PAYMENT_PRODUCT_MAP_JSON;
+  process.env.STRIPE_PAYMENT_PRODUCT_MAP_JSON = "{";
+  await assert.rejects(
+    () => webhook.processStripeWebhookEvent(event, dependencies),
+    error => error && error.name === "StripeWebhookProcessingError" && error.stage === "product_map",
+    "invalid product configuration is classified as product_map",
+  );
+  process.env.STRIPE_PAYMENT_PRODUCT_MAP_JSON = productMap;
   console.log("PASS: webhook processing records verified Stripe session facts, handles duplicate delivery, and does not classify failed payments as paid.");
 })().catch(error => { console.error(error); process.exitCode = 1; });

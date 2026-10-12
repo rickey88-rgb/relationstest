@@ -9,6 +9,28 @@ const SUPPORTED_EVENT_TYPES = new Set([
   "checkout.session.expired",
 ]);
 
+export type StripeWebhookFailureStage = "session_retrieve" | "line_items_retrieve" | "product_map" | "database_ledger";
+
+/**
+ * Carries only the processing boundary that failed. The route deliberately
+ * extracts a small allowlisted diagnostic instead of logging the original
+ * error, which may contain Stripe or database connection details.
+ */
+export class StripeWebhookProcessingError extends Error {
+  constructor(readonly stage: StripeWebhookFailureStage, readonly source: unknown) {
+    super("Stripe webhook processing failed");
+    this.name = "StripeWebhookProcessingError";
+  }
+}
+
+async function atStage<T>(stage: StripeWebhookFailureStage, work: () => Promise<T> | T) {
+  try {
+    return await work();
+  } catch (error) {
+    throw new StripeWebhookProcessingError(stage, error);
+  }
+}
+
 type StripeDependencies = {
   retrieveSession: (sessionId: string) => Promise<Stripe.Checkout.Session>;
   listLineItems: (sessionId: string) => Promise<Stripe.ApiList<Stripe.LineItem>>;
@@ -49,13 +71,13 @@ function eventSessionId(event: Stripe.Event) {
 export async function processStripeWebhookEvent(event: Stripe.Event, dependencies: StripeDependencies) {
   if (!SUPPORTED_EVENT_TYPES.has(event.type)) return { kind: "ignored" as const };
   const sessionId = eventSessionId(event);
-  if (!sessionId) throw new Error("Checkout webhook event is missing a session identifier");
+  if (!sessionId) throw new StripeWebhookProcessingError("session_retrieve", new Error("Checkout webhook event is missing a session identifier"));
 
-  const session = await dependencies.retrieveSession(sessionId);
-  const stripeLineItems = await dependencies.listLineItems(sessionId);
+  const session = await atStage("session_retrieve", () => dependencies.retrieveSession(sessionId));
+  const stripeLineItems = await atStage("line_items_retrieve", () => dependencies.listLineItems(sessionId));
   const lineItems = lineItemsFromStripe(stripeLineItems);
   const paymentLinkId = idOf(session.payment_link);
-  const productKey = identifyPaymentProduct({ priceIds: lineItems.map((item) => item.priceId), paymentLinkId });
+  const productKey = await atStage("product_map", () => identifyPaymentProduct({ priceIds: lineItems.map((item) => item.priceId), paymentLinkId }));
   const isPaid = session.status === "complete" && session.payment_status === "paid";
   const payment = {
     eventId: event.id,
@@ -74,6 +96,6 @@ export async function processStripeWebhookEvent(event: Stripe.Event, dependencie
     lineItems,
   } satisfies VerifiedStripePayment;
 
-  const recorded = await dependencies.recordPayment(payment);
+  const recorded = await atStage("database_ledger", () => dependencies.recordPayment(payment));
   return { kind: "recorded" as const, duplicate: recorded.duplicate, productKey, paid: isPaid };
 }

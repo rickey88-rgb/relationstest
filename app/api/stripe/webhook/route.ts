@@ -1,7 +1,7 @@
 import Stripe from "stripe";
 import { NextRequest, NextResponse } from "next/server";
 import { recordVerifiedStripePayment } from "../../../_lib/paymentsDb.server";
-import { processStripeWebhookEvent } from "../../../_lib/stripeWebhook.server";
+import { processStripeWebhookEvent, StripeWebhookProcessingError } from "../../../_lib/stripeWebhook.server";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -14,6 +14,32 @@ function required(name: string) {
 
 function noStore(status: number) {
   return new NextResponse(null, { status, headers: { "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff" } });
+}
+
+function safeErrorClass(error: unknown) {
+  if (!(error instanceof Error) || !/^[A-Za-z0-9_.-]{1,80}$/.test(error.name)) return "unknown";
+  return error.name;
+}
+
+function safeErrorCode(error: unknown) {
+  if (!error || typeof error !== "object") return undefined;
+  const candidate = error as { code?: unknown; type?: unknown };
+  const value = typeof candidate.code === "string" ? candidate.code : typeof candidate.type === "string" ? candidate.type : undefined;
+  return value && /^[A-Za-z0-9_.:-]{1,80}$/.test(value) ? value : undefined;
+}
+
+function logProcessingFailure(error: unknown) {
+  const isStagedFailure = error instanceof StripeWebhookProcessingError;
+  const source = isStagedFailure ? error.source : error;
+  const commit = process.env.VERCEL_GIT_COMMIT_SHA;
+  const diagnostic = {
+    event: "stripe_webhook_processing_failed",
+    stage: isStagedFailure ? error.stage : "unknown",
+    error_class: safeErrorClass(source),
+    ...(safeErrorCode(source) ? { error_code: safeErrorCode(source) } : {}),
+    ...(commit && /^[a-f0-9]{7,64}$/i.test(commit) ? { commit_sha: commit } : {}),
+  };
+  console.error(JSON.stringify(diagnostic));
 }
 
 export async function POST(request: NextRequest) {
@@ -37,8 +63,9 @@ export async function POST(request: NextRequest) {
       recordPayment: recordVerifiedStripePayment,
     });
     return noStore(200);
-  } catch {
+  } catch (error) {
     // Stripe retries 5xx responses. Do not mark events as processed on failure.
+    logProcessingFailure(error);
     return noStore(500);
   }
 }
