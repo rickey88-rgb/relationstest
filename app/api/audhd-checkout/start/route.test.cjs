@@ -8,17 +8,17 @@ process.env.NODE_ENV = "test";
 const attemptId = "11111111-1111-4111-8111-111111111111";
 let reservation = { kind: "reserved", checkoutReferenceId: "audhd_12345678901234567890123456789012" };
 let reservationSequence = null;
-let created = 0, bound = null, released = null, expiredReleased = null, shouldFailCreation = false;
+let created = 0, bound = null, released = null, expiredReleased = null, shouldFailCreation = false, shouldFailReserve = false, shouldFailBind = false, failureStage = null;
 const route = createLoader({
   "../../../_lib/audhdCheckoutAttempt.server": { AUDHD_CHECKOUT_ATTEMPT_COOKIE: "rv_audhd_checkout_attempt", hashAudhdCheckoutBrowserSecret: value => `hash:${value}` },
   "../../../_lib/audhdCheckoutAttemptsDb.server": {
-    reserveAudhdCheckoutAttempt: async () => reservationSequence ? reservationSequence.shift() : reservation,
-    bindAudhdCheckoutSession: async value => { bound = value; },
+    reserveAudhdCheckoutAttempt: async () => { if (shouldFailReserve) { const error = new Error("database failure"); error.code = "42P01"; throw error; } return reservationSequence ? reservationSequence.shift() : reservation; },
+    bindAudhdCheckoutSession: async value => { if (shouldFailBind) throw new Error("binding failure"); bound = value; },
     releaseAudhdCheckoutReservation: async value => { released = value; },
     releaseExpiredAudhdCheckoutSession: async value => { expiredReleased = value; return true; },
   },
   "../../../_lib/audhdCheckoutStripe.server": {
-    createAudhdStripeCheckout: async reference => { created += 1; if (shouldFailCreation) throw new Error("Stripe unavailable"); return { checkoutSessionId: "cs_live_audhd123", checkoutUrl: `https://checkout.stripe.com/${reference}` }; },
+    createAudhdStripeCheckout: async reference => { created += 1; if (shouldFailCreation) { const error = new Error("Stripe unavailable"); if (failureStage) error.stage = failureStage; throw error; } return { checkoutSessionId: "cs_live_audhd123", checkoutUrl: `https://checkout.stripe.com/${reference}` }; },
     existingAudhdStripeCheckout: async (sessionId, reference) => sessionId === "cs_live_existing" ? { kind: "open", checkoutSessionId: sessionId, checkoutUrl: `https://checkout.stripe.com/${reference}` } : sessionId === "cs_live_expired" ? { kind: "expired" } : { kind: "unavailable" },
   },
 })(path.join(__dirname, "route.ts"));
@@ -30,6 +30,9 @@ function request(body, { origin = "http://localhost:3000", cookie = "rv_audhd_ch
 }
 
 (async () => {
+  const logs = [];
+  const originalConsoleError = console.error;
+  console.error = value => logs.push(String(value));
   let response = await route.POST(request({ attemptId }, { origin: "https://evil.example" }));
   assert.equal(response.status, 404);
 
@@ -46,6 +49,12 @@ function request(body, { origin = "http://localhost:3000", cookie = "rv_audhd_ch
   response = await route.POST(request({ attemptId }));
   assert.equal(response.status, 409);
 
+  shouldFailReserve = true;
+  response = await route.POST(request({ attemptId }));
+  assert.equal(response.status, 503);
+  assert.deepEqual(JSON.parse(logs.at(-1)), { event: "audhd_checkout_start_failed", stage: "reserve", error_class: "Error", error_code: "42P01" });
+  shouldFailReserve = false;
+
   reservation = { kind: "reserved", checkoutReferenceId: "audhd_12345678901234567890123456789012" };
   response = await route.POST(request({ attemptId }));
   assert.equal(response.status, 201);
@@ -54,11 +63,25 @@ function request(body, { origin = "http://localhost:3000", cookie = "rv_audhd_ch
   assert.deepEqual(bound, { attemptId, browserSecretHash: "hash:abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQ", checkoutReferenceId: "audhd_12345678901234567890123456789012", checkoutSessionId: "cs_live_audhd123" });
 
   shouldFailCreation = true;
+  for (const expectedStage of ["price_config", "stripe_price", "stripe_create"]) {
+    failureStage = expectedStage;
+    reservation = { kind: "reserved", checkoutReferenceId: "audhd_abcdefghijklmnopqrstuvwxzyABCDEF" };
+    response = await route.POST(request({ attemptId }));
+    assert.equal(response.status, 503);
+    assert.deepEqual(released, { attemptId, browserSecretHash: "hash:abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQ", checkoutReferenceId: "audhd_abcdefghijklmnopqrstuvwxzyABCDEF" });
+    assert.deepEqual(JSON.parse(logs.at(-1)), { event: "audhd_checkout_start_failed", stage: expectedStage, error_class: "Error" });
+    assert(!logs.at(-1).includes("Stripe unavailable"));
+    assert(!logs.at(-1).includes("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQ"));
+  }
+  shouldFailCreation = false;
+  failureStage = null;
+
+  shouldFailBind = true;
   reservation = { kind: "reserved", checkoutReferenceId: "audhd_abcdefghijklmnopqrstuvwxzyABCDEF" };
   response = await route.POST(request({ attemptId }));
   assert.equal(response.status, 503);
-  assert.deepEqual(released, { attemptId, browserSecretHash: "hash:abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQ", checkoutReferenceId: "audhd_abcdefghijklmnopqrstuvwxzyABCDEF" });
-  shouldFailCreation = false;
+  assert.deepEqual(JSON.parse(logs.at(-1)), { event: "audhd_checkout_start_failed", stage: "bind", error_class: "Error" });
+  shouldFailBind = false;
 
   reservation = { kind: "existing", checkoutSessionId: "cs_live_existing", checkoutReferenceId: "audhd_12345678901234567890123456789012" };
   const createdBeforeExisting = created;
@@ -75,5 +98,6 @@ function request(body, { origin = "http://localhost:3000", cookie = "rv_audhd_ch
   assert.equal(created, createdBeforeExpiredRetry + 1);
   assert.deepEqual(expiredReleased, { attemptId, browserSecretHash: "hash:abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQ", checkoutReferenceId: "audhd_12345678901234567890123456789012", checkoutSessionId: "cs_live_expired" });
   reservationSequence = null;
+  console.error = originalConsoleError;
   console.log("PASS: AuDHD Checkout start rejects forged or expired attempts, serializes concurrent starts, and binds one live Session to the browser-owned draft.");
 })().catch(error => { console.error(error); process.exitCode = 1; });
