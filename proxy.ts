@@ -8,7 +8,21 @@ const typoRedirects: Readonly<Record<string, string>> = {
   "/autism test": "/autism-test",
 };
 
+const APEX_HOST = "relationsvarning.se";
+const CANONICAL_HOST = "www.relationsvarning.se";
+
 export function proxy(request: NextRequest) {
+  // Checkout cookies are deliberately host-only. Normalize the apex before any
+  // page or API route can set one, so Stripe's fixed www return keeps the same
+  // browser secret without sharing it with unrelated subdomains.
+  if (request.nextUrl.hostname === APEX_HOST) {
+    const url = request.nextUrl.clone();
+    url.protocol = "https:";
+    url.hostname = CANONICAL_HOST;
+    url.port = "";
+    return NextResponse.redirect(url, 308);
+  }
+
   let pathname = request.nextUrl.pathname;
 
   try {

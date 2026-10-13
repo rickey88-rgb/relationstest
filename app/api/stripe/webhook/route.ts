@@ -2,6 +2,8 @@ import Stripe from "stripe";
 import { NextRequest, NextResponse } from "next/server";
 import { recordVerifiedStripePayment } from "../../../_lib/paymentsDb.server";
 import { processStripeWebhookEvent, StripeWebhookProcessingError } from "../../../_lib/stripeWebhook.server";
+import { revokeAudhdCheckoutAccessForPaymentIntent } from "../../../_lib/audhdCheckoutAttemptsDb.server";
+import { processAudhdCheckoutRevocationEvent } from "../../../_lib/audhdCheckoutRevocation.server";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -62,6 +64,9 @@ export async function POST(request: NextRequest) {
       listLineItems: (sessionId) => stripe.checkout.sessions.listLineItems(sessionId, { limit: 100, expand: ["data.price.product"] }),
       recordPayment: recordVerifiedStripePayment,
     });
+    // This is independent from the shadow ledger: signed refund/dispute events
+    // only revoke a matching short-lived AuDHD checkout entitlement.
+    await processAudhdCheckoutRevocationEvent(event, revokeAudhdCheckoutAccessForPaymentIntent);
     return noStore(200);
   } catch (error) {
     // Stripe retries 5xx responses. Do not mark events as processed on failure.

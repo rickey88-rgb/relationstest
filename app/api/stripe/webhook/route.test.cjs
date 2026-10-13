@@ -9,6 +9,8 @@ process.env.STRIPE_WEBHOOK_SECRET = "local-webhook-test-placeholder";
 let signatureAccepted = true;
 let processed = 0;
 let processingFailure = null;
+let eventType = "checkout.session.completed";
+let revocationCalls = 0;
 class StripeWebhookProcessingError extends Error {
   constructor(stage, source) {
     super("Stripe webhook processing failed");
@@ -21,7 +23,7 @@ class StripeMock {
   constructor() {
     this.webhooks = { constructEvent: () => {
       if (!signatureAccepted) throw new Error("invalid signature");
-      return { id: "evt_route_test", type: "checkout.session.completed", created: 1760054400, data: { object: { id: "cs_test_route" } } };
+      return { id: "evt_route_test", type: eventType, livemode: true, created: 1760054400, data: { object: eventType.startsWith("charge.") ? { payment_intent: "pi_audhd123" } : { id: "cs_test_route" } } };
     } };
     this.checkout = { sessions: { retrieve: async () => ({}), listLineItems: async () => ({ data: [] }) } };
   }
@@ -30,6 +32,8 @@ const route = createLoader({
   stripe: { default: StripeMock },
   "../../../_lib/stripeWebhook.server": { StripeWebhookProcessingError, processStripeWebhookEvent: async () => { processed += 1; if (processingFailure) throw processingFailure; return { kind: "recorded", duplicate: false }; } },
   "../../../_lib/paymentsDb.server": { recordVerifiedStripePayment: async () => ({ duplicate: false }) },
+  "../../../_lib/audhdCheckoutAttemptsDb.server": { revokeAudhdCheckoutAccessForPaymentIntent: async paymentIntent => { assert.equal(paymentIntent, "pi_audhd123"); revocationCalls += 1; return true; } },
+  "../../../_lib/audhdCheckoutRevocation.server": { processAudhdCheckoutRevocationEvent: async (event, revoke) => { if (event.type === "charge.refunded") await revoke(event.data.object.payment_intent); } },
 })(path.join(__dirname, "route.ts"));
 
 function request(signature = "test-signature") {
@@ -54,6 +58,12 @@ function request(signature = "test-signature") {
   assert.equal(response.status, 200);
   assert.equal(processed, 1);
   assert.equal(response.headers.get("cache-control"), "no-store");
+
+  eventType = "charge.refunded";
+  response = await route.POST(request());
+  assert.equal(response.status, 200);
+  assert.equal(revocationCalls, 1, "only an already signature-verified refund event can revoke access");
+  eventType = "checkout.session.completed";
 
   const originalConsoleError = console.error;
   const logs = [];

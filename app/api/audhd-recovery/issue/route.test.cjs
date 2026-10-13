@@ -6,13 +6,18 @@ const createLoader = require("../../../autism-test/test/test-loader.cjs");
 
 process.env.AUDHD_RECOVERY_TOKEN_SECRET = "test-recovery-secret-that-is-longer-than-thirty-two-characters";
 process.env.AUDHD_RECOVERY_ISSUER_SECRET = "test-issuer-secret-that-is-longer-than-thirty-two-characters";
-const recovery = createLoader()(path.join(__dirname, "../../../_lib/audhdRecovery.server.ts"));
-const route = createLoader()(path.join(__dirname, "route.ts"));
+let grantInput = null;
+const route = createLoader({
+  "../../../_lib/audhdRecovery.server": { issueAudhdRecoveryToken: () => "opaque-support-token", hashAudhdRecoveryToken: value => `hash:${value}` },
+  "../../../_lib/audhdRecoveryDb.server": { createAudhdRecoveryGrant: async input => { grantInput = input; return { id: "11111111-1111-4111-8111-111111111111" }; } },
+  "../../../_lib/audhdRecoveryPayment.server": { inspectAudhdCheckoutSession: async id => id === "cs_live_paid" ? { verified: true, checkoutSessionId: id, paymentIntentId: "pi_paid", priceId: "price_audhd" } : { verified: false, reason: "wrong_product" } },
+})(path.join(__dirname, "route.ts"));
 
-function request(authorization) {
+function request(authorization, body) {
   return new NextRequest("https://www.relationsvarning.se/api/audhd-recovery/issue", {
     method: "POST",
-    headers: authorization ? { authorization } : undefined,
+    headers: authorization ? { authorization, "content-type": "application/json" } : undefined,
+    body: body === undefined ? undefined : JSON.stringify(body),
   });
 }
 
@@ -24,8 +29,10 @@ function request(authorization) {
   response = await route.POST(request("Bearer wrong-admin-secret"));
   assert.equal(response.status, 404);
 
-  const issuedAt = Math.floor(Date.now() / 1000);
-  response = await route.POST(request(`Bearer ${process.env.AUDHD_RECOVERY_ISSUER_SECRET}`));
+  response = await route.POST(request(`Bearer ${process.env.AUDHD_RECOVERY_ISSUER_SECRET}`, { checkoutSessionId: "cs_live_wrong_product" }));
+  assert.equal(response.status, 422);
+
+  response = await route.POST(request(`Bearer ${process.env.AUDHD_RECOVERY_ISSUER_SECRET}`, { checkoutSessionId: "cs_live_paid" }));
   assert.equal(response.status, 200);
   assert.equal(response.headers.get("cache-control"), "private, no-store");
   assert.equal(response.headers.get("referrer-policy"), "no-referrer");
@@ -36,10 +43,8 @@ function request(authorization) {
   const recoveryUrl = new URL(body.recoveryUrl);
   assert.equal(recoveryUrl.origin, "https://www.relationsvarning.se");
   assert.equal(recoveryUrl.pathname, "/api/audhd-recovery/redeem");
-  const payload = recovery.verifyAudhdSupportRecoveryToken(recoveryUrl.searchParams.get("token"));
-  assert(payload);
-  assert(payload.exp >= issuedAt + (48 * 60 * 60));
-  assert(payload.exp <= issuedAt + (48 * 60 * 60) + 1);
+  assert.equal(recoveryUrl.searchParams.get("token"), "opaque-support-token");
+  assert.deepEqual(grantInput, { tokenHash: "hash:opaque-support-token", checkoutSessionId: "cs_live_paid", paymentIntentId: "pi_paid", priceId: "price_audhd" });
 
   const configuredIssuerSecret = process.env.AUDHD_RECOVERY_ISSUER_SECRET;
   delete process.env.AUDHD_RECOVERY_ISSUER_SECRET;
@@ -47,5 +52,5 @@ function request(authorization) {
   assert.equal(response.status, 404);
   process.env.AUDHD_RECOVERY_ISSUER_SECRET = configuredIssuerSecret;
 
-  console.log("PASS: AuDHD recovery issuance requires a server-side admin bearer secret and returns only a 48-hour, production-origin recovery URL.");
+  console.log("PASS: AuDHD recovery issuance requires a server-side admin bearer secret, verifies the exact paid AuDHD session, and returns only an opaque production-origin recovery URL.");
 })().catch(error => { console.error(error); process.exitCode = 1; });

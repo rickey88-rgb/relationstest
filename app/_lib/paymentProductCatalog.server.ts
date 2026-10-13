@@ -88,3 +88,25 @@ export function identifyPaymentProduct(input: { priceIds: string[]; paymentLinkI
 
   return matches.size === 1 ? Array.from(matches)[0] : "unmapped";
 }
+
+/**
+ * Returns the exact Price IDs configured for a product. Recovery flows use
+ * this instead of trusting a Checkout Session's Payment Link alone.
+ */
+export function configuredPriceIdsForProduct(product: PaymentProductKey) {
+  return paymentProductCatalog()[product]?.priceIds ?? [];
+}
+
+/**
+ * Checkout uses one deliberately selected current Price. The product map stays
+ * an allowlist for the shadow ledger and historical recovery, so it may retain
+ * older legitimate AuDHD Price IDs without changing a new customer's price.
+ */
+export function configuredAudhdCheckoutPriceId() {
+  const priceId = process.env.AUDHD_CHECKOUT_PRICE_ID?.trim() ?? "";
+  if (!/^price_[A-Za-z0-9]+$/.test(priceId)) throw new Error("AUDHD_CHECKOUT_PRICE_ID is not configured");
+  if (!configuredPriceIdsForProduct("audhd_test").includes(priceId)) {
+    throw new Error("AUDHD_CHECKOUT_PRICE_ID must be allowlisted for audhd_test");
+  }
+  return priceId;
+}

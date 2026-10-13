@@ -4,7 +4,6 @@ import PaywallCheckoutCTA from "../../_components/PaywallCheckoutCTA";
 import PostPurchaseRecommendation from "../../_components/PostPurchaseRecommendation";
 import type { TestId } from "../../_analytics/config";
 import { useTestAnalytics } from "../../_analytics/useTestAnalytics";
-import { AUDHD_STRIPE_URL } from "./payment";
 import { answerLabels, calculateReport, contextQuestions, descriptiveLevel, dimensionNames, dimensions, emptyAnswers, emptyContextAnswers, formatPercent, parseState, PRICE_SEK, questions, REPORT_VERSION, STORAGE_KEY, type Report } from "./model";
 
 const card = "mt-7 space-y-5 rounded-[26px] border border-neutral-200 bg-white p-5 leading-7 shadow-sm sm:p-7";
@@ -53,7 +52,28 @@ function migrateLegacyAudhdCheckoutState(raw: string | null) {
     if (!exactKeys || state.version !== 1 || !Array.isArray(state.answers) || state.answers.length !== 54 || !state.answers.every(value => Number.isInteger(value) && value >= 0 && value <= 4) || typeof index !== "number" || !Number.isInteger(index) || index < 0 || index > 47 || typeof state.unlocked !== "boolean") return null;
     const answers = state.answers.slice(0, 48) as number[];
     const contextAnswers = state.answers.slice(48) as number[];
-    return { reportVersion: REPORT_VERSION, answers, contextAnswers, questionIndex: index, contextIndex: 5, unlocked: state.unlocked, report: calculateReport(answers, contextAnswers) };
+    return { reportVersion: REPORT_VERSION, answers, contextAnswers, questionIndex: index, contextIndex: 5, unlocked: false, report: calculateReport(answers, contextAnswers) };
+  } catch { return null; }
+}
+
+function restoredAudhdAnswers(value: unknown) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return null;
+  const restored = value as { reportVersion?: unknown; answers?: unknown; contextAnswers?: unknown };
+  if (restored.reportVersion !== REPORT_VERSION || !Array.isArray(restored.answers) || !Array.isArray(restored.contextAnswers)) return null;
+  if (restored.answers.length !== questions.length || restored.contextAnswers.length !== contextQuestions.length) return null;
+  if (![...restored.answers, ...restored.contextAnswers].every(answer => Number.isInteger(answer) && answer >= 0 && answer <= 4)) return null;
+  return { answers: restored.answers as number[], contextAnswers: restored.contextAnswers as number[] };
+}
+
+function clearCheckoutQuery() {
+  window.history.replaceState({}, "", window.location.pathname);
+}
+
+function validCheckoutUrl(value: unknown) {
+  if (typeof value !== "string") return null;
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:" && url.hostname === "checkout.stripe.com" ? url.toString() : null;
   } catch { return null; }
 }
 
@@ -66,7 +86,7 @@ function downloadPdf(report: Report) {
 export default function AudhdTestPage() {
   const [answers, setAnswers] = useState<number[]>(emptyAnswers); const [context, setContext] = useState<number[]>(emptyContextAnswers);
   const [questionIndex, setQuestionIndex] = useState(0); const [contextIndex, setContextIndex] = useState(0); const [phase, setPhase] = useState<"questions" | "context" | "analysis" | "result">("questions");
-  const [unlocked, setUnlocked] = useState(false); const [hydrated, setHydrated] = useState(false); const [transitioning, setTransitioning] = useState(false); const [analysisStep, setAnalysisStep] = useState(0); const [checkoutUnavailable, setCheckoutUnavailable] = useState(false); const [storageError, setStorageError] = useState(false); const [paymentRecoveryRequired, setPaymentRecoveryRequired] = useState(false); const [recoveryNotice, setRecoveryNotice] = useState(false); const [recoveryLinkInvalid, setRecoveryLinkInvalid] = useState(false);
+  const [unlocked, setUnlocked] = useState(false); const [hydrated, setHydrated] = useState(false); const [transitioning, setTransitioning] = useState(false); const [analysisStep, setAnalysisStep] = useState(0); const [checkoutUnavailable, setCheckoutUnavailable] = useState(false); const [storageError, setStorageError] = useState(false); const [paymentRecoveryRequired, setPaymentRecoveryRequired] = useState(false); const [recoveryNotice, setRecoveryNotice] = useState(false); const [recoveryLinkInvalid, setRecoveryLinkInvalid] = useState(false); const [checkoutNotice, setCheckoutNotice] = useState(false);
   const lock = useRef(false); const checkoutPending = useRef(false); const standardAnalytics = useTestAnalytics("audhd_test", questions.length + contextQuestions.length); const complete = answers.every(v => v >= 0) && context.every(v => v >= 0);
   const report = useMemo(() => complete ? calculateReport(answers, context) : null, [answers, context, complete]);
   useEffect(() => {
@@ -74,14 +94,24 @@ export default function AudhdTestPage() {
     async function hydrate() {
       const query = new URLSearchParams(window.location.search);
       const paidReturn = query.get("paid") === "true";
+      const checkoutCancelled = query.get("checkout") === "cancelled";
+      const checkoutUnavailableReturn = query.get("checkout") === "unavailable";
       const recoveryReturn = query.get("recovery");
       let recoveryUnlocked = false;
+      let serverAnswers: ReturnType<typeof restoredAudhdAnswers> = null;
       try {
-        const response = await fetch("/api/audhd-recovery/status", { cache: "no-store" });
-        const body: unknown = response.ok ? await response.json() : null;
-        recoveryUnlocked = Boolean(body && typeof body === "object" && (body as { unlocked?: unknown }).unlocked === true);
+        const [restoreResponse, recoveryResponse] = await Promise.all([
+          fetch("/api/audhd-checkout/restore", { cache: "no-store" }),
+          fetch("/api/audhd-recovery/status", { cache: "no-store" }),
+        ]);
+        const restoreBody: unknown = restoreResponse.ok ? await restoreResponse.json() : null;
+        serverAnswers = restoreBody && typeof restoreBody === "object" && (restoreBody as { restored?: unknown }).restored === true
+          ? restoredAudhdAnswers((restoreBody as { answers?: unknown }).answers)
+          : null;
+        const recoveryBody: unknown = recoveryResponse.ok ? await recoveryResponse.json() : null;
+        recoveryUnlocked = Boolean(recoveryBody && typeof recoveryBody === "object" && (recoveryBody as { unlocked?: unknown }).unlocked === true);
       } catch {
-        // A failed status check must never unlock the browser client-side.
+        // Failed server checks must never unlock the browser client-side.
       }
       if (disposed) return;
       try {
@@ -91,7 +121,7 @@ export default function AudhdTestPage() {
         if (!saved) {
           const migrated = migrateLegacyAudhdCheckoutState(rawState);
           if (migrated) {
-            const migratedState = { ...migrated, unlocked: migrated.unlocked || paidReturn || paidMarker };
+            const migratedState = { ...migrated, unlocked: false };
             localStorage.setItem(STORAGE_KEY, JSON.stringify(migratedState));
             saved = parseState(localStorage.getItem(STORAGE_KEY));
             if (!saved) throw new Error("Legacy state could not be migrated");
@@ -99,17 +129,29 @@ export default function AudhdTestPage() {
         }
         if (recoveryReturn === "success" && !recoveryUnlocked) setRecoveryLinkInvalid(true);
         if (recoveryReturn === "invalid") setRecoveryLinkInvalid(true);
+        if (paidReturn || checkoutCancelled || checkoutUnavailableReturn) clearCheckoutQuery();
+        if (checkoutCancelled) setCheckoutNotice(true);
+        if (checkoutUnavailableReturn) setPaymentRecoveryRequired(true);
+
+        // A signed, database-backed Checkout entitlement is the only payment
+        // path that can restore this report. It works without localStorage.
+        if (serverAnswers) {
+          const restoredReport = calculateReport(serverAnswers.answers, serverAnswers.contextAnswers);
+          setAnswers(serverAnswers.answers); setContext(serverAnswers.contextAnswers); setQuestionIndex(questions.length - 1); setContextIndex(contextQuestions.length - 1); setPhase("result"); setUnlocked(true);
+          try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ reportVersion: REPORT_VERSION, answers: serverAnswers.answers, contextAnswers: serverAnswers.contextAnswers, questionIndex: questions.length - 1, contextIndex: contextQuestions.length - 1, unlocked: false, report: restoredReport })); } catch { setStorageError(true); }
+          return;
+        }
 
         // A signed server cookie can only start a new test or restore an existing
         // recovery test. It never relies on a query parameter to unlock a report.
-        const shouldStartRecoveredTest = recoveryUnlocked && !hasCompleteSavedState(saved) && (recoveryReturn === "success" || !saved || !saved.unlocked);
+        const shouldStartRecoveredTest = recoveryUnlocked && !hasCompleteSavedState(saved) && (recoveryReturn === "success" || !saved);
         if (shouldStartRecoveredTest) {
-          const recoveredState = { reportVersion: REPORT_VERSION, answers: emptyAnswers(), contextAnswers: emptyContextAnswers(), questionIndex: 0, contextIndex: 0, unlocked: true };
+          const recoveredState = { reportVersion: REPORT_VERSION, answers: emptyAnswers(), contextAnswers: emptyContextAnswers(), questionIndex: 0, contextIndex: 0, unlocked: false };
           localStorage.setItem(STORAGE_KEY, JSON.stringify(recoveredState));
           const persisted = parseState(localStorage.getItem(STORAGE_KEY));
-          if (!persisted?.unlocked) throw new Error("Recovery unlock could not be persisted");
+          if (!persisted) throw new Error("Recovery state could not be persisted");
           setAnswers(persisted.answers); setContext(persisted.contextAnswers); setQuestionIndex(0); setContextIndex(0); setPhase("questions"); setUnlocked(true); setRecoveryNotice(true);
-          if (recoveryReturn === "success") window.history.replaceState({}, "", window.location.pathname);
+          if (recoveryReturn === "success") clearCheckoutQuery();
           return;
         }
 
@@ -119,22 +161,14 @@ export default function AudhdTestPage() {
           return;
         }
         if (saved) {
-          const restoredUnlocked = saved.unlocked || paidReturn || paidMarker || recoveryUnlocked;
+          const restoredUnlocked = recoveryUnlocked;
           setAnswers(saved.answers); setContext(saved.contextAnswers); setQuestionIndex(saved.questionIndex); setContextIndex(saved.contextIndex); setUnlocked(restoredUnlocked);
           if (hasCompleteSavedState(saved)) setPhase("result");
-          if (restoredUnlocked && !saved.unlocked) {
-            const paidState = { ...saved, unlocked: true };
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(paidState));
-            if (!parseState(localStorage.getItem(STORAGE_KEY))?.unlocked) throw new Error("Paid state could not be persisted");
-          }
-          if (paidReturn) {
-            standardAnalytics.purchase();
-            window.history.replaceState({}, "", window.location.pathname);
-          }
+          if (paidStateExists && !recoveryUnlocked) setPaymentRecoveryRequired(true);
         }
       } catch {
         setStorageError(true);
-        if (paidReturn) setPaymentRecoveryRequired(true);
+        if (paidReturn || checkoutUnavailableReturn) setPaymentRecoveryRequired(true);
       } finally {
         if (!disposed) setHydrated(true);
       }
@@ -142,22 +176,22 @@ export default function AudhdTestPage() {
     void hydrate();
     return () => { disposed = true; };
   }, [standardAnalytics]);
-  useEffect(() => { if (!hydrated || paymentRecoveryRequired) return; try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ reportVersion: REPORT_VERSION, answers, contextAnswers: context, questionIndex, contextIndex, unlocked, report })); } catch { setStorageError(true); } }, [answers, context, questionIndex, contextIndex, unlocked, report, hydrated, paymentRecoveryRequired]);
+  useEffect(() => { if (!hydrated) return; try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ reportVersion: REPORT_VERSION, answers, contextAnswers: context, questionIndex, contextIndex, unlocked: false, report })); } catch { setStorageError(true); } }, [answers, context, questionIndex, contextIndex, report, hydrated]);
   useEffect(() => { if (unlocked && report) standardAnalytics.resultView(); }, [unlocked, report, standardAnalytics]);
   useEffect(() => { if (phase !== "analysis" || !report) return; const timers = [setTimeout(() => setAnalysisStep(1), 1200), setTimeout(() => setAnalysisStep(2), 2500), setTimeout(() => { standardAnalytics.analysisView(); setPhase("result"); }, 4000)]; return () => timers.forEach(clearTimeout); }, [phase, report, standardAnalytics]);
   function answer(value: number) { if (lock.current) return; lock.current = true; setTransitioning(true); if (phase === "questions") { const next = answers.map((item, i) => i === questionIndex ? value : item); setAnswers(next); const count = next.filter(item => item >= 0).length; standardAnalytics.answer(count, questionIndex + 1); setTimeout(() => { if (questionIndex < 47) setQuestionIndex(questionIndex + 1); else setPhase("context"); lock.current = false; setTransitioning(false); }, 180); } else { const next = context.map((item, i) => i === contextIndex ? value : item); setContext(next); const count = next.filter(item => item >= 0).length; standardAnalytics.answer(questions.length + count, questions.length + contextIndex + 1); setTimeout(() => { if (contextIndex < 5) setContextIndex(contextIndex + 1); else setPhase("analysis"); lock.current = false; setTransitioning(false); }, 180); } }
-  function checkout() { if (!report || unlocked) { setUnlocked(true); return; } if (checkoutPending.current) return; try { const checkoutState = { reportVersion: REPORT_VERSION, answers, contextAnswers: context, questionIndex, contextIndex, unlocked: false, report }; localStorage.setItem(STORAGE_KEY, JSON.stringify(checkoutState)); const persisted = parseState(localStorage.getItem(STORAGE_KEY)); if (!hasCompleteSavedState(persisted) || persisted?.unlocked) throw new Error("Checkout state could not be persisted"); } catch { setStorageError(true); return; } if (!AUDHD_STRIPE_URL.startsWith("https://buy.stripe.com/")) { setCheckoutUnavailable(true); return; } checkoutPending.current = true; standardAnalytics.checkout(() => { window.location.href = AUDHD_STRIPE_URL; }); }
+  async function checkout() { if (!report || unlocked || checkoutPending.current) return; checkoutPending.current = true; setCheckoutUnavailable(false); try { const prepared = await fetch("/api/audhd-checkout/prepare", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ reportVersion: REPORT_VERSION, answers, contextAnswers: context }), cache: "no-store" }); const preparedBody: unknown = prepared.ok ? await prepared.json() : null; const attemptId = preparedBody && typeof preparedBody === "object" ? (preparedBody as { attemptId?: unknown }).attemptId : null; if (typeof attemptId !== "string") throw new Error("Checkout preparation failed"); const started = await fetch("/api/audhd-checkout/start", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ attemptId }), cache: "no-store" }); const startedBody: unknown = started.ok ? await started.json() : null; const checkoutUrl = startedBody && typeof startedBody === "object" ? validCheckoutUrl((startedBody as { checkoutUrl?: unknown }).checkoutUrl) : null; if (!checkoutUrl) throw new Error("Checkout start failed"); standardAnalytics.checkout(() => { window.location.assign(checkoutUrl); }); } catch { checkoutPending.current = false; setCheckoutUnavailable(true); } }
   function restart() { standardAnalytics.restart(); setAnswers(emptyAnswers()); setContext(emptyContextAnswers()); setQuestionIndex(0); setContextIndex(0); setPhase("questions"); setCheckoutUnavailable(false); try { localStorage.removeItem(STORAGE_KEY); } catch { setStorageError(true); } }
   if (!hydrated) return <p className="mt-8" role="status">Laddar testet…</p>;
   const storageNotice = storageError ? <p role="status" className="mt-6 rounded-xl border border-neutral-300 bg-[#F1E8E2] p-4 text-sm leading-6">Webbläsaren kan inte spara testet säkert. Du kan fortsätta här, men lämna inte sidan om du vill behålla svaren.</p> : null;
   const recoveryMessage = recoveryNotice ? <p role="status" className="mt-6 rounded-xl border border-[#c8a777] bg-[#fff8e8] p-4 text-sm font-medium leading-6 text-[#4a3823]">Ditt test är redan upplåst – du behöver inte betala igen.</p> : null;
   const invalidRecoveryMessage = recoveryLinkInvalid ? <p role="alert" className="mt-6 rounded-xl border border-[#d6a5a9] bg-[#fff5f5] p-4 text-sm leading-6 text-[#702d36]">Recovery-länken är ogiltig eller har gått ut. Inget har låsts upp.</p> : null;
-  if (paymentRecoveryRequired) return <>{storageNotice}<section className={card} role="alert" aria-live="assertive"><p className="text-sm font-semibold uppercase tracking-[.16em] text-[#27666A]">Betalningen behöver kopplas till dina svar</p><h2 className="text-2xl font-semibold">Vi kan inte öppna rapporten ännu</h2><p>Vi hittar inga kompletta AuDHD-svar i den här webbläsaren. Din betalning är inte borttappad, men rapporten kan inte återskapas utan de sparade testsvaren.</p><p>Kontakta <a className="underline underline-offset-4" href="mailto:support@relationsvarning.se">support@relationsvarning.se</a> och ange tidpunkt för köpet samt e-postadressen som användes vid betalningen, så kan vi hjälpa dig vidare.</p></section></>;
+  if (paymentRecoveryRequired) return <>{storageNotice}<section className={card} role="alert" aria-live="assertive"><p className="text-sm font-semibold uppercase tracking-[.16em] text-[#27666A]">Betalningen behöver verifieras</p><h2 className="text-2xl font-semibold">Betala inte igen</h2><p>Vi kan inte säkert koppla den här webbläsaren till ett genomfört köp ännu. Dina svar och din betalning är inte automatiskt förlorade, men rapporten kan inte öppnas förrän köpet har verifierats.</p><p>Öppna i första hand länken i Stripe-kvittot i samma webbläsare. Om det inte hjälper, kontakta <a className="underline underline-offset-4" href="mailto:support@relationsvarning.se">support@relationsvarning.se</a> med tidpunkt för köpet och e-postadressen som användes vid betalningen, så hjälper vi dig vidare.</p></section></>;
   if (phase === "questions" || phase === "context") { const isContext = phase === "context"; const item = isContext ? contextQuestions[contextIndex] : questions[questionIndex]; const selected = isContext ? context[contextIndex] : answers[questionIndex]; const current = isContext ? contextIndex + 1 : questionIndex + 1; const total = isContext ? 6 : 48; const options = isContext ? contextQuestions[contextIndex].options : answerLabels; return <>{storageNotice}{recoveryMessage}{invalidRecoveryMessage}<section className={card} aria-labelledby="question"><div className="text-sm text-neutral-600"><span>{isContext ? "Sista frågor" : `Fråga ${current} av 48`}</span></div><progress className="h-2 w-full accent-[#27666A]" value={current - (selected >= 0 ? 0 : 1)} max={total} aria-label="Testets förlopp" /><h2 id="question" className="text-2xl font-semibold leading-snug">{isContext && contextIndex === 0 ? "Några sista frågor hjälper oss sätta dina svar i sammanhang." : item.text}</h2>{isContext && contextIndex === 0 && <p className="text-neutral-600">De ändrar inte dina index. De hjälper bara rapporten att använda ett mer försiktigt och relevant språk.</p>}<div role="group" aria-labelledby="question" className="space-y-2">{options.map((label, value) => <button key={label} type="button" disabled={transitioning} aria-pressed={selected === value} onClick={() => answer(value)} className={`flex min-h-12 w-full items-center rounded-xl border p-3 text-left ${selected === value ? "border-[#202124] bg-[#F1E8E2] font-semibold" : "border-neutral-300 bg-white hover:bg-neutral-50"}`}>{label}</button>)}</div><div className="flex gap-3"><button className={`${btn} border border-neutral-300 bg-white`} type="button" disabled={transitioning || (isContext ? contextIndex === 0 : questionIndex === 0)} onClick={() => isContext ? setContextIndex(contextIndex - 1) : setQuestionIndex(questionIndex - 1)}>Tillbaka</button></div><p className="text-sm text-neutral-600">Dina svar sparas lokalt i den här webbläsaren.</p></section></>; }
   if (phase === "analysis") return <section className={card} aria-busy="true" aria-live="polite"><p className="text-sm uppercase tracking-[.16em] text-neutral-600">Din profil är på väg</p><h2 className="text-3xl font-semibold">Vi analyserar dina svar</h2><div className="space-y-3">{["Analyserar dina svar inom 8 områden…", "Jämför ADHD- och autismrelaterade mönster…", "Identifierar hur områdena samspelar hos dig…"].map((text, i) => <p key={text} className={i <= analysisStep ? "text-neutral-900" : "text-neutral-400"}>✓ {text}</p>)}</div></section>;
   if (!report) return null;
   const finding = freeFinding(report);
-  if (!unlocked) return <><section ref={standardAnalytics.paywallRef} data-audhd-paywall className={`${card} bg-[#202124] text-white`}>
+  if (!unlocked) return <>{checkoutNotice && <p role="status" className="mt-6 rounded-xl border border-[#c8a777] bg-[#fff8e8] p-4 text-sm font-medium leading-6 text-[#4a3823]">Betalningen avbröts. Dina svar finns kvar och du har inte debiterats.</p>}<section ref={standardAnalytics.paywallRef} data-audhd-paywall className={`${card} bg-[#202124] text-white`}>
     <div>
       <p data-audhd-kicker className="text-sm uppercase tracking-[.16em] text-[#DDE8E3]">Ett första fynd</p>
       <h2 className="text-xl font-semibold">{finding.title}</h2>
@@ -186,7 +220,7 @@ export default function AudhdTestPage() {
       </aside>
       <PaywallCheckoutCTA onClick={checkout} label={<>Lås upp min AuDHD-profil · {PRICE_SEK} kr</>} trustText="Engångsbetalning · Ingen prenumeration." />
     </div>
-    {checkoutUnavailable && <p role="alert">Betalning är inte konfigurerad ännu. Dina svar finns kvar lokalt.</p>}
+    {checkoutUnavailable && <p role="alert">Vi kunde inte starta betalningen just nu. Dina svar finns kvar. Försök igen om en stund – du har inte debiterats.</p>}
   </section><div data-audhd-restart className="mt-3"><button type="button" className="text-sm underline" onClick={restart}>Gör om testet</button></div></>;
   const [recommendedTest, fallbackTest] = audhdRecommendations(report);
   return <><ReportView report={report} onRestart={restart} /><PostPurchaseRecommendation sourceProduct="audhd_test" preferredProductIds={[recommendedTest, fallbackTest]} /></>;

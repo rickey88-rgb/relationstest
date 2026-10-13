@@ -1,6 +1,8 @@
 import { timingSafeEqual } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
-import { issueAudhdSupportRecoveryToken } from "../../../_lib/audhdRecovery.server";
+import { hashAudhdRecoveryToken, issueAudhdRecoveryToken } from "../../../_lib/audhdRecovery.server";
+import { createAudhdRecoveryGrant } from "../../../_lib/audhdRecoveryDb.server";
+import { inspectAudhdCheckoutSession } from "../../../_lib/audhdRecoveryPayment.server";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -39,7 +41,20 @@ export async function POST(request: NextRequest) {
   if (!isAuthorized(request)) return response({ error: "Not found." }, 404);
 
   try {
-    const token = issueAudhdSupportRecoveryToken();
+    const body: unknown = await request.json();
+    const checkoutSessionId = body && typeof body === "object" && !Array.isArray(body) && typeof (body as { checkoutSessionId?: unknown }).checkoutSessionId === "string"
+      ? (body as { checkoutSessionId: string }).checkoutSessionId.trim()
+      : "";
+    const verification = await inspectAudhdCheckoutSession(checkoutSessionId);
+    if (!verification.verified) return response({ error: "Payment could not be verified." }, 422);
+
+    const token = issueAudhdRecoveryToken();
+    await createAudhdRecoveryGrant({
+      tokenHash: hashAudhdRecoveryToken(token),
+      checkoutSessionId: verification.checkoutSessionId,
+      paymentIntentId: verification.paymentIntentId,
+      priceId: verification.priceId,
+    });
     const recoveryUrl = new URL("/api/audhd-recovery/redeem", RECOVERY_ORIGIN);
     recoveryUrl.searchParams.set("token", token);
     return response({ recoveryUrl: recoveryUrl.toString() }, 200);
