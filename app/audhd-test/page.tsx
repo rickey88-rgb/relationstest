@@ -3,6 +3,7 @@ import Link from "next/link";
 import EditorialSurface from "../_components/EditorialSurface";
 import { EditorialArticleJsonLd, getEditorialArticleSchema, getEditorialMetadata } from "../_seo/editorialSeo";
 import { GuideSection, textLink } from "../_components/ContentGuide";
+import AudhdBookCard from "../_components/AudhdBookCard";
 
 const title = "AuDHD-test för vuxna – ADHD och autism samtidigt | Relationsvarning";
 const description = "Gör ett omfattande AuDHD-test för vuxna med 48 frågor om ADHD-drag, autismdrag och överlappande mönster. Få ett första resultat direkt.";
@@ -78,6 +79,8 @@ export default function AudhdLanding() {
       <GuideSection title="Fördjupa dig i rätt del av ämnet"><div className="grid gap-3 sm:grid-cols-2">{relatedGuides.map(([href, heading, copy]) => <Link data-rv="card" key={href} href={href} className="block rounded-2xl border border-neutral-200 bg-neutral-50 p-5 transition hover:border-neutral-300 hover:bg-white"><h3 className="font-semibold text-neutral-950">{heading} <span aria-hidden="true">→</span></h3><p className="mt-2 text-sm leading-6 text-neutral-700">{copy}</p></Link>)}</div></GuideSection>
 
       <GuideSection title="Vanliga frågor om AuDHD-testet"><div className="divide-y divide-neutral-200 border-y border-neutral-200">{faqs.map(([question, answer]) => <div key={question} className="py-5"><h3 className="font-semibold text-neutral-950">{question}</h3><p className="mt-2 max-w-3xl text-sm leading-6 text-neutral-700">{answer}</p></div>)}</div></GuideSection>
+
+      <GuideSection title="Fördjupa dig med konkreta verktyg"><p className="max-w-3xl">Vill du ha praktiskt stöd för vardagen finns en bok med tio konkreta sätt att hantera när ADHD och autism drar åt olika håll.</p><div className="max-w-[370px]"><AudhdBookCard /></div></GuideSection>
 
       <section data-rv="panel" className="mt-12 rounded-[28px] border border-[#D6E1DD] bg-[#FFFEFC] px-5 py-8 text-center sm:px-9 sm:py-10"><h2 className="text-3xl font-semibold tracking-tight text-neutral-950">Redo att se hur ditt mönster ser ut?</h2><p className="mx-auto mt-3 max-w-xl leading-7 text-neutral-700">Svara på 48 frågor och få ett första resultat direkt i webbläsaren.</p><div className="mt-6"><Link data-rv="button" href="/audhd-test/test" className={cta}>Starta AuDHD-testet</Link></div><p className="mt-3 text-sm font-semibold text-neutral-700">48 frågor · första resultatet direkt</p><p className="mx-auto mt-5 max-w-2xl text-sm leading-6 text-neutral-600"><strong className="font-semibold text-neutral-700">Bra att veta:</strong> Du kan göra AuDHD-testet och se ett första fynd i dina svar utan kostnad. Vill du låsa upp din personliga fördjupade analys kostar det 79 kr. Du väljer själv om du vill köpa den.</p></section>
     </article>

@@ -7,6 +7,7 @@ import adhdGuides from "../content/adhd-guides.json";
 import autismGuides from "../content/autism-guides.json";
 import HomeGuideDirectory, { type HomeGuide } from "./_components/HomeGuideDirectory";
 import HomeScrollLink from "./_components/HomeScrollLink";
+import AudhdBookCard from "./_components/AudhdBookCard";
 
 const pageUrl = "https://www.relationsvarning.se/";
 const title = "Relationsvarning – ADHD, autism, AuDHD och relationer";
@@ -200,11 +201,7 @@ export default function Landing() {
           <p>Konkreta och lättlästa böcker för vardagen, när du vill förstå mer och pröva verktyg i din egen takt.</p>
         </div>
         <div className={styles.bookGrid}>
-          <article className={styles.bookCard}>
-            <Image src="/audhd-bok-mockup.png" alt="Världens bästa bok om AuDHD av Elias Voss" width={1312} height={1199} sizes="(max-width: 700px) min(100vw - 5rem, 250px), 280px" className={styles.bookMockup} />
-            <p className={styles.eyebrow}>Digital bok · 149 kr</p><h3>Världens bästa bok om AuDHD</h3><p>10 konkreta sätt att få livet att fungera när ADHD och autism drar åt varsitt håll.</p>
-            <Link href="/audhd-bok" className={styles.bookLink}>Läs mer om boken <span aria-hidden="true">→</span></Link>
-          </article>
+          <AudhdBookCard />
           <article className={styles.bookCard}>
             <Image src="/adhd-bok-mockup.png" alt="ADHD Deluxe – bok om ADHD av Elias Voss" width={1448} height={1086} sizes="(max-width: 700px) min(100vw - 5rem, 250px), 280px" className={styles.bookMockup} />
             <p className={styles.eyebrow}>Digital bok</p><h3>ADHD Deluxe</h3><p>En personlig och praktisk bok om ADHD i verkliga livet.</p>
