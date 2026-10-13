@@ -52,7 +52,7 @@ export default function Page() {
             Känner du igen flera av de här mönstren i din relation?
           </p>
           <Link data-rv="card"
-            href="/"
+            href="/test"
             className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-xl border border-neutral-300 bg-white px-4 py-2 text-sm font-semibold text-neutral-900 hover:bg-neutral-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"
           >
             Gör relationstestet
@@ -228,7 +228,7 @@ export default function Page() {
             hur trygg du känner dig.
           </p>
           <Link data-rv="button"
-            href="/"
+            href="/test"
             className="mt-5 inline-flex min-h-12 items-center justify-center rounded-xl bg-[#7A1F1F] px-5 py-3 text-center font-semibold text-white hover:bg-[#5C1717] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#5C1717]"
           >
             Gör Relationsvarnings test
