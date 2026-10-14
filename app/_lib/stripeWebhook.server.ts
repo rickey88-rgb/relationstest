@@ -97,5 +97,5 @@ export async function processStripeWebhookEvent(event: Stripe.Event, dependencie
   } satisfies VerifiedStripePayment;
 
   const recorded = await atStage("database_ledger", () => dependencies.recordPayment(payment));
-  return { kind: "recorded" as const, duplicate: recorded.duplicate, productKey, paid: isPaid };
+  return { kind: "recorded" as const, duplicate: recorded.duplicate, productKey, paid: isPaid, checkoutSessionId: session.id };
 }

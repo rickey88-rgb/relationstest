@@ -1,6 +1,7 @@
 import Stripe from "stripe";
 import { NextRequest, NextResponse } from "next/server";
 import { recordVerifiedStripePayment } from "../../../_lib/paymentsDb.server";
+import { deliverPendingGa4Purchase, Ga4PurchaseDeliveryError } from "../../../_lib/ga4PurchaseDelivery.server";
 import { processStripeWebhookEvent, StripeWebhookProcessingError } from "../../../_lib/stripeWebhook.server";
 import { revokeAudhdCheckoutAccessForPaymentIntent } from "../../../_lib/audhdCheckoutAttemptsDb.server";
 import { processAudhdCheckoutRevocationEvent } from "../../../_lib/audhdCheckoutRevocation.server";
@@ -31,6 +32,10 @@ function safeErrorCode(error: unknown) {
 }
 
 function logProcessingFailure(error: unknown) {
+  if (error instanceof Ga4PurchaseDeliveryError) {
+    console.error(JSON.stringify({ event: "ga4_purchase_delivery_failed", stage: error.stage, error_class: safeErrorClass(error.source) }));
+    return;
+  }
   const isStagedFailure = error instanceof StripeWebhookProcessingError;
   const source = isStagedFailure ? error.source : error;
   const commit = process.env.VERCEL_GIT_COMMIT_SHA;
@@ -59,11 +64,18 @@ export async function POST(request: NextRequest) {
 
   try {
     const stripe = new Stripe(required("STRIPE_SECRET_KEY"));
-    await processStripeWebhookEvent(event, {
+    const processed = await processStripeWebhookEvent(event, {
       retrieveSession: (sessionId) => stripe.checkout.sessions.retrieve(sessionId),
       listLineItems: (sessionId) => stripe.checkout.sessions.listLineItems(sessionId, { limit: 100, expand: ["data.price.product"] }),
       recordPayment: recordVerifiedStripePayment,
     });
+    if (processed.kind === "recorded") {
+      // The payment ledger and optional GA4 outbox are already committed. A
+      // Measurement Protocol outage must not turn a verified Stripe payment
+      // into a failed webhook delivery; the cron job safely retries the row.
+      try { await deliverPendingGa4Purchase(processed.checkoutSessionId); }
+      catch (error) { logProcessingFailure(error); }
+    }
     // This is independent from the shadow ledger: signed refund/dispute events
     // only revoke a matching short-lived AuDHD checkout entitlement.
     await processAudhdCheckoutRevocationEvent(event, revokeAudhdCheckoutAccessForPaymentIntent);

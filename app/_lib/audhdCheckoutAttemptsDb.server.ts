@@ -1,6 +1,7 @@
 import { randomBytes, randomUUID } from "node:crypto";
 import postgres from "postgres";
 import { AUDHD_CHECKOUT_ATTEMPT_RETENTION_SECONDS, type EncryptedAudhdCheckoutAnswers } from "./audhdCheckoutAttempt.server";
+import type { AudhdCheckoutAnalyticsAttribution } from "./audhdCheckoutAnalytics.server";
 
 type Sql = ReturnType<typeof postgres>;
 const globalForAudhdCheckoutAttempts = globalThis as typeof globalThis & { audhdCheckoutAttemptsSql?: Sql };
@@ -144,6 +145,28 @@ export async function bindAudhdCheckoutSession(input: { attemptId: string; brows
     returning id
   `;
   if (rows.length !== 1) throw new Error("AuDHD checkout session could not be bound to its attempt");
+}
+
+/**
+ * Optional, consent-gated attribution. It is intentionally best-effort at the
+ * route boundary and is never used to determine whether a payment is valid.
+ * The first valid browser context wins, so repeated checkout clicks cannot
+ * rewrite a purchase's original GA session association.
+ */
+export async function saveAudhdCheckoutAnalyticsAttribution(input: { attemptId: string; browserSecretHash: string; attribution: AudhdCheckoutAnalyticsAttribution }) {
+  const rows = await database()<{ id: string }[]>`
+    update public.audhd_checkout_attempts
+    set ga4_client_id = coalesce(ga4_client_id, ${input.attribution.clientId}),
+        ga4_session_id = coalesce(ga4_session_id, ${input.attribution.sessionId}::bigint),
+        ga4_attribution_captured_at = coalesce(ga4_attribution_captured_at, now()),
+        updated_at = now()
+    where id = ${input.attemptId}
+      and browser_secret_hash = ${input.browserSecretHash}
+      and expires_at > now()
+      and paid_at is null
+    returning id
+  `;
+  return rows.length === 1;
 }
 
 export type AudhdCheckoutRestoreRecord = EncryptedAudhdCheckoutAnswers & { id: string; checkoutSessionId: string; paymentIntentId: string; expiresAt: Date; accessExpiresAt: Date };

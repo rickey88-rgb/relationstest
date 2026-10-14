@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 export const metadata: Metadata = {
   title: "Integritetspolicy | Relationsvarning",
   description: "Läs hur Relationsvarning hanterar uppgifter, testsvar och lokal lagring samt hur du kontaktar oss i integritetsfrågor.",
@@ -55,7 +56,10 @@ export default function IntegritetPage() {
       <p style={{ opacity: 0.9 }}>
         Om du godkänner statistik använder vi Google Analytics 4 för att förstå sidbesök
         och hur test- och köpflöden används. Det omfattar testets namn, start, framsteg,
-        slutförande, tidsåtgång och köpbelopp. Testsvar, testpoäng och profiltyper skickas inte.
+        slutförande, tidsåtgång och köpbelopp. För AuDHD kan ett Stripe-verifierat köp
+        kopplas till Google Analytics pseudonyma klient- och sessionsidentifierare för att
+        mätningen ska räknas en gång och tillskrivas rätt besök. Testsvar, testpoäng och
+        profiltyper skickas inte.
         Google Analytics använder cookies efter ditt godkännande. Du kan avvisa statistik
         och ändå använda testerna och köpa resultat. Ändra eller återkalla ditt val via
         Statistikinställningar i sidfoten; då stoppas fortsatt mätning och sajtens
@@ -75,9 +79,9 @@ export default function IntegritetPage() {
       </p>
 
       <nav aria-label="Sidnavigation" style={{ marginTop: 24, fontSize: 13 }}>
-        <a href="/" style={{ textDecoration: "underline" }}>Till startsidan</a>
+        <Link href="/" style={{ textDecoration: "underline" }}>Till startsidan</Link>
         {" · "}
-        <a href="/villkor" style={{ textDecoration: "underline" }}>Villkor</a>
+        <Link href="/villkor" style={{ textDecoration: "underline" }}>Villkor</Link>
       </nav>
 
       <p style={{ marginTop: 26, fontSize: 12, opacity: 0.7 }}>

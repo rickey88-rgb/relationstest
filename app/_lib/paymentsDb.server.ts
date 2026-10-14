@@ -105,6 +105,35 @@ export async function recordVerifiedStripePayment(input: VerifiedStripePayment) 
       `;
     }
 
+    // This outbox is intentionally created in the same transaction as the
+    // Stripe ledger update. It cannot exist for an unverified browser return,
+    // a test-mode checkout, another product, a wrong amount/currency, or a
+    // visitor who has not explicitly supplied GA4 attribution after consent.
+    if (
+      input.livemode
+      && input.productKey === "audhd_test"
+      && input.checkoutStatus === "complete"
+      && input.paymentStatus === "paid"
+      && input.amountTotalOre === 7900
+      && input.currency?.toLowerCase() === "sek"
+    ) {
+      await transaction`
+        insert into public.ga4_purchase_deliveries (
+          stripe_checkout_session_id, transaction_id, ga4_client_id, ga4_session_id
+        )
+        select attempt.stripe_checkout_session_id,
+               attempt.stripe_checkout_session_id,
+               attempt.ga4_client_id,
+               attempt.ga4_session_id
+        from public.audhd_checkout_attempts attempt
+        where attempt.stripe_checkout_session_id = ${input.checkoutSessionId}
+          and (attempt.stripe_payment_intent_id is null or attempt.stripe_payment_intent_id = ${input.paymentIntentId})
+          and attempt.ga4_client_id is not null
+          and attempt.ga4_session_id is not null
+        on conflict (stripe_checkout_session_id) do nothing
+      `;
+    }
+
     await transaction`
       update stripe_webhook_events
       set processing_status = 'processed', processed_at = now()

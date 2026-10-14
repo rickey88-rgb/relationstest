@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { AUDHD_CHECKOUT_ATTEMPT_COOKIE, hashAudhdCheckoutBrowserSecret } from "../../../_lib/audhdCheckoutAttempt.server";
-import { bindAudhdCheckoutSession, releaseAudhdCheckoutReservation, releaseExpiredAudhdCheckoutSession, reserveAudhdCheckoutAttempt } from "../../../_lib/audhdCheckoutAttemptsDb.server";
+import { parseAudhdCheckoutAnalyticsAttribution } from "../../../_lib/audhdCheckoutAnalytics.server";
+import { bindAudhdCheckoutSession, releaseAudhdCheckoutReservation, releaseExpiredAudhdCheckoutSession, reserveAudhdCheckoutAttempt, saveAudhdCheckoutAnalyticsAttribution } from "../../../_lib/audhdCheckoutAttemptsDb.server";
 import { createAudhdStripeCheckout, existingAudhdStripeCheckout } from "../../../_lib/audhdCheckoutStripe.server";
 
 export const runtime = "nodejs";
@@ -58,6 +59,7 @@ export async function POST(request: NextRequest) {
   try {
     const body: unknown = await request.json();
     const attemptId = body && typeof body === "object" && !Array.isArray(body) ? (body as { attemptId?: unknown }).attemptId : null;
+    const analyticsAttribution = body && typeof body === "object" && !Array.isArray(body) ? parseAudhdCheckoutAnalyticsAttribution((body as { analytics?: unknown }).analytics) : null;
     const browserSecret = request.cookies.get(AUDHD_CHECKOUT_ATTEMPT_COOKIE)?.value ?? "";
     if (!isAttemptId(attemptId) || !/^[A-Za-z0-9_-]{43}$/.test(browserSecret)) return response({ error: "Checkout attempt is unavailable." }, 404);
 
@@ -66,6 +68,12 @@ export async function POST(request: NextRequest) {
     const reservation = await reserveAudhdCheckoutAttempt(attemptId, browserSecretHash);
     if (reservation.kind === "invalid") return response({ error: "Checkout attempt is unavailable." }, 404);
     if (reservation.kind === "in_progress") return response({ error: "Checkout is already being prepared." }, 409);
+    if (analyticsAttribution) {
+      // Analytics is optional: a storage outage must never prevent a customer
+      // from reaching the already secure Checkout flow.
+      try { await saveAudhdCheckoutAnalyticsAttribution({ attemptId, browserSecretHash, attribution: analyticsAttribution }); }
+      catch { console.error(JSON.stringify({ event: "audhd_checkout_analytics_attribution_failed" })); }
+    }
     if (reservation.kind === "existing") {
       stage = "stripe_create";
       const checkout = await existingAudhdStripeCheckout(reservation.checkoutSessionId, reservation.checkoutReferenceId);

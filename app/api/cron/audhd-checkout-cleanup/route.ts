@@ -1,6 +1,7 @@
 import { timingSafeEqual } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { deleteExpiredAudhdCheckoutAttempts } from "../../../_lib/audhdCheckoutAttemptsDb.server";
+import { deliverPendingGa4Purchases } from "../../../_lib/ga4PurchaseDelivery.server";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -26,11 +27,11 @@ function safeErrorClass(error: unknown) {
 export async function GET(request: NextRequest) {
   if (!authorized(request)) return response({ error: "Unauthorized" }, 401);
   try {
-    const deleted = await deleteExpiredAudhdCheckoutAttempts();
-    console.info(JSON.stringify({ event: "audhd_checkout_attempts_cleaned", deleted_count: deleted }));
-    return response({ deleted }, 200);
+    const [deleted, delivered] = await Promise.all([deleteExpiredAudhdCheckoutAttempts(), deliverPendingGa4Purchases()]);
+    console.info(JSON.stringify({ event: "audhd_checkout_maintenance_completed", deleted_count: deleted, ga4_purchases_delivered: delivered }));
+    return response({ deleted, delivered }, 200);
   } catch (error) {
-    console.error(JSON.stringify({ event: "audhd_checkout_attempt_cleanup_failed", error_class: safeErrorClass(error) }));
-    return response({ error: "Cleanup unavailable." }, 503);
+    console.error(JSON.stringify({ event: "audhd_checkout_maintenance_failed", error_class: safeErrorClass(error) }));
+    return response({ error: "Maintenance unavailable." }, 503);
   }
 }

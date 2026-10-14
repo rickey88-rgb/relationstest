@@ -8,6 +8,7 @@ export type Consent = "granted" | "denied" | "unknown";
 export type EventName = "page_view" | "landing_view" | "book_landing_view" | "book_checkout_click" | "test_start" | "test_progress" | "test_complete" | "teaser_view" | "analysis_view" | "result_view" | "paywall_view" | "begin_checkout" | "purchase" | "cross_sell_view" | "cross_sell_click" | "related_guide_click" | "guide_to_test_click" | "quickcheck_start" | "quickcheck_complete" | "quickcheck_analysis_view" | "quickcheck_result_view" | "quickcheck_recommendation_view" | "quickcheck_specialist_test_click" | "quickcheck_share_click" | "quickcheck_share_success" | "healthy_relationship_test_start" | "healthy_relationship_test_complete" | "healthy_relationship_analysis_view" | "healthy_relationship_result_view" | "healthy_relationship_recommendation_view" | "healthy_relationship_specialist_click" | "healthy_relationship_share_click" | "healthy_relationship_share_success";
 export type EcommerceItem = { item_id: string; item_name: string; price: number; quantity: number };
 export type EventParams = Record<string, string | number | boolean | EcommerceItem[] | undefined>;
+export type Ga4CheckoutAttribution = { clientId: string; sessionId: string };
 
 declare global {
   interface Window {
@@ -87,6 +88,33 @@ export function trackEventBeforeNavigation(name: EventName, params: EventParams,
     finish();
     return false;
   }
+}
+
+function gaValue(field: "client_id" | "session_id"): Promise<string | null> {
+  return new Promise(resolve => {
+    if (typeof window === "undefined" || typeof window.gtag !== "function" || !initialized) return resolve(null);
+    let finished = false;
+    const finish = (value: unknown) => {
+      if (finished) return;
+      finished = true;
+      window.clearTimeout(timeout);
+      resolve(typeof value === "string" || typeof value === "number" ? String(value) : null);
+    };
+    const timeout = window.setTimeout(() => finish(null), 400);
+    try { window.gtag("get", GA_MEASUREMENT_ID, field, finish); } catch { finish(null); }
+  });
+}
+
+/**
+ * Gets GA4's own pseudonymous browser/session identifiers only after opt-in.
+ * No URL, referrer, answer, score, or profile data is sent to the server.
+ */
+export async function captureGa4CheckoutAttribution(): Promise<Ga4CheckoutAttribution | null> {
+  if (consent() !== "granted") return null;
+  const [clientId, sessionId] = await Promise.all([gaValue("client_id"), gaValue("session_id")]);
+  if (!clientId || !sessionId) return null;
+  if (!/^[1-9][0-9]{0,19}\.[1-9][0-9]{0,19}$/.test(clientId) || !/^[1-9][0-9]{0,14}$/.test(sessionId)) return null;
+  return { clientId, sessionId };
 }
 export function initializeAnalytics() {
   try {

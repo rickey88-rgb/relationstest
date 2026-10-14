@@ -18,7 +18,7 @@ const dependencies = {
 
 (async () => {
   let result = await webhook.processStripeWebhookEvent(event, dependencies);
-  assert.deepEqual(result, { kind: "recorded", duplicate: false, productKey: "adhd_test", paid: true });
+  assert.deepEqual(result, { kind: "recorded", duplicate: false, productKey: "adhd_test", paid: true, checkoutSessionId: "cs_live_shadow123" });
   assert.equal(recorded[0].paymentIntentId, "pi_shadow123");
   assert.equal(recorded[0].lineItems[0].priceId, "price_adhd_39");
 
