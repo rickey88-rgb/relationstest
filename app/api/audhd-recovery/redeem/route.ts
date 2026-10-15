@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { AUDHD_LEGACY_RECOVERY_COOKIE, AUDHD_RECOVERY_COOKIE, audhdBrowserUnlockMaxAge, hashAudhdRecoveryToken, isAudhdRecoveryToken, issueAudhdBrowserUnlockToken, issueAudhdLegacyBrowserUnlockToken, verifyAudhdLegacySupportRecoveryToken } from "../../../_lib/audhdRecovery.server";
-import { redeemAudhdRecoveryGrant } from "../../../_lib/audhdRecoveryDb.server";
+import { loadAudhdRecoveryGrantForRedemption, redeemAudhdRecoveryGrant, revokeAudhdRecoveryGrantsForPaymentIntent } from "../../../_lib/audhdRecoveryDb.server";
+import { inspectAudhdCheckoutSession } from "../../../_lib/audhdRecoveryPayment.server";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -25,7 +26,18 @@ export async function GET(request: NextRequest) {
   }
   let grantId: string | null = null;
   try {
-    grantId = await redeemAudhdRecoveryGrant(hashAudhdRecoveryToken(token));
+    const tokenHash = hashAudhdRecoveryToken(token);
+    const grant = await loadAudhdRecoveryGrantForRedemption(tokenHash);
+    if (grant) {
+      // Recovery is a payment entitlement. Recheck Stripe immediately before
+      // consuming the one-time link rather than trusting a past support check.
+      const payment = await inspectAudhdCheckoutSession(grant.checkoutSessionId);
+      if (payment.verified && payment.paymentIntentId === grant.paymentIntentId && payment.priceId === grant.priceId) {
+        grantId = await redeemAudhdRecoveryGrant(tokenHash);
+      } else if (!payment.verified && (payment.reason === "payment_refunded" || payment.reason === "payment_disputed")) {
+        await revokeAudhdRecoveryGrantsForPaymentIntent(grant.paymentIntentId);
+      }
+    }
   } catch {
     grantId = null;
   }

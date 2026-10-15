@@ -12,6 +12,7 @@ let processingFailure = null;
 let deliveryFailure = null;
 let eventType = "checkout.session.completed";
 let revocationCalls = 0;
+let recoveryRevocationCalls = 0;
 class StripeWebhookProcessingError extends Error {
   constructor(stage, source) {
     super("Stripe webhook processing failed");
@@ -43,6 +44,7 @@ const route = createLoader({
   "../../../_lib/paymentsDb.server": { recordVerifiedStripePayment: async () => ({ duplicate: false }) },
   "../../../_lib/ga4PurchaseDelivery.server": { Ga4PurchaseDeliveryError, deliverPendingGa4Purchase: async sessionId => { assert.equal(sessionId, "cs_live_audhd123"); if (deliveryFailure) throw deliveryFailure; } },
   "../../../_lib/audhdCheckoutAttemptsDb.server": { revokeAudhdCheckoutAccessForPaymentIntent: async paymentIntent => { assert.equal(paymentIntent, "pi_audhd123"); revocationCalls += 1; return true; } },
+  "../../../_lib/audhdRecoveryDb.server": { revokeAudhdRecoveryGrantsForPaymentIntent: async paymentIntent => { assert.equal(paymentIntent, "pi_audhd123"); recoveryRevocationCalls += 1; return true; } },
   "../../../_lib/audhdCheckoutRevocation.server": { processAudhdCheckoutRevocationEvent: async (event, revoke) => { if (event.type === "charge.refunded") await revoke(event.data.object.payment_intent); } },
 })(path.join(__dirname, "route.ts"));
 
@@ -83,6 +85,7 @@ function request(signature = "test-signature") {
   response = await route.POST(request());
   assert.equal(response.status, 200);
   assert.equal(revocationCalls, 1, "only an already signature-verified refund event can revoke access");
+  assert.equal(recoveryRevocationCalls, 1, "the same verified refund revokes recovery grants");
   eventType = "checkout.session.completed";
 
   const originalProcessingConsoleError = console.error;

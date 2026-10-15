@@ -4,6 +4,7 @@ import { recordVerifiedStripePayment } from "../../../_lib/paymentsDb.server";
 import { deliverPendingGa4Purchase, Ga4PurchaseDeliveryError } from "../../../_lib/ga4PurchaseDelivery.server";
 import { processStripeWebhookEvent, StripeWebhookProcessingError } from "../../../_lib/stripeWebhook.server";
 import { revokeAudhdCheckoutAccessForPaymentIntent } from "../../../_lib/audhdCheckoutAttemptsDb.server";
+import { revokeAudhdRecoveryGrantsForPaymentIntent } from "../../../_lib/audhdRecoveryDb.server";
 import { processAudhdCheckoutRevocationEvent } from "../../../_lib/audhdCheckoutRevocation.server";
 
 export const runtime = "nodejs";
@@ -78,7 +79,13 @@ export async function POST(request: NextRequest) {
     }
     // This is independent from the shadow ledger: signed refund/dispute events
     // only revoke a matching short-lived AuDHD checkout entitlement.
-    await processAudhdCheckoutRevocationEvent(event, revokeAudhdCheckoutAccessForPaymentIntent);
+    await processAudhdCheckoutRevocationEvent(event, async paymentIntentId => {
+      await Promise.all([
+        revokeAudhdCheckoutAccessForPaymentIntent(paymentIntentId),
+        revokeAudhdRecoveryGrantsForPaymentIntent(paymentIntentId),
+      ]);
+      return true;
+    });
     return noStore(200);
   } catch (error) {
     // Stripe retries 5xx responses. Do not mark events as processed on failure.

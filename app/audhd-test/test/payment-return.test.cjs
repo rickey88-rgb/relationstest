@@ -18,6 +18,7 @@ function environment({ query = "", recoveryUnlocked = false, secureRestore = nul
   global.fetch = async (url, options = {}) => {
     requests.push({ url, options });
     if (url === "/api/audhd-checkout/restore") return secureRestore ? { ok: true, json: async () => secureRestore } : { ok: false, json: async () => ({ restored: false }) };
+    if (url === "/api/audhd-recovery/restore") return { ok: false, json: async () => ({ restored: false }) };
     if (url === "/api/audhd-recovery/status") return { ok: true, json: async () => ({ unlocked: recoveryUnlocked }) };
     if (url === "/api/audhd-checkout/prepare") return checkoutFailure ? { ok: false, json: async () => ({}) } : { ok: true, json: async () => ({ attemptId: "5f2c9a20-8c14-4df9-88c6-5bb87197789a" }) };
     if (url === "/api/audhd-checkout/start") return checkoutFailure ? { ok: false, json: async () => ({}) } : { ok: true, json: async () => ({ checkoutUrl: "https://checkout.stripe.com/c/pay/cs_live_secure" }) };

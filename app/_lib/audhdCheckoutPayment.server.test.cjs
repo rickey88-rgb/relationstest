@@ -26,7 +26,7 @@ function paid() {
 
 (async () => {
   paid();
-  assert.deepEqual(await payment.verifyAudhdCheckoutPayment("cs_live_audhd123"), { verified: true, checkoutSessionId: "cs_live_audhd123", checkoutReferenceId: "audhd_12345678901234567890123456789012", paymentIntentId: "pi_audhd123" });
+  assert.deepEqual(await payment.verifyAudhdCheckoutPayment("cs_live_audhd123"), { verified: true, checkoutSessionId: "cs_live_audhd123", checkoutReferenceId: "audhd_12345678901234567890123456789012", paymentIntentId: "pi_audhd123", priceId: "price_audhd_79", customerEmail: null });
   paid(); StripeMock.session.payment_status = "unpaid";
   assert.equal((await payment.verifyAudhdCheckoutPayment("cs_live_audhd123")).reason, "session_not_paid");
   paid(); StripeMock.session.livemode = false;
