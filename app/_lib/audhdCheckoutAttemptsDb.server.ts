@@ -193,6 +193,44 @@ export async function finalizeVerifiedAudhdCheckout(input: { browserSecretHash: 
   return rows.length === 1 ? { id: rows[0].id, accessExpiresAt: rows[0].access_expires_at } : null;
 }
 
+/**
+ * A cookie-less Stripe return may prove a payment, but it never receives an
+ * entitlement here. This only proves that an existing server-created attempt
+ * is eligible for a separately authenticated recovery link.
+ */
+export async function hasAudhdCheckoutRecoveryCandidate(input: { checkoutReferenceId: string; checkoutSessionId: string }) {
+  const rows = await database()<{ id: string }[]>`
+    select id
+    from public.audhd_checkout_attempts
+    where checkout_reference_id = ${input.checkoutReferenceId}
+      and stripe_checkout_session_id = ${input.checkoutSessionId}
+      and expires_at > now()
+      and revoked_at is null
+    limit 1
+  `;
+  return rows.length === 1;
+}
+
+export type AudhdCheckoutPendingRecord = { checkoutReferenceId: string; checkoutSessionId: string };
+
+/** A browser-bound retry reads the Session ID only from its own persisted attempt. */
+export async function loadAudhdCheckoutPendingRecord(browserSecretHash: string): Promise<AudhdCheckoutPendingRecord | null> {
+  const rows = await database()<Array<{ checkout_reference_id: string; stripe_checkout_session_id: string }>>`
+    select checkout_reference_id, stripe_checkout_session_id
+    from public.audhd_checkout_attempts
+    where browser_secret_hash = ${browserSecretHash}
+      and checkout_reference_id is not null
+      and stripe_checkout_session_id is not null
+      and paid_at is null
+      and expires_at > now()
+      and revoked_at is null
+    order by checkout_created_at desc
+    limit 1
+  `;
+  const record = rows[0];
+  return record ? { checkoutReferenceId: record.checkout_reference_id, checkoutSessionId: record.stripe_checkout_session_id } : null;
+}
+
 /** The restored ciphertext is released only after both signed access and browser-secret checks. */
 export async function loadAudhdCheckoutRestoreRecord(attemptId: string, browserSecretHash: string): Promise<AudhdCheckoutRestoreRecord | null> {
   const rows = await database()<Array<{ id: string; answers_ciphertext: string; encryption_iv: string; encryption_auth_tag: string; stripe_checkout_session_id: string; stripe_payment_intent_id: string; expires_at: Date; access_expires_at: Date }>>`

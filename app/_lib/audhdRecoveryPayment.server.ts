@@ -19,7 +19,7 @@ function required(name: string) {
 
 export type AudhdCheckoutVerification =
   | { verified: true; checkoutSessionId: string; paymentIntentId: string; priceId: string }
-  | { verified: false; reason: "invalid_session_id" | "price_not_configured" | "session_not_paid" | "payment_not_captured" | "payment_refunded" | "wrong_product" | "stripe_request_failed" };
+  | { verified: false; reason: "invalid_session_id" | "price_not_configured" | "session_not_paid" | "payment_not_captured" | "payment_refunded" | "payment_disputed" | "wrong_product" | "stripe_request_failed" };
 
 /**
  * Verification deliberately uses Stripe as the source of truth rather than a
@@ -55,6 +55,7 @@ export async function inspectAudhdCheckoutSession(sessionId: string): Promise<Au
       ? await stripe.charges.retrieve(expandedCharge)
       : expandedCharge;
     if (charge && (charge.refunded || charge.amount_refunded > 0)) return { verified: false, reason: "payment_refunded" };
+    if (charge?.disputed) return { verified: false, reason: "payment_disputed" };
 
     return { verified: true, checkoutSessionId: session.id, paymentIntentId, priceId };
   } catch {

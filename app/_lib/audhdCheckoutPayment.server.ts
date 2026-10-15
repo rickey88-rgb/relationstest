@@ -6,9 +6,10 @@ type StripeReference = string | { id: string } | null | undefined;
 function idOf(value: StripeReference) { return typeof value === "string" ? value : value?.id ?? null; }
 function required(name: string) { const value = process.env[name]?.trim(); if (!value) throw new Error(`${name} is not configured`); return value; }
 function liveSessionId(value: string) { return /^cs_live_[A-Za-z0-9]+$/.test(value); }
+function customerEmail(value: unknown) { return typeof value === "string" && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) && value.length <= 254 ? value : null; }
 
 export type AudhdCheckoutPaymentVerification =
-  | { verified: true; checkoutSessionId: string; checkoutReferenceId: string; paymentIntentId: string }
+  | { verified: true; checkoutSessionId: string; checkoutReferenceId: string; paymentIntentId: string; priceId: string; customerEmail: string | null }
   | { verified: false; reason: "invalid_session_id" | "price_not_configured" | "session_not_paid" | "wrong_reference" | "wrong_price_or_amount" | "payment_not_captured" | "payment_refunded" | "payment_disputed" | "stripe_request_failed" };
 
 /** Direct Stripe verification used only by the return route, never by browser state. */
@@ -41,6 +42,8 @@ export async function verifyAudhdCheckoutPayment(sessionId: string): Promise<Aud
     // automatically, so support can make the explicit customer-service decision.
     if (!charge || !charge.paid || charge.refunded || charge.amount_refunded > 0) return { verified: false, reason: "payment_refunded" };
     if (charge.disputed) return { verified: false, reason: "payment_disputed" };
-    return { verified: true, checkoutSessionId: session.id, checkoutReferenceId: session.client_reference_id, paymentIntentId };
+    // Customer email is used transiently for a transactional recovery link;
+    // it is neither persisted in our database nor added to diagnostics.
+    return { verified: true, checkoutSessionId: session.id, checkoutReferenceId: session.client_reference_id, paymentIntentId, priceId: expectedPriceId, customerEmail: customerEmail(session.customer_details?.email ?? session.customer_email) };
   } catch { return { verified: false, reason: "stripe_request_failed" }; }
 }

@@ -42,6 +42,9 @@ function paidFixtures() {
   paidFixtures(); StripeMock.paymentIntent.latest_charge = { refunded: true, amount_refunded: 7900 };
   assert.equal((await payment.inspectAudhdCheckoutSession("cs_live_paid")).reason, "payment_refunded");
 
+  paidFixtures(); StripeMock.paymentIntent.latest_charge = { refunded: false, amount_refunded: 0, disputed: true };
+  assert.equal((await payment.inspectAudhdCheckoutSession("cs_live_paid")).reason, "payment_disputed");
+
   paidFixtures(); StripeMock.session.livemode = false;
   assert.equal((await payment.inspectAudhdCheckoutSession("cs_live_paid")).reason, "session_not_paid");
 
