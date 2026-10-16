@@ -6,17 +6,17 @@ import ArticleImage from "../_components/ArticleImage";
 import { getPublishedArticleImage } from "../_seo/articleImages";
 import { EditorialArticleJsonLd, getEditorialArticleSchema, getEditorialMetadata } from "../_seo/editorialSeo";
 
-const title = "Gaslighting i relationer: tecken, exempel och vad du kan göra";
+const title = "Gaslighting i relation: tecken, exempel och skillnaden mot konflikt";
 const description = "En saklig guide till gaslighting i relationer: vad det betyder, vanliga tecken, konkreta exempel, skillnaden mot vanlig konflikt och praktiska sätt att skydda dig.";
 
 export const metadata: Metadata = {
   title,
   description,
-  ...getEditorialMetadata({ route: "/gaslighting-relation", title, description, datePublished: "2026-03-13T21:44:14+01:00", dateModified: "2026-09-21T22:29:14+02:00" }),
+  ...getEditorialMetadata({ route: "/gaslighting-relation", title, description, datePublished: "2026-03-13T21:44:14+01:00", dateModified: "2026-10-16T12:00:00+02:00" }),
 };
 
 const gaslightingImage = getPublishedArticleImage("/gaslighting-relation");
-const articleJsonLd = getEditorialArticleSchema({ route: "/gaslighting-relation", title, description, datePublished: "2026-03-13T21:44:14+01:00", dateModified: "2026-09-21T22:29:14+02:00" });
+const articleJsonLd = getEditorialArticleSchema({ route: "/gaslighting-relation", title, description, datePublished: "2026-03-13T21:44:14+01:00", dateModified: "2026-10-16T12:00:00+02:00" });
 
 export default function GaslightingRelationPage() {
   return (

@@ -4,15 +4,15 @@ import Image from "next/image";
 import { EditorialArticleJsonLd, getEditorialArticleSchema, getEditorialMetadata } from "../_seo/editorialSeo";
 
 const title = "Kontrollerande partner – tecken på kontrollerande beteende";
-const description = "Hur märks en kontrollerande partner? Läs om vanliga tecken, skillnaden mellan omtanke och kontroll och vad du kan göra om du känner igen beteendet.";
+const description = "Hur märks en kontrollerande partner? Läs om tidiga tecken, skillnaden mellan omtanke och kontroll och ett test för att reflektera över relationen.";
 
 export const metadata = {
   title,
   description,
-  ...getEditorialMetadata({ route: "/kontrollerande-relation", title, description, datePublished: "2026-02-22T13:39:05+01:00", dateModified: "2026-09-21T22:29:14+02:00" }),
+  ...getEditorialMetadata({ route: "/kontrollerande-relation", title, description, datePublished: "2026-02-22T13:39:05+01:00", dateModified: "2026-10-16T12:00:00+02:00" }),
 };
 
-const articleJsonLd = getEditorialArticleSchema({ route: "/kontrollerande-relation", title, description, datePublished: "2026-02-22T13:39:05+01:00", dateModified: "2026-09-21T22:29:14+02:00" });
+const articleJsonLd = getEditorialArticleSchema({ route: "/kontrollerande-relation", title, description, datePublished: "2026-02-22T13:39:05+01:00", dateModified: "2026-10-16T12:00:00+02:00" });
 
 export default function Page() {
   return (
@@ -34,6 +34,12 @@ export default function Page() {
           som minskar din frihet. En kontrollerande pojkvän, flickvän, man eller
           kvinna kan uttrycka kontroll på olika sätt. Det viktiga är hur du behandlas,
           inte partnerns kön.
+        </p>
+
+        <p>
+          Tidigt kan kontroll vara lätt att förväxla med omtanke. Skillnaden märks i
+          om dina gränser och egna val respekteras, eller om omsorgen blir krav,
+          insyn och konsekvenser när du säger nej.
         </p>
 
         <h2 className="text-2xl font-semibold">

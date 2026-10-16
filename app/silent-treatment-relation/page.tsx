@@ -6,14 +6,14 @@ import GuideNextSteps from "../_components/GuideNextSteps";
 export const metadata: Metadata = {
   title: "Silent treatment i relation – när tystnad blir makt och kontroll",
   description:
-    "Lär dig känna igen silent treatment i en relation: vad det är, hur det skiljer sig från att behöva lugna ner sig, vilka tecken som är vanliga och varför tystnad kan bli ett sätt att styra.",
+    "Vad betyder silent treatment på svenska? Lär dig känna igen straffande tystnad i en relation och skillnaden mot en sund paus.",
   alternates: {
     canonical: "/silent-treatment-relation",
   },
   openGraph: {
     title: "Silent treatment i relation – när tystnad blir makt och kontroll",
     description:
-      "En lång, saklig guide om silent treatment i relationer – hur tystnad används, varför det gör så starkt avtryck och vad du kan vara uppmärksam på.",
+      "Vad betyder silent treatment på svenska? En saklig guide om straffande tystnad i relationer och skillnaden mot en sund paus.",
     url: "/silent-treatment-relation",
     type: "article",
   },
@@ -103,7 +103,7 @@ const articleJsonLd = {
   "@type": "Article",
   headline: "Silent treatment i relation – när tystnad blir makt och kontroll",
   description:
-    "En lång guide om silent treatment i relationer: vad det är, hur det skiljer sig från att behöva space och varför tystnad kan bli ett sätt att styra.",
+    "Vad betyder silent treatment på svenska? En guide om straffande tystnad i relationer och skillnaden mot en sund paus.",
   author: {
     "@type": "Organization",
     name: "Relationsvarning",
@@ -162,11 +162,12 @@ export default function SilentTreatmentRelationPage() {
           </h1>
 
           <p className="mt-6 max-w-3xl text-lg leading-8 text-neutral-700 md:text-xl">
-            Silent treatment kan på ytan se stillsamt ut. Det finns inga skrik, inga
-            stora ord, ibland inte ens någon tydlig konflikt. Men för den som utsätts
-            kan just tystnaden bli det som skapar mest oro. När kontakt, värme eller
-            normal kommunikation plötsligt dras bort kan hela relationens tyngdpunkt
-            förskjutas: från det som hände – till jakten på att få tillbaka lugnet.
+            Silent treatment, ofta kallat straffande tystnad på svenska, kan på ytan
+            se stillsamt ut. Det finns inga skrik, inga stora ord, ibland inte ens
+            någon tydlig konflikt. Men för den som utsätts kan just tystnaden bli det
+            som skapar mest oro. När kontakt, värme eller normal kommunikation
+            plötsligt dras bort kan hela relationens tyngdpunkt förskjutas: från det
+            som hände – till jakten på att få tillbaka lugnet.
           </p>
 
           <p className="mt-4 max-w-3xl text-lg leading-8 text-neutral-700">

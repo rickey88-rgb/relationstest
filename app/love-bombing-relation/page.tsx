@@ -14,14 +14,14 @@ const imageMetadata = getArticleImageMetadata("/love-bombing-relation");
 export const metadata: Metadata = {
   title: "Love bombing – 10 tecken och skillnaden mot förälskelse",
   description:
-    "Vad är love bombing? Läs om 10 tecken, skillnaden mot stark förälskelse och vad du kan göra om uppmärksamheten övergår i press eller kontroll.",
+    "Vad betyder love bombing på svenska? Läs om 10 tecken, skillnaden mot stark förälskelse och när uppmärksamhet blir press eller kontroll.",
   alternates: {
     canonical: "https://www.relationsvarning.se/love-bombing-relation",
   },
   openGraph: {
     title: "Love bombing – 10 tecken och skillnaden mot förälskelse",
     description:
-      "En saklig guide om love bombing: 10 tecken, gränser, stark förälskelse och vad du kan göra om du känner igen mönstret.",
+      "Vad betyder love bombing på svenska? En saklig guide om 10 tecken, gränser, stark förälskelse, press och kontroll.",
     url: "/love-bombing-relation",
     type: "article",
     ...(imageMetadata.openGraph ?? {}),
@@ -109,7 +109,7 @@ const articleJsonLd = {
   "@type": "Article",
   headline: "Love bombing – 10 tecken och skillnaden mot förälskelse",
   description:
-    "Love bombing: 10 tecken, skillnaden mot stark förälskelse och råd när intensitet följs av press eller kontroll.",
+    "Vad betyder love bombing på svenska? Läs om 10 tecken, skillnaden mot stark förälskelse och när intensitet blir press eller kontroll.",
   author: {
     "@type": "Organization",
     name: "Relationsvarning",
@@ -165,7 +165,7 @@ export default function LoveBombingRelationPage() {
           </div>
 
           <h1 className="mt-5 text-4xl font-semibold tracking-tight text-neutral-950 md:text-5xl">
-            Love bombing – tecken och skillnaden mot stark förälskelse
+            Love bombing – 10 tecken och skillnaden mot stark förälskelse
           </h1>
           <p id="vad-ar" className="mt-6 max-w-3xl text-lg leading-8 text-neutral-700 md:text-xl">
             Love bombing, ibland skrivet lovebombing och kallat kärleksbombning på
