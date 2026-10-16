@@ -55,7 +55,7 @@ export default function Page() {
 
         <div className="flex flex-col items-start gap-3 border-l-2 border-neutral-200 pl-4 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-sm leading-6 text-neutral-700">
-            Känner du igen flera av de här mönstren i din relation?
+            Vill du reflektera över återkommande kontroll och hur dina gränser påverkas i relationen?
           </p>
           <Link data-rv="card"
             href="/test"
