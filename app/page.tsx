@@ -157,6 +157,19 @@ export default function Landing() {
               </div>
             </nav>
             <HomeScrollLink targetId="relationship-tests" className={styles.allTestsLink}>Utforska fler tester <span aria-hidden="true">→</span></HomeScrollLink>
+            <a href="#bocker" className={styles.booksShortcut}>
+              <span className={styles.booksShortcutIcon} aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" focusable="false">
+                  <path d="M4.5 5.75A2.75 2.75 0 0 1 7.25 3H19.5v15.5H7.25a2.75 2.75 0 0 0-2.75 2.75V5.75Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+                  <path d="M7.25 3v15.5M10.5 7h5.5M10.5 10h5.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+                </svg>
+              </span>
+              <span className={styles.booksShortcutText}>
+                <strong>Upptäck våra böcker</strong>
+                <small>Praktiska guider om ADHD, autism och AuDHD</small>
+              </span>
+              <span className={styles.booksShortcutArrow} aria-hidden="true">↓</span>
+            </a>
           </div>
 
           <div className={styles.heroArt} aria-hidden="true">
