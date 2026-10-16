@@ -347,6 +347,15 @@ export default function PsykiskMisshandelRelationPage() {
                 bedömning av om någon har begått ett brott.
               </p>
             </div>
+
+            <div>
+              <h3 className="mb-2 text-lg font-semibold">
+                Vad kostar testet?
+              </h3>
+              <p className="leading-relaxed text-neutral-700">
+                Testet är gratis att genomföra och du får en kort indikation på återkommande mönster i dina svar utan kostnad. Den fullständiga personliga analysen kostar 39 kr.
+              </p>
+            </div>
           </div>
         </div>
 

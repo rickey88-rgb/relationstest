@@ -251,6 +251,13 @@ export default function Page() {
         </Link>
       </section>
 
+      <section style={{ marginTop: 24, paddingTop: 18, borderTop: "1px solid #e5e5e5" }}>
+        <h2 style={{ margin: 0, fontSize: 18 }}>Vad kostar testet?</h2>
+        <p style={{ ...paragraphStyle, marginTop: 8, fontSize: 14 }}>
+          Testet är gratis att genomföra och du får en kort indikation på ditt svarsmönster utan kostnad. Den fullständiga personliga analysen kostar 39 kr.
+        </p>
+      </section>
+
       <p
         style={{
           marginTop: 30,

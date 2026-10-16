@@ -196,6 +196,10 @@ export default function AnknytningPage() {
             för att fundera över vilka situationer som väcker oro eller avstånd,
             vilka behov du har och vad som faktiskt händer mellan er.
           </p>
+          <div className="border-t border-neutral-200 pt-4 text-sm leading-6 text-neutral-600">
+            <h3 className="font-semibold text-neutral-900">Vad kostar testet?</h3>
+            <p className="mt-2">Testet är gratis att genomföra och du får en kort indikation på ditt svarsmönster utan kostnad. Den fullständiga personliga analysen kostar 39 kr.</p>
+          </div>
           <Link data-rv="button"
             href="/anknytningstest/test"
             className="inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-neutral-900 px-5 py-3 text-center text-sm font-semibold text-white hover:bg-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900 sm:w-auto"
