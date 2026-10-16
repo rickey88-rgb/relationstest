@@ -744,6 +744,11 @@ export default function NarcissistRelationPage() {
           </p>
         </section>
 
+        <section className="mt-12 border-t border-neutral-200 pt-6">
+          <h2 className="text-lg font-semibold tracking-tight text-neutral-950">Vad kostar testet?</h2>
+          <p className="mt-2 text-sm leading-6 text-neutral-600">Testet är gratis att genomföra och du får en kort indikation på ditt relationsmönster utan kostnad. Den fullständiga personliga analysen kostar 39 kr.</p>
+        </section>
+
         <TestCta
           title="Generellt relationstest"
           text="Om du vill få en första bild av om det du lever i liknar ett destruktivt relationsmönster kan du göra vårt test här. Det är ett enkelt nästa steg när man behöver få tankarna ur dimman och ner i något mer konkret."
