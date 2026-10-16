@@ -12,6 +12,10 @@ export default function PaywallCheckoutCTA({ onClick, separated = false, label =
     >
       {label}
     </button>
+    <p data-paywall-return-notice className="mt-2 flex items-start justify-center gap-2 text-center text-xs leading-5 text-neutral-300">
+      <span aria-hidden="true" className="mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-full border border-current text-[10px] font-bold leading-none">i</span>
+      <span>Stanna kvar efter betalningen. Det kan ta några sekunder innan du skickas vidare till din analys.</span>
+    </p>
     {belowCta}
     <p className={`mt-2 text-center text-neutral-300 ${trustClassName}`}><span data-flow="lock" aria-hidden="true">🔒</span> {trustText}</p>
     <div className="mt-1.5 flex items-center justify-center gap-2.5" aria-label="Betalningsalternativ: Klarna, Visa och Mastercard">
