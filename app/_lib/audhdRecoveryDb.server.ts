@@ -164,20 +164,20 @@ export type AudhdRecoveryRestoreRecord = {
 /** Recovery links may restore only the paid attempt that their redeemed grant names. */
 export async function loadAudhdRecoveryRestoreRecord(grantId: string): Promise<AudhdRecoveryRestoreRecord | null> {
   const rows = await database()<Array<{ stripe_checkout_session_id: string; stripe_payment_intent_id: string; stripe_price_id: string; answers_ciphertext: string; encryption_iv: string; encryption_auth_tag: string }>>`
-    select grant.stripe_checkout_session_id,
-           grant.stripe_payment_intent_id,
-           grant.stripe_price_id,
+    select rg.stripe_checkout_session_id,
+           rg.stripe_payment_intent_id,
+           rg.stripe_price_id,
            attempt.answers_ciphertext,
            attempt.encryption_iv,
            attempt.encryption_auth_tag
-    from public.audhd_recovery_grants grant
+    from public.audhd_recovery_grants rg
     join public.audhd_checkout_attempts attempt
-      on attempt.stripe_checkout_session_id = grant.stripe_checkout_session_id
-    where grant.id = ${grantId}
-      and grant.product_key = 'audhd_test'
-      and grant.expires_at > now()
-      and grant.redeemed_at is not null
-      and grant.revoked_at is null
+      on attempt.stripe_checkout_session_id = rg.stripe_checkout_session_id
+    where rg.id = ${grantId}
+      and rg.product_key = 'audhd_test'
+      and rg.expires_at > now()
+      and rg.redeemed_at is not null
+      and rg.revoked_at is null
       and attempt.expires_at > now()
       and attempt.revoked_at is null
     limit 1
