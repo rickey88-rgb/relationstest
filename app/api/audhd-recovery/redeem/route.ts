@@ -6,14 +6,52 @@ import { inspectAudhdCheckoutSession } from "../../../_lib/audhdRecoveryPayment.
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-export async function GET(request: NextRequest) {
+function recoveryDestination(request: NextRequest, state: "success" | "invalid") {
   const destination = new URL("/audhd-test/test", request.url);
-  const token = request.nextUrl.searchParams.get("token");
+  destination.searchParams.set("recovery", state);
+  return destination;
+}
+
+function escapeHtmlAttribute(value: string) {
+  return value.replace(/[&<>"]/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[character] as string);
+}
+
+export async function GET(request: NextRequest) {
+  // Link previews, security scanners and mail clients may issue GET requests.
+  // Deliberately do not validate, look up, revoke or redeem a grant here.
+  const token = request.nextUrl.searchParams.get("token") ?? "";
+  return new NextResponse(`<!doctype html>
+<html lang="sv">
+  <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Återställ åtkomst</title></head>
+  <body>
+    <main>
+      <h1>Återställ åtkomst till ditt resultat</h1>
+      <p>Kontrollera att du vill öppna ditt betalda resultat. Åtkomsten aktiveras först när du väljer knappen nedan.</p>
+      <form method="post" action="/api/audhd-recovery/redeem">
+        <input type="hidden" name="token" value="${escapeHtmlAttribute(token)}">
+        <button type="submit">Öppna mitt resultat</button>
+      </form>
+    </main>
+  </body>
+</html>`, {
+    headers: {
+      "cache-control": "private, no-store, max-age=0",
+      "content-type": "text/html; charset=utf-8",
+      "content-security-policy": "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'",
+      "referrer-policy": "no-referrer",
+      "x-robots-tag": "noindex, nofollow, nosnippet",
+    },
+  });
+}
+
+export async function POST(request: NextRequest) {
+  const formData = await request.formData();
+  const submittedToken = formData.get("token");
+  const token = typeof submittedToken === "string" ? submittedToken : null;
   const legacyToken = verifyAudhdLegacySupportRecoveryToken(token);
   if (legacyToken) {
     const remainingSeconds = legacyToken.exp - Math.floor(Date.now() / 1000);
-    destination.searchParams.set("recovery", "success");
-    const response = NextResponse.redirect(destination, 303);
+    const response = NextResponse.redirect(recoveryDestination(request, "success"), 303);
     // Do not extend v1: this replacement cookie expires with the old link.
     response.cookies.set(AUDHD_LEGACY_RECOVERY_COOKIE, issueAudhdLegacyBrowserUnlockToken(legacyToken.exp), { httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", path: "/", maxAge: remainingSeconds });
     return response;
@@ -21,8 +59,7 @@ export async function GET(request: NextRequest) {
   // v1 is a signed dotted token; v2 is a fixed-size opaque value. A legacy
   // shaped value is never hashed or considered by the v2 grant lookup.
   if (!isAudhdRecoveryToken(token)) {
-    destination.searchParams.set("recovery", "invalid");
-    return NextResponse.redirect(destination, 303);
+    return NextResponse.redirect(recoveryDestination(request, "invalid"), 303);
   }
   let grantId: string | null = null;
   try {
@@ -42,11 +79,9 @@ export async function GET(request: NextRequest) {
     grantId = null;
   }
   if (!grantId) {
-    destination.searchParams.set("recovery", "invalid");
-    return NextResponse.redirect(destination, 303);
+    return NextResponse.redirect(recoveryDestination(request, "invalid"), 303);
   }
-  destination.searchParams.set("recovery", "success");
-  const response = NextResponse.redirect(destination, 303);
+  const response = NextResponse.redirect(recoveryDestination(request, "success"), 303);
   response.cookies.set(AUDHD_RECOVERY_COOKIE, issueAudhdBrowserUnlockToken(grantId), { httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", path: "/", maxAge: audhdBrowserUnlockMaxAge });
   return response;
 }
