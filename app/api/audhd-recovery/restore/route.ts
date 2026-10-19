@@ -11,7 +11,7 @@ function unavailable() {
   return NextResponse.json({ restored: false }, { status: 404, headers: { "Cache-Control": "no-store", "Referrer-Policy": "no-referrer", "X-Content-Type-Options": "nosniff", Vary: "Cookie" } });
 }
 
-function logRestoreFailure(reason: "record_missing" | "stripe_verification_failed" | "decrypt_failed") {
+function logRestoreFailure(reason: "record_missing" | "stripe_verification_failed" | "decrypt_failed" | "restore_query_failed") {
   console.error(JSON.stringify({ event: "audhd_recovery_restore_unavailable", reason }));
 }
 
@@ -40,6 +40,7 @@ export async function GET(request: NextRequest) {
     }
     return NextResponse.json({ restored: true, answers }, { headers: { "Cache-Control": "no-store", "Referrer-Policy": "no-referrer", "X-Content-Type-Options": "nosniff", Vary: "Cookie" } });
   } catch {
+    logRestoreFailure("restore_query_failed");
     return unavailable();
   }
 }
