@@ -11,22 +11,34 @@ function unavailable() {
   return NextResponse.json({ restored: false }, { status: 404, headers: { "Cache-Control": "no-store", "Referrer-Policy": "no-referrer", "X-Content-Type-Options": "nosniff", Vary: "Cookie" } });
 }
 
+function logRestoreFailure(reason: "record_missing" | "stripe_verification_failed" | "decrypt_failed") {
+  console.error(JSON.stringify({ event: "audhd_recovery_restore_unavailable", reason }));
+}
+
 /** A redeemed recovery link can restore only its own server-encrypted attempt. */
 export async function GET(request: NextRequest) {
   const access = verifyAudhdBrowserUnlockToken(request.cookies.get(AUDHD_RECOVERY_COOKIE)?.value ?? null);
   if (!access) return unavailable();
   try {
     const record = await loadAudhdRecoveryRestoreRecord(access.grantId);
-    if (!record) return unavailable();
+    if (!record) {
+      logRestoreFailure("record_missing");
+      return unavailable();
+    }
     const payment = await inspectAudhdCheckoutSession(record.checkoutSessionId);
     if (!payment.verified || payment.paymentIntentId !== record.paymentIntentId || payment.priceId !== record.priceId) {
       if (!payment.verified && (payment.reason === "payment_refunded" || payment.reason === "payment_disputed")) {
         await revokeAudhdRecoveryGrantsForPaymentIntent(record.paymentIntentId);
       }
+      logRestoreFailure("stripe_verification_failed");
       return unavailable();
     }
     const answers = decryptAudhdCheckoutAnswers(record);
-    return answers ? NextResponse.json({ restored: true, answers }, { headers: { "Cache-Control": "no-store", "Referrer-Policy": "no-referrer", "X-Content-Type-Options": "nosniff", Vary: "Cookie" } }) : unavailable();
+    if (!answers) {
+      logRestoreFailure("decrypt_failed");
+      return unavailable();
+    }
+    return NextResponse.json({ restored: true, answers }, { headers: { "Cache-Control": "no-store", "Referrer-Policy": "no-referrer", "X-Content-Type-Options": "nosniff", Vary: "Cookie" } });
   } catch {
     return unavailable();
   }

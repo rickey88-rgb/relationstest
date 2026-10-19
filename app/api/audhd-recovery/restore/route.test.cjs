@@ -7,10 +7,13 @@ const createLoader = require("../../../autism-test/test/test-loader.cjs");
 const grantId = "11111111-1111-4111-8111-111111111111";
 let record = { checkoutSessionId: "cs_live_audhd123", paymentIntentId: "pi_audhd123", priceId: "price_audhd", ciphertext: "cipher", iv: "iv", authTag: "tag" };
 let verification = { verified: true, checkoutSessionId: "cs_live_audhd123", paymentIntentId: "pi_audhd123", priceId: "price_audhd" };
-let revoked = 0;
+let revoked = 0, decrypts = true;
+const logs = [];
+const originalError = console.error;
+console.error = value => logs.push(String(value));
 const answers = { reportVersion: "audhd-v1", answers: Array(48).fill(2), contextAnswers: Array(6).fill(2) };
 const route = createLoader({
-  "../../../_lib/audhdCheckoutAttempt.server": { decryptAudhdCheckoutAnswers: value => value === record ? answers : null },
+  "../../../_lib/audhdCheckoutAttempt.server": { decryptAudhdCheckoutAnswers: value => decrypts && value === record ? answers : null },
   "../../../_lib/audhdRecovery.server": { AUDHD_RECOVERY_COOKIE: "rv_audhd_recovery_v2", verifyAudhdBrowserUnlockToken: value => value === "signed" ? { grantId } : null },
   "../../../_lib/audhdRecoveryDb.server": { loadAudhdRecoveryRestoreRecord: async id => id === grantId ? record : null, revokeAudhdRecoveryGrantsForPaymentIntent: async () => { revoked += 1; return true; } },
   "../../../_lib/audhdRecoveryPayment.server": { inspectAudhdCheckoutSession: async () => verification },
@@ -25,11 +28,21 @@ function request(cookie = "signed") { return new NextRequest("https://www.relati
   record = null;
   response = await route.GET(request());
   assert.equal(response.status, 404, "expired or cleaned-up answers become a free recovered retest, not a leaked report");
+  assert.deepEqual(JSON.parse(logs.at(-1)), { event: "audhd_recovery_restore_unavailable", reason: "record_missing" });
 
   record = { checkoutSessionId: "cs_live_audhd123", paymentIntentId: "pi_audhd123", priceId: "price_audhd", ciphertext: "cipher", iv: "iv", authTag: "tag" };
   verification = { verified: false, reason: "payment_refunded" };
   response = await route.GET(request());
   assert.equal(response.status, 404);
   assert.equal(revoked, 1);
+  assert.deepEqual(JSON.parse(logs.at(-1)), { event: "audhd_recovery_restore_unavailable", reason: "stripe_verification_failed" });
+
+  verification = { verified: true, checkoutSessionId: "cs_live_audhd123", paymentIntentId: "pi_audhd123", priceId: "price_audhd" };
+  decrypts = false;
+  response = await route.GET(request());
+  assert.equal(response.status, 404);
+  assert.deepEqual(JSON.parse(logs.at(-1)), { event: "audhd_recovery_restore_unavailable", reason: "decrypt_failed" });
+  assert.equal(logs.some(value => /cs_live|pi_audhd|cipher|signed/.test(value)), false, "failure logs contain no payment IDs, ciphertext or cookie values");
+  console.error = originalError;
   console.log("PASS: redeemed recovery can restore only its own retained answers and revokes on a later refund.");
-})().catch(error => { console.error(error); process.exitCode = 1; });
+})().catch(error => { console.error = originalError; console.error(error); process.exitCode = 1; });
