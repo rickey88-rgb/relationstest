@@ -211,6 +211,21 @@ export async function hasAudhdCheckoutRecoveryCandidate(input: { checkoutReferen
   return rows.length === 1;
 }
 
+/** Read encrypted material only for a matching, live recovery candidate. */
+export async function loadAudhdRecoveryCandidateAnswers(input: { checkoutReferenceId: string; checkoutSessionId: string }) {
+  const rows = await database()<Array<{ answers_ciphertext: string; encryption_iv: string; encryption_auth_tag: string }>>`
+    select answers_ciphertext, encryption_iv, encryption_auth_tag
+    from public.audhd_checkout_attempts
+    where checkout_reference_id = ${input.checkoutReferenceId}
+      and stripe_checkout_session_id = ${input.checkoutSessionId}
+      and expires_at > now()
+      and revoked_at is null
+    limit 1
+  `;
+  const row = rows[0];
+  return row ? { ciphertext: row.answers_ciphertext, iv: row.encryption_iv, authTag: row.encryption_auth_tag } : null;
+}
+
 export type AudhdCheckoutPendingRecord = { checkoutReferenceId: string; checkoutSessionId: string };
 
 /** A browser-bound retry reads the Session ID only from its own persisted attempt. */

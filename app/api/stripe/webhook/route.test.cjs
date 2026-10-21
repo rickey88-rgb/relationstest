@@ -13,6 +13,12 @@ let deliveryFailure = null;
 let eventType = "checkout.session.completed";
 let revocationCalls = 0;
 let recoveryRevocationCalls = 0;
+let webhookDuplicate = false;
+let recoveryCandidate = true;
+let answersValid = true;
+let safetyEmailCalls = 0;
+let safetyEmailFailure = null;
+let recoveryVerification = { verified: true, checkoutSessionId: "cs_live_audhd123", checkoutReferenceId: "audhd_12345678901234567890123456789012", paymentIntentId: "pi_audhd123", priceId: "price_audhd", customerEmail: "buyer@example.test" };
 class StripeWebhookProcessingError extends Error {
   constructor(stage, source) {
     super("Stripe webhook processing failed");
@@ -40,12 +46,15 @@ class StripeMock {
 }
 const route = createLoader({
   stripe: { default: StripeMock },
-  "../../../_lib/stripeWebhook.server": { StripeWebhookProcessingError, processStripeWebhookEvent: async () => { processed += 1; if (processingFailure) throw processingFailure; return { kind: "recorded", duplicate: false, checkoutSessionId: "cs_live_audhd123" }; } },
+  "../../../_lib/stripeWebhook.server": { StripeWebhookProcessingError, processStripeWebhookEvent: async () => { processed += 1; if (processingFailure) throw processingFailure; return { kind: "recorded", duplicate: webhookDuplicate, productKey: "audhd_test", paid: true, checkoutSessionId: "cs_live_audhd123" }; } },
   "../../../_lib/paymentsDb.server": { recordVerifiedStripePayment: async () => ({ duplicate: false }) },
   "../../../_lib/ga4PurchaseDelivery.server": { Ga4PurchaseDeliveryError, deliverPendingGa4Purchase: async sessionId => { assert.equal(sessionId, "cs_live_audhd123"); if (deliveryFailure) throw deliveryFailure; } },
-  "../../../_lib/audhdCheckoutAttemptsDb.server": { revokeAudhdCheckoutAccessForPaymentIntent: async paymentIntent => { assert.equal(paymentIntent, "pi_audhd123"); revocationCalls += 1; return true; } },
+  "../../../_lib/audhdCheckoutAttemptsDb.server": { revokeAudhdCheckoutAccessForPaymentIntent: async paymentIntent => { assert.equal(paymentIntent, "pi_audhd123"); revocationCalls += 1; return true; }, loadAudhdRecoveryCandidateAnswers: async input => { assert.deepEqual(input, { checkoutReferenceId: "audhd_12345678901234567890123456789012", checkoutSessionId: "cs_live_audhd123" }); return recoveryCandidate ? { ciphertext: "cipher", iv: "iv", authTag: "tag" } : null; } },
+  "../../../_lib/audhdCheckoutAttempt.server": { decryptAudhdCheckoutAnswers: value => answersValid && value.ciphertext === "cipher" ? { answers: Array(48).fill(2), contextAnswers: Array(6).fill(2) } : null },
   "../../../_lib/audhdRecoveryDb.server": { revokeAudhdRecoveryGrantsForPaymentIntent: async paymentIntent => { assert.equal(paymentIntent, "pi_audhd123"); recoveryRevocationCalls += 1; return true; } },
   "../../../_lib/audhdCheckoutRevocation.server": { processAudhdCheckoutRevocationEvent: async (event, revoke) => { if (event.type === "charge.refunded") await revoke(event.data.object.payment_intent); } },
+  "../../../_lib/audhdCheckoutPayment.server": { verifyAudhdCheckoutPayment: async sessionId => { assert.equal(sessionId, "cs_live_audhd123"); return recoveryVerification; } },
+  "../../../_lib/audhdAutomaticRecovery.server": { sendAutomaticAudhdRecovery: async payment => { safetyEmailCalls += 1; assert.equal(payment.customerEmail, "buyer@example.test"); if (safetyEmailFailure) throw safetyEmailFailure; return { kind: "accepted" }; } },
 })(path.join(__dirname, "route.ts"));
 
 function request(signature = "test-signature") {
@@ -70,6 +79,29 @@ function request(signature = "test-signature") {
   assert.equal(response.status, 200);
   assert.equal(processed, 1);
   assert.equal(response.headers.get("cache-control"), "no-store");
+  assert.equal(safetyEmailCalls, 1, "a new verified paid AuDHD purchase requests one safety email");
+
+  webhookDuplicate = true;
+  response = await route.POST(request());
+  assert.equal(response.status, 200);
+  assert.equal(safetyEmailCalls, 1, "a duplicate Stripe webhook must not request a second recovery link/email");
+  webhookDuplicate = false;
+  recoveryCandidate = false;
+  response = await route.POST(request());
+  assert.equal(response.status, 200);
+  assert.equal(safetyEmailCalls, 1, "mail is not requested without a retained encrypted test attempt");
+  recoveryCandidate = true;
+  answersValid = false;
+  response = await route.POST(request());
+  assert.equal(response.status, 200);
+  assert.equal(safetyEmailCalls, 1, "mail is not sent if encrypted answers cannot be restored");
+  answersValid = true;
+  safetyEmailFailure = new Error("ResendUnavailable");
+  response = await route.POST(request());
+  safetyEmailFailure = null;
+  assert.equal(response.status, 200, "safety-email failure must not turn a paid webhook into a failed payment flow");
+  assert.equal(safetyEmailCalls, 2);
+  webhookDuplicate = true;
 
   const originalDeliveryConsoleError = console.error;
   const deliveryLogs = [];
@@ -87,6 +119,7 @@ function request(signature = "test-signature") {
   assert.equal(revocationCalls, 1, "only an already signature-verified refund event can revoke access");
   assert.equal(recoveryRevocationCalls, 1, "the same verified refund revokes recovery grants");
   eventType = "checkout.session.completed";
+  webhookDuplicate = false;
 
   const originalProcessingConsoleError = console.error;
   const processingLogs = [];

@@ -14,6 +14,15 @@ function postgresMock() {
 const db = createLoader({ postgres: { default: postgresMock } })(path.join(__dirname, "audhdCheckoutAttemptsDb.server.ts"));
 
 (async () => {
+  nextRows = [{ answers_ciphertext: "cipher", encryption_iv: "iv", encryption_auth_tag: "tag" }];
+  assert.deepEqual(await db.loadAudhdRecoveryCandidateAnswers({ checkoutReferenceId: "audhd_reference", checkoutSessionId: "cs_live_abc123" }), { ciphertext: "cipher", iv: "iv", authTag: "tag" });
+  assert.match(query, /checkout_reference_id =/i);
+  assert.match(query, /stripe_checkout_session_id =/i);
+  assert.match(query, /expires_at > now\(\)/i);
+  assert.match(query, /revoked_at is null/i);
+  nextRows = [];
+  assert.equal(await db.loadAudhdRecoveryCandidateAnswers({ checkoutReferenceId: "audhd_reference", checkoutSessionId: "cs_live_abc123" }), null);
+  nextRows = [{ id: "11111111-1111-4111-8111-111111111111" }];
   await db.createAudhdCheckoutAttempt({ browserSecretHash: "a".repeat(64), reportVersion: "audhd-v1", ciphertext: "cipher", iv: "iv", authTag: "tag" });
   assert.match(query, /insert into public\.audhd_checkout_attempts/i);
   assert(values.includes("a".repeat(64)));

@@ -2,14 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { AUDHD_CHECKOUT_ACCESS_COOKIE, AUDHD_CHECKOUT_ATTEMPT_COOKIE, hashAudhdCheckoutBrowserSecret, issueAudhdCheckoutAccessToken } from "../../../_lib/audhdCheckoutAttempt.server";
 import { finalizeVerifiedAudhdCheckout, hasAudhdCheckoutRecoveryCandidate } from "../../../_lib/audhdCheckoutAttemptsDb.server";
 import { verifyAudhdCheckoutPayment, type AudhdCheckoutPaymentVerification } from "../../../_lib/audhdCheckoutPayment.server";
-import { sendAutomaticAudhdRecovery } from "../../../_lib/audhdAutomaticRecovery.server";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 const SITE_ORIGIN = "https://www.relationsvarning.se";
 
 type ReturnState = "unavailable" | "pending" | "recovery";
-type ReturnOutcome = "access_issued" | "cookie_missing" | "browser_binding_mismatch" | "payment_pending" | "stripe_verification_failed" | "database_finalization_failed" | "recovery_database_failed" | "recovery_email_accepted" | "recovery_link_existing" | "recovery_email_unavailable" | "recovery_email_failed" | "recovery_email_unknown";
+type ReturnOutcome = "access_issued" | "cookie_missing" | "browser_binding_mismatch" | "payment_pending" | "stripe_verification_failed" | "database_finalization_failed";
 
 function destination(state?: ReturnState) {
   // Never derive a post-payment redirect target from a request Host header.
@@ -39,11 +38,8 @@ function retryable(payment: AudhdCheckoutPaymentVerification) {
   return !payment.verified && (payment.reason === "session_not_paid" || payment.reason === "stripe_request_failed");
 }
 
-async function offerAutomaticRecovery(payment: Extract<AudhdCheckoutPaymentVerification, { verified: true }>) {
-  const candidate = await hasAudhdCheckoutRecoveryCandidate({ checkoutReferenceId: payment.checkoutReferenceId, checkoutSessionId: payment.checkoutSessionId });
-  if (!candidate) return "unavailable" as const;
-  const result = await sendAutomaticAudhdRecovery(payment);
-  return result.kind;
+async function hasAutomaticRecoveryCandidate(payment: Extract<AudhdCheckoutPaymentVerification, { verified: true }>) {
+  return hasAudhdCheckoutRecoveryCandidate({ checkoutReferenceId: payment.checkoutReferenceId, checkoutSessionId: payment.checkoutSessionId });
 }
 
 /** Stripe sends the Session ID here; this route strips it before the test page loads. */
@@ -60,19 +56,8 @@ export async function GET(request: NextRequest) {
       logReturn("cookie_missing", { stripe_reason: payment.reason, retryable: retryable(payment) });
       return response(retryable(payment) ? "pending" : "unavailable");
     }
-    try {
-      const recovery = await offerAutomaticRecovery(payment);
-      if (recovery === "accepted" || recovery === "existing") {
-        logReturn(recovery === "accepted" ? "recovery_email_accepted" : "recovery_link_existing");
-        return response("recovery");
-      }
-      if (recovery === "database_failed") logReturn("recovery_database_failed");
-      else if (recovery === "delivery_failed") logReturn("recovery_email_failed");
-      else if (recovery === "delivery_unknown") logReturn("recovery_email_unknown");
-      else logReturn("recovery_email_unavailable");
-    } catch (error) {
-      logReturn("recovery_email_failed", { error_class: safeErrorClass(error) });
-    }
+    try { if (await hasAutomaticRecoveryCandidate(payment)) return response("recovery"); }
+    catch (error) { logReturn("cookie_missing", { error_class: safeErrorClass(error) }); }
     logReturn("cookie_missing");
     return response("unavailable");
   }
@@ -95,19 +80,8 @@ export async function GET(request: NextRequest) {
       return response("pending");
     }
     if (!paidAttempt) {
-      try {
-        const recovery = await offerAutomaticRecovery(verified);
-        if (recovery === "accepted" || recovery === "existing") {
-          logReturn(recovery === "accepted" ? "recovery_email_accepted" : "recovery_link_existing");
-          return response("recovery");
-        }
-        if (recovery === "database_failed") logReturn("recovery_database_failed");
-        else if (recovery === "delivery_failed") logReturn("recovery_email_failed");
-        else if (recovery === "delivery_unknown") logReturn("recovery_email_unknown");
-        else logReturn("recovery_email_unavailable");
-      } catch (error) {
-        logReturn("recovery_email_failed", { error_class: safeErrorClass(error) });
-      }
+      try { if (await hasAutomaticRecoveryCandidate(verified)) return response("recovery"); }
+      catch (error) { logReturn("browser_binding_mismatch", { error_class: safeErrorClass(error) }); }
       logReturn("browser_binding_mismatch");
       return response("unavailable");
     }

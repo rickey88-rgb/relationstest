@@ -12,10 +12,19 @@ global.fetch = async (url, init) => { request = { url, init }; return { ok: true
 let mail = createLoader()(path.join(__dirname, "audhdRecoveryEmail.server.ts"));
 
 (async () => {
-  await mail.sendAudhdRecoveryEmail({ to: "buyer@example.test", recoveryUrl: "https://www.relationsvarning.se/api/audhd-recovery/redeem?token=test" });
+  await mail.sendAudhdRecoveryEmail({ to: "buyer@example.test", recoveryUrl: "https://www.relationsvarning.se/api/audhd-recovery/redeem?token=test", idempotencyKey: "audhd-recovery/test" });
   assert.equal(request.url, "https://api.resend.com/emails");
   assert.equal(request.init.headers.Authorization, "Bearer test-resend-key");
+  assert.equal(request.init.headers["Idempotency-Key"], "audhd-recovery/test");
   assert.equal(request.init.signal.aborted, false);
+  assert.match(request.init.body, /Om du redan har öppnat den behöver du inte göra något/);
+  assert.match(request.init.body, /inom 72 timmar/);
+
+  global.fetch = async () => ({ ok: false });
+  await assert.rejects(
+    () => mail.sendAudhdRecoveryEmail({ to: "buyer@example.test", recoveryUrl: "https://example.test" }),
+    error => error?.name === "AudhdRecoveryEmailRejected",
+  );
 
   class ImmediateAbortController {
     constructor() { this.signal = { aborted: false }; }
