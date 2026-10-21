@@ -33,8 +33,24 @@ export async function sendAudhdRecoveryEmail(input: { to: string; recoveryUrl: s
       body: JSON.stringify({
         from,
         to: [input.to],
-        subject: "Din AuDHD-analys – säker återställningslänk",
-        text: `Din AuDHD-analys är klar. Om du redan har öppnat den behöver du inte göra något. Om analysen inte visas i din webbläsare kan du använda den här personliga engångslänken inom 72 timmar för att återställa åtkomsten: ${input.recoveryUrl}`,
+        subject: "Din personliga AuDHD-analys",
+        text: `Hej!
+
+Tack för att du genomförde vårt AuDHD-test!
+
+Din personliga analys är klar. Vi skickar även en personlig länk så att du enkelt kan hitta tillbaka till ditt resultat om du vill läsa det igen.
+
+Öppna din AuDHD-analys:
+${input.recoveryUrl}
+
+Länken är giltig i 72 timmar och kan användas en gång. När du öppnar den trycker du på ”Öppna mitt resultat” för att visa din sparade analys.
+
+Tips: Spara gärna din analys som PDF om du vill behålla den även efter att länken gått ut.
+
+Tack för att du valde Relationsvarning.se! 💙
+
+Vänliga hälsningar
+Relationsvarning.se`,
       }),
       signal: controller.signal,
     });

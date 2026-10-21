@@ -17,8 +17,12 @@ let mail = createLoader()(path.join(__dirname, "audhdRecoveryEmail.server.ts"));
   assert.equal(request.init.headers.Authorization, "Bearer test-resend-key");
   assert.equal(request.init.headers["Idempotency-Key"], "audhd-recovery/test");
   assert.equal(request.init.signal.aborted, false);
-  assert.match(request.init.body, /Om du redan har öppnat den behöver du inte göra något/);
-  assert.match(request.init.body, /inom 72 timmar/);
+  const body = JSON.parse(request.init.body);
+  assert.equal(body.subject, "Din personliga AuDHD-analys");
+  assert.match(body.text, /hitta tillbaka till ditt resultat/);
+  assert.match(body.text, /https:\/\/www\.relationsvarning\.se\/api\/audhd-recovery\/redeem\?token=test/);
+  assert.match(body.text, /giltig i 72 timmar och kan användas en gång/);
+  assert.match(body.text, /Öppna mitt resultat/);
 
   global.fetch = async () => ({ ok: false });
   await assert.rejects(
