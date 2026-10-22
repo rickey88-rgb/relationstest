@@ -7,10 +7,11 @@ const createLoader = require("../../../autism-test/test/test-loader.cjs");
 process.env.AUDHD_RECOVERY_TOKEN_SECRET = "test-recovery-secret-that-is-longer-than-thirty-two-characters";
 process.env.AUDHD_RECOVERY_ISSUER_SECRET = "test-issuer-secret-that-is-longer-than-thirty-two-characters";
 let grantInput = null;
+let failureReason = "wrong_product";
 const route = createLoader({
   "../../../_lib/audhdRecovery.server": { issueAudhdRecoveryToken: () => "opaque-support-token", hashAudhdRecoveryToken: value => `hash:${value}` },
   "../../../_lib/audhdRecoveryDb.server": { createAudhdRecoveryGrant: async input => { grantInput = input; return { id: "11111111-1111-4111-8111-111111111111" }; } },
-  "../../../_lib/audhdRecoveryPayment.server": { inspectAudhdCheckoutSession: async id => id === "cs_live_paid" ? { verified: true, checkoutSessionId: id, paymentIntentId: "pi_paid", priceId: "price_audhd" } : { verified: false, reason: "wrong_product" } },
+  "../../../_lib/audhdRecoveryPayment.server": { inspectAudhdCheckoutSession: async id => id === "cs_live_paid" ? { verified: true, checkoutSessionId: id, paymentIntentId: "pi_paid", priceId: "price_audhd" } : { verified: false, reason: failureReason } },
 })(path.join(__dirname, "route.ts"));
 
 function request(authorization, body) {
@@ -29,8 +30,21 @@ function request(authorization, body) {
   response = await route.POST(request("Bearer wrong-admin-secret"));
   assert.equal(response.status, 404);
 
-  response = await route.POST(request(`Bearer ${process.env.AUDHD_RECOVERY_ISSUER_SECRET}`, { checkoutSessionId: "cs_live_wrong_product" }));
-  assert.equal(response.status, 422);
+  const logs = [];
+  const originalError = console.error;
+  console.error = value => logs.push(value);
+  try {
+    for (const reason of ["wrong_product", "stripe_request_failed", "session_not_paid", "invalid_session_id", "price_not_configured", "payment_not_captured", "payment_refunded", "payment_disputed", "sensitive-unexpected-value"]) {
+      failureReason = reason;
+      response = await route.POST(request(`Bearer ${process.env.AUDHD_RECOVERY_ISSUER_SECRET}`, { checkoutSessionId: "cs_live_wrong_product" }));
+      assert.equal(response.status, 422);
+      assert.deepEqual(await response.json(), { error: "Payment could not be verified." });
+      assert.deepEqual(JSON.parse(logs.pop()), { event: "audhd_recovery_issue_failed", reason: reason === "sensitive-unexpected-value" ? "unexpected" : reason });
+    }
+  } finally {
+    console.error = originalError;
+  }
+  assert.equal(grantInput, null, "failed verification never creates a grant");
 
   response = await route.POST(request(`Bearer ${process.env.AUDHD_RECOVERY_ISSUER_SECRET}`, { checkoutSessionId: "cs_live_paid" }));
   assert.equal(response.status, 200);

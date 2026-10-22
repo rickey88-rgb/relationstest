@@ -46,7 +46,12 @@ export async function POST(request: NextRequest) {
       ? (body as { checkoutSessionId: string }).checkoutSessionId.trim()
       : "";
     const verification = await inspectAudhdCheckoutSession(checkoutSessionId);
-    if (!verification.verified) return response({ error: "Payment could not be verified." }, 422);
+    if (!verification.verified) {
+      const allowedReasons = ["invalid_session_id", "price_not_configured", "session_not_paid", "payment_not_captured", "payment_refunded", "payment_disputed", "wrong_product", "stripe_request_failed"];
+      const reason = allowedReasons.includes(verification.reason) ? verification.reason : "unexpected";
+      console.error(JSON.stringify({ event: "audhd_recovery_issue_failed", reason }));
+      return response({ error: "Payment could not be verified." }, 422);
+    }
 
     const token = issueAudhdRecoveryToken();
     await createAudhdRecoveryGrant({
