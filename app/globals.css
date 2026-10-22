@@ -49,6 +49,7 @@ body {
 
 /* Print the actual paid AuDHD report, not surrounding navigation or offers. */
 @media print {
+  @page audhd-report { size: A4; margin: 14mm 15mm; }
   body:has(#audhd-print-report) * { visibility: hidden; }
   body:has(#audhd-print-report) #audhd-print-report,
   body:has(#audhd-print-report) #audhd-print-report * { visibility: visible; }
@@ -57,8 +58,24 @@ body {
     top: 0;
     left: 0;
     width: 100%;
+    page: audhd-report;
+    color: #202124;
   }
+  #audhd-print-report > section,
+  #audhd-print-report > section > .grid > div,
+  #audhd-print-report li {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  #audhd-print-report h2,
+  #audhd-print-report h3 {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+  #audhd-print-report p { orphans: 3; widows: 3; }
+  #audhd-print-report > section { margin-block: 0 5mm; }
   body:has(#audhd-print-report) #audhd-print-report .audhd-print-actions,
   body:has(#audhd-print-report) #audhd-print-report .audhd-print-actions * { visibility: hidden; }
+  body:has(#audhd-print-report) #audhd-print-report .audhd-print-actions { display: none; }
 }
 
