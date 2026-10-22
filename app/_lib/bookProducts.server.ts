@@ -83,8 +83,10 @@ export async function verifyAudhdBookCheckoutSession(sessionId: string) {
   }
   if (!isStripeCheckoutSessionId(sessionId)) return reject("invalid_session");
 
+  let stage: "config" | "session" | "line_items" | "payment_intent" | "charge" = "config";
   try {
     const stripe = new Stripe(required("STRIPE_SECRET_KEY"));
+    stage = "session";
     const session = await stripe.checkout.sessions.retrieve(sessionId);
     if (session.status !== "complete" || session.payment_status !== "paid" || session.mode !== "payment") return reject("session_not_paid");
     {
@@ -92,21 +94,28 @@ export async function verifyAudhdBookCheckoutSession(sessionId: string) {
       if (!rawPrices) return reject("price_configuration_missing");
       const prices = rawPrices.split(",").map((value) => value.trim());
       if (prices.some((value) => !/^price_[A-Za-z0-9]+$/.test(value))) return reject("price_configuration_error");
+      stage = "line_items";
       const items = await stripe.checkout.sessions.listLineItems(sessionId, { limit: 100 });
       const priceId = items.data.length === 1 ? lineItemPriceId(items.data[0].price) : null;
       if (items.has_more || items.data.length !== 1 || items.data[0].quantity !== 1 || !priceId || !prices.includes(priceId)) return reject("wrong_product");
     }
     const paymentIntent = typeof session.payment_intent === "string" ? session.payment_intent : session.payment_intent?.id;
     if (!paymentIntent) return reject("payment_intent_missing");
+    stage = "payment_intent";
     const intent = await stripe.paymentIntents.retrieve(paymentIntent, { expand: ["latest_charge"] });
     if (intent.status !== "succeeded") return reject("payment_not_captured");
+    stage = "charge";
     const charge = typeof intent.latest_charge === "string" ? await stripe.charges.retrieve(intent.latest_charge) : intent.latest_charge;
     if (!charge || !charge.paid) return reject("charge_unavailable");
     if (charge.refunded || charge.amount_refunded > 0) return reject("payment_refunded");
     if (charge.disputed) return reject("payment_disputed");
     return true;
-  } catch {
-    return reject("stripe_or_configuration_unavailable");
+  } catch (error) {
+    const category = stage === "config" && !process.env.STRIPE_SECRET_KEY?.trim()
+      ? "configuration"
+      : Stripe.errors?.StripeError && error instanceof Stripe.errors.StripeError ? "stripe_api" : "unexpected";
+    console.error(JSON.stringify({ event: "audhd_book_verification_failed", reason: "stripe_or_configuration_unavailable", stage, category }));
+    return false;
   }
 }
 

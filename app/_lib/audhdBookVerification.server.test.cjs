@@ -9,11 +9,17 @@ process.env.AUDHD_BOOK_ALLOWED_PRICE_IDS = "price_1UMq7YAgF4ugWkEkkPZcHThd, pric
 let session = { status: "complete", payment_status: "paid", mode: "payment", payment_link: "plink_old", payment_intent: "pi_mock" };
 let items = { data: [{ price: { id: "price_1UMq7YAgF4ugWkEkkPZcHThd" }, quantity: 1 }], has_more: false };
 let charge = { paid: true, refunded: false, amount_refunded: 0, disputed: false };
+let failureStage = null;
+class StripeError extends Error {}
+function failAt(stage) {
+  if (failureStage === stage) throw new StripeError("secret customer session key details");
+}
 class StripeMock {
+  static errors = { StripeError };
   constructor() {
-    this.checkout = { sessions: { retrieve: async () => session, listLineItems: async () => items } };
-    this.paymentIntents = { retrieve: async () => ({ status: "succeeded", latest_charge: charge }) };
-    this.charges = { retrieve: async () => charge };
+    this.checkout = { sessions: { retrieve: async () => { failAt("session"); return session; }, listLineItems: async () => { failAt("line_items"); return items; } } };
+    this.paymentIntents = { retrieve: async () => { failAt("payment_intent"); return { status: "succeeded", latest_charge: failureStage === "charge" ? "ch_mock" : charge }; } };
+    this.charges = { retrieve: async () => { failAt("charge"); return charge; } };
   }
 }
 const products = createLoader({ stripe: { default: StripeMock } })(path.join(__dirname, "bookProducts.server.ts"));
@@ -48,6 +54,16 @@ const products = createLoader({ stripe: { default: StripeMock } })(path.join(__d
     assert.equal(await products.verifyAudhdBookCheckoutSession("cs_live_example"), false);
     assert.equal(errors.at(-1).reason, "price_configuration_error");
     assert(errors.every(entry => Object.keys(entry).sort().join(",") === "event,reason"));
+    process.env.AUDHD_BOOK_ALLOWED_PRICE_IDS = "price_1UMq7YAgF4ugWkEkkPZcHThd";
+    for (const stage of ["session", "line_items", "payment_intent", "charge"]) {
+      failureStage = stage;
+      assert.equal(await products.verifyAudhdBookCheckoutSession("cs_live_example"), false);
+      assert.deepEqual(errors.at(-1), { event: "audhd_book_verification_failed", reason: "stripe_or_configuration_unavailable", stage, category: "stripe_api" });
+    }
+    failureStage = null;
+    delete process.env.STRIPE_SECRET_KEY;
+    assert.equal(await products.verifyAudhdBookCheckoutSession("cs_live_example"), false);
+    assert.deepEqual(errors.at(-1), { event: "audhd_book_verification_failed", reason: "stripe_or_configuration_unavailable", stage: "config", category: "configuration" });
   } finally { console.error = originalError; }
   console.log("PASS: AuDHD book product, historical price, refund, dispute and configuration checks.");
 })().catch(error => { console.error(error); process.exitCode = 1; });
