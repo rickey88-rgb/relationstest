@@ -61,8 +61,11 @@ body {
     page: audhd-report;
     color: #202124;
   }
-  #audhd-print-report > section,
+  /* Let long sections fragment; only keep individual cards and the compact map together. */
+  #audhd-print-report > section > .grid { display: block; }
+  #audhd-print-report > section > .grid > div + div { margin-top: 3mm; }
   #audhd-print-report > section > .grid > div,
+  #audhd-print-report > section > .space-y-3,
   #audhd-print-report li {
     break-inside: avoid;
     page-break-inside: avoid;
