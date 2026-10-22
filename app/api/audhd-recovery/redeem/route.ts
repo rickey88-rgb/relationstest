@@ -22,15 +22,37 @@ export async function GET(request: NextRequest) {
   const token = request.nextUrl.searchParams.get("token") ?? "";
   return new NextResponse(`<!doctype html>
 <html lang="sv">
-  <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Återställ åtkomst</title></head>
+  <head>
+    <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Din personliga AuDHD-analys</title>
+    <style>
+      * { box-sizing: border-box; }
+      body { margin: 0; background: #f7f5f2; color: #202124; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      main { min-height: 100vh; min-height: 100dvh; display: grid; place-items: center; padding: 24px 16px; }
+      .card { width: 100%; max-width: 560px; padding: clamp(28px, 6vw, 48px); background: #fff; border: 1px solid #e5e2de; border-radius: 26px; box-shadow: 0 12px 36px rgba(32, 33, 36, .06); }
+      .brand { margin: 0 0 32px; color: #27666a; font-size: 14px; font-weight: 700; letter-spacing: .04em; }
+      .eyebrow { margin: 0 0 12px; color: #27666a; font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+      h1 { margin: 0; font-family: Georgia, serif; font-size: clamp(32px, 7vw, 44px); line-height: 1.15; font-weight: 600; }
+      .intro { margin: 20px 0 28px; color: #454b4a; font-size: 17px; line-height: 1.65; }
+      button { width: 100%; min-height: 56px; padding: 14px 20px; border: 0; border-radius: 14px; background: #27666a; color: #fff; font: inherit; font-weight: 700; cursor: pointer; }
+      button:hover { background: #1f5357; }
+      button:focus-visible { outline: 3px solid #202124; outline-offset: 4px; }
+      .help { margin: 22px 0 0; color: #555c5b; font-size: 14px; line-height: 1.6; }
+      .help a { color: #1f5357; text-underline-offset: 3px; }
+    </style>
+  </head>
   <body>
     <main>
-      <h1>Återställ åtkomst till ditt resultat</h1>
-      <p>Kontrollera att du vill öppna ditt betalda resultat. Åtkomsten aktiveras först när du väljer knappen nedan.</p>
+      <div class="card">
+      <p class="brand">Relationsvarning.se</p>
+      <p class="eyebrow">Ditt resultat</p>
+      <h1>Din personliga AuDHD-analys</h1>
+      <p class="intro">Din analys är redo att öppnas. Tryck på knappen för att komma till ditt sparade resultat.</p>
       <form method="post" action="/api/audhd-recovery/redeem">
         <input type="hidden" name="token" value="${escapeHtmlAttribute(token)}">
         <button type="submit">Öppna mitt resultat</button>
       </form>
+      <p class="help">Behöver du hjälp med att öppna ditt resultat? <a href="mailto:support@relationsvarning.se">Kontakta oss</a>.</p>
+      </div>
     </main>
   </body>
 </html>`, {

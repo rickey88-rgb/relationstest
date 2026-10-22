@@ -26,11 +26,20 @@ function postRecovery(token) {
   let response = await route.GET(new NextRequest(`https://www.relationsvarning.se/api/audhd-recovery/redeem?token=${v2Token}`));
   assert.equal(response.status, 200, "a link preview gets only the confirmation page");
   assert.match(response.headers.get("content-type"), /^text\/html/i);
-  assert.match(await response.text(), /<form method="post" action="\/api\/audhd-recovery\/redeem">/);
+  const html = await response.text();
+  assert.match(html, /<form method="post" action="\/api\/audhd-recovery\/redeem">/);
+  assert.match(html, /Din personliga AuDHD-analys/);
+  assert.match(html, /<button type="submit">Öppna mitt resultat<\/button>/);
+  assert.match(html, /name="viewport"/);
+  assert.match(response.headers.get("content-security-policy"), /form-action 'self'/);
   assert.equal(response.headers.get("set-cookie"), null);
   assert.equal(redeemCalls, 0, "GET must never consume the grant");
   assert.equal(grantLoads, 0, "GET must not even look up the grant");
   assert.equal(paymentChecks, 0, "GET must not call Stripe");
+
+  const escapedResponse = await route.GET(new NextRequest("https://www.relationsvarning.se/api/audhd-recovery/redeem?token=%22%3E%3Cscript%3E"));
+  assert.match(await escapedResponse.text(), /value="&quot;&gt;&lt;script&gt;"/, "untrusted token remains safely escaped in the hidden field");
+  assert.equal(grantLoads, 0);
 
   response = await postRecovery(v2Token);
   assert.equal(response.status, 303);
