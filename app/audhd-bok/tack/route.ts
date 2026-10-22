@@ -17,6 +17,7 @@ export async function GET(request: NextRequest) {
   const sessionId = request.nextUrl.searchParams.get("session_id");
   const errorDestination = new URL("/audhd-bok/tack/fel", request.url);
   if (typeof sessionId !== "string" || !isStripeCheckoutSessionId(sessionId)) {
+    console.error(JSON.stringify({ event: "audhd_book_verification_failed", reason: "invalid_session" }));
     return redirectWithoutCaching(errorDestination);
   }
   const verified = await verifyAudhdBookCheckoutSession(sessionId);
@@ -29,6 +30,7 @@ export async function GET(request: NextRequest) {
     response.cookies.set(BOOK_ACCESS_COOKIE, issueBookAccessToken(AUDHD_BOOK.id), bookAccessCookieOptions());
     return response;
   } catch {
+    console.error(JSON.stringify({ event: "audhd_book_verification_failed", reason: "cookie_unavailable" }));
     return redirectWithoutCaching(errorDestination);
   }
 }

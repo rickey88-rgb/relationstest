@@ -20,7 +20,10 @@ class StripeMock {
   static lineItems = [];
   static retrieveError = null;
   static lineItemsError = null;
+  static charge = { paid: true, refunded: false, amount_refunded: 0, disputed: false };
   constructor() {
+    this.paymentIntents = { retrieve: async () => ({ status: "succeeded", latest_charge: StripeMock.charge }) };
+    this.charges = { retrieve: async () => StripeMock.charge };
     this.checkout = {
       sessions: {
         retrieve: async () => {
@@ -53,10 +56,13 @@ assert.equal(products.autismBookR2Config().key, "books/autism/Pa-mitt-satt_Elias
 assert.equal(products.adhdDeluxeBookR2Config().key, "books/adhd-deluxe/ADHD-Deluxe_Elias-Voss.pdf");
 
 (async () => {
-  StripeMock.session = { status: "complete", payment_status: "paid", payment_link: "plink_audhd_book_149" };
+  process.env.AUDHD_BOOK_ALLOWED_PRICE_IDS = "price_audhd149";
+  StripeMock.lineItems = [{ price: { id: "price_audhd149" }, quantity: 1 }];
+  StripeMock.session = { status: "complete", payment_status: "paid", mode: "payment", payment_intent: "pi_test", payment_link: "plink_audhd_book_149" };
   assert.equal(await products.verifyAudhdBookCheckoutSession("cs_test_audhdbook123"), true);
 
-  StripeMock.session = { status: "complete", payment_status: "paid", payment_link: "plink_other_product" };
+  StripeMock.session = { status: "complete", payment_status: "paid", mode: "payment", payment_intent: "pi_test", payment_link: "plink_other_product" };
+  StripeMock.lineItems = [{ price: { id: "price_other" }, quantity: 1 }];
   assert.equal(await products.verifyAudhdBookCheckoutSession("cs_test_audhdbook123"), false);
 
   StripeMock.session = { status: "complete", payment_status: "unpaid", payment_link: "plink_audhd_book_149" };
