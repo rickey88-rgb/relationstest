@@ -70,6 +70,11 @@ body {
     break-inside: avoid;
     page-break-inside: avoid;
   }
+  /* The short "Det som gör bilden mindre självklar" card. */
+  #audhd-print-report > section:nth-of-type(11) {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
   #audhd-print-report h2,
   #audhd-print-report h3 {
     break-after: avoid;
