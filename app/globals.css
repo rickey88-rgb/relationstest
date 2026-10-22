@@ -47,3 +47,18 @@ body {
   --foreground: #202124;
 }
 
+/* Print the actual paid AuDHD report, not surrounding navigation or offers. */
+@media print {
+  body:has(#audhd-print-report) * { visibility: hidden; }
+  body:has(#audhd-print-report) #audhd-print-report,
+  body:has(#audhd-print-report) #audhd-print-report * { visibility: visible; }
+  body:has(#audhd-print-report) #audhd-print-report {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+  body:has(#audhd-print-report) #audhd-print-report .audhd-print-actions,
+  body:has(#audhd-print-report) #audhd-print-report .audhd-print-actions * { visibility: hidden; }
+}
+
