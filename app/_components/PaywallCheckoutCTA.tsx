@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
+import SwishPaymentMark from "./SwishPaymentMark";
 
 type PaywallCheckoutCTAProps = { onClick: () => void; separated?: boolean; label?: ReactNode; belowCta?: ReactNode; trustText?: ReactNode; trustClassName?: string };
 
@@ -18,7 +19,8 @@ export default function PaywallCheckoutCTA({ onClick, separated = false, label =
     </p>
     {belowCta}
     <p className={`mt-2 text-center text-neutral-300 ${trustClassName}`}><span data-flow="lock" aria-hidden="true">🔒</span> {trustText}</p>
-    <div className="mt-1.5 flex items-center justify-center gap-2.5" aria-label="Betalningsalternativ: Klarna, Visa och Mastercard">
+    <div className="mt-1.5 flex items-center justify-center gap-2.5" aria-label="Betalningsalternativ: Swish, Klarna, Visa och Mastercard">
+      <SwishPaymentMark />
       <Image src="/payment-methods/klarna.svg" alt="Klarna" width={20} height={20} />
       <Image src="/payment-methods/visa.svg" alt="Visa" width={30} height={20} />
       <Image src="/payment-methods/mastercard.svg" alt="Mastercard" width={30} height={20} />
