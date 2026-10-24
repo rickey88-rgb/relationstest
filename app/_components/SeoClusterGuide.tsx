@@ -4,7 +4,8 @@ import GuideNextSteps from "./GuideNextSteps";
 import { guideRecommendations } from "./guideRecommendations";
 import { getArticleImageMetadata, getArticleImageSchema } from "../_seo/articleImages";
 
-export type ClusterSection = { heading: string; paragraphs: string[]; bullets?: string[]; links?: Array<Pick<ClusterLink, "href" | "label">> };
+type LinkedParagraph = { before: string; href: string; label: string; after: string };
+export type ClusterSection = { heading: string; paragraphs: Array<string | LinkedParagraph>; bullets?: string[]; links?: Array<Pick<ClusterLink, "href" | "label">> };
 export type ClusterLink = { href: string; label: string; description: string };
 export type ClusterFaq = { question: string; answer: string };
 export type ClusterGuideData = {
@@ -65,7 +66,7 @@ export default function SeoClusterGuide({ data }: { data: ClusterGuideData }) {
       <div className="mt-11 space-y-11">
         {data.sections.map((section) => <section key={section.heading} className="space-y-4">
           <h2 className="text-2xl font-semibold tracking-tight text-neutral-950">{section.heading}</h2>
-          {section.paragraphs.map((paragraph) => <p key={paragraph} className="leading-7 text-neutral-700">{paragraph}</p>)}
+          {section.paragraphs.map((paragraph) => <p key={typeof paragraph === "string" ? paragraph : `${paragraph.href}-${paragraph.label}`} className="leading-7 text-neutral-700">{typeof paragraph === "string" ? paragraph : <>{paragraph.before}<Link href={paragraph.href} className={textLink}>{paragraph.label}</Link>{paragraph.after}</>}</p>)}
           {section.bullets && <ul className="list-disc space-y-3 pl-6 leading-7 text-neutral-700">{section.bullets.map((item) => <li key={item}>{item}</li>)}</ul>}
           {section.links?.length ? <p className="text-sm leading-7 text-neutral-600">Läs vidare: {section.links.map((item, index) => <span key={item.href}>{index > 0 ? ", " : ""}<Link href={item.href} className={textLink}>{item.label}</Link></span>)}.</p> : null}
         </section>)}
