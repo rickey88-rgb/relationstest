@@ -8,7 +8,7 @@ let signOuts = 0;
 let clears = 0;
 const route = createLoader({
   "../_lib/authSession.server": { privateCacheControl: "private, no-store" },
-  "../_lib/supabase/route": {
+  "../_lib/supabase/routeClient.server": {
     createRouteSupabaseClient: () => ({ auth: { signOut: async () => { signOuts += 1; } } }),
     clearRouteAuthCookies: () => { clears += 1; },
   },

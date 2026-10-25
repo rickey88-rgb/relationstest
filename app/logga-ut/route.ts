@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { privateCacheControl } from "../_lib/authSession.server";
-import { clearRouteAuthCookies, createRouteSupabaseClient } from "../_lib/supabase/route";
+import { clearRouteAuthCookies, createRouteSupabaseClient } from "../_lib/supabase/routeClient.server";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";

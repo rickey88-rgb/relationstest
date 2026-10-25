@@ -1,6 +1,6 @@
 import type { NextRequest, NextResponse } from "next/server";
 import { createServerSupabaseClient } from "./supabase/server";
-import { createRouteSupabaseClient } from "./supabase/route";
+import { createRouteSupabaseClient } from "./supabase/routeClient.server";
 
 export const privateCacheControl = "private, no-store, max-age=0, must-revalidate";
 

@@ -12,7 +12,7 @@ const route = createLoader({
     loginUrl: (origin, status) => new URL(`/logga-in${status ? `?status=${status}` : ""}`, origin),
   },
   "../../_lib/authSession.server": { privateCacheControl: "private, no-store" },
-  "../../_lib/supabase/route": {
+  "../../_lib/supabase/routeClient.server": {
     createRouteSupabaseClient: () => ({
       auth: {
         verifyOtp: async input => {
