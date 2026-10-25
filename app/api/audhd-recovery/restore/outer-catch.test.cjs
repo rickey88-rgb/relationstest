@@ -14,9 +14,11 @@ const route = createLoader({
 
 (async () => {
   const response = await route.GET(new NextRequest("https://www.relationsvarning.se/api/audhd-recovery/restore", { headers: { cookie: "rv_audhd_recovery_v2=signed" } }));
-  assert.equal(response.status, 404);
+  assert.equal(response.status, 503);
+  assert.equal(response.headers.get("retry-after"), "2");
+  assert.deepEqual(await response.json(), { restored: false, retryable: true });
   assert.deepEqual(JSON.parse(logs.at(-1)), { event: "audhd_recovery_restore_unavailable", reason: "restore_query_failed" });
   assert.equal(logs.some(value => /database failure|signed|11111111/.test(value)), false, "outer-catch log contains no raw error, cookie or grant ID");
   console.error = originalError;
-  console.log("PASS: an unexpected recovery restore query failure emits only the safe failure code.");
+  console.log("PASS: an unexpected recovery restore query failure stays retryable and emits only the safe failure code.");
 })().catch(error => { console.error = originalError; console.error(error); process.exitCode = 1; });

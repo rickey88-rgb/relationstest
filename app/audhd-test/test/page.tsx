@@ -93,11 +93,37 @@ async function retryPendingCheckout() {
   return "pending";
 }
 
+type JsonFetchResult = { ok: boolean; status: number; body: unknown };
+type RecoveryRestoreFailure = "temporary" | "unavailable";
+
+async function fetchJson(url: string): Promise<JsonFetchResult> {
+  try {
+    const response = await fetch(url, { cache: "no-store" });
+    let body: unknown = null;
+    try { body = await response.json(); } catch { /* A malformed failure response is never trusted. */ }
+    return { ok: response.ok, status: response.status, body };
+  } catch {
+    return { ok: false, status: 0, body: null };
+  }
+}
+
+/** Retry only an explicitly temporary recovery failure; a valid recovery cookie is not consumed here. */
+async function restoreRecoveryWithRetry() {
+  let latest: JsonFetchResult = { ok: false, status: 0, body: null };
+  for (const delay of [0, 1500, 4000]) {
+    if (delay) await new Promise(resolve => window.setTimeout(resolve, delay));
+    latest = await fetchJson("/api/audhd-recovery/restore");
+    const retryable = latest.status === 0 || latest.status === 503 || Boolean(latest.body && typeof latest.body === "object" && (latest.body as { retryable?: unknown }).retryable === true);
+    if (latest.ok || !retryable) return latest;
+  }
+  return latest;
+}
+
 
 export default function AudhdTestPage() {
   const [answers, setAnswers] = useState<number[]>(emptyAnswers); const [context, setContext] = useState<number[]>(emptyContextAnswers);
   const [questionIndex, setQuestionIndex] = useState(0); const [contextIndex, setContextIndex] = useState(0); const [phase, setPhase] = useState<"questions" | "context" | "analysis" | "result">("questions");
-  const [unlocked, setUnlocked] = useState(false); const [hydrated, setHydrated] = useState(false); const [transitioning, setTransitioning] = useState(false); const [analysisStep, setAnalysisStep] = useState(0); const [checkoutUnavailable, setCheckoutUnavailable] = useState(false); const [storageError, setStorageError] = useState(false); const [paymentRecoveryRequired, setPaymentRecoveryRequired] = useState(false); const [recoveryNotice, setRecoveryNotice] = useState(false); const [recoveryLinkInvalid, setRecoveryLinkInvalid] = useState(false); const [checkoutNotice, setCheckoutNotice] = useState(false); const [checkoutPendingVerification, setCheckoutPendingVerification] = useState(false); const [recoveryEmailSent, setRecoveryEmailSent] = useState(false);
+  const [unlocked, setUnlocked] = useState(false); const [hydrated, setHydrated] = useState(false); const [transitioning, setTransitioning] = useState(false); const [analysisStep, setAnalysisStep] = useState(0); const [checkoutUnavailable, setCheckoutUnavailable] = useState(false); const [storageError, setStorageError] = useState(false); const [paymentRecoveryRequired, setPaymentRecoveryRequired] = useState(false); const [recoveryNotice, setRecoveryNotice] = useState(false); const [recoveryLinkInvalid, setRecoveryLinkInvalid] = useState(false); const [checkoutNotice, setCheckoutNotice] = useState(false); const [checkoutPendingVerification, setCheckoutPendingVerification] = useState(false); const [recoveryEmailSent, setRecoveryEmailSent] = useState(false); const [recoveryRestoreFailure, setRecoveryRestoreFailure] = useState<RecoveryRestoreFailure | null>(null); const [recoveryRetry, setRecoveryRetry] = useState(0);
   const lock = useRef(false); const checkoutPending = useRef(false); const standardAnalytics = useTestAnalytics("audhd_test", questions.length + contextQuestions.length); const complete = answers.every(v => v >= 0) && context.every(v => v >= 0);
   const report = useMemo(() => complete ? calculateReport(answers, context) : null, [answers, context, complete]);
   useEffect(() => {
@@ -112,6 +138,8 @@ export default function AudhdTestPage() {
       const recoveryReturn = query.get("recovery");
       let recoveryUnlocked = false;
       let serverAnswers: ReturnType<typeof restoredAudhdAnswers> = null;
+      let checkoutRestoreResult: JsonFetchResult = { ok: false, status: 0, body: null };
+      let recoveryRestoreResult: JsonFetchResult = { ok: false, status: 0, body: null };
       try {
         if (checkoutPendingReturn) {
           const pendingStatus = await retryPendingCheckout();
@@ -120,18 +148,25 @@ export default function AudhdTestPage() {
           if (pendingStatus === "unavailable") setPaymentRecoveryRequired(true);
           else setCheckoutPendingVerification(true);
         }
-        const [restoreResponse, recoveryRestoreResponse, recoveryResponse] = await Promise.all([
-          fetch("/api/audhd-checkout/restore", { cache: "no-store" }),
-          fetch("/api/audhd-recovery/restore", { cache: "no-store" }),
-          fetch("/api/audhd-recovery/status", { cache: "no-store" }),
+        const [restoreResponse, recoveredResponse, recoveryResponse] = await Promise.all([
+          fetchJson("/api/audhd-checkout/restore"),
+          restoreRecoveryWithRetry(),
+          fetchJson("/api/audhd-recovery/status"),
         ]);
-        const restoreBody: unknown = restoreResponse.ok ? await restoreResponse.json() : null;
-        const recoveryRestoreBody: unknown = recoveryRestoreResponse.ok ? await recoveryRestoreResponse.json() : null;
-        const candidateRestore = restoreBody && typeof restoreBody === "object" && (restoreBody as { restored?: unknown }).restored === true ? restoreBody : recoveryRestoreBody;
-        serverAnswers = candidateRestore && typeof candidateRestore === "object" && (candidateRestore as { restored?: unknown }).restored === true
-          ? restoredAudhdAnswers((candidateRestore as { answers?: unknown }).answers)
+        checkoutRestoreResult = restoreResponse;
+        recoveryRestoreResult = recoveredResponse;
+        const restoreBody = restoreResponse.ok ? restoreResponse.body : null;
+        const recoveryRestoreBody = recoveredResponse.ok ? recoveredResponse.body : null;
+        const directAnswers = restoreBody && typeof restoreBody === "object" && (restoreBody as { restored?: unknown }).restored === true
+          ? restoredAudhdAnswers((restoreBody as { answers?: unknown }).answers)
           : null;
-        const recoveryBody: unknown = recoveryResponse.ok ? await recoveryResponse.json() : null;
+        const recoveredAnswers = recoveryRestoreBody && typeof recoveryRestoreBody === "object" && (recoveryRestoreBody as { restored?: unknown }).restored === true
+          ? restoredAudhdAnswers((recoveryRestoreBody as { answers?: unknown }).answers)
+          : null;
+        // A direct Checkout restore always wins. A failed parallel recovery
+        // request must never overwrite either successful answer set.
+        serverAnswers = directAnswers ?? recoveredAnswers;
+        const recoveryBody = recoveryResponse.ok ? recoveryResponse.body : null;
         recoveryUnlocked = Boolean(recoveryBody && typeof recoveryBody === "object" && (recoveryBody as { unlocked?: unknown }).unlocked === true);
       } catch {
         // Failed server checks must never unlock the browser client-side.
@@ -152,7 +187,7 @@ export default function AudhdTestPage() {
         }
         if (recoveryReturn === "success" && !recoveryUnlocked) setRecoveryLinkInvalid(true);
         if (recoveryReturn === "invalid") setRecoveryLinkInvalid(true);
-        if (paidReturn || checkoutCancelled || checkoutUnavailableReturn || checkoutPendingReturn || checkoutRecoveryReturn) clearCheckoutQuery();
+        if (paidReturn || checkoutCancelled || checkoutUnavailableReturn || checkoutPendingReturn || checkoutRecoveryReturn || recoveryReturn === "success" || recoveryReturn === "invalid") clearCheckoutQuery();
         if (checkoutCancelled) setCheckoutNotice(true);
         if (checkoutUnavailableReturn) setPaymentRecoveryRequired(true);
         if (checkoutRecoveryReturn) setRecoveryEmailSent(true);
@@ -160,22 +195,20 @@ export default function AudhdTestPage() {
         // A signed, database-backed Checkout entitlement is the only payment
         // path that can restore this report. It works without localStorage.
         if (serverAnswers) {
+          setRecoveryRestoreFailure(null);
           const restoredReport = calculateReport(serverAnswers.answers, serverAnswers.contextAnswers);
           setAnswers(serverAnswers.answers); setContext(serverAnswers.contextAnswers); setQuestionIndex(questions.length - 1); setContextIndex(contextQuestions.length - 1); setPhase("result"); setUnlocked(true);
           try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ reportVersion: REPORT_VERSION, answers: serverAnswers.answers, contextAnswers: serverAnswers.contextAnswers, questionIndex: questions.length - 1, contextIndex: contextQuestions.length - 1, unlocked: false, report: restoredReport })); } catch { setStorageError(true); }
           return;
         }
 
-        // A signed server cookie can only start a new test or restore an existing
-        // recovery test. It never relies on a query parameter to unlock a report.
-        const shouldStartRecoveredTest = recoveryUnlocked && !hasCompleteSavedState(saved) && (recoveryReturn === "success" || !saved);
-        if (shouldStartRecoveredTest) {
-          const recoveredState = { reportVersion: REPORT_VERSION, answers: emptyAnswers(), contextAnswers: emptyContextAnswers(), questionIndex: 0, contextIndex: 0, unlocked: false };
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(recoveredState));
-          const persisted = parseState(localStorage.getItem(STORAGE_KEY));
-          if (!persisted) throw new Error("Recovery state could not be persisted");
-          setAnswers(persisted.answers); setContext(persisted.contextAnswers); setQuestionIndex(0); setContextIndex(0); setPhase("questions"); setUnlocked(true); setRecoveryNotice(true);
-          if (recoveryReturn === "success") clearCheckoutQuery();
+        // Never turn a valid recovery credential into a blank, apparently paid
+        // test. This includes cleared storage and a customer opening the link
+        // in another browser context.
+        const checkoutRestoreRetryable = checkoutRestoreResult.status === 503 || Boolean(checkoutRestoreResult.body && typeof checkoutRestoreResult.body === "object" && (checkoutRestoreResult.body as { retryable?: unknown }).retryable === true);
+        if (!hasCompleteSavedState(saved) && (recoveryUnlocked || recoveryReturn === "success" || checkoutRestoreRetryable)) {
+          const retryable = checkoutRestoreRetryable || recoveryRestoreResult.status === 0 || recoveryRestoreResult.status === 503 || Boolean(recoveryRestoreResult.body && typeof recoveryRestoreResult.body === "object" && (recoveryRestoreResult.body as { retryable?: unknown }).retryable === true);
+          setRecoveryRestoreFailure(retryable ? "temporary" : "unavailable");
           return;
         }
 
@@ -199,19 +232,21 @@ export default function AudhdTestPage() {
     }
     void hydrate();
     return () => { disposed = true; };
-  }, [standardAnalytics]);
+  }, [standardAnalytics, recoveryRetry]);
   useEffect(() => { if (!hydrated) return; try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ reportVersion: REPORT_VERSION, answers, contextAnswers: context, questionIndex, contextIndex, unlocked: false, report })); } catch { setStorageError(true); } }, [answers, context, questionIndex, contextIndex, report, hydrated]);
   useEffect(() => { if (unlocked && report) standardAnalytics.resultView(); }, [unlocked, report, standardAnalytics]);
   useEffect(() => { if (phase !== "analysis" || !report) return; const timers = [setTimeout(() => setAnalysisStep(1), 1200), setTimeout(() => setAnalysisStep(2), 2500), setTimeout(() => { standardAnalytics.analysisView(); setPhase("result"); }, 4000)]; return () => timers.forEach(clearTimeout); }, [phase, report, standardAnalytics]);
   function answer(value: number) { if (lock.current) return; lock.current = true; setTransitioning(true); if (phase === "questions") { const next = answers.map((item, i) => i === questionIndex ? value : item); setAnswers(next); const count = next.filter(item => item >= 0).length; standardAnalytics.answer(count, questionIndex + 1); setTimeout(() => { if (questionIndex < 47) setQuestionIndex(questionIndex + 1); else setPhase("context"); lock.current = false; setTransitioning(false); }, 180); } else { const next = context.map((item, i) => i === contextIndex ? value : item); setContext(next); const count = next.filter(item => item >= 0).length; standardAnalytics.answer(questions.length + count, questions.length + contextIndex + 1); setTimeout(() => { if (contextIndex < 5) setContextIndex(contextIndex + 1); else setPhase("analysis"); lock.current = false; setTransitioning(false); }, 180); } }
   async function checkout() { if (!report || unlocked || checkoutPending.current || checkoutPendingVerification) return; checkoutPending.current = true; setCheckoutUnavailable(false); try { const prepared = await fetch("/api/audhd-checkout/prepare", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ reportVersion: REPORT_VERSION, answers, contextAnswers: context }), cache: "no-store" }); const preparedBody: unknown = prepared.ok ? await prepared.json() : null; const attemptId = preparedBody && typeof preparedBody === "object" ? (preparedBody as { attemptId?: unknown }).attemptId : null; if (typeof attemptId !== "string") throw new Error("Checkout preparation failed"); const analytics = await captureGa4CheckoutAttribution(); const started = await fetch("/api/audhd-checkout/start", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ attemptId, ...(analytics ? { analytics } : {}) }), cache: "no-store" }); const startedBody: unknown = started.ok ? await started.json() : null; const checkoutUrl = startedBody && typeof startedBody === "object" ? validCheckoutUrl((startedBody as { checkoutUrl?: unknown }).checkoutUrl) : null; if (!checkoutUrl) throw new Error("Checkout start failed"); standardAnalytics.checkout(() => { window.location.assign(checkoutUrl); }); } catch { checkoutPending.current = false; setCheckoutUnavailable(true); } }
   function restart() { standardAnalytics.restart(); setAnswers(emptyAnswers()); setContext(emptyContextAnswers()); setQuestionIndex(0); setContextIndex(0); setPhase("questions"); setCheckoutUnavailable(false); try { localStorage.removeItem(STORAGE_KEY); } catch { setStorageError(true); } }
+  function retryRecoveryRestore() { setRecoveryRestoreFailure(null); setHydrated(false); setRecoveryRetry(value => value + 1); }
   if (!hydrated) return <p className="mt-8" role="status">Laddar testet…</p>;
   const storageNotice = storageError ? <p role="status" className="mt-6 rounded-xl border border-neutral-300 bg-[#F1E8E2] p-4 text-sm leading-6">Webbläsaren kan inte spara testet säkert. Du kan fortsätta här, men lämna inte sidan om du vill behålla svaren.</p> : null;
   const recoveryMessage = recoveryNotice ? <p role="status" className="mt-6 rounded-xl border border-[#c8a777] bg-[#fff8e8] p-4 text-sm font-medium leading-6 text-[#4a3823]">Ditt test är redan upplåst – du behöver inte betala igen.</p> : null;
   const recoveryEmailMessage = recoveryEmailSent ? <p role="status" className="mt-6 rounded-xl border border-[#c8a777] bg-[#fff8e8] p-4 text-sm font-medium leading-6 text-[#4a3823]">En säker återställningslänk kan ha begärts till e-postadressen som användes vid betalningen. Kontrollera inkorg och skräppost innan du försöker igen. Betala inte igen.</p> : null;
   const pendingPaymentMessage = checkoutPendingVerification ? <p role="status" className="mt-6 rounded-xl border border-[#c8a777] bg-[#fff8e8] p-4 text-sm font-medium leading-6 text-[#4a3823]">Vi kontrollerar fortfarande din betalning. Betala inte igen och lämna sidan öppen en stund.</p> : null;
   const invalidRecoveryMessage = recoveryLinkInvalid ? <p role="alert" className="mt-6 rounded-xl border border-[#d6a5a9] bg-[#fff5f5] p-4 text-sm leading-6 text-[#702d36]">Länken kunde inte användas. Den kan ha gått ut eller redan ha använts. Betala inte igen – kontakta <a className="underline underline-offset-4" href="mailto:support@relationsvarning.se">support@relationsvarning.se</a> så hjälper vi dig vidare.</p> : null;
+  if (recoveryRestoreFailure) return <>{storageNotice}<section className={card} role="alert" aria-live="assertive"><p className="text-sm font-semibold uppercase tracking-[.16em] text-[#27666A]">Återställningen behöver slutföras</p><h2 className="text-2xl font-semibold">Ditt betalda resultat har inte ersatts</h2><p>{recoveryRestoreFailure === "temporary" ? "Vi kan inte nå den säkra återställningen just nu. Din återställningsåtkomst finns kvar och inget nytt test har skapats." : "Vi kan inte längre läsa den sparade analysen från den här återställningsåtkomsten. Inget nytt test har skapats och du ska inte betala igen."}</p><button type="button" onClick={retryRecoveryRestore} className={`${btn} bg-[#202124] text-white`}>Försök återställa igen</button><p className="text-sm text-neutral-600">Om problemet fortsätter, kontakta <a className="underline underline-offset-4" href="mailto:support@relationsvarning.se">support@relationsvarning.se</a> med tidpunkten för köpet och e-postadressen som användes vid betalningen.</p></section></>;
   if (paymentRecoveryRequired) return <>{storageNotice}<section className={card} role="alert" aria-live="assertive"><p className="text-sm font-semibold uppercase tracking-[.16em] text-[#27666A]">Betalningen behöver verifieras</p><h2 className="text-2xl font-semibold">Betala inte igen</h2><p>Vi kan inte säkert koppla den här webbläsaren till ett genomfört köp ännu. Dina svar och din betalning är inte automatiskt förlorade, men rapporten kan inte öppnas förrän köpet har verifierats.</p><p>Öppna i första hand länken i Stripe-kvittot i samma webbläsare. Om det inte hjälper, kontakta <a className="underline underline-offset-4" href="mailto:support@relationsvarning.se">support@relationsvarning.se</a> med tidpunkt för köpet och e-postadressen som användes vid betalningen, så hjälper vi dig vidare.</p></section></>;
   if (phase === "questions" || phase === "context") { const isContext = phase === "context"; const item = isContext ? contextQuestions[contextIndex] : questions[questionIndex]; const selected = isContext ? context[contextIndex] : answers[questionIndex]; const current = isContext ? contextIndex + 1 : questionIndex + 1; const total = isContext ? 6 : 48; const options = isContext ? contextQuestions[contextIndex].options : answerLabels; return <>{storageNotice}{recoveryMessage}{recoveryEmailMessage}{pendingPaymentMessage}{invalidRecoveryMessage}<section className={card} aria-labelledby="question"><div className="text-sm text-neutral-600"><span>{isContext ? "Sista frågor" : `Fråga ${current} av 48`}</span></div><progress className="h-2 w-full accent-[#27666A]" value={current - (selected >= 0 ? 0 : 1)} max={total} aria-label="Testets förlopp" /><h2 id="question" className="text-2xl font-semibold leading-snug">{isContext && contextIndex === 0 ? "Några sista frågor hjälper oss sätta dina svar i sammanhang." : item.text}</h2>{isContext && contextIndex === 0 && <p className="text-neutral-600">De ändrar inte dina index. De hjälper bara rapporten att använda ett mer försiktigt och relevant språk.</p>}<div role="group" aria-labelledby="question" className="space-y-2">{options.map((label, value) => <button key={label} type="button" disabled={transitioning} aria-pressed={selected === value} onClick={() => answer(value)} className={`flex min-h-12 w-full items-center rounded-xl border p-3 text-left ${selected === value ? "border-[#202124] bg-[#F1E8E2] font-semibold" : "border-neutral-300 bg-white hover:bg-neutral-50"}`}>{label}</button>)}</div><div className="flex gap-3"><button className={`${btn} border border-neutral-300 bg-white`} type="button" disabled={transitioning || (isContext ? contextIndex === 0 : questionIndex === 0)} onClick={() => isContext ? setContextIndex(contextIndex - 1) : setQuestionIndex(questionIndex - 1)}>Tillbaka</button></div><p className="text-sm text-neutral-600">Dina svar sparas lokalt i den här webbläsaren.</p></section></>; }
   if (phase === "analysis") return <section className={card} aria-busy="true" aria-live="polite"><p className="text-sm uppercase tracking-[.16em] text-neutral-600">Din profil är på väg</p><h2 className="text-3xl font-semibold">Vi analyserar dina svar</h2><div className="space-y-3">{["Analyserar dina svar inom 8 områden…", "Jämför ADHD- och autismrelaterade mönster…", "Identifierar hur områdena samspelar hos dig…"].map((text, i) => <p key={text} className={i <= analysisStep ? "text-neutral-900" : "text-neutral-400"}>✓ {text}</p>)}</div></section>;

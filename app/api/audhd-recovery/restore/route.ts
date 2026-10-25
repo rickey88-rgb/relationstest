@@ -8,10 +8,15 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 function unavailable() {
-  return NextResponse.json({ restored: false }, { status: 404, headers: { "Cache-Control": "no-store", "Referrer-Policy": "no-referrer", "X-Content-Type-Options": "nosniff", Vary: "Cookie" } });
+  return NextResponse.json({ restored: false, retryable: false }, { status: 404, headers: { "Cache-Control": "no-store", "Referrer-Policy": "no-referrer", "X-Content-Type-Options": "nosniff", Vary: "Cookie" } });
 }
 
-function logRestoreFailure(reason: "record_missing" | "stripe_verification_failed" | "decrypt_failed" | "restore_query_failed") {
+/** A valid recovery cookie remains usable; the client may retry this response. */
+function temporarilyUnavailable() {
+  return NextResponse.json({ restored: false, retryable: true }, { status: 503, headers: { "Cache-Control": "no-store", "Referrer-Policy": "no-referrer", "Retry-After": "2", "X-Content-Type-Options": "nosniff", Vary: "Cookie" } });
+}
+
+function logRestoreFailure(reason: "record_missing" | "stripe_verification_failed" | "stripe_temporarily_unavailable" | "decrypt_failed" | "restore_query_failed") {
   console.error(JSON.stringify({ event: "audhd_recovery_restore_unavailable", reason }));
 }
 
@@ -27,6 +32,10 @@ export async function GET(request: NextRequest) {
     }
     const payment = await inspectAudhdCheckoutSession(record.checkoutSessionId);
     if (!payment.verified || payment.paymentIntentId !== record.paymentIntentId || payment.priceId !== record.priceId) {
+    if (!payment.verified && payment.reason === "stripe_request_failed") {
+      logRestoreFailure("stripe_temporarily_unavailable");
+      return temporarilyUnavailable();
+    }
       if (!payment.verified && (payment.reason === "payment_refunded" || payment.reason === "payment_disputed")) {
         await revokeAudhdRecoveryGrantsForPaymentIntent(record.paymentIntentId);
       }
@@ -41,6 +50,6 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ restored: true, answers }, { headers: { "Cache-Control": "no-store", "Referrer-Policy": "no-referrer", "X-Content-Type-Options": "nosniff", Vary: "Cookie" } });
   } catch {
     logRestoreFailure("restore_query_failed");
-    return unavailable();
+    return temporarilyUnavailable();
   }
 }

@@ -40,7 +40,9 @@ function request(cookie = `rv_audhd_checkout_access=signed; rv_audhd_checkout_at
   record = { ciphertext: "cipher", iv: "iv", authTag: "tag", checkoutSessionId: "cs_live_audhd123", paymentIntentId: "pi_audhd123" };
   verification = { verified: false, reason: "stripe_request_failed" };
   response = await route.GET(request());
-  assert.equal(response.status, 404, "Stripe verification failure fails closed without falsely revoking");
+  assert.equal(response.status, 503, "Stripe verification failure fails closed but remains retryable");
+  assert.equal(response.headers.get("retry-after"), "2");
+  assert.deepEqual(await response.json(), { restored: false, retryable: true });
   assert.equal(revokeCalls, 2);
 
   access = null;

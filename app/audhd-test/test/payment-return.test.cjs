@@ -82,7 +82,7 @@ const isReportView = test => test.nodes().some(node => node.type?.name === "Repo
   assert(test.text(test.tree).includes("du har inte debiterats"));
 
   test = await ready({ recoveryUnlocked: true });
-  assert(test.text(test.tree).includes("Ditt test är redan upplåst"));
+  assert(test.text(test.tree).includes("Ditt betalda resultat har inte ersatts"), "cleared local storage in another browser context does not become a new blank paid test");
   assert.equal(test.nodes().some(node => node.type === test.PaywallCheckoutCTA), false);
 
   console.log("PASS: AuDHD client checkout uses prepare/start, restores only server-verified answers, and ignores local or query-string payment bypasses.");
