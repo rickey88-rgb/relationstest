@@ -1,0 +1,73 @@
+{
+  "verifiedAt": "2026-10-27",
+  "source": "Read-only Stripe Dashboard and public checkouts",
+  "products": {
+    "adhd_test": {
+      "productId": "prod_VWFo9E8vSScRj5",
+      "priceId": "price_1UVDIYAgF4ugWkEkDBJfJhME",
+      "paymentLinkId": "plink_1UVDIyAgF4ugWkEk3UqxeShv",
+      "url": "https://buy.stripe.com/eVq8wO2CB5Ad1u71ws0gw0z",
+      "returnUrl": "https://relationsvarning.se/adhd-test/test?paid=true",
+      "amount": 7900,
+      "currency": "sek",
+      "type": "one_time",
+      "taxBehavior": "inclusive"
+    },
+    "autism_test": {
+      "productId": "prod_VWFqvSUNm3jY41",
+      "priceId": "price_1UVDKtAgF4ugWkEkvuSXZibL",
+      "paymentLinkId": "plink_1UVDLMAgF4ugWkEkwaKZ8aPQ",
+      "url": "https://buy.stripe.com/bJe6oGfpn2o1egT1ws0gw0A",
+      "returnUrl": "https://relationsvarning.se/autism-test/test?paid=true",
+      "amount": 7900,
+      "currency": "sek",
+      "type": "one_time",
+      "taxBehavior": "inclusive"
+    }
+  },
+  "buildEnvironment": {
+    "NEXT_PUBLIC_ADHD_PAYMENT_LINK_79": "https://buy.stripe.com/eVq8wO2CB5Ad1u71ws0gw0z",
+    "NEXT_PUBLIC_AUTISM_PAYMENT_LINK_79": "https://buy.stripe.com/bJe6oGfpn2o1egT1ws0gw0A"
+  },
+  "productMapMerge": {
+    "adhd_test": {
+      "priceIds": [
+        "price_1UFctJAgF4ugWkEkHTrwY3JH",
+        "price_1UVDIYAgF4ugWkEkDBJfJhME"
+      ],
+      "paymentLinkIds": [
+        "plink_1UFctdAgF4ugWkEkYP7aToNE",
+        "plink_1UVDIyAgF4ugWkEk3UqxeShv"
+      ]
+    },
+    "autism_test": {
+      "priceIds": [
+        "price_1UFzL0AgF4ugWkEkgjOM10GH",
+        "price_1UVDKtAgF4ugWkEkvuSXZibL"
+      ],
+      "paymentLinkIds": [
+        "plink_1UFzLVAgF4ugWkEk8re8WHTh",
+        "plink_1UVDLMAgF4ugWkEkwaKZ8aPQ"
+      ]
+    }
+  },
+  "instructions": "Merge productMapMerge into the existing STRIPE_PAYMENT_PRODUCT_MAP_JSON, unioning arrays and preserving every other product/identifier. Never replace the complete production map with this two-product fragment. Do not activate account flags.",
+  "referencePriceIds": {
+    "audhd_test": "price_1UKFywAgF4ugWkEkZBL89VlN",
+    "adhd_test": "price_1UFctJAgF4ugWkEkHTrwY3JH",
+    "hsp_test": "price_1UKfvxAgF4ugWkEkv7zbiHST",
+    "angest_test": "price_1UJ01HAgF4ugWkEkUvBLX3mO",
+    "ptsd_test": "price_1UL83uAgF4ugWkEkdE28FfIa",
+    "narcissism_selftest": "price_1UFEg6AgF4ugWkEkjs2LodZI",
+    "screening_test": "price_1UFEiLAgF4ugWkEkGnCkj3Uo",
+    "autism_test": "price_1UFzL0AgF4ugWkEkgjOM10GH",
+    "attachment_test": "price_1UFEkaAgF4ugWkEkg1MoHYNT",
+    "codependency_test": "price_1UFEs6AgF4ugWkEkhNoQjFay",
+    "gaslighting_test": "price_1UFEtUAgF4ugWkEkmf2c7eI4",
+    "narcissist_partner": "price_1UFEmPAgF4ugWkEkHT8rKrrj",
+    "trauma_bond_test": "price_1UFEqOAgF4ugWkEk5Ik0vIfw",
+    "psychological_abuse_test": "price_1UFEouAgF4ugWkEkDgElZmhT",
+    "iq_test": "price_1ULqEsAgF4ugWkEkZfYt5OZF"
+  },
+  "referenceCatalogSource": "Stripe-granskning 2026-10-26; verified reference catalog, NOT a current production-map export."
+}

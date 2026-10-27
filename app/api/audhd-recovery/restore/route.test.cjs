@@ -46,7 +46,6 @@ function request(cookie = "signed") { return new NextRequest("https://www.relati
   assert.deepEqual(JSON.parse(logs.at(-1)), { event: "audhd_recovery_restore_unavailable", reason: "decrypt_failed" });
   assert.equal(logs.some(value => /cs_live|pi_audhd|cipher|signed/.test(value)), false, "failure logs contain no payment IDs, ciphertext or cookie values");
   assert.deepEqual(await response.json(), { restored: false, retryable: false });
-  console.error = originalError;
 
   decrypts = true;
   verification = { verified: false, reason: "stripe_request_failed" };
@@ -57,5 +56,6 @@ function request(cookie = "signed") { return new NextRequest("https://www.relati
   assert.deepEqual(await response.json(), { restored: false, retryable: true });
   assert.equal(revoked, revokedBeforeTemporaryFailure, "a temporary Stripe failure does not consume or revoke recovery access");
   assert.deepEqual(JSON.parse(logs.at(-1)), { event: "audhd_recovery_restore_unavailable", reason: "stripe_temporarily_unavailable" });
+  console.error = originalError;
   console.log("PASS: redeemed recovery can restore only its own retained answers and revokes on a later refund.");
 })().catch(error => { console.error = originalError; console.error(error); process.exitCode = 1; });
