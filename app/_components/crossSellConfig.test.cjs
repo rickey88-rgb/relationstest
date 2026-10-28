@@ -14,7 +14,9 @@ assert.deepEqual(
 );
 
 const autismOffers = crossSell.resolveCrossSellOffers("autism_test", { hasTestAccess: noExistingUnlocks });
-assert.deepEqual(autismOffers.map((offer) => [offer.productId, offer.displayPosition]), [["audhd_test", "primary"]]);
+assert.deepEqual(autismOffers.map((offer) => [offer.productId, offer.displayPosition]), [["autism_book", "primary"], ["audhd_test", "secondary"]]);
+assert.equal(autismOffers[0].product.price, 99);
+assert.equal(autismOffers[0].product.path, "/autism-bok?offer=analysis");
 
 const audhdOffers = crossSell.resolveCrossSellOffers("audhd_test", {
   preferredProductIds: ["autism_test", "adhd_test"],
@@ -38,7 +40,9 @@ assert.deepEqual(
   ["audhd_test"],
 );
 assert.equal(crossSell.productCatalog.adhd_deluxe.enabled, false);
-assert.equal(crossSell.productCatalog.autism_book.enabled, false);
+assert.equal(crossSell.productCatalog.autism_book.enabled, true);
+const pausedAutism = createLoader({ "../_lib/featureFlags": { AUTISM_BOOK_SALE_ENABLED: false, ADHD_DELUXE_SALE_ENABLED: false } })(path.join(__dirname, "crossSellConfig.ts"));
+assert.deepEqual(pausedAutism.resolveCrossSellOffers("autism_test", { hasTestAccess: noExistingUnlocks }).map((offer) => offer.productId), ["audhd_test"]);
 assert.equal(crossSell.productCatalog.adhd_deluxe.path, "/adhd-deluxe?offer=analysis");
 assert.equal(crossSell.productCatalog.adhd_deluxe.price, 99);
 assert.equal(crossSell.productCatalog.adhd_deluxe.ordinaryPrice, 149);
@@ -55,4 +59,4 @@ assert.deepEqual(
   ["adhd_test"],
 );
 
-console.log("PASS: central cross-sell catalogue removes paused books while preserving active recommendations.");
+console.log("PASS: autism book recommendation is active at 99 SEK; paused books and other recommendations retain their behavior.");
