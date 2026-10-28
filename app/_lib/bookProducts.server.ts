@@ -9,9 +9,10 @@ export const AUDHD_BOOK = {
 
 export const AUTISM_BOOK = {
   id: "autism-bok",
-  name: "På mitt sätt",
+  name: "AUTISM ALL INCLUSIVE",
   author: "Elias Voss",
-  downloadFilename: "Pa-mitt-satt_Elias-Voss.pdf",
+  downloadFilename: "AUTISM_ALL_INCLUSIVE_Elias_Voss.pdf",
+  worksheetsFilename: "AUTISM_ALL_INCLUSIVE_arbetsblad_A4.pdf",
 } as const;
 
 export const ADHD_DELUXE_BOOK = {
@@ -126,9 +127,20 @@ export async function verifyAutismBookCheckoutSession(sessionId: string) {
     const stripe = new Stripe(required("STRIPE_SECRET_KEY"));
     const session = await stripe.checkout.sessions.retrieve(sessionId);
 
-    // TODO: When the two price_ IDs are available, retrieve line_items here and
-    // require one of them as an additional product-level verification.
-    return session.status === "complete" && session.payment_status === "paid" && isAllowedAutismBookPaymentLink(session.payment_link);
+    if (session.status !== "complete" || session.payment_status !== "paid" || session.mode !== "payment" || session.livemode !== true || session.currency !== "sek") return false;
+    if (!isAllowedAutismBookPaymentLink(session.payment_link)) return false;
+    const prices = required("AUTISM_BOOK_ALLOWED_PRICE_IDS").split(",").map(value => value.trim());
+    if (prices.some(value => !/^price_[A-Za-z0-9]+$/.test(value))) return false;
+    const items = await stripe.checkout.sessions.listLineItems(sessionId, { limit: 100 });
+    const item = items.data[0];
+    const priceId = item ? lineItemPriceId(item.price) : null;
+    if (items.has_more || items.data.length !== 1 || item.quantity !== 1 || !priceId || !prices.includes(priceId)) return false;
+    const intentId = typeof session.payment_intent === "string" ? session.payment_intent : session.payment_intent?.id;
+    if (!intentId) return false;
+    const intent = await stripe.paymentIntents.retrieve(intentId, { expand: ["latest_charge"] });
+    if (intent.status !== "succeeded") return false;
+    const charge = typeof intent.latest_charge === "string" ? await stripe.charges.retrieve(intent.latest_charge) : intent.latest_charge;
+    return Boolean(charge && charge.paid && charge.captured && !charge.refunded && charge.amount_refunded === 0 && !charge.disputed);
   } catch {
     return false;
   }
@@ -245,14 +257,14 @@ export function audhdBookR2Config() {
   };
 }
 
-export function autismBookR2Config() {
+export function autismBookR2Config(file: "book" | "worksheets" = "book") {
   const endpoint = required("R2_ENDPOINT");
   if (!/^https:\/\//.test(endpoint)) throw new Error("R2_ENDPOINT must use HTTPS");
 
   return {
     endpoint,
     bucket: required("R2_BUCKET_NAME"),
-    key: required("AUTISM_BOOK_R2_KEY"),
+    key: required(file === "worksheets" ? "AUTISM_BOOK_WORKSHEETS_R2_KEY" : "AUTISM_BOOK_R2_KEY"),
     credentials: {
       accessKeyId: required("R2_ACCESS_KEY_ID"),
       secretAccessKey: required("R2_SECRET_ACCESS_KEY"),

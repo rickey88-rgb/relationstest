@@ -12,7 +12,9 @@ process.env.R2_ENDPOINT = "https://r2.example.test";
 process.env.R2_BUCKET_NAME = "relationsvarning-private";
 process.env.R2_ACCESS_KEY_ID = "test-access-key";
 process.env.R2_SECRET_ACCESS_KEY = "test-secret-key";
-process.env.AUTISM_BOOK_R2_KEY = "books/autism/Pa-mitt-satt_Elias-Voss.pdf";
+process.env.AUTISM_BOOK_R2_KEY = "books/autism-all-inclusive/v1/book.pdf";
+process.env.AUTISM_BOOK_WORKSHEETS_R2_KEY = "books/autism-all-inclusive/v1/worksheets.pdf";
+process.env.AUTISM_BOOK_ALLOWED_PRICE_IDS = "price_autism149,price_autism99";
 process.env.ADHD_DELUXE_BOOK_R2_KEY = "books/adhd-deluxe/ADHD-Deluxe_Elias-Voss.pdf";
 
 class StripeMock {
@@ -20,7 +22,7 @@ class StripeMock {
   static lineItems = [];
   static retrieveError = null;
   static lineItemsError = null;
-  static charge = { paid: true, refunded: false, amount_refunded: 0, disputed: false };
+  static charge = { paid: true, captured: true, refunded: false, amount_refunded: 0, disputed: false };
   constructor() {
     this.paymentIntents = { retrieve: async () => ({ status: "succeeded", latest_charge: StripeMock.charge }) };
     this.charges = { retrieve: async () => StripeMock.charge };
@@ -52,7 +54,8 @@ assert(products.isAllowedAutismBookPaymentLink("plink_autism_book_149"));
 assert(products.isAllowedAutismBookPaymentLink({ id: "plink_autism_book_99" }));
 assert.equal(products.isAllowedAutismBookPaymentLink("plink_audhd_book_149"), false);
 assert.equal(products.isAllowedAutismBookPaymentLink(null), false);
-assert.equal(products.autismBookR2Config().key, "books/autism/Pa-mitt-satt_Elias-Voss.pdf");
+assert.equal(products.autismBookR2Config().key, "books/autism-all-inclusive/v1/book.pdf");
+assert.equal(products.autismBookR2Config("worksheets").key, "books/autism-all-inclusive/v1/worksheets.pdf");
 assert.equal(products.adhdDeluxeBookR2Config().key, "books/adhd-deluxe/ADHD-Deluxe_Elias-Voss.pdf");
 
 (async () => {
@@ -68,10 +71,12 @@ assert.equal(products.adhdDeluxeBookR2Config().key, "books/adhd-deluxe/ADHD-Delu
   StripeMock.session = { status: "complete", payment_status: "unpaid", payment_link: "plink_audhd_book_149" };
   assert.equal(await products.verifyAudhdBookCheckoutSession("cs_test_audhdbook123"), false);
 
-  StripeMock.session = { status: "complete", payment_status: "paid", payment_link: "plink_autism_book_149" };
+  StripeMock.lineItems = [{ price: { id: "price_autism149" }, quantity: 1 }];
+  StripeMock.session = { status: "complete", payment_status: "paid", mode: "payment", livemode: true, currency: "sek", payment_intent: "pi_mock", payment_link: "plink_autism_book_149" };
   assert.equal(await products.verifyAutismBookCheckoutSession("cs_test_autismbook123"), true);
 
-  StripeMock.session = { status: "complete", payment_status: "paid", payment_link: "plink_autism_book_99" };
+  StripeMock.lineItems = [{ price: { id: "price_autism99" }, quantity: 1 }];
+  StripeMock.session = { status: "complete", payment_status: "paid", mode: "payment", livemode: true, currency: "sek", payment_intent: "pi_mock", payment_link: "plink_autism_book_99" };
   assert.equal(await products.verifyAutismBookCheckoutSession("cs_test_autismbook123"), true);
 
   StripeMock.session = { status: "complete", payment_status: "paid", payment_link: "plink_other_product" };

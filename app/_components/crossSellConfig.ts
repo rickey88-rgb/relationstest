@@ -69,14 +69,14 @@ export const productCatalog = {
   autism_book: {
     id: "autism_book",
     type: "book",
-    name: "På mitt sätt",
+    name: "AUTISM ALL INCLUSIVE",
     path: "/autism-bok?offer=analysis",
     price: BOOK_OFFER_PRICES.autism.analysis,
     ordinaryPrice: BOOK_OFFER_PRICES.autism.ordinary,
     currency: "SEK",
     enabled: AUTISM_BOOK_SALE_ENABLED,
     analyticsId: "autism_book",
-    image: { src: "/autism-bok-mockup.png", alt: "På mitt sätt – bok om autism av Elias Voss", width: 1312, height: 1199 },
+    image: { src: "/autism-all-inclusive-mockup.png", alt: "AUTISM ALL INCLUSIVE av Elias Voss", width: 1205, height: 1305 },
   },
   adhd_deluxe: {
     id: "adhd_deluxe",
@@ -129,7 +129,7 @@ function testOffer(source: ProductId, productId: TestId, position: OfferPosition
 function bookOffer(productId: BookProductId, position: OfferPosition, priority: number): ConfiguredOffer {
   const product = productCatalog[productId];
   const descriptions: Record<BookProductId, string> = {
-    autism_book: "En konkret bok som hjälper dig att omsätta förståelsen från analysen till vardagsverktyg som fungerar på ditt sätt.",
+    autism_book: "52 sidor om sinnesintryck, energi, tydlighet och en vardag med mer utrymme. Dessutom 12 A4-sidor med digitalt ifyllbara arbetsblad.",
     audhd_book: "10 konkreta sätt att få livet att fungera när ADHD och autism drar åt varsitt håll.",
     adhd_deluxe: "En konkret bok om att förstå var vardagen fastnar och bygga smartare runt det.",
   };

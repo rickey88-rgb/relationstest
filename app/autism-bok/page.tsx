@@ -1,78 +1,79 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import EditorialSurface from "../_components/EditorialSurface";
+import BookPurchaseAnalytics, { BookLandingAnalytics } from "../_components/BookPurchaseAnalytics";
 import { AUTISM_BOOK } from "../_lib/bookProducts.server";
 import { getAutismBookOffer, type BookOffer } from "../_lib/bookOffers";
 import { AUTISM_BOOK_SALE_ENABLED } from "../_lib/featureFlags";
+import AutismBookPreviewGallery from "./AutismBookPreviewGallery";
+import AutismBookStickyCta from "./AutismBookStickyCta";
+import styles from "./page.module.css";
 
 const pageUrl = "https://www.relationsvarning.se/autism-bok";
-const mockupUrl = "https://www.relationsvarning.se/autism-bok-mockup.png";
-const title = "På mitt sätt – bok om autism och vardag | Relationsvarning";
-const description = "På mitt sätt är en konkret bok om autism, vardag och praktiska verktyg för vuxna som vill förstå sina behov och få vardagen att fungera på sitt sätt.";
-
+const mockupUrl = "https://www.relationsvarning.se/autism-all-inclusive-mockup.png";
+const title = "AUTISM ALL INCLUSIVE – bok och ifyllbara arbetsblad | Relationsvarning";
+const description = "En färgstark guide till en lättare vardag med autism. 52 sidor, 10 kapitel och 12 A4-sidor med digitalt ifyllbara arbetsblad. Av Elias Voss.";
 export const metadata: Metadata = {
-  title,
-  description,
-  alternates: { canonical: pageUrl },
-  openGraph: { title, description, url: pageUrl, type: "website" },
-  twitter: { card: "summary", title, description },
+  title, description, alternates: { canonical: pageUrl },
+  openGraph: { title, description, url: pageUrl, type: "website", images: [{ url: mockupUrl, width: 1205, height: 1305, alt: AUTISM_BOOK.name }] },
+  twitter: { card: "summary_large_image", title, description, images: [mockupUrl] },
 };
-
-const sectionHeading = "text-3xl font-semibold tracking-tight text-neutral-950 sm:text-4xl";
-const primaryButton = "inline-flex min-h-[52px] w-full items-center justify-center rounded-xl bg-[#27666A] px-6 py-3.5 text-center font-semibold text-white transition hover:bg-[#1F5357] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#27666A] sm:w-auto";
-const structuredData = [
-  { "@context": "https://schema.org", "@type": "Book", "@id": `${pageUrl}#book`, name: AUTISM_BOOK.name, author: { "@type": "Person", name: AUTISM_BOOK.author }, bookFormat: "EBook", inLanguage: "sv", numberOfPages: 48, url: pageUrl },
-  { "@context": "https://schema.org", "@type": "Product", "@id": `${pageUrl}#product`, name: AUTISM_BOOK.name, description, image: mockupUrl, brand: { "@type": "Brand", name: "Relationsvarning" }, ...(AUTISM_BOOK_SALE_ENABLED ? { offers: { "@type": "Offer", url: pageUrl, price: "149", priceCurrency: "SEK", availability: "https://schema.org/InStock", itemCondition: "https://schema.org/NewCondition" } } : {}) },
-];
-
-function BuyButton({ offer, children }: { offer: BookOffer; children?: string }) {
-  return <a data-rv="button" href={offer.paymentLink} className={primaryButton}>{children ?? `Köp boken · ${offer.price} kr`}</a>;
+const chapters = [
+  ["Din egen bruksanvisning", "Se vad som fungerar, vad som kostar kraft och vilket stöd du vill prova."],
+  ["När världen skruvar upp volymen", "Undersök sinnesintrycken i en situation och prova en ändring i miljön."],
+  ["Batteriet som ingen annan ser", "Ge resor, omställningar och återhämtning plats i din planering."],
+  ["När det blir för mycket", "Sätt ord på tidiga signaler och gör en plan när du har utrymme."],
+  ["Startknappen som gömde sig", "Hitta hindret och gör den första handlingen mindre och tydligare."],
+  ["En plan som tål verkligheten", "Skapa enkla ankare och en reservväg när något förändras."],
+  ["Tydlighet är en omtanke", "Be om konkreta besked, betänketid eller ett sätt att kommunicera som fungerar."],
+  ["Du får ta plats som du", "Utforska trygghet, relationer och det du vill ha mer plats för."],
+  ["Kroppen vill också vara med", "Uppmärksamma grundläggande behov och förbered en anteckning inför vården."],
+  ["Du ska inte bära allt själv", "Beskriv ett behov och ett konkret önskemål om stöd i skolan, på jobbet eller hemma."],
+] as const;
+const previews = [
+  { page: 5, slug: "sa-anvander-du-boken", title: "Ta det som hjälper dig", caption: "Läs, prova och spara. Du väljer var du börjar." },
+  { page: 11, slug: "sinnesintryck", title: "När världen skruvar upp volymen", caption: "Ljud, ljus och allt annat som tar plats i en vanlig dag." },
+  { page: 15, slug: "energi", title: "Batteriet som ingen annan ser", caption: "Det som kostar kraft syns inte alltid i kalendern." },
+  { page: 25, slug: "forsta-steget", title: "Från moln till första steg", caption: "Ett vardagsexempel och en övning för att komma igång." },
+  { page: 31, slug: "tydlighet", title: "Tydlighet är en omtanke", caption: "Du får be om information som går att använda." },
+  { page: 10, slug: "vardagsprofil", title: "Min vardagsprofil", caption: "Utsnitt ur ett arbetsblad. De första två frågorna visas.", cropped: true },
+].map(item => ({ ...item, src: `/autism-book-previews/${item.slug}.webp`, fullSrc: `/autism-book-previews/read/${item.slug}.webp` }));
+const faqs = [
+  ["Är det en fysisk bok?", "Du köper en digital bok. Mockupen visar omslaget, men ingen tryckt bok skickas. Du får två separata PDF-filer."],
+  ["Vad ingår i köpet?", "Hela boken på 52 sidor med tio kapitel, övningar och arbetsblad. Dessutom ett separat häfte med 12 A4-sidor och 72 digitalt ifyllbara formulärfält. Båda filerna ingår i samma engångsköp."],
+  ["Hur får jag filerna?", "Efter betalningen kontrolleras köpet och du kommer till en sida med två nedladdningsknappar. Spara båda filerna på din enhet. Du behöver inget konto."],
+  ["Kan jag fylla i arbetsbladen i mobilen?", "A4-häftet kan fyllas i i en PDF-läsare som stöder formulär, även på mobil och surfplatta. Spara en egen kopia och kontrollera att svaren finns kvar när du öppnar den igen. PDF-läsarnas stöd varierar. Du kan också skriva ut bladen."],
+  ["Behöver jag en autismdiagnos?", "Nej. Boken vänder sig till ungdomar och vuxna som har autism eller känner igen sig i erfarenheterna, och till närstående som vill förstå. Den ger allmän kunskap och reflektionsverktyg och ersätter inte utredning, vård eller behandling."],
+  ["Kan jag hämta filerna igen?", "I samma webbläsare kan du återvända till nedladdningssidan så länge din bokåtkomst gäller. Byter du webbläsare eller rensar cookies kan support hjälpa dig manuellt. Spara därför gärna filerna direkt efter köpet."],
+] as const;
+function Purchase({ offer, enabled, label }: { offer: BookOffer; enabled: boolean; label?: string }) {
+  return <div className={styles.purchase}><p className={styles.price}>{offer.price} kr {offer.isAnalysisOffer && <span>Ordinarie 149 kr</span>}</p>{enabled ? <BookPurchaseAnalytics productId={AUTISM_BOOK.id} productName={AUTISM_BOOK.name} price={offer.price} offerType={offer.isAnalysisOffer ? "analysis" : "standard"} paymentLink={offer.paymentLink} className={styles.buy}>{label ?? "Köp boken + arbetsbladen"}</BookPurchaseAnalytics> : <span className={styles.paused}>Kommer snart</span>}<p className={styles.purchaseNote}>Engångsköp · Två PDF-filer · Ingen prenumeration</p></div>;
 }
-
 export default async function AutismBookPage({ searchParams }: { searchParams: Promise<{ offer?: string | string[] }> }) {
   const offer = getAutismBookOffer((await searchParams).offer);
-  return (
-    <EditorialSurface>
-      <main className="overflow-x-hidden text-neutral-900">
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData).replace(/</g, "\\u003c") }} />
-
-        <section className="mx-auto max-w-6xl px-4 pb-14 pt-7 sm:px-6 sm:pb-20 sm:pt-10">
-          <nav aria-label="Brödsmulor" className="text-sm text-neutral-600"><Link href="/" className="underline underline-offset-4 decoration-neutral-300 hover:decoration-neutral-700">Relationsvarning</Link><span aria-hidden="true"> / </span><span aria-current="page">Autism-bok</span></nav>
-          <div className="mt-5 grid gap-8 rounded-[32px] border border-[#DDE8E3] bg-[#EFF5F2] px-5 py-8 shadow-sm sm:mt-7 sm:px-8 sm:py-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(260px,.85fr)] lg:items-center lg:gap-12 lg:px-12 lg:py-14">
-            <div className="max-w-2xl">
-              {offer.isAnalysisOffer && <p className="text-sm font-semibold uppercase tracking-[.16em] text-[#27666A]">Specialpris efter testet</p>}
-              <p className="text-sm font-semibold uppercase tracking-[.16em] text-[#27666A]">Ny digital bok</p>
-              <h1 className="mt-3 text-4xl font-semibold leading-[1.04] tracking-tight text-neutral-950 sm:text-5xl">På mitt sätt</h1>
-              <p className="mt-5 font-serif text-2xl leading-8 text-[#35444A] sm:text-[1.7rem] sm:leading-9">En konkret bok om autism och att få vardagen att fungera på ditt sätt.</p>
-              <p className="mt-5 text-lg leading-8 text-neutral-700">För dig som vill förstå dina behov bättre och skapa vardagsverktyg som faktiskt går att använda — utan att försöka passa in i någon annans system.</p>
-              {AUTISM_BOOK_SALE_ENABLED ? <><div className="mt-7 flex flex-wrap items-end gap-x-5 gap-y-3">{offer.isAnalysisOffer ? <><p className="text-3xl font-semibold tracking-tight text-neutral-950">Ditt pris: {offer.price} kr</p><p className="pb-1 text-sm font-medium text-neutral-600"><span className="line-through">149 kr</span> · 48 sidor · praktiska arbetsblad</p></> : <><p className="text-3xl font-semibold tracking-tight text-neutral-950">{offer.price} kr</p><p className="pb-1 text-sm font-medium text-neutral-600">48 sidor · praktiska arbetsblad</p></>}</div><div className="mt-5"><BuyButton offer={offer} /></div><p className="mt-3 text-sm text-neutral-600">Digital bok (PDF) · Direkt tillgång efter betalning</p></> : <p className="mt-7 inline-flex min-h-[52px] items-center justify-center rounded-xl border border-[#27666A] px-6 py-3.5 font-semibold text-[#27666A]">Kommer snart</p>}
-            </div>
-            <div className="space-y-5">
-              <div className="mx-auto w-full max-w-[640px]"><Image src="/autism-bok-mockup.png" alt="På mitt sätt – bok om autism av Elias Voss" width={1312} height={1199} priority sizes="(max-width: 1024px) min(100vw - 2.5rem, 640px), 55vw" className="h-auto w-full" /></div>
-              <aside className="rounded-[28px] border border-[#C7D8D2] bg-white p-6 sm:p-8" aria-label="Bokens innehåll">
-                <p className="text-sm font-semibold uppercase tracking-[.16em] text-[#27666A]">I boken</p>
-                <p className="mt-4 font-serif text-3xl leading-tight text-[#35444A]">48 sidor för vardagen på ditt sätt.</p>
-                <ul className="mt-6 space-y-3 leading-7 text-neutral-700"><li>10 konkreta system och områden</li><li>Praktiska arbetsblad och övningar</li><li>Vardagsnära förståelse för behov, energi och återhämtning</li></ul>
-              </aside>
-            </div>
-          </div>
-        </section>
-
-        <section className="border-y border-[#DDE8E3] bg-[#EFF5F2]"><div className="mx-auto max-w-4xl px-4 py-14 sm:px-6 sm:py-20"><p className="text-sm font-semibold uppercase tracking-[.16em] text-[#27666A]">Vardag före perfektion</p><h2 className={`mt-3 max-w-3xl ${sectionHeading}`}>Det handlar inte om att fungera som alla andra.</h2><div className="mt-6 max-w-3xl space-y-4 text-lg leading-8 text-neutral-700"><p>Vardag med autism kan innebära att intryck, sociala situationer, förändringar och återhämtning tar mer plats än omgivningen ser. Då räcker det sällan med fler allmänna råd.</p><p>På mitt sätt är byggd kring praktisk förståelse och konkreta verktyg som hjälper dig att utgå från dina egna behov.</p></div></div></section>
-
-        <section className="mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-20"><div className="max-w-3xl"><p className="text-sm font-semibold uppercase tracking-[.16em] text-[#27666A]">I boken</p><h2 className={`mt-3 ${sectionHeading}`}>Konkreta system för en mer fungerande vardag</h2><p className="mt-5 text-lg leading-8 text-neutral-700">Boken samlar tio områden med reflektioner, arbetsblad och övningar som hjälper dig att förstå vad som fungerar, vad som skaver och vad du kan förändra i små steg.</p></div><div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{["Förstå dina egna behov", "Göra plats för återhämtning", "Hantera intryck och överbelastning", "Skapa tydlighet kring planer och förändringar", "Hitta vardagsverktyg som går att återvända till", "Bygga ett sätt att fungera som passar dig"].map((item, index) => <div data-rv="card" key={item} className="min-w-0 rounded-2xl border border-[#DDE8E3] bg-[#EFF5F2] p-5"><span aria-hidden="true" className="font-serif text-lg text-[#27666A]">{String(index + 1).padStart(2, "0")}</span><h3 className="mt-5 text-lg font-semibold leading-6 text-neutral-950">{item}</h3></div>)}</div></section>
-
-        <section className="border-y border-[#DDE8E3] bg-[#202124] text-white"><div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:px-6 sm:py-20 lg:grid-cols-[.9fr_1.1fr] lg:items-center"><div><p className="text-sm font-semibold uppercase tracking-[.16em] text-[#DDE8E3]">Arbetsblad och övningar</p><h2 className="mt-3 font-serif text-4xl leading-tight text-white sm:text-5xl">Läs, reflektera och använd.</h2><p className="mt-5 max-w-xl text-lg leading-8 text-neutral-100">Arbetsbladen hjälper dig att omsätta förståelsen i din egen vardag — i din takt och på ett sätt som går att återvända till.</p></div><ul className="grid gap-3 sm:grid-cols-2">{["Se vilka situationer som tar eller ger energi", "Sätta ord på behov som annars är svåra att förklara", "Göra plats för återhämtning utan skuld", "Välja ett nästa steg som faktiskt går att prova"].map((item) => <li key={item} className="rounded-xl border border-[#DDE8E3] bg-[#FFFEFC] px-4 py-4 leading-6 text-[#202124]"><span aria-hidden="true" className="mr-2 text-[#27666A]">•</span>{item}</li>)}</ul></div></section>
-
-        <section className="mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-20"><div className="max-w-3xl"><p className="text-sm font-semibold uppercase tracking-[.16em] text-[#27666A]">Läsarreaktioner</p><h2 className={`mt-3 ${sectionHeading}`}>Vad läsarna säger</h2></div><div className="mt-8 grid gap-4 lg:grid-cols-2"><figure className="flex min-h-[220px] flex-col justify-between rounded-[28px] border border-[#DDE8E3] bg-[#EFF5F2] p-6 sm:p-8"><blockquote className="font-serif text-2xl leading-9 text-[#35444A] sm:text-[1.75rem] sm:leading-10">“Jag köpte boken till min 15-åriga dotter och hon älskar den. Hon säger att hon förstår sig själv bättre nu.”</blockquote><figcaption className="mt-7 font-semibold text-neutral-800">— Anna-Lena</figcaption></figure><figure className="flex min-h-[220px] flex-col justify-between rounded-[28px] border border-[#DDE8E3] bg-[#EFF5F2] p-6 sm:p-8"><blockquote className="font-serif text-2xl leading-9 text-[#35444A] sm:text-[1.75rem] sm:leading-10">“Väldigt bra bok som verkligen förstår hur man lär sig att fungera med autism.”</blockquote><figcaption className="mt-7 font-semibold text-neutral-800">— Elvira, provläsare</figcaption></figure></div></section>
-
-        <section className="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:px-6 sm:py-20 lg:grid-cols-2 lg:items-start"><div><p className="text-sm font-semibold uppercase tracking-[.16em] text-[#27666A]">För vem?</p><h2 className={`mt-3 ${sectionHeading}`}>För dig som vill förstå dig själv bättre — på ditt sätt.</h2><p className="mt-5 max-w-xl text-lg leading-8 text-neutral-700">Boken är inte behandling, diagnostik eller en ersättning för professionell vård. Den är ett vardagsnära stöd för reflektion och praktiska verktyg.</p></div><div className="space-y-3">{["Dig som har autism", "Dig som känner igen dig i autismrelaterade behov och erfarenheter", "Dig som vill förstå intryck, återhämtning och vardagsstruktur bättre", "Dig som vill ha konkreta arbetsblad snarare än fler allmänna råd", "Någon som vill förstå en närstående bättre"].map((item) => <p key={item} className="rounded-xl border border-[#DDE8E3] bg-[#EFF5F2] px-5 py-4 font-medium leading-6 text-neutral-800"><span aria-hidden="true" className="mr-3 text-[#27666A]">✓</span>{item}</p>)}</div></section>
-
-        <section className="bg-[#27666A] text-white"><div className="mx-auto max-w-4xl px-4 py-14 text-center sm:px-6 sm:py-20"><h2 className="font-serif text-4xl leading-tight text-white sm:text-5xl">Du får skapa en vardag som fungerar för dig.</h2><p className="mx-auto mt-4 max-w-2xl text-lg leading-8 text-white/90">Börja med ett konkret verktyg, ett behov och ett litet nästa steg.</p>{AUTISM_BOOK_SALE_ENABLED ? <>{offer.isAnalysisOffer && <p className="mt-7 text-sm font-semibold uppercase tracking-[.16em] text-white/85">Specialpris efter testet</p>}<p className="mt-2 text-3xl font-semibold">{offer.isAnalysisOffer ? `Ditt pris: ${offer.price} kr` : `${offer.price} kr`}</p><div className="mt-5"><BuyButton offer={offer}>{`Köp På mitt sätt · ${offer.price} kr`}</BuyButton></div><p className="mt-3 text-sm text-white/85">Digital bok (PDF) · Direkt tillgång efter betalning</p></> : <p className="mt-7 inline-flex min-h-[52px] items-center justify-center rounded-xl border border-white/70 px-6 py-3.5 font-semibold text-white">Kommer snart</p>}</div></section>
-
-        <section className="mx-auto max-w-4xl px-4 py-14 sm:px-6 sm:py-20"><p className="text-sm font-semibold uppercase tracking-[.16em] text-[#27666A]">Vanliga frågor</p><h2 className={`mt-3 ${sectionHeading}`}>Innan du köper</h2><div className="mt-7 divide-y divide-neutral-200 border-y border-neutral-200">{[["Är det en fysisk bok?", "Nej, det är en digital bok i PDF-format."], ["Hur får jag boken?", "Efter genomförd betalning verifieras köpet och du får direkt tillgång till nedladdningen."], ["Behöver jag ha en autismdiagnos?", "Nej. Boken är för personer som vill förstå autism och vardag bättre. Den ersätter inte professionell utredning eller vård."], ["Kan jag läsa den i mobilen?", "Ja. PDF-filen kan läsas på mobil, surfplatta och dator."], ["Finns det arbetsblad?", "Ja, boken innehåller praktiska arbetsblad och övningar kopplade till de tio områdena."]].map(([question, answer]) => <details key={question} className="group py-5"><summary className="cursor-pointer list-none pr-8 font-semibold text-neutral-950 marker:content-none"><span>{question}</span><span aria-hidden="true" className="float-right text-[#27666A] transition group-open:rotate-45">+</span></summary><p className="mt-3 max-w-3xl leading-7 text-neutral-700">{answer}</p></details>)}</div></section>
-      </main>
-    </EditorialSurface>
-  );
+  // Local development preview only: neither a query string nor a production env can enable this bypass.
+  const enabled = AUTISM_BOOK_SALE_ENABLED || (process.env.NODE_ENV === "development" && process.env.AUTISM_BOOK_LOCAL_PREVIEW === "1");
+  const structuredData = [
+    { "@context": "https://schema.org", "@type": "Book", "@id": `${pageUrl}#book`, name: AUTISM_BOOK.name, author: { "@type": "Person", name: AUTISM_BOOK.author }, bookFormat: "EBook", inLanguage: "sv", numberOfPages: 52, image: mockupUrl, url: pageUrl },
+    { "@context": "https://schema.org", "@type": "Product", name: `${AUTISM_BOOK.name} – bok och arbetsblad`, description, image: mockupUrl, url: pageUrl, brand: { "@type": "Brand", name: "Relationsvarning" }, ...(AUTISM_BOOK_SALE_ENABLED ? { offers: { "@type": "Offer", url: pageUrl, price: "149", priceCurrency: "SEK", availability: "https://schema.org/InStock" } } : {}) },
+  ];
+  return <main className={styles.page}>
+    <BookLandingAnalytics productId={AUTISM_BOOK.id} productName={AUTISM_BOOK.name} price={offer.price} offerType={offer.isAnalysisOffer ? "analysis" : "standard"} />
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData).replace(/</g, "\\u003c") }} />
+    <header className={styles.header}><Link href="/" className={styles.brand}>Relationsvarning<span>Kunskap för din vardag</span></Link><a href="#titta-i-boken" className={styles.headerLink}>Titta i boken <span aria-hidden="true">↗</span></a></header>
+    <section id="autism-book-hero" className={styles.hero}><div className={styles.heroCopy}>
+      <p className={styles.eyebrow}>En digital guide av Elias Voss</p>{offer.isAnalysisOffer && <p className={styles.offerBadge}>Ditt erbjudande efter autismtestet · 99 kr</p>}
+      <h1>AUTISM<br /><span>ALL</span><br />INCLUSIVE</h1><p className={styles.subtitle}>En färgstark guide till en lättare vardag.</p><p className={styles.heroDescription}>För dig som lägger mycket kraft på sådant som andra knappt märker. Förstå dina behov, prova något konkret och ge vardagen lite mer utrymme.</p>
+      <Purchase offer={offer} enabled={enabled} /><a href="#titta-i-boken" className={styles.heroLink}>Bläddra bland riktiga sidor ↓</a>
+    </div><div className={styles.heroVisual}><span className={styles.visualLabel}>BOKEN + ARBETSBLADEN</span><Image src="/autism-all-inclusive-mockup.png" alt="Omslaget till AUTISM ALL INCLUSIVE av Elias Voss, illustrerat som en bok. Produkten levereras digitalt." width={1205} height={1305} priority sizes="(max-width: 760px) 92vw, 48vw" className={styles.mockup} /><p>Digital utgåva. Ingen fysisk bok skickas.</p></div></section>
+    <div className={styles.facts}><span><strong>52</strong> sidor i boken</span><span><strong>10</strong> kapitel att använda</span><span><strong>12</strong> A4-sidor med arbetsblad</span><span><strong>Din takt.</strong> Du väljer starten.</span></div>
+    <section className={`${styles.section} ${styles.recognition}`}><div><p className={styles.eyebrow}>Det osynliga får ta plats</p><h2>En vanlig dag kan vara<br />ett ganska stort jobb.</h2></div><div><p>Resan dit. Ljuden i rummet. Den otydliga instruktionen. Planen som plötsligt ändras. Och allt du gör för att det inte ska märkas hur mycket det kostar.</p><p>Här får du undersöka vad som faktiskt hjälper dig. Varje kapitel går från igenkänning till ett exempel, en övning och ett arbetsblad. Du behöver inte göra hela boken till ännu en uppgift.</p><p className={styles.pullquote}>Ta en sak. Prova i din vardag.<br />Behåll det som fungerar.</p></div></section>
+    <section id="titta-i-boken" className={`${styles.section} ${styles.previewSection}`}><div className={styles.sectionIntro}><div><p className={styles.eyebrow}>Titta innan du bestämmer dig</p><h2>Så här ser boken ut.<br /><em>På riktigt.</em></h2></div><p>Sex utdrag direkt ur PDF-filen. Se formen, läs ett vardagsexempel och kika på ett arbetsblad. Tryck på en sida för att förstora.</p></div><AutismBookPreviewGallery previews={previews} /><p className={styles.smallNote}>Bilderna visar enskilda sidor ur boken. Arbetsbladet är ett märkt utsnitt.</p></section>
+    <section className={`${styles.section} ${styles.chapters}`}><div className={styles.sectionIntro}><div><p className={styles.eyebrow}>Tio ingångar till din vardag</p><h2>Börja där<br />det skaver mest.</h2></div><p>Läs i ordning eller välj det kapitel du behöver just nu. Boken innehåller också en sjudagarsplan och en kort bruksanvisning där du samlar det som hjälper.</p></div><ol className={styles.chapterGrid}>{chapters.map(([name, detail], index) => <li key={name}><span className={styles.chapterNumber}>{String(index + 1).padStart(2, "0")}</span><div><h3>{name}</h3><p>{detail}</p></div></li>)}</ol></section>
+    <section className={`${styles.section} ${styles.worksheets}`}><div><p className={styles.eyebrow}>Från igenkänning till något att prova</p><h2>Gör plats för<br />dina egna svar.</h2><p>Arbetsbladen finns redan i huvudboken. Du får dessutom ett separat A4-häfte, gjort för att skrivas ut eller fyllas i digitalt.</p><ul><li><strong>12 A4-sidor</strong> med gott om plats för dina anteckningar.</li><li><strong>72 ifyllbara fält</strong> i PDF-läsare som stöder formulär.</li><li><strong>Två separata filer</strong> att hämta och spara efter ett och samma köp.</li></ul><p className={styles.worksheetNote}>Skriv, rita eller ta hjälp av någon som antecknar. Spara en egen kopia efter digital ifyllnad. Huvudbokens arbetsblad är till för utskrift.</p><Purchase offer={offer} enabled={enabled} label="Få boken + arbetsbladen" /></div><figure className={styles.worksheetFigure}><span className={styles.paperTab}>ETT AV BOKENS ARBETSBLAD</span><Image src="/autism-book-previews/read/vardagsprofil.webp" alt="Utsnitt ur Min vardagsprofil, med arbetsbladets första två frågor" width={1200} height={1040} sizes="(max-width: 760px) 85vw, 40vw" /><figcaption>Min vardagsprofil · utdrag från sida 10 i huvudboken. Hela bladet ingår i köpet.</figcaption></figure></section>
+    <section className={`${styles.section} ${styles.audience}`}><div><p className={styles.eyebrow}>För dig. Och den som vill förstå dig.</p><h2>Du behöver ingen<br />perfekt utgångspunkt.</h2><p>Boken är skriven för ungdomar och vuxna med autism, för dig som känner igen dig i erfarenheterna och för närstående som vill förstå mer.</p><p className={styles.smallNote}>Den ger allmän kunskap och egna reflektionsverktyg. Den ställer ingen diagnos och ersätter inte individuell vård eller behandling.</p></div><aside><span className={styles.authorMark}>EV</span><p className={styles.eyebrow}>Om författaren</p><h3>Elias Voss</h3><p>Författare till AUTISM ALL INCLUSIVE, utgiven av Relationsvarning.se. Guiden samlar vardagsexempel, förklaringar och övningar i tio kapitel. Faktahänvisningar och vidare läsning finns i bokens källförteckning.</p></aside></section>
+    <section className={`${styles.section} ${styles.finalOffer}`}><p className={styles.eyebrow}>En färgstark guide. Ett litet nästa steg.</p><h2>Du får bygga en vardag<br />med mer plats för dig.</h2><p>Hela boken på 52 sidor + 12 A4-sidor med ifyllbara arbetsblad.<br />Läs på mobil, surfplatta eller dator. Spara filerna och återvänd när du vill.</p><Purchase offer={offer} enabled={enabled} /></section>
+    <section className={`${styles.section} ${styles.faq}`}><div><p className={styles.eyebrow}>Bra att veta</p><h2>Innan du köper.</h2><p>Undrar du något mer?<br /><a href="mailto:support@relationsvarning.se">Kontakta oss</a>, så hjälper vi dig.</p></div><div>{faqs.map(([question, answer]) => <details key={question}><summary>{question}<span aria-hidden="true">+</span></summary><p>{answer}</p></details>)}</div></section>
+    {enabled && <AutismBookStickyCta price={offer.price} paymentLink={offer.paymentLink} offerType={offer.isAnalysisOffer ? "analysis" : "standard"} />}
+  </main>;
 }

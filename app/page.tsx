@@ -221,8 +221,8 @@ export default function Landing() {
             <span className={styles.comingSoon}>Kommer snart</span>
           </article>
           <article className={styles.bookCard}>
-            <Image src="/autism-bok-mockup.png" alt="På mitt sätt – bok om autism av Elias Voss" width={1312} height={1199} sizes="(max-width: 700px) min(100vw - 5rem, 250px), 280px" className={styles.bookMockup} />
-            <p className={styles.eyebrow}>Digital bok</p><h3>På mitt sätt</h3><p>En varm och praktisk bok om autism, behov och vardag på egna villkor.</p>
+            <Image src="/autism-all-inclusive-mockup.png" alt="AUTISM ALL INCLUSIVE av Elias Voss" width={1205} height={1305} sizes="(max-width: 700px) min(100vw - 5rem, 250px), 280px" className={styles.bookMockup} />
+            <p className={styles.eyebrow}>Digital bok och ifyllbara arbetsblad</p><h3>AUTISM ALL INCLUSIVE</h3><p>En färgstark guide till en lättare vardag. 52 sidor och ett separat A4-häfte med arbetsblad.</p>
             <span className={styles.comingSoon}>Kommer snart</span>
           </article>
         </div>
