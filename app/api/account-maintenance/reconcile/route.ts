@@ -1,3 +1,4 @@
+import { accountLaunchUnavailable, accountPortalEnabled } from "../../../_lib/accountLaunch.server";
 import { NextRequest } from "next/server";
 import { accountMaintenanceAuthorized } from "../../../_lib/accountCron.server";
 import { accountResponse, readAccountForm, sameAccountOrigin } from "../../../_lib/accountHttp.server";
@@ -11,6 +12,7 @@ export const maxDuration = 300;
  * backups, changes subscription plans, or opens customer traffic.
  */
 export async function POST(request: NextRequest) {
+  if (!accountPortalEnabled()) return accountLaunchUnavailable();
   if (!accountMaintenanceAuthorized(request) || !sameAccountOrigin(request)) return accountResponse({ error: "Unauthorized" }, 401);
   try {
     const form = await readAccountForm(request);

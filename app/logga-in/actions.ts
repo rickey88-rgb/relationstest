@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { authConfirmUrl, applicationOrigin, loginUrl, validLoginEmail } from "../_lib/authConfig.server";
 import { createServerSupabaseClient } from "../_lib/supabase/server";
+import { accountPortalEnabled } from "../_lib/accountLaunch.server";
 
 type SupabaseAuthFailure = {
   status?: unknown;
@@ -45,6 +46,7 @@ function logMagicLinkFailure(phase: MagicLinkFailurePhase, error: unknown) {
  * Failure copy remains neutral and never reveals account existence.
  */
 export async function requestMagicLink(formData: FormData) {
+  if (!accountPortalEnabled()) redirect(loginUrl(applicationOrigin(), "unavailable").toString());
   const email = validLoginEmail(formData.get("email"));
   let status: "sent" | "unavailable" = "unavailable";
   if (email) {

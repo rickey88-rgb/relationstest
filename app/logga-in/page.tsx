@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { requestMagicLink } from "./actions";
+import { notFound } from "next/navigation";
+import { accountPortalEnabled } from "../_lib/accountLaunch.server";
 
 export const metadata: Metadata = {
   title: "Logga in – Relationsvarning",
@@ -17,6 +19,7 @@ function statusMessage(status: string | undefined) {
 }
 
 export default async function LoginPage({ searchParams }: LoginPageProps) {
+  if (!accountPortalEnabled()) notFound();
   const { status } = await searchParams;
   const message = statusMessage(status);
   return (

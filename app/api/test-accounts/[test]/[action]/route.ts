@@ -1,3 +1,4 @@
+import { accountLaunchUnavailable, accountPortalEnabled } from "../../../../_lib/accountLaunch.server";
 import { NextRequest } from "next/server";
 import { adapterForSlug } from "../../../../_lib/testAccounts/adapter";
 import { testAccountHandlers } from "../../../../_lib/testAccounts/handlers.server";
@@ -6,6 +7,7 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 type Context = { params: Promise<{ test: string; action: string }> };
 async function dispatch(method: "GET" | "POST", request: NextRequest, context: Context) {
+  if (!accountPortalEnabled()) return accountLaunchUnavailable();
   const { test, action } = await context.params;
   let model;
   try { model = adapterForSlug(test); } catch { return accountResponse({ error: "Not found" }, 404); }

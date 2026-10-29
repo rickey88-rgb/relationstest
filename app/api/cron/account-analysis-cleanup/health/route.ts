@@ -1,3 +1,4 @@
+import { accountLaunchUnavailable, accountPortalEnabled } from "../../../../_lib/accountLaunch.server";
 import { NextRequest } from "next/server";
 import { accountCronAuthorized } from "../../../../_lib/accountCron.server";
 import { accountResponse } from "../../../../_lib/accountHttp.server";
@@ -10,6 +11,7 @@ export const dynamic = "force-dynamic";
 
 /** Read-only: an independent monitor must call this, never the deletion URL. */
 export async function GET(request: NextRequest) {
+  if (!accountPortalEnabled()) return accountLaunchUnavailable();
   if (!accountCronAuthorized(request)) return accountResponse({ error: "Unauthorized" }, 401);
   try {
     if (accountStorageMode() !== "active" || !accountMonitoringConfigured()) throw new Error("Account maintenance not active");

@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { ACCOUNT_PATH, loginUrl } from "./app/_lib/authConfig.server";
 import { copyResponseCookies, refreshAuthSession } from "./app/_lib/authSession.server";
+import { accountLaunchUnavailable, accountPortalEnabled, isAccountLaunchPath } from "./app/_lib/accountLaunch.server";
 
 // Next's configured redirects are case-insensitive. These exact request paths
 // therefore live here so a misspelled URL cannot catch the real landing page.
@@ -50,6 +51,9 @@ export function proxy(request: NextRequest) {
     url.pathname = destination;
     return NextResponse.redirect(url, 308);
   }
+
+  // Fail closed before Auth/session refresh, rendering or server actions.
+  if (!accountPortalEnabled() && isAccountLaunchPath(pathname)) return accountLaunchUnavailable();
 
   // Auth is intentionally limited to the account surface. Tests, Checkout,
   // recovery and book-delivery requests remain completely anonymous flows.

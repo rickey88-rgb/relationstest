@@ -1,5 +1,6 @@
 import { randomBytes } from "node:crypto";
 import { NextRequest } from "next/server";
+import { accountLaunchUnavailable, accountPortalEnabled } from "../accountLaunch.server";
 import { accountIdentity, accountResponse, accountRedirect, sameAccountOrigin, readAccountForm } from "../accountHttp.server";
 import { adapter, assertFlag, flags } from "./adapter";
 import { browserCookie, siteOrigin } from "./http.server";
@@ -12,10 +13,12 @@ export function testAccountHandlers(product: string, slug: string, overrides: Pa
   const { accountIdentity, accountResponse, accountRedirect, sameAccountOrigin, readAccountForm, adapter, assertFlag, flags, paymentConfig, stripeClient, bindCheckout, createAttempt, prepareLegacyImport, remove, save } = { ...defaults, ...overrides };
 type Context = { params: Promise<{ action: string }> };
 async function GET(_request: NextRequest, { params }: Context) {
+  if (!accountPortalEnabled()) return accountLaunchUnavailable();
   if ((await params).action !== "capabilities") return accountResponse({ error: "Not found" }, 404);
   return accountResponse({ checkout: flags(product).checkout }, 200);
 }
 async function POST(request: NextRequest, { params }: Context) {
+  if (!accountPortalEnabled()) return accountLaunchUnavailable();
   if (!sameAccountOrigin(request)) return accountResponse({ error: "Forbidden" }, 403);
   try {
     const { action } = await params;

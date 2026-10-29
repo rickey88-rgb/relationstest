@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { authenticatedUser } from "./authSession.server";
 import { validAccountRecordId } from "./accountPurchasesDb.server";
+import { accountPortalEnabled } from "./accountLaunch.server";
 
 export async function accountIdentity() {
+  if (!accountPortalEnabled()) return { kind: "unavailable" as const };
   try {
     const user = await authenticatedUser();
     if (!user || !validAccountRecordId(user.id) || !user.email_confirmed_at || user.is_anonymous) return { kind: "anonymous" as const };

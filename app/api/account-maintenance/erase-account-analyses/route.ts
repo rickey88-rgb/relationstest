@@ -1,3 +1,4 @@
+import { accountLaunchUnavailable, accountPortalEnabled } from "../../../_lib/accountLaunch.server";
 import { NextRequest } from "next/server";
 import { accountMaintenanceAuthorized } from "../../../_lib/accountCron.server";
 import { accountResponse, readAccountForm, sameAccountOrigin } from "../../../_lib/accountHttp.server";
@@ -10,6 +11,7 @@ export const maxDuration = 300;
 
 /** Approved operator workflow only. Does not delete an Auth user. */
 export async function POST(request: NextRequest) {
+  if (!accountPortalEnabled()) return accountLaunchUnavailable();
   if (!accountMaintenanceAuthorized(request) || !sameAccountOrigin(request)) return accountResponse({ error: "Unauthorized" }, 401);
   try {
     if (accountStorageMode() !== "maintenance") throw new Error("Maintenance required");

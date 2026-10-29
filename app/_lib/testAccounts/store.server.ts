@@ -1,4 +1,6 @@
 import postgres from "postgres";
+import { accountDatabaseTls } from "../accountDatabaseTls.server";
+import { assertAccountPortalEnabled } from "../accountLaunch.server";
 import { randomUUID } from "node:crypto";
 import { adapter, consentVersion } from "./adapter";
 import { context, seal, secretHash } from "./crypto.server";
@@ -6,11 +8,12 @@ import { accountErasureIdentity, assertAccountStorageActive, assertErasureJourna
 
 const globals = globalThis as typeof globalThis & { testAccountsSql?: ReturnType<typeof postgres> };
 export function db() {
+  assertAccountPortalEnabled();
   if (!globals.testAccountsSql) {
     const url = process.env.DATABASE_URL?.trim();
     if (!url) throw new Error("Test storage unavailable");
     globals.testAccountsSql = postgres(url, { max: 1, prepare: false, idle_timeout: 20, connect_timeout: 10,
-      ssl: "verify-full", connection: { statement_timeout: 20000, lock_timeout: 5000 } });
+      ssl: accountDatabaseTls(), connection: { statement_timeout: 20000, lock_timeout: 5000 } });
   }
   return globals.testAccountsSql;
 }

@@ -1,11 +1,13 @@
 import { createHash, createHmac, timingSafeEqual } from "node:crypto";
 import { GetObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { assertAccountPortalEnabled } from "./accountLaunch.server";
 
 export type ErasureReason = "user_deleted" | "expired" | "revoked";
 type Receipt = { v: 1; registryId: string; generationHash: string; reason: ErasureReason; deletedAt: string };
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 export function accountStorageMode() { return process.env.ACCOUNT_STORAGE_MODE ?? "disabled"; }
 export function assertAccountStorageActive() {
+  assertAccountPortalEnabled();
   if (accountStorageMode() !== "active") throw new Error("Account storage disabled");
 }
 function config() {

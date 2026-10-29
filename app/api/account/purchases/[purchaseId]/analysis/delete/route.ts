@@ -1,3 +1,4 @@
+import { accountLaunchUnavailable, accountPortalEnabled } from "../../../../../../_lib/accountLaunch.server";
 import { NextRequest } from "next/server";
 import { accountIdentity, accountRedirect, accountResponse, readAccountForm, sameAccountOrigin } from "../../../../../../_lib/accountHttp.server";
 import { removeOwnedAccountAnalysis } from "../../../../../../_lib/accountPurchasesDb.server";
@@ -6,6 +7,7 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function POST(request: NextRequest, context: { params: Promise<{ purchaseId: string }> }) {
+  if (!accountPortalEnabled()) return accountLaunchUnavailable();
   if (!sameAccountOrigin(request)) return accountResponse({ error: "Åtkomst saknas." }, 403);
   const identity = await accountIdentity();
   if (identity.kind !== "authenticated") return accountResponse({ error: "Åtkomst saknas." }, identity.kind === "anonymous" ? 401 : 503);

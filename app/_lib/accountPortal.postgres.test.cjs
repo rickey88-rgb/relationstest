@@ -40,7 +40,9 @@ const userB = "22222222-2222-4222-8222-222222222222";
       writeAnalysisErasure: async (id, reason) => { if (journalFailure) throw new Error("offline"); externalJournal.set(id, { reason }); },
     };
     const load = createLoader({ "./accountErasureJournal.server": journal, postgres: { default: (_url, options) => {
-      assert.equal(options.ssl, "verify-full", "account DB requires certificate and hostname verification");
+      assert.equal(options.ssl.rejectUnauthorized, true, "account DB requires a trusted certificate chain");
+      assert.equal(options.ssl.checkServerIdentity, require("node:tls").checkServerIdentity, "hostname verification remains enabled");
+      assert(options.ssl.ca.includes("BEGIN CERTIFICATE"), "official public CA is bundled");
       return adapter(pg);
     } } });
     const db = load(path.join(__dirname, "accountPurchasesDb.server.ts"));

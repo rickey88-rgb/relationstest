@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { ACCOUNT_PATH, loginUrl } from "../../_lib/authConfig.server";
 import { privateCacheControl } from "../../_lib/authSession.server";
 import { createRouteSupabaseClient } from "../../_lib/supabase/routeClient.server";
+import { accountLaunchUnavailable, accountPortalEnabled } from "../../_lib/accountLaunch.server";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -32,6 +33,7 @@ function escapeHtmlAttribute(value: string) {
  * never be able to consume a customer's sign-in link.
  */
 export async function GET(request: NextRequest) {
+  if (!accountPortalEnabled()) return accountLaunchUnavailable();
   const tokenHash = request.nextUrl.searchParams.get("token_hash");
   const type = request.nextUrl.searchParams.get("type");
   if (!validTokenHash(tokenHash) || type !== "email") return loginRedirect(request, "invalid-link");
@@ -74,6 +76,7 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  if (!accountPortalEnabled()) return accountLaunchUnavailable();
   const formData = await request.formData();
   const submittedTokenHash = formData.get("token_hash");
   const type = formData.get("type");

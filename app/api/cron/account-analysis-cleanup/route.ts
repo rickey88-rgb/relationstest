@@ -1,3 +1,4 @@
+import { accountLaunchUnavailable, accountPortalEnabled } from "../../../_lib/accountLaunch.server";
 import { NextRequest } from "next/server";
 import { accountResponse } from "../../../_lib/accountHttp.server";
 import { accountCleanupHealth, accountStorageReady, deleteExpiredAccountAnalyses, recordAccountMonitorSuccess } from "../../../_lib/accountPurchasesDb.server";
@@ -9,6 +10,7 @@ export const dynamic = "force-dynamic";
 export const maxDuration = 300;
 
 export async function GET(request: NextRequest) {
+  if (!accountPortalEnabled()) return accountLaunchUnavailable();
   if (!accountCronAuthorized(request)) return accountResponse({ error: "Unauthorized" }, 401);
   try {
     if (!await accountStorageReady()) throw new Error("Storage unavailable");

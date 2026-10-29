@@ -1,5 +1,7 @@
 import { randomUUID } from "node:crypto";
 import postgres from "postgres";
+import { accountDatabaseTls } from "./accountDatabaseTls.server";
+import { assertAccountPortalEnabled } from "./accountLaunch.server";
 import type { AccountAudhdProof } from "./accountAudhdProof.server";
 import type { EncryptedAudhdCheckoutAnswers } from "./audhdCheckoutAttempt.server";
 import { audhdBrowserUnlockMaxAge } from "./audhdRecovery.server";
@@ -8,10 +10,11 @@ import { accountErasureIdentity, accountStorageMode, assertAccountStorageActive,
 
 const globals = globalThis as typeof globalThis & { accountPurchasesSql?: ReturnType<typeof postgres> };
 function database() {
+  assertAccountPortalEnabled();
   if (!globals.accountPurchasesSql) {
     const url = process.env.DATABASE_URL?.trim();
     if (!url) throw new Error("Account storage unavailable");
-    globals.accountPurchasesSql = postgres(url, { max: 1, prepare: false, idle_timeout: 20, connect_timeout: 10, ssl: "verify-full",
+    globals.accountPurchasesSql = postgres(url, { max: 1, prepare: false, idle_timeout: 20, connect_timeout: 10, ssl: accountDatabaseTls(),
       connection: { statement_timeout: 20000, lock_timeout: 5000 } });
   }
   return globals.accountPurchasesSql;

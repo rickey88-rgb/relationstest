@@ -1,4 +1,5 @@
 import { iq } from "./adapters/iq";
+import { accountPortalEnabled } from "../accountLaunch.server";
 import { partner } from "./adapters/partner";
 import { traumaBond } from "./adapters/traumaBond";
 import { psychologicalAbuse } from "./adapters/psychologicalAbuse";
@@ -45,7 +46,7 @@ export function adapterForSlug(slug: string): Adapter {
 }
 export function flags(product: string) {
   const model = adapter(product);
-  const enabled = (name: string) => process.env[`${model.flagPrefix}_${name}_ENABLED`] === "true";
+  const enabled = (name: string) => accountPortalEnabled() && process.env[`${model.flagPrefix}_${name}_ENABLED`] === "true";
   return { checkout: enabled("CHECKOUT"), save: enabled("SAVE"), read: enabled("READ"), legacyImport: enabled("LEGACY_IMPORT") };
 }
 export function assertFlag(product: string, flag: keyof ReturnType<typeof flags>) {
