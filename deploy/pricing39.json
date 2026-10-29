@@ -1,0 +1,25 @@
+{
+  "verifiedAt": "2026-10-29",
+  "source": "Read-only Stripe retrieval of the original live Payment Links and line items",
+  "products": {
+    "adhd_test": {
+      "productId": "prod_VG9BLp1747QvOi",
+      "priceId": "price_1UFctJAgF4ugWkEkHTrwY3JH",
+      "paymentLinkId": "plink_1UFctdAgF4ugWkEkYP7aToNE",
+      "url": "https://buy.stripe.com/6oUcN46SR7Il6Or5MI0gw0m",
+      "returnUrl": "https://relationsvarning.se/adhd-test/test?paid=true",
+      "amount": 3900,
+      "currency": "sek"
+    },
+    "autism_test": {
+      "productId": "prod_VGWNogqNopSaFe",
+      "priceId": "price_1UFzL0AgF4ugWkEkgjOM10GH",
+      "paymentLinkId": "plink_1UFzLVAgF4ugWkEk8re8WHTh",
+      "url": "https://buy.stripe.com/7sY6oG5ON6Eh0q3b720gw0n",
+      "returnUrl": "https://relationsvarning.se/autism-test/test?paid=true",
+      "amount": 3900,
+      "currency": "sek"
+    }
+  },
+  "configuration": "No environment changes. Original links are pinned in the two payment modules; former NEXT_PUBLIC_*_PAYMENT_LINK_79 values are ignored by new checkout buttons and retained for older deployments. Do not remove 39 or 79 SEK identifiers from STRIPE_PAYMENT_PRODUCT_MAP_JSON. Historical identifiers remain in pricing79.json; no mapping, recovery or account flags are changed."
+}

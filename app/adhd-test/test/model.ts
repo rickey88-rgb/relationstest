@@ -10,7 +10,7 @@ export const areaNames: Record<Area, string> = {
   activation: "Tid, igångsättning och motivation", impact: "Påverkan i vardagen",
 };
 export const answerLabels = ["Aldrig", "Sällan", "Ibland", "Ofta", "Mycket ofta"];
-export const PRICE_SEK = 79;
+export const PRICE_SEK = 39;
 export const STATE_VERSION = 1;
 export const STORAGE_KEY = "relationsvarning_adhd_state_v1";
 export const emptyAnswers = () => Array<number>(questions.length).fill(-1);

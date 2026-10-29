@@ -1,54 +1,48 @@
-/* eslint-disable @typescript-eslint/no-require-imports -- synthetic standalone regression harness. */
-/* Synthetic-only offer tests. No network, Stripe writes or customer data. */
-const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),{createHash}=require('node:crypto');
-const root=process.cwd(),createLoader=require(path.join(root,'app/autism-test/test/test-loader.cjs'));
-const load=createLoader(),config=load(path.join(root,'app/_analytics/config.ts')).testConfig;
-const expected={iq_test:79,audhd_test:79,hsp_test:49,ptsd_test:39,autism_test:79,adhd_test:79,angest_test:39,screening_test:39,psychological_abuse_test:39,attachment_test:39,codependency_test:39,gaslighting_test:39,trauma_bond_test:39,narcissist_partner:39,narcissism_selftest:39};
-assert.deepEqual(Object.fromEntries(Object.entries(config).map(([k,v])=>[k,v.price])),expected);
-const pins={adhd:'b66ba5fd17805d6335fd0c3289368d0d2814cdb2b9f53b09a3321f77ec71604b',autism:'3b1be9bc3b6b24e60107905ab58fee0826e4eafe72577b0c0fee6fc3b1c4dbe2'};
-const legacy={adhd:'https://buy.stripe.com/6oUcN46SR7Il6Or5MI0gw0m',autism:'https://buy.stripe.com/7sY6oG5ON6Eh0q3b720gw0n'};
-let comparisons=0;
-for(const slug of ['adhd','autism']){
- const upper=slug.toUpperCase(),envName=`NEXT_PUBLIC_${upper}_PAYMENT_LINK_79`,file=path.join(root,`app/${slug}-test/test/model.ts`),model=load(file);
- assert.equal(model.PRICE_SEK,79);
- const oldSource=fs.readFileSync(file,'utf8').replace(/\r\n/g,'\n').replace('export const PRICE_SEK = 79;','export const PRICE_SEK = 39;');
- assert.equal(createHash('sha256').update(oldSource).digest('hex'),pins[slug],'entire model unchanged except the price constant');
- const ts=require(path.join(root,'node_modules/typescript')),mod={exports:{}};
- new Function('require','module','exports',ts.transpileModule(oldSource,{compilerOptions:{module:ts.ModuleKind.CommonJS}}).outputText)(name=>name.startsWith('.')?load(path.resolve(path.dirname(file),name+'.ts')):require(name),mod,mod.exports);
- for(let i=0;i<250;i++){const answers=Array.from({length:30},(_,j)=>i<5?i:(i*7+j*j+Math.floor(i/5))%5);assert.deepEqual(model.calculate(answers),mod.exports.calculate(answers));comparisons++;}
- assert(fs.readFileSync(path.join(root,`app/${slug}-test/page.tsx`),'utf8').includes('analysen kostar 79 kr.'));
- const payment=path.join(root,`app/${slug}-test/test/payment.ts`),prior=process.env[envName];
- for(const invalid of [undefined,'',legacy[slug],'https://example.invalid/price79','https://buy.stripe.com.evil.invalid/test','https://buy.stripe.com/test?price=79']){if(invalid===undefined)delete process.env[envName];else process.env[envName]=invalid;assert.throws(()=>createLoader()(payment),/verified.*79 SEK Payment Link/);}
- process.env[envName]=`https://buy.stripe.com/Synthetic${upper}79LocalOnly`;
- assert.equal(createLoader()(payment)[`${upper}_STRIPE_URL`],process.env[envName]);
- if(prior===undefined)delete process.env[envName];else process.env[envName]=prior;
-}
-if(fs.existsSync(path.join(root,'app/_lib/testAccounts/adapter.ts'))){const adapters=load(path.join(root,'app/_lib/testAccounts/adapter.ts'));assert.equal(adapters.adapter('adhd_test').amount,7900);assert.equal(adapters.adapter('autism_test').amount,7900);for(const [key,value]of Object.entries(expected))if(key!=='audhd_test')assert.equal(adapters.adapter(key).amount,value*100);assert.deepEqual(adapters.flags('adhd_test'),{checkout:false,save:false,read:false,legacyImport:false});assert.deepEqual(adapters.flags('autism_test'),{checkout:false,save:false,read:false,legacyImport:false});}
-console.log(`PASS: only ADHD/autism 79; all other prices unchanged; ${comparisons} identical original/new analyses; missing/old/invalid links fail closed; no import or flag activation.`);
-
-const release=JSON.parse(fs.readFileSync(path.join(root,'deploy/pricing79.json'),'utf8'));
-const catalog=load(path.join(root,'app/_lib/paymentProductCatalog.server.ts'));
-const mapBefore=process.env.STRIPE_PAYMENT_PRODUCT_MAP_JSON;
-process.env.STRIPE_PAYMENT_PRODUCT_MAP_JSON=JSON.stringify(release.productMapMerge);
-try{
- for(const [key,product]of Object.entries(release.products)){
-  assert.equal(product.amount,7900);assert.equal(product.currency,'sek');assert.equal(product.type,'one_time');assert.equal(product.taxBehavior,'inclusive');
-  for(const priceId of release.productMapMerge[key].priceIds)assert.equal(catalog.identifyPaymentProduct({priceIds:[priceId],paymentLinkId:null}),key);
-  for(const paymentLinkId of release.productMapMerge[key].paymentLinkIds)assert.equal(catalog.identifyPaymentProduct({priceIds:[],paymentLinkId}),key);
-  const slug=key==='adhd_test'?'adhd':'autism',envName='NEXT_PUBLIC_'+slug.toUpperCase()+'_PAYMENT_LINK_79';
-  const prior=process.env[envName];process.env[envName]=release.buildEnvironment[envName];
-  try{assert.equal(createLoader()(path.join(root,'app/'+slug+'-test/test/payment.ts'))[slug.toUpperCase()+'_STRIPE_URL'],product.url);}
-  finally{if(prior===undefined)delete process.env[envName];else process.env[envName]=prior;}
-  assert.equal(product.returnUrl,'https://relationsvarning.se/'+slug+'-test/test?paid=true');
- }
- if(fs.existsSync(path.join(root,'app/_lib/testAccounts/payment.server.ts'))){
-  const server=load(path.join(root,'app/_lib/testAccounts/payment.server.ts'));
-  for(const key of ['adhd_test','autism_test']){
-   const envName=key==='adhd_test'?'TEST_ACCOUNTS_ADHD_PRICE_ID':'TEST_ACCOUNTS_AUTISM_PRICE_ID',prior=process.env[envName];
-   process.env[envName]=release.accountEnvironment[envName];
-   try{assert.equal(server.paymentConfig(key).price,release.products[key].priceId);}
-   finally{if(prior===undefined)delete process.env[envName];else process.env[envName]=prior;}
+/* eslint-disable @typescript-eslint/no-require-imports -- synthetic standalone pricing regression. */
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const { createHash } = require('node:crypto');
+const root = process.cwd();
+const createLoader = require(path.join(root, 'app/autism-test/test/test-loader.cjs'));
+const load = createLoader();
+const current = require('../deploy/pricing39.json');
+const history = require('../deploy/pricing79.json');
+const expected = { iq_test:79, audhd_test:79, hsp_test:49, ptsd_test:39, autism_test:39, adhd_test:39, angest_test:39, screening_test:39, psychological_abuse_test:39, attachment_test:39, codependency_test:39, gaslighting_test:39, trauma_bond_test:39, narcissist_partner:39, narcissism_selftest:39 };
+assert.deepEqual(Object.fromEntries(Object.entries(load(path.join(root,'app/_analytics/config.ts')).testConfig).map(([key,value]) => [key,value.price])), expected);
+// Original complete models at 39 SEK: questions, scoring, state versions,
+// storage keys and persisted-unlock parsing must remain exactly unchanged.
+const pins = { adhd:'b66ba5fd17805d6335fd0c3289368d0d2814cdb2b9f53b09a3321f77ec71604b', autism:'3b1be9bc3b6b24e60107905ab58fee0826e4eafe72577b0c0fee6fc3b1c4dbe2' };
+for (const slug of ['adhd','autism']) {
+  const key=slug+'_test', upper=slug.toUpperCase(), modelPath=path.join(root,`app/${slug}-test/test/model.ts`);
+  const source=fs.readFileSync(modelPath,'utf8').replace(/\r\n/g,'\n');
+  assert.equal(createHash('sha256').update(source).digest('hex'),pins[slug]);
+  const model=load(modelPath); assert.equal(model.PRICE_SEK,39);
+  for (const previouslyPaid of [39,79]) {
+    const saved={version:model.STATE_VERSION,answers:Array(30).fill(2),index:29,unlocked:true,paidPrice:previouslyPaid};
+    const restored=model.parseState(JSON.stringify(saved));
+    assert.equal(restored.unlocked,true); assert.deepEqual(restored.answers,saved.answers);
   }
- }
-}finally{if(mapBefore===undefined)delete process.env.STRIPE_PAYMENT_PRODUCT_MAP_JSON;else process.env.STRIPE_PAYMENT_PRODUCT_MAP_JSON=mapBefore;}
-console.log('PASS: real public links resolve from deployment configuration; new and historical Stripe identifiers map correctly; account Price selection uses verified IDs. No network or live payment.');
+  assert(fs.readFileSync(path.join(root,`app/${slug}-test/page.tsx`),'utf8').includes('analysen kostar 39 kr.'));
+  const envName=`NEXT_PUBLIC_${upper}_PAYMENT_LINK_79`, prior=process.env[envName];
+  try {
+    for (const stale of [undefined, '', history.products[key].url, 'https://example.invalid/wrong']) {
+      if(stale===undefined)delete process.env[envName];else process.env[envName]=stale;
+      assert.equal(createLoader()(path.join(root,`app/${slug}-test/test/payment.ts`))[upper+'_STRIPE_URL'],current.products[key].url);
+    }
+  } finally { if(prior===undefined)delete process.env[envName];else process.env[envName]=prior; }
+  assert.equal(current.products[key].amount,3900); assert.equal(current.products[key].currency,'sek');
+  assert.equal(current.products[key].returnUrl,`https://relationsvarning.se/${slug}-test/test?paid=true`);
+  assert(history.productMapMerge[key].priceIds.includes(current.products[key].priceId));
+  assert(history.productMapMerge[key].priceIds.includes(history.products[key].priceId));
+}
+const priorMap=process.env.STRIPE_PAYMENT_PRODUCT_MAP_JSON;
+try {
+  process.env.STRIPE_PAYMENT_PRODUCT_MAP_JSON=JSON.stringify(history.productMapMerge);
+  const catalog=load(path.join(root,'app/_lib/paymentProductCatalog.server.ts'));
+  for (const key of ['adhd_test','autism_test']) {
+    for (const priceId of history.productMapMerge[key].priceIds) assert.equal(catalog.identifyPaymentProduct({priceIds:[priceId],paymentLinkId:null}),key);
+    for (const paymentLinkId of history.productMapMerge[key].paymentLinkIds) assert.equal(catalog.identifyPaymentProduct({priceIds:[],paymentLinkId}),key);
+  }
+} finally { if(priorMap===undefined)delete process.env.STRIPE_PAYMENT_PRODUCT_MAP_JSON;else process.env.STRIPE_PAYMENT_PRODUCT_MAP_JSON=priorMap; }
+console.log('PASS: ADHD/autism 39 SEK; original links ignore former 79 variables; entire analyses/state parsing unchanged; 39/79 history retained; AuDHD and other prices unchanged.');

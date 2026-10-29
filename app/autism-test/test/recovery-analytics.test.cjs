@@ -49,9 +49,9 @@ for(const name of ['test_start','test_complete','paywall_view','begin_checkout']
   assert.equal(params.release_id,'rv-ga4-2026-10-08-etapp-1');
 }
 assert.deepEqual(events.filter(e=>e.name==='test_progress').map(e=>e.params.progress_percent),[25,50,75]);
-assert.equal(events.at(-1).params.value,79);assert.equal(events.at(-1).params.currency,'SEK');
+assert.equal(events.at(-1).params.value,39);assert.equal(events.at(-1).params.currency,'SEK');
 assert.equal(events.at(-1).params.attempt_id,events[0].params.attempt_id);
-assert.deepEqual(events.at(-1).params.items,[{item_id:'autism_test',item_name:'Autismtest för vuxna',price:79,quantity:1}]);
+assert.deepEqual(events.at(-1).params.items,[{item_id:'autism_test',item_name:'Autismtest för vuxna',price:39,quantity:1}]);
 assert.deepEqual(events.find(e=>e.name==='begin_checkout').params.items,events.at(-1).params.items);
 assert(events.at(-1).params.transaction_id.startsWith('rv-autism_test-'));
 const before=events.length;consent='denied';tracking.restartEvents('autism_test');tracking.answerEvent('autism_test',1,1,30);tracking.checkoutEvent('autism_test');tracking.purchaseEvent('autism_test');assert.equal(events.length,before);
@@ -67,4 +67,4 @@ for(const [id,total] of [['adhd_test',30],['audhd_test',54]]){
     assert.equal(params.release_id,'rv-ga4-2026-10-08-etapp-1');
   }
 }
-console.log('PASS: recovery, old tab, persisted unlock, duplicate checkout, blocked/silent storage, paid return fallback, test isolation; all analytics events, consent, purchase 79 SEK, variant labels and deduplication.');
+console.log('PASS: recovery, old tab, persisted unlock, duplicate checkout, blocked/silent storage, paid return fallback, test isolation; all analytics events, consent, purchase 39 SEK, variant labels and deduplication.');
