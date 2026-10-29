@@ -1,5 +1,7 @@
 "use client";
 
+import ReportView from "./ReportView";
+import { useTestAccountCheckout } from "../_components/useTestAccountCheckout";
 import PaywallCheckoutCTA from "../_components/PaywallCheckoutCTA";
 import { buildPaywallTeaser } from "../_lib/paywallTeaser";
 
@@ -9,7 +11,7 @@ import { useTestAnalytics } from "../_analytics/useTestAnalytics";
 
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { answerLabels, band, calculate, domainCopy, domains, emptyAnswers, parseState, questions, recommendations, SCREENING_CHECKOUT_URL, STATE_VERSION, STORAGE_KEY } from "./screening";
+import { answerLabels, calculate, emptyAnswers, parseState, questions, recommendations, SCREENING_CHECKOUT_URL, STATE_VERSION, STORAGE_KEY } from "./screening";
 import PostPurchaseRecommendation from "../_components/PostPurchaseRecommendation";
 import type { TestId } from "../_analytics/config";
 
@@ -38,6 +40,7 @@ export default function ScreeningPage() {
   const [hydrated, setHydrated] = useState(false);
   const [editing, setEditing] = useState(false);
   const [storageUnavailable, setStorageUnavailable] = useState(false);
+  const [checkoutUnavailable, setCheckoutUnavailable] = useState(false);
   const [transitioning, setTransitioning] = useState(false);
   const answerLock = useRef(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -104,11 +107,13 @@ export default function ScreeningPage() {
   }
   function restart() {
     tracking.restart();
+    setCheckoutUnavailable(false);
     setAnalysisStep(null);
     setIndex(0); setAnswers(emptyAnswers()); setUnlocked(hasPaidReturn(STORAGE_KEY)); setEditing(false); moveFocus.current = true;
     try { localStorage.removeItem(STORAGE_KEY); } catch { setStorageUnavailable(true); }
   }
-  function checkout() {
+  const accountCheckout = useTestAccountCheckout("screening", answers, () => setCheckoutUnavailable(true), { questionVersion: "screening-questions-v2", reportVersion: "screening-report-v1" });
+  function checkout() { if (accountCheckout()) return;
     // Save before redirect; don't lose a purchased result when storage is blocked.
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({ version: STATE_VERSION, index, answers, unlocked }));
@@ -124,6 +129,7 @@ export default function ScreeningPage() {
       {payment.checkoutError && <p role="alert" style={{ margin: "20px 0", lineHeight: 1.6 }}>{payment.checkoutError}</p>}
 
     {storageUnavailable && <p role="status" className="mt-6 rounded-xl border border-neutral-300 bg-neutral-50 p-4 text-sm leading-6">Webbläsaren kan inte spara testet. Du kan svara här, men återupptagning och betalning behöver fungerande lokal lagring. Lämna inte sidan om du vill behålla svaren.</p>}
+    {checkoutUnavailable && <p role="alert" className="mt-6 rounded-xl border border-neutral-300 bg-neutral-50 p-4 text-sm leading-6">Köpet kunde inte öppnas just nu. Dina svar finns kvar. Försök igen om en stund.</p>}
     {!showResult && <section data-flow="question" data-nosnippet className={section} aria-labelledby="question-heading">
       <div className="flex flex-wrap justify-between gap-2 text-sm text-neutral-600"><span>Fråga {index + 1} av {questions.length}</span><span>{answeredCount} av {questions.length} besvarade</span></div>
       <progress aria-label="Besvarade frågor" value={answeredCount} max={questions.length} className="h-2 w-full accent-neutral-900" />
@@ -151,17 +157,7 @@ export default function ScreeningPage() {
           <button type="button" onClick={restart} className="min-h-11 w-full text-sm text-neutral-300 underline underline-offset-4 hover:text-white">Gör om testet</button>
         </div>
       </section> : <>
-        <section data-flow="card" className={section} aria-labelledby="result-heading"><h2 id="result-heading" ref={heading} tabIndex={-1} className="text-2xl font-semibold outline-none">Din analys</h2>{analysis.paragraphs.map((text,i) => <p key={i}>{text}</p>)}</section>
-        <section data-flow="card" className={section}><h2 className="text-2xl font-semibold">Så hänger dina svar ihop</h2>{analysis.connections.map(item => <p key={item.id} data-insight={item.id}>{item.text}</p>)}</section>
-        <section data-flow="card" className={section}><h2 className="text-2xl font-semibold">Det här sticker ut i dina svar</h2>
-          {analysis.observations.map(item => <div key={item.domain} className="space-y-3 border-t border-neutral-200 pt-4"><h3 className="text-xl font-semibold">{item.heading}</h3><p>{item.text}</p><p className="rounded-xl bg-neutral-50 p-3 text-sm">Ett konkret svar: ”{item.marker.text}” — {answerLabels[item.marker.value]}.</p><p>{item.reflection}</p><Link href={item.guide} className={link}>{item.guideLabel}</Link></div>)}
-          {analysis.zero && <><p>Inget av de efterfrågade mönstren finns rapporterat. Vad fick dig att söka testet: ett behov, en enskild situation eller något som frågorna inte tog upp?</p><p>Fundera på vad du själv upplever fungerar, till exempel utrymme för egna val, privatliv och ett nej utan rädsla. Det är sådant du kan vilja bevara.</p><Link href="/beteenden" className={link}>Utforska guiden om beteenden i relationer</Link></>}
-        </section>
-        <section data-flow="card" className={section}><h2 className="text-2xl font-semibold">Vad kan du göra med resultatet?</h2><ol className="list-decimal space-y-4 pl-5">{analysis.nextSteps.map(text => <li key={text}>{text}</li>)}</ol></section>
-        <section data-flow="card" className={section}><h2 className="text-xl font-semibold">Din fullständiga profil</h2><div className="grid gap-3 sm:grid-cols-2">{domains.map(domain => {
-          const level = profile.scores[domain] >= 65 ? 4 : profile.scores[domain] >= 45 ? 3 : profile.scores[domain] >= 25 ? 2 : 1;
-          return <div data-flow="inset" key={domain} className="min-w-0 rounded-xl bg-neutral-50 p-3"><h3 className="text-sm font-semibold">{domainCopy[domain].label}</h3><p className="mt-1 text-sm text-neutral-600">{band(profile.scores[domain])}</p><div className="mt-2 flex gap-1" aria-hidden="true">{[1,2,3,4].map(part => <span key={part} className={`h-1 flex-1 rounded ${part <= level ? "bg-neutral-500" : "bg-neutral-200"}`} />)}</div></div>;
-        })}</div></section>
+        <ReportView result={{ profile, analysis }} heading={heading} includeSafety={false} includeAbout={false} />
       </>}</>}
       <section className="mt-8 space-y-2 text-sm leading-6 text-neutral-600"><h2 className="font-semibold text-neutral-900">Om resultatet</h2><p>Screeningen är ett reflektionsverktyg baserat på dina egna svar. Den ställer inte diagnoser och avgör inte juridiskt om ett brott har begåtts.</p><Link href="/metodik" className={link}>Läs om metodiken</Link></section>
       {unlocked && <PostPurchaseRecommendation sourceProduct="screening_test" activeProductIds={recommendedTest ? [recommendedTest] : []} />}

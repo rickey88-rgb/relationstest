@@ -24,7 +24,7 @@ export default function IntegritetPage() {
       </h1>
 
       <p style={{ opacity: 0.85 }}>
-        Här beskriver vi hur vi hanterar uppgifter när du använder relationstestet.
+        Här beskriver vi hur vi hanterar uppgifter när du använder våra tester och Mina sidor.
       </p>
 
       <h2 style={{ marginTop: 22, fontSize: 18 }}>1. Vilka uppgifter vi hanterar</h2>
@@ -37,14 +37,22 @@ export default function IntegritetPage() {
           <b>Testdata lokalt:</b> för att testet ska fungera kan viss data sparas i din
           webbläsare (t.ex. via localStorage) så att du inte tappar dina svar vid refresh.
         </li>
+        <li><b>Frivilligt konto:</b> Supabase hanterar din inloggning via mejllänk. Köp som du själv kopplar till kontot sparas separat från analysens underlag.</li>
       </ul>
 
       <h2 style={{ marginTop: 22, fontSize: 18 }}>2. Lagring av testsvar</h2>
       <p style={{ opacity: 0.9 }}>
         I nuvarande version sparas dina testsvar främst <b>lokalt i din webbläsare</b>{" "}
-        för funktionalitet (t.ex. om sidan laddas om). Vi eftersträvar att inte lagra
-        känsliga testsvar på server permanent i MVP.
+        för funktionalitet (t.ex. om sidan laddas om). AuDHD använder också krypterad
+        serverlagring med sju dagars giltighet för det ursprungliga köp- och återställningsflödet.
       </p>
+      <h3 style={{ marginTop: 18, fontSize: 16 }}>Sparad AuDHD-analys på Mina sidor</h3>
+      <p style={{ opacity: 0.9 }}>Om du aktivt väljer att spara analysen på ditt konto lagras en separat, krypterad kopia av dess underlag i Supabase. Underlaget kan innehålla känsliga uppgifter om din hälsa. Vi använder det för att du ska kunna öppna din betalda analys igen, även från en annan enhet. Du behöver inte spara analysen på ett konto för att köpa eller använda resultatet.</p>
+      <p style={{ opacity: 0.9 }}>Den exakta sista tillgänglighetsdagen visas på Mina sidor. Åtkomsten upphör senast tio dagar före tolv månader från sparningen. Kontokopian rensas därefter ur den aktiva databasen. Marginalen är avsedd för daglig rensning, hantering av driftfel och sju dagars säkerhetskopiering.</p>
+      <p style={{ opacity: 0.9 }}>Du kan radera kontots sparade analys tidigare från Mina sidor. Köpposten finns då kvar utan testsvar, poäng eller profil. Kontots kopia, den ursprungliga gästlagringen och webbläsarens lokala data har separata giltighets- och raderingsflöden. Kontakta oss om du vill få hjälp att radera alla återstående kopior eller ditt konto.</p>
+      <p style={{ opacity: 0.9 }}>Radering från den aktiva databasen innebär inte att tidigare säkerhetskopior omedelbart skrivs om. Kopior kan finnas kvar tills säkerhetskopiornas lagringstid löper ut. Innan en återställd säkerhetskopia används i tjänsten behöver tidigare raderingsbegäranden och utgångna lagringstider tillämpas igen. Kontakta oss för information om den aktuella backuphanteringen.</p>
+      <p style={{ opacity: 0.9 }}>För att en raderad analys inte ska visas efter återställning sparas ett separat raderingskvitto utan testsvar eller mejladress. Kvittot innehåller en skyddad identifierare och tidpunkt. Det hanteras separat från analysens underlag.</p>
+      <p style={{ opacity: 0.9 }}>Testsvar och sparade analyser används inte för reklam eller statistik. Mina sidor och inloggningsflödet är undantagna från vår Google Analytics-mätning.</p>
 
       <h2 style={{ marginTop: 22, fontSize: 18 }}>3. Cookies och lokal lagring</h2>
       <p style={{ opacity: 0.9 }}>

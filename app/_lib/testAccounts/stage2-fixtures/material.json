@@ -1,0 +1,14 @@
+{
+  "hsp": {
+    "model": "194ea3b953ec8d37592a19af4afa8325d84a8105386986936a4f5196685d124a",
+    "checkout": "function checkout() {\n    if (!payment.prepareCheckout({ version: STATE_VERSION, index, answers, unlocked })) return;\n    if (!HSP_STRIPE_URL.startsWith(\"https://buy.stripe.com/\")) { setCheckoutUnavailable(true); return; }\n    tracking.checkout(() => { window.location.assign(HSP_STRIPE_URL); });\n  }"
+  },
+  "angest": {
+    "model": "f752d0ffda2d7ab3b0590fc7faea86f184c63607218916a696875f9e4a1b2899",
+    "checkout": "function checkout() { if (!payment.prepareCheckout({ version: STATE_VERSION, index, answers, unlocked })) return; if (!ANGEST_TEST_STRIPE_URL.startsWith(\"https://buy.stripe.com/\")) { setCheckoutUnavailable(true); return; } tracking.checkout(() => { window.location.assign(ANGEST_TEST_STRIPE_URL); }); }"
+  },
+  "ptsd": {
+    "model": "8a581b643eef7909477296eeeb0e5d63ee7571e4185924be05c477f8fac12876",
+    "checkout": "function checkout() {\n    if (!payment.prepareCheckout({ version: STATE_VERSION, index, answers, unlocked })) return;\n    if (!PTSD_STRIPE_URL.startsWith(\"https://buy.stripe.com/\")) { setCheckoutUnavailable(true); return; }\n    tracking.checkout(() => { window.location.assign(PTSD_STRIPE_URL); });\n  }"
+  }
+}

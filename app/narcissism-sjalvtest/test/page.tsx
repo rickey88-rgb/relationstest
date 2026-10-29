@@ -1,5 +1,7 @@
 "use client";
 
+import ReportView from "./ReportView";
+import { useTestAccountCheckout } from "../../_components/useTestAccountCheckout";
 import PaywallCheckoutCTA from "../../_components/PaywallCheckoutCTA";
 import { buildPaywallTeaser } from "../../_lib/paywallTeaser";
 
@@ -7,16 +9,13 @@ import { hasPaidReturn, usePaymentRecovery } from "../../_components/usePaymentR
 
 import { useTestAnalytics } from "../../_analytics/useTestAnalytics";
 
-import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { answerLabels, calculate, dimensionNames, dimensions, emptyAnswers, formatPercent, parseState, questions, PRICE_SEK, STATE_VERSION, STORAGE_KEY, dimensionLevel } from "./model";
+import { answerLabels, calculate, emptyAnswers, formatPercent, parseState, questions, PRICE_SEK, STATE_VERSION, STORAGE_KEY } from "./model";
 import { NARCISSISM_SELFTEST_STRIPE_URL } from "./payment";
 
-import { interpretation, profileAnalysis } from "./interpretation";
 
 const button = "inline-flex min-h-12 items-center justify-center rounded-xl px-5 py-3 text-center font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900";
 const secondary = button + " border border-neutral-300 bg-white text-neutral-900 hover:bg-neutral-100";
-const link = "underline underline-offset-4 decoration-neutral-400 focus-visible:outline-2 focus-visible:outline-offset-4";
 const section = "mt-8 space-y-4 rounded-2xl border border-neutral-200 p-5 leading-7 sm:p-6";
 
 export default function NarcissismSelfTestPage() {
@@ -105,7 +104,8 @@ export default function NarcissismSelfTestPage() {
     setIndex(0); setAnswers(emptyAnswers()); setUnlocked(hasPaidReturn(STORAGE_KEY)); setEditing(false); moveFocus.current = true;
     try { localStorage.removeItem(STORAGE_KEY); } catch { setStorageUnavailable(true); }
   }
-  function checkout() {
+  const accountCheckout = useTestAccountCheckout("narcissism-sjalvtest", answers, () => setCheckoutUnavailable(true));
+  function checkout() { if (accountCheckout()) return;
     // Save before redirect; don't lose a purchased result when storage is blocked.
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({ version: STATE_VERSION, index, answers, unlocked }));
@@ -138,6 +138,7 @@ export default function NarcissismSelfTestPage() {
       <p role="status" aria-live="polite">{["Analyserar dina svar...", "Identifierar återkommande mönster...", "Sammanställer din profil..."][analysisStep ?? 0]}</p>
     </section>}
     {showResult && (!analyzing || unlocked) && result && <div data-selftest-result>
+      {!unlocked ? <>
       <section data-flow={unlocked ? "card" : "paywall"} ref={unlocked ? null : tracking.paywallRef} className={unlocked ? section : "mt-8 space-y-5 rounded-[20px] bg-[#0d0d0d] px-[18px] py-6 leading-7 text-white"} aria-labelledby="result-heading">
         <h2 id="result-heading" ref={heading} tabIndex={-1} className="text-2xl font-semibold outline-none">{unlocked ? "Din övergripande profil" : preview.title}</h2>
         {unlocked && <><p className="text-xl font-semibold">{result.level}</p><p className="text-4xl font-semibold tabular-nums">{formatPercent(result.percent)} %</p>
@@ -145,12 +146,8 @@ export default function NarcissismSelfTestPage() {
         {!unlocked && <><p className="text-neutral-200">{preview.body}</p><div className="space-y-4 border-t border-white/15 pt-5"><h3 className="text-xl font-semibold">I din fullständiga analys ser du</h3><ul className="space-y-2 text-neutral-200"><li>✓ vilket drag som väger tyngst i dina svar</li><li>✓ vad som förstärker eller nyanserar helhetsbilden</li><li>✓ hur de olika delarna samverkar i din profil</li></ul><div><p className="font-semibold">{PRICE_SEK} kr</p><p className="text-sm text-neutral-300">Engångsbetalning · Ingen prenumeration</p><p className="text-sm text-neutral-300">Resultatet visas direkt efter betalning</p></div><PaywallCheckoutCTA onClick={checkout} /><button type="button" onClick={restart} className="min-h-11 w-full text-sm text-neutral-300 underline underline-offset-4 hover:text-white">Gör om testet</button>{checkoutUnavailable && <p role="status" className="text-sm text-neutral-300">Köp av fullständig profil är inte tillgängligt just nu. Dina svar finns kvar i den här webbläsaren.</p>}</div></>}
         {unlocked && <p className="rounded-xl bg-neutral-50 p-4"><span className="block text-sm text-neutral-600">Profiltyp</span><strong>{result.profileType}</strong></p>}
       </section>
-      {unlocked && <>
-        <section data-flow="card" className={section}><h2 className="text-2xl font-semibold">Din personliga analys</h2>{profileAnalysis(result).map((text,i) => <p key={i}>{text}</p>)}</section>
-        <section data-flow="card" className={section}><h2 className="text-2xl font-semibold">Dina sex dimensionsresultat</h2><p className="text-sm text-neutral-600">Högre värden visar mer av de drag som frågorna mäter. För empati och ömsesidighet betyder ett högre värde större svårigheter.</p><div className="grid gap-3 sm:grid-cols-2">{dimensions.map(d => <div data-flow="inset" key={d} className="min-w-0 rounded-xl bg-neutral-50 p-4"><h3 className="font-semibold">{dimensionNames[d]}</h3><p className="mt-1 text-sm">{dimensionLevel(result.scores[d])} · {formatPercent(result.scores[d])} %</p><div className="mt-3 h-2 overflow-hidden rounded bg-neutral-200" aria-hidden="true"><div data-flow="fill" className="h-full rounded bg-neutral-700" style={{width: `${result.scores[d]}%`}} /></div></div>)}</div></section>
-        <section data-flow="card" className={section}><h2 className="text-2xl font-semibold">Så kan områdena märkas i ditt liv</h2>{result.ranked.map(d => { const text = interpretation(result,d); return <div key={d} className="space-y-3 border-t border-neutral-200 pt-5"><h3 className="text-xl font-semibold">{dimensionNames[d]}</h3><p>{text.summary}</p><p><strong>I vardagen: </strong>{text.everyday}</p><p><strong>I nära relationer: </strong>{text.relationship}</p><p className="rounded-xl bg-neutral-50 p-4"><strong>Att reflektera över: </strong>{text.reflection}</p></div>; })}</section>
-        <section data-flow="card" className={section}><h2 className="text-xl font-semibold">Ta med dig en konkret fråga</h2><p>Välj en situation som du kände igen dig i när du svarade. Vad hände, vad behövde du och vilket utrymme fick den andra personen? Börja med en liten förändring du själv kan påverka, till exempel att uttrycka ett önskemål tydligt eller lyssna färdigt innan du svarar.</p><Link href="/narcissism-sjalvtest" className={link}>Läs mer om de sex områdena</Link></section>
-      </>}
+      </> : <ReportView result={result} heading={heading} />}
+
       <div className="mt-6 flex flex-wrap gap-3"><button type="button" onClick={() => { moveFocus.current = true; setEditing(true); setIndex(0); }} className={secondary}>Granska mina svar</button><button type="button" onClick={restart} className={secondary}>Börja om</button></div>
     </div>}
   </>;

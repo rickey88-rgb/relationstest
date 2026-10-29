@@ -3,7 +3,7 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 
-const page = fs.readFileSync(path.join(__dirname, "page.tsx"), "utf8");
+const page = fs.readFileSync(path.join(__dirname, "ReportView.tsx"), "utf8");
 const css = fs.readFileSync(path.join(__dirname, "../../globals.css"), "utf8");
 assert.match(page, /id="audhd-print-report"/);
 assert.match(page, /onClick=\{\(\) => window\.print\(\)\}/);

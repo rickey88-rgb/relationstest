@@ -1,0 +1,16 @@
+{
+  "narcissism": {
+    "checkout": "function checkout() {\n    // Save before redirect; don't lose a purchased result when storage is blocked.\n    try {\n      localStorage.setItem(STORAGE_KEY, JSON.stringify({ version: STATE_VERSION, index, answers, unlocked }));\n      if (!parseState(localStorage.getItem(STORAGE_KEY))) throw new Error(\"storage unavailable\");\n    } catch { setStorageUnavailable(true); return; }\n    if (!NARCISSISM_SELFTEST_STRIPE_URL.startsWith(\"https://buy.stripe.com/\")) { setCheckoutUnavailable(true); return; }\n    if (!payment.prepareCheckout({ version: STATE_VERSION, index, answers, unlocked })) return;\n    tracking.checkout(() => { window.location.href = NARCISSISM_SELFTEST_STRIPE_URL; });\n  }",
+    "files": {
+      "app/narcissism-sjalvtest/test/model.ts": "d19e43143919e9deef91c29c381dc9a284f15209c1833c4db3bc057dad1f772e",
+      "app/narcissism-sjalvtest/test/interpretation.ts": "7a9a21cafabc24d3991b1fd39a4d15423e2df8cfb648abfc84d03d64876e2186"
+    }
+  },
+  "screening": {
+    "checkout": "function checkout() {\n    // Save before redirect; don't lose a purchased result when storage is blocked.\n    try {\n      localStorage.setItem(STORAGE_KEY, JSON.stringify({ version: STATE_VERSION, index, answers, unlocked }));\n      if (!parseState(localStorage.getItem(STORAGE_KEY))) throw new Error(\"storage unavailable\");\n    } catch { setStorageUnavailable(true); return; }\n    if (!payment.prepareCheckout({ version: STATE_VERSION, index, answers, unlocked })) return;\n    tracking.checkout(() => { window.location.href = SCREENING_CHECKOUT_URL; });\n  }",
+    "files": {
+      "app/test/screening.ts": "4ae7d31316a8a248ebfadd481a4f1e96d819ded898c6859c9b5977c8287ac37b",
+      "app/test/analysis.ts": "9113a83dd85769e604dada1a6cf7390b65f0651904a15df90a2527df214cdfd7"
+    }
+  }
+}

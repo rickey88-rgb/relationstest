@@ -13,7 +13,7 @@ function mount({data=new Map(),paid=false,blocked=false,recovery=null,recoveryUn
   const query=recovery?`?recovery=${recovery}`:(paid?'?paid=true':'');
   global.window={location:{href:'https://relationsvarning.se/autism-test/test'+query,pathname:'/autism-test/test',search:query},scrollTo:()=>{},history:{replaceState:(...args)=>{const url=args[2];window.location.href='https://relationsvarning.se'+url;window.location.search=new URL(window.location.href).search;}},addEventListener:(name,fn)=>listeners.set(name,fn),removeEventListener:name=>listeners.delete(name)};
   window.location.assign=url=>{window.location.href=url;};
-  global.fetch=async url=>{assert.equal(url,'/api/autism-recovery/status');return{ok:true,json:async()=>({unlocked:recoveryUnlocked})};};
+  global.fetch=async url=>{if(url==='/api/test-accounts/autism/capabilities')return{ok:true,json:async()=>({checkout:false})};assert.equal(url,'/api/autism-recovery/status');return{ok:true,json:async()=>({unlocked:recoveryUnlocked})};};
   global.setTimeout=(fn,delay)=>{const id=++sequence;timers.set(id,{at:clock+delay,fn});return id;};
   global.clearTimeout=id=>timers.delete(id);
   const react={
@@ -29,8 +29,8 @@ function mount({data=new Map(),paid=false,blocked=false,recovery=null,recoveryUn
   const Page=load(path.join(__dirname,'page.tsx')).default;
   function render(){let count=0;while(dirty||pending.length){if(++count>20)throw Error('render loop');if(dirty){dirty=false;cursor=0;tree=Page();}pending.splice(0).forEach(fn=>fn());}return tree;}
   function advance(ms){const target=clock+ms;for(;;){const next=[...timers].filter(([,t])=>t.at<=target).sort((a,b)=>a[1].at-b[1].at)[0];if(!next)break;clock=next[1].at;timers.delete(next[0]);next[1].fn();render();}clock=target;render();}
-  function nodes(node=tree){if(!node||typeof node!=='object')return [];if(Array.isArray(node))return node.flatMap(n=>nodes(n));if(node.type?.name==='PaywallCheckoutCTA')return nodes(node.type(node.props));return[node,...nodes(node.props?.children ?? null)];}
-  function text(node=tree){if(node==null||typeof node==='boolean')return '';if(typeof node!=='object')return String(node);if(Array.isArray(node))return node.map(n=>text(n)).join('');if(node.type?.name==='PaywallCheckoutCTA')return text(node.type(node.props));return text(node.props?.children ?? null);}
+  function nodes(node=tree){if(!node||typeof node!=='object')return [];if(Array.isArray(node))return node.flatMap(n=>nodes(n));if(['PaywallCheckoutCTA','ReportView'].includes(node.type?.name))return nodes(node.type(node.props));return[node,...nodes(node.props?.children ?? null)];}
+  function text(node=tree){if(node==null||typeof node==='boolean')return '';if(typeof node!=='object')return String(node);if(Array.isArray(node))return node.map(n=>text(n)).join('');if(['PaywallCheckoutCTA','ReportView'].includes(node.type?.name))return text(node.type(node.props));return text(node.props?.children ?? null);}
   function button(label){const found=nodes().find(n=>n.type==='button'&&text(n).trim()===label);assert(found,'Button: '+label);return found;}
   function click(label,detail=1){const b=button(label);assert(!b.props.disabled);b.props.onClick({detail});render();}
   async function settleRecovery(){await Promise.resolve();await Promise.resolve();render();}

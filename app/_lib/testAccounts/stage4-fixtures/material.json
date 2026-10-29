@@ -1,0 +1,15 @@
+{
+  "files": {
+    "app/autism-test/test/model.ts": "3b1be9bc3b6b24e60107905ab58fee0826e4eafe72577b0c0fee6fc3b1c4dbe2",
+    "app/autism-test/test/questions.ts": "13902fc05db36b6c381e0d7f2b65efbf7e1677275a3f12067242e591f27b4a6c",
+    "app/autism-test/test/interpretation.ts": "20c1cbb95352ac9768ebee9e9e10e7d425959721936f8e97c768e97c00a5d460",
+    "app/autism-test/test/copy.ts": "4ff1a6023ddd3153e92957c2ef68aa1856078729299efade58175a81b17e1c72",
+    "app/autism-test/test/payment.ts": "077db94c0f9a1d3b3ceb80bc4afeb5fe5ad23e1377e7b175c4db6b6873b6ade5",
+    "app/_lib/autismRecovery.server.ts": "61d8cfe2e7d34aaeab6f2517bbf058aa9a59708ef22e11e5c367d37d6d800e63",
+    "app/api/autism-recovery/redeem/route.ts": "483319de71b84423921469770e215f4fd991932d0217689c149161d68d703558",
+    "app/api/autism-recovery/status/route.ts": "9fe6c8db743baa885636001b246cf420af2d1789801a221b916e80815d7d4221"
+  },
+  "checkout": "function checkout() {\n    if (!payment.prepareCheckout({ version: STATE_VERSION, index, answers, unlocked })) return;\n    if (!AUTISM_STRIPE_URL.startsWith(\"https://buy.stripe.com/\")) { setCheckoutUnavailable(true); return; }\n    tracking.checkout(() => { window.location.assign(AUTISM_STRIPE_URL); });\n  }",
+  "restart": "function restart() {\n    tracking.restart();\n    setAnalysisStep(null);\n    setCheckoutUnavailable(false);\n    setIndex(0); setAnswers(emptyAnswers()); setUnlocked(unlocked || hasPaidReturn(STORAGE_KEY) || new URLSearchParams(window.location.search).get(\"paid\") === \"true\"); setEditing(false); moveFocus.current = true;\n    try { localStorage.removeItem(STORAGE_KEY); } catch { setStorageUnavailable(true); }\n  }",
+  "recovery": "async function restoreSupportRecovery() {\n      const recovery = new URLSearchParams(window.location.search).get(\"recovery\");\n      let recoveryUnlocked = false;\n\n      try {\n        const response = await fetch(\"/api/autism-recovery/status\", { cache: \"no-store\" });\n        const body: unknown = response.ok ? await response.json() : null;\n        recoveryUnlocked = typeof body === \"object\" && body !== null && (body as { unlocked?: unknown }).unlocked === true;\n      } catch {\n        // A failed status check must never unlock a result.\n      }\n\n      if (cancelled) return;\n\n      if (recovery === \"invalid\" || (recovery === \"success\" && !recoveryUnlocked)) {\n        setRecoveryLinkInvalid(true);\n        return;\n      }\n\n      if (!recoveryUnlocked) return;\n\n      setUnlocked(true);\n      if (recovery === \"success\") {\n        window.history.replaceState({}, \"\", window.location.pathname);\n        window.scrollTo({ top: 0, behavior: \"smooth\" });\n      }\n    }"
+}

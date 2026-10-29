@@ -1,0 +1,21 @@
+/* eslint-disable @typescript-eslint/no-require-imports -- synthetic restart, sanitized provider failures and report-access failures. */
+const assert=require('node:assert/strict'),path=require('node:path'),React=require('react'),{renderToStaticMarkup:render}=require('react-dom/server');
+const createLoader=require('../../autism-test/test/test-loader.cjs'),load=createLoader(),registry=load(path.join(__dirname,'adapter.ts')),Restart=load(path.join(__dirname,'../../_components/TestRestartLink.tsx')).default;
+const {NextRequest}=require('next/server'),http=load(path.join(__dirname,'../accountHttp.server.ts')),factory=load(path.join(__dirname,'handlers.server.ts')).testAccountHandlers;
+const slugs=['narcissist-i-en-relation','traumabindningtest','psykisk-misshandel-relation'],marker='SYNTHETIC_PRIVATE_RESULT_NEVER_LOG',origin='https://www.relationsvarning.se';
+process.env.TEST_ACCOUNTS_SITE_ORIGIN=origin;
+async function run(){const logs=[],oldLog=console.log,oldError=console.error,oldWarn=console.warn;console.log=console.error=console.warn=(...args)=>logs.push(args);try{
+ for(const slug of slugs){const a=registry.adapterForSlug(slug),m=load(path.join(__dirname,`../../${slug}/test/model.ts`)),data=new Map([[m.LS_KEY,marker],['another-test',marker],['paid-marker','preserved']]);global.localStorage={removeItem:key=>data.delete(key)};
+ const node=Restart({href:a.testPath,storageKey:m.LS_KEY,children:'Gör om testet'});assert.equal(node.props.href,a.testPath);node.props.onClick();assert(!data.has(m.LS_KEY));assert.equal(data.get('another-test'),marker);assert.equal(data.get('paid-marker'),'preserved');global.localStorage={removeItem:()=>{throw Error(marker);}};assert.doesNotThrow(()=>node.props.onClick());
+ const req=(action,body)=>new NextRequest(`${origin}/api/test-accounts/${slug}/${action}`,{method:'POST',headers:{origin,'content-type':'application/x-www-form-urlencoded'},body});
+ const providerFailure=()=>{throw Error(marker);};const handlers=factory(a.product,slug,{...http,accountIdentity:async()=>({kind:'authenticated',userId:'11111111-1111-4111-8111-111111111111'}),paymentConfig:()=>({price:'price_synthetic'}),stripeClient:()=>({prices:{retrieve:providerFailure}}),save:providerFailure,remove:providerFailure});
+ process.env[`${a.flagPrefix}_CHECKOUT_ENABLED`]='true';
+ for(const action of ['checkout','save','delete','legacy-import']){const body=action==='checkout'?new URLSearchParams({payload:JSON.stringify({answers:Array(30).fill(2),questionVersion:a.questionVersion,reportVersion:a.reportVersion})}):`id=${marker}&consent=test-account-storage-v1`;const response=await handlers.POST(req(action,body),{params:Promise.resolve({action})});assert.equal(response.status,503);assert(!JSON.stringify(await response.json()).includes(marker));assert.match(response.headers.get('cache-control'),/no-store/);}
+ delete process.env[`${a.flagPrefix}_CHECKOUT_ENABLED`];
+ for(const mode of ['guest','saved']){const stubs={'next/link':{default:({href,children})=>React.createElement('a',{href},children)},'next/headers':{cookies:async()=>({get:()=>({value:'synthetic'})})},'next/navigation':{notFound:()=>{throw Error('notFound');},redirect:()=>{throw Error('redirect');}},'../../../../_lib/accountHttp.server':{accountIdentity:async()=>({kind:'authenticated',userId:'11111111-1111-4111-8111-111111111111'})},'../../../../_lib/testAccounts/service.server':{guestForProduct:providerFailure,openForProduct:providerFailure}};
+ const file=mode==='guest'?'../../mina-sidor/gast/[test]/[id]/page.tsx':'../../mina-sidor/tester/[test]/[id]/page.tsx';const Page=createLoader(stubs)(path.join(__dirname,file)).default;const html=render(await Page({params:Promise.resolve({test:slug,id:'11111111-1111-4111-8111-111111111111'})}));assert(!html.includes(marker));assert(html.includes(mode==='guest'?'kan inte öppnas':'inte tillgänglig'));}
+ }
+ assert.equal(logs.length,0,'provider/result failures must never log sensitive content');
+ }finally{console.log=oldLog;console.error=oldError;console.warn=oldWarn;delete global.localStorage;}
+ console.log('PASS: all three restart controls clear only their own original local answers; stored analyses/other tests/purchase markers remain intact; API and report failures expose/log no private provider content.');}
+run().catch(error=>{console.error(error);process.exitCode=1;});

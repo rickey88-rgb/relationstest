@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "test:account": "node scripts/test-account-phase2.cjs",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -23,6 +24,7 @@
     "stripe": "^23.0.0"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "^0.5.11",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",

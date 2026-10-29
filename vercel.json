@@ -4,6 +4,14 @@
     {
       "path": "/api/cron/audhd-checkout-cleanup",
       "schedule": "15 3 * * *"
+    },
+    {
+      "path": "/api/cron/account-analysis-cleanup",
+      "schedule": "0 2 * * *"
+    },
+    {
+      "path": "/api/cron/test-account-cleanup",
+      "schedule": "30 3 * * *"
     }
   ]
 }

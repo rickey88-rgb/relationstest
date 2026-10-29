@@ -27,15 +27,22 @@ let lastPage = "";
 const allowedParams = new Set(["test_id", "test_name", "attempt_id", "paywall_version", "release_id", "page_path", "progress_percent", "current_question", "total_questions", "completion_time_seconds", "price", "value", "currency", "transaction_id", "items", "page_location", "page_referrer", "page_title", "source_test", "recommended_test", "source_product", "source_product_type", "recommended_product", "recommended_product_type", "offer_position", "product_id", "product_name", "offer_type", "source_page", "destination_page", "position", "destination_test", "cta_label", "target_route", "dominant_dimension", "weakest_dimension", "recommendation_position", "share_method", "teaser_type"]);
 const campaignKeys = ["gclid", "dclid", "gbraid", "wbraid", "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "utm_id"];
 
+export function privateAnalyticsPath(pathname: string) {
+  return ["/mina-sidor", "/auth", "/logga-in", "/logga-ut", "/api/account"].some(path => pathname === path || pathname.startsWith(path + "/"));
+}
+function privateAnalyticsPage() {
+  try { return typeof window !== "undefined" && privateAnalyticsPath(new URL(window.location.href).pathname); } catch { return false; }
+}
+
 export function consent(): Consent {
   if (typeof window === "undefined") return "unknown";
   if (memoryConsent) return memoryConsent;
   try { const saved = localStorage.getItem(CONSENT_KEY); return saved === "granted" || saved === "denied" ? saved : "unknown"; } catch { return "unknown"; }
 }
 export function safeLocation(raw: string) {
-  try { const url = new URL(raw); const query = new URLSearchParams(); for (const key of campaignKeys) { const value = url.searchParams.get(key); if (value) query.set(key,value); } return url.origin + url.pathname + (query.size ? "?" + query.toString() : ""); } catch { return ""; }
+  try { const url = new URL(raw); if (privateAnalyticsPath(url.pathname)) return url.origin + "/mina-sidor"; const query = new URLSearchParams(); for (const key of campaignKeys) { const value = url.searchParams.get(key); if (value) query.set(key,value); } return url.origin + url.pathname + (query.size ? "?" + query.toString() : ""); } catch { return ""; }
 }
-function referrer(raw: string) { try { const url = new URL(raw); return url.origin + url.pathname; } catch { return ""; } }
+function referrer(raw: string) { try { const url = new URL(raw); return privateAnalyticsPath(url.pathname) ? "" : url.origin + url.pathname; } catch { return ""; } }
 function safeEventParams(params: EventParams): EventParams {
   // Never accept answers, test scores, profile types, question text or arbitrary parameters.
   const safe: EventParams = {};
@@ -51,7 +58,7 @@ function safeEventParams(params: EventParams): EventParams {
 }
 export function trackEvent(name: EventName, params: EventParams = {}): boolean {
   try {
-    if (typeof window === "undefined" || consent() !== "granted") return false;
+    if (typeof window === "undefined" || privateAnalyticsPage() || consent() !== "granted") return false;
     const safe = safeEventParams(params);
     if (typeof window.gtag !== "function" || !initialized) {
       if (pending.length >= 100) return false;
@@ -71,7 +78,7 @@ export function trackEventBeforeNavigation(name: EventName, params: EventParams,
     try { navigate(); } catch { /* A failed navigation must not break the page. */ }
   };
   try {
-    if (typeof window === "undefined" || consent() !== "granted" || typeof window.gtag !== "function" || !initialized) {
+    if (typeof window === "undefined" || privateAnalyticsPage() || consent() !== "granted" || typeof window.gtag !== "function" || !initialized) {
       finish();
       return false;
     }
@@ -118,6 +125,10 @@ export async function captureGa4CheckoutAttribution(): Promise<Ga4CheckoutAttrib
 }
 export function initializeAnalytics() {
   try {
+  if (privateAnalyticsPage()) {
+    (window as unknown as Record<string,unknown>)[`ga-disable-${GA_MEASUREMENT_ID}`] = true;
+    pending.length = 0; lastPage = ""; return;
+  }
   if (typeof window === "undefined" || consent() !== "granted") return;
   (window as unknown as Record<string,unknown>)[`ga-disable-${GA_MEASUREMENT_ID}`] = false;
   if (initialized) return;
@@ -132,10 +143,11 @@ export function initializeAnalytics() {
   } catch { /* Analytics must never break rendering, even when scripts are blocked. */ }
 }
 export function flushEvents() {
-  if (!initialized || consent() !== "granted" || typeof window.gtag !== "function") return;
+  if (privateAnalyticsPage() || !initialized || consent() !== "granted" || typeof window.gtag !== "function") return;
   for (const item of pending.splice(0)) trackEvent(item.name,item.params);
 }
 export function pageView(pathname: string) {
+  if (privateAnalyticsPath(pathname)) { lastPage = ""; return; }
   if (typeof window === "undefined" || consent() !== "granted") return;
   const normalized = pathname.replace(/\/$/, "") || "/";
   if (normalized === lastPage) return;

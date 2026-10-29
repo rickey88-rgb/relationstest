@@ -53,6 +53,11 @@ export function proxy(request: NextRequest) {
 
   // Auth is intentionally limited to the account surface. Tests, Checkout,
   // recovery and book-delivery requests remain completely anonymous flows.
+  // These registered guest reports authenticate purchase possession in their server reader;
+  // requiring an account here would break anonymous purchases. Other portal paths remain protected.
+  if (/^\/mina-sidor\/gast\/(iq|adhd|hsp|angest|ptsd|narcissism-sjalvtest|screening|autism|anknytningstest|medberoendetest|gaslightingtest|narcissist-i-en-relation|traumabindningtest|psykisk-misshandel-relation)\/[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\/?$/i.test(pathname)) {
+    return NextResponse.next();
+  }
   if (pathname === ACCOUNT_PATH || pathname.startsWith(`${ACCOUNT_PATH}/`)) {
     return protectAccount(request);
   }
