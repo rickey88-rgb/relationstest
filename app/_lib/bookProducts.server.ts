@@ -17,9 +17,11 @@ export const AUTISM_BOOK = {
 
 export const ADHD_DELUXE_BOOK = {
   id: "adhd-deluxe",
-  name: "ADHD Deluxe",
+  name: "ADHD DELUXE",
   author: "Elias Voss",
-  downloadFilename: "ADHD-Deluxe_Elias-Voss.pdf",
+  downloadFilename: "ADHD-DELUXE_Elias-Voss_v1.1.pdf",
+  worksheetsFilename: "ADHD-DELUXE_Arbetsblad_Ifyllbara_v1.1.pdf",
+  printWorksheetsFilename: "ADHD-DELUXE_Arbetsblad_Utskrift_v1.1.pdf",
 } as const;
 
 // Price IDs are non-secret Stripe product identifiers. ADHD Deluxe verifies
@@ -28,6 +30,12 @@ export const ADHD_DELUXE_ALLOWED_PRICE_IDS = new Set([
   "price_1UO3C0AgF4ugWkEkklryPLKO",
   "price_1UO3F6AgF4ugWkEkRCM7L9yX",
 ]);
+
+const adhdDeluxePaymentLinks = new Set(["plink_1UO3CpAgF4ugWkEkyWAfIbus", "plink_1UO3FGAgF4ugWkEkniqT0FGP"]);
+const adhdDeluxeAmounts: Record<string, number> = {
+  price_1UO3C0AgF4ugWkEkklryPLKO: 14900,
+  price_1UO3F6AgF4ugWkEkRCM7L9yX: 9900,
+};
 
 type PaymentLinkReference = string | { id: string } | null;
 
@@ -154,12 +162,12 @@ export type AdhdDeluxeCheckoutVerification =
   | { verified: true }
   | {
     verified: false;
-    reason: "invalid_session_id" | "session_not_paid_or_complete" | "line_item_price_not_allowed" | "stripe_request_failed";
+    reason: "invalid_session_id" | "session_not_paid_or_complete" | "line_item_price_not_allowed" | "payment_not_valid" | "stripe_request_failed";
     diagnostic: AdhdDeluxeCheckoutDiagnostic;
   };
 
 export type AdhdDeluxeCheckoutDiagnostic = {
-  stage: "session_id" | "session_retrieve" | "session_status" | "line_items_retrieve" | "price_allowlist";
+  stage: "session_id" | "session_retrieve" | "session_status" | "line_items_retrieve" | "price_allowlist" | "payment_intent" | "charge";
   allowedPriceIds: string[];
   sessionLivemode: boolean | null;
   sessionStatus: string | null;
@@ -210,7 +218,7 @@ export async function inspectAdhdDeluxeBookCheckoutSession(sessionId: string): P
       sessionStatus: session.status,
       paymentStatus: session.payment_status,
     };
-    if (session.status !== "complete" || session.payment_status !== "paid") {
+    if (session.status !== "complete" || session.payment_status !== "paid" || session.mode !== "payment" || session.livemode !== true || session.currency !== "sek" || !adhdDeluxePaymentLinks.has(paymentLinkId(session.payment_link) ?? "")) {
       return { verified: false, reason: "session_not_paid_or_complete", diagnostic: checkoutDiagnostic("session_status", sessionDetails) };
     }
 
@@ -221,8 +229,9 @@ export async function inspectAdhdDeluxeBookCheckoutSession(sessionId: string): P
       .filter((priceId): priceId is string => priceId !== null)))
       .slice(0, 10);
     const priceMatch = observedPriceIds.some((priceId) => ADHD_DELUXE_ALLOWED_PRICE_IDS.has(priceId));
-    if (priceMatch) return { verified: true };
-    return {
+    const item = lineItems.data[0];
+    const priceId = item ? lineItemPriceId(item.price) : null;
+    if (!priceMatch || lineItems.has_more || lineItems.data.length !== 1 || item.quantity !== 1 || !priceId || session.amount_total !== adhdDeluxeAmounts[priceId] || item.amount_total !== adhdDeluxeAmounts[priceId]) return {
       verified: false,
       reason: "line_item_price_not_allowed",
       diagnostic: checkoutDiagnostic("price_allowlist", {
@@ -233,6 +242,15 @@ export async function inspectAdhdDeluxeBookCheckoutSession(sessionId: string): P
         priceMatch,
       }),
     };
+    stage = "payment_intent";
+    const intentId = typeof session.payment_intent === "string" ? session.payment_intent : session.payment_intent?.id;
+    if (!intentId) return { verified: false, reason: "payment_not_valid", diagnostic: checkoutDiagnostic(stage, sessionDetails) };
+    const intent = await stripe.paymentIntents.retrieve(intentId, { expand: ["latest_charge"] });
+    if (intent.status !== "succeeded") return { verified: false, reason: "payment_not_valid", diagnostic: checkoutDiagnostic(stage, sessionDetails) };
+    stage = "charge";
+    const charge = typeof intent.latest_charge === "string" ? await stripe.charges.retrieve(intent.latest_charge) : intent.latest_charge;
+    if (!charge || !charge.paid || !charge.captured || charge.refunded || charge.amount_refunded > 0 || charge.disputed) return { verified: false, reason: "payment_not_valid", diagnostic: checkoutDiagnostic(stage, sessionDetails) };
+    return { verified: true };
   } catch (error) {
     return { verified: false, reason: "stripe_request_failed", diagnostic: checkoutDiagnostic(stage, stripeErrorDetails(error)) };
   }
@@ -272,14 +290,14 @@ export function autismBookR2Config(file: "book" | "worksheets" = "book") {
   };
 }
 
-export function adhdDeluxeBookR2Config() {
+export function adhdDeluxeBookR2Config(file: "book" | "worksheets" | "print" = "book") {
   const endpoint = required("R2_ENDPOINT");
   if (!/^https:\/\//.test(endpoint)) throw new Error("R2_ENDPOINT must use HTTPS");
 
   return {
     endpoint,
     bucket: required("R2_BUCKET_NAME"),
-    key: required("ADHD_DELUXE_BOOK_R2_KEY"),
+    key: required(file === "worksheets" ? "ADHD_DELUXE_WORKSHEETS_R2_KEY" : file === "print" ? "ADHD_DELUXE_WORKSHEETS_PRINT_R2_KEY" : "ADHD_DELUXE_BOOK_R2_KEY"),
     credentials: {
       accessKeyId: required("R2_ACCESS_KEY_ID"),
       secretAccessKey: required("R2_SECRET_ACCESS_KEY"),

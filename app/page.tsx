@@ -216,9 +216,9 @@ export default function Landing() {
         <div className={styles.bookGrid}>
           <AudhdBookCard />
           <article className={styles.bookCard}>
-            <Image src="/adhd-bok-mockup.png" alt="ADHD Deluxe – bok om ADHD av Elias Voss" width={1448} height={1086} sizes="(max-width: 700px) min(100vw - 5rem, 250px), 280px" className={styles.bookMockup} />
-            <p className={styles.eyebrow}>Digital bok</p><h3>ADHD Deluxe</h3><p>En personlig och praktisk bok om ADHD i verkliga livet.</p>
-            <span className={styles.comingSoon}>Kommer snart</span>
+            <Image src="/adhd-deluxe/mockup.png" alt="ADHD DELUXE – Jobba smartare. Inte hårdare. Av Elias Voss" width={1064} height={1479} sizes="(max-width: 700px) min(100vw - 5rem, 250px), 280px" className={styles.bookMockup} />
+            <p className={styles.eyebrow}>Digital bok · 120 sidor</p><h3>ADHD DELUXE</h3><p>Jobba smartare. Inte hårdare. 28 verktyg och 10 arbetsblad för vardagen med ADHD.</p>
+            <Link href="/adhd-deluxe" className={styles.bookLink}>Upptäck boken</Link>
           </article>
           <article className={styles.bookCard}>
             <Image src="/autism-all-inclusive-mockup.png" alt="AUTISM ALL INCLUSIVE av Elias Voss" width={1205} height={1305} sizes="(max-width: 700px) min(100vw - 5rem, 250px), 280px" className={styles.bookMockup} />

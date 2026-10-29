@@ -86,12 +86,14 @@ assert.equal(products.adhdDeluxeBookR2Config().key, "books/adhd-deluxe/ADHD-Delu
   assert.equal(await products.verifyAutismBookCheckoutSession("cs_test_autismbook123"), false);
   assert.equal(await products.verifyAutismBookCheckoutSession("not-a-checkout-session"), false);
 
-  StripeMock.session = { status: "complete", payment_status: "paid", livemode: true };
-  StripeMock.lineItems = [{ price: { id: "price_1UO3C0AgF4ugWkEkklryPLKO" } }];
+  StripeMock.session = { status: "complete", payment_status: "paid", livemode: true, mode: "payment", currency: "sek", amount_total: 14900, payment_intent: "pi_adhd", payment_link: "plink_1UO3CpAgF4ugWkEkyWAfIbus" };
+  StripeMock.lineItems = [{ price: { id: "price_1UO3C0AgF4ugWkEkklryPLKO" }, quantity: 1, amount_total: 14900 }];
   assert.equal(await products.verifyAdhdDeluxeBookCheckoutSession("cs_test_adhddeluxe149"), true);
   assert.deepEqual(await products.inspectAdhdDeluxeBookCheckoutSession("cs_test_adhddeluxe149"), { verified: true });
 
-  StripeMock.lineItems = [{ price: "price_1UO3F6AgF4ugWkEkRCM7L9yX" }];
+  StripeMock.session.amount_total = 9900;
+  StripeMock.session.payment_link = "plink_1UO3FGAgF4ugWkEkniqT0FGP";
+  StripeMock.lineItems = [{ price: "price_1UO3F6AgF4ugWkEkRCM7L9yX", quantity: 1, amount_total: 9900 }];
   assert.equal(await products.verifyAdhdDeluxeBookCheckoutSession("cs_test_adhddeluxe99"), true);
 
   StripeMock.lineItems = [{ price: { id: "price_other_book" } }];
@@ -113,7 +115,7 @@ assert.equal(products.adhdDeluxeBookR2Config().key, "books/adhd-deluxe/ADHD-Delu
   });
 
   StripeMock.session = { status: "complete", payment_status: "unpaid", livemode: true };
-  StripeMock.lineItems = [{ price: { id: "price_1UO3C0AgF4ugWkEkklryPLKO" } }];
+  StripeMock.lineItems = [{ price: { id: "price_1UO3C0AgF4ugWkEkklryPLKO" }, quantity: 1, amount_total: 14900 }];
   assert.equal(await products.verifyAdhdDeluxeBookCheckoutSession("cs_test_adhddeluxeunpaid"), false);
   assert.deepEqual(await products.inspectAdhdDeluxeBookCheckoutSession("cs_test_adhddeluxeunpaid"), {
     verified: false,

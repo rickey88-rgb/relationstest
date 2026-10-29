@@ -1,0 +1,26 @@
+{
+  "version": "1.1",
+  "files": [
+    {
+      "file": "ADHD-DELUXE_Elias-Voss_v1.1.pdf",
+      "key": "books/adhd-deluxe/v1.1/ADHD-DELUXE_Elias-Voss.pdf",
+      "env": "ADHD_DELUXE_BOOK_R2_KEY",
+      "bytes": 12978467,
+      "sha256": "621a4c64848ef4204ab05cbecb96f6a4cdb486b208816163ec2e384d316719cb"
+    },
+    {
+      "file": "ADHD-DELUXE_Arbetsblad_Ifyllbara_v1.1.pdf",
+      "key": "books/adhd-deluxe/v1.1/Arbetsblad_Ifyllbara.pdf",
+      "env": "ADHD_DELUXE_WORKSHEETS_R2_KEY",
+      "bytes": 110695,
+      "sha256": "045bfadea1864bf906736da177bc136146e8292ed0a4a4949c960f0b815bc823"
+    },
+    {
+      "file": "ADHD-DELUXE_Arbetsblad_Utskrift_v1.1.pdf",
+      "key": "books/adhd-deluxe/v1.1/Arbetsblad_Utskrift.pdf",
+      "env": "ADHD_DELUXE_WORKSHEETS_PRINT_R2_KEY",
+      "bytes": 65662,
+      "sha256": "d3ff80672d49accf02cb8949a10b3b35921f59757565617bda6f3d418a07ccf1"
+    }
+  ]
+}

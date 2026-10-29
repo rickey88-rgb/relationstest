@@ -21,7 +21,13 @@ export default async function AdhdDeluxeThankYouPage() {
           <p className="text-sm font-semibold uppercase tracking-[.16em] text-[#27666A]">Köpet är klart</p>
           <h1 className="mt-3">Tack för ditt köp</h1>
           <p className="mt-4 text-lg leading-8 text-neutral-700">Din åtkomst till {ADHD_DELUXE_BOOK.name} är klar i den här webbläsaren.</p>
-          <a href="/api/books/adhd-deluxe/download" className="mt-7 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[#27666A] px-5 py-3 text-center font-semibold text-white transition hover:bg-[#1F5357] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#27666A] sm:w-auto">Ladda ner boken</a>
+          <p className="mt-4 leading-7">Ditt köp innehåller tre separata PDF-filer. Hämta och spara dem på din enhet.</p>
+          <div className="mt-7 grid gap-3">
+            <a href="/api/books/adhd-deluxe/download" className="inline-flex min-h-14 items-center justify-center rounded-xl bg-[#27666A] px-5 py-3 text-center font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-4">Ladda ner boken · 120 sidor</a>
+            <a href="/api/books/adhd-deluxe/download?file=worksheets" className="inline-flex min-h-14 items-center justify-center rounded-xl border border-[#27666A] px-5 py-3 text-center font-semibold text-[#27666A] focus-visible:outline-2 focus-visible:outline-offset-4">Ladda ner ifyllbara arbetsblad · 10 A4-sidor</a>
+            <a href="/api/books/adhd-deluxe/download?file=print" className="inline-flex min-h-14 items-center justify-center rounded-xl border border-[#27666A] px-5 py-3 text-center font-semibold text-[#27666A] focus-visible:outline-2 focus-visible:outline-offset-4">Ladda ner arbetsblad för utskrift · 10 A4-sidor</a>
+          </div>
+          <p className="mt-4 text-sm leading-6 text-neutral-700">Öppna de ifyllbara bladen i en PDF-läsare med formulärstöd. Spara en egen svarskopia och öppna den igen för att kontrollera svaren. Inga beräkningar görs automatiskt. Utskriftsversionen har skrivlinjer.</p>
           <p className="mt-4 text-sm leading-6 text-neutral-700">På mobilen: När boken öppnas, tryck på Dela och välj Spara i Filer eller Böcker för att behålla den på telefonen.</p>
           <p className="mt-2 text-xs leading-5 text-neutral-600">Tips: Spara boken på din enhet när den öppnas så har du den kvar och kan läsa den när du vill.</p>
           <p className="mt-4 text-sm leading-6 text-neutral-600">Om du byter webbläsare eller rensar cookies kan support hjälpa dig att återställa åtkomsten manuellt.</p>
