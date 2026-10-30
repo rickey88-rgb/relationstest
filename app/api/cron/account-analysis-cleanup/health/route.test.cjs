@@ -23,7 +23,7 @@ const request = token => new NextRequest("https://www.relationsvarning.se/api/cr
   const token = "Bearer " + process.env.CRON_SECRET;
   assert.equal((await route.GET(request(token))).status, 200);
   journalOffline = true; assert.equal((await route.GET(request(token))).status, 503); journalOffline = false;
-  mode = "maintenance"; assert.equal((await route.GET(request(token))).status, 503); mode = "active";
+  mode = "maintenance"; assert.equal((await route.GET(request(token))).status, 200); mode = "active";
   healthy = false;
   const response = await route.GET(request(token));
   assert.equal(response.status, 503);

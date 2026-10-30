@@ -1,6 +1,7 @@
 import { db, erase } from "./store.server";
 import { active, notErased } from "./service.server";
 import { assertErasureJournalAvailable } from "../accountErasureJournal.server";
+import { hasCleanupContext } from "../accountCleanupContext.server";
 
 export function monitorUrl() {
   const value = process.env.TEST_ACCOUNTS_HEALTHCHECKS_URL ?? "";
@@ -14,7 +15,8 @@ async function ping(failed = false) {
   if (!response.ok) throw new Error("Monitor unavailable");
 }
 export async function cleanup() {
-  active(); monitorUrl(); await assertErasureJournalAvailable();
+  if (!hasCleanupContext("tests")) active();
+  monitorUrl(); await assertErasureJournalAvailable();
   try {
     const started = Date.now();
     for (let batch = 0; batch < 10; batch++) {
@@ -38,7 +40,8 @@ export async function cleanup() {
   }
 }
 export async function health() {
-  active(); monitorUrl(); await assertErasureJournalAvailable();
+  if (!hasCleanupContext("tests")) active();
+  monitorUrl(); await assertErasureJournalAvailable();
   const rows = await db()<Array<{ healthy: boolean }>>`select last_success_at > now() - interval '26 hours'
     and last_monitor_at > now() - interval '26 hours'
     and not exists(select 1 from public.test_account_analyses where expires_at < now() - interval '24 hours') as healthy

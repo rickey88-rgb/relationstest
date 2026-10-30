@@ -1,4 +1,4 @@
-import { accountLaunchUnavailable, accountPortalEnabled } from "../../../_lib/accountLaunch.server";
+import { accountCleanupHandler } from "../../../_lib/accountCleanupContext.server";
 import { NextRequest } from "next/server";
 import { accountResponse } from "../../../_lib/accountHttp.server";
 import { accountCleanupHealth, accountStorageReady, deleteExpiredAccountAnalyses, recordAccountMonitorSuccess } from "../../../_lib/accountPurchasesDb.server";
@@ -9,8 +9,7 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 300;
 
-export async function GET(request: NextRequest) {
-  if (!accountPortalEnabled()) return accountLaunchUnavailable();
+async function runCleanup(request: NextRequest) {
   if (!accountCronAuthorized(request)) return accountResponse({ error: "Unauthorized" }, 401);
   try {
     if (!await accountStorageReady()) throw new Error("Storage unavailable");
@@ -26,3 +25,5 @@ export async function GET(request: NextRequest) {
     return accountResponse({ error: "Cleanup unavailable" }, 503);
   }
 }
+
+export const GET = accountCleanupHandler("audhd", runCleanup);

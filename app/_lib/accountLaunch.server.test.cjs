@@ -34,7 +34,7 @@ process.env.ACCOUNT_STORAGE_MODE = "active";
 process.env.TEST_ACCOUNTS_STORAGE_MODE = "active";
 process.env.CRON_SECRET = "synthetic-cron-secret";
 const request = (url, method = "GET") => new NextRequest("https://www.relationsvarning.se" + url, {
-  method, headers: { origin: "https://www.relationsvarning.se", authorization: "Bearer synthetic-cron-secret",
+  method, headers: { origin: "https://www.relationsvarning.se", authorization: "Bearer synthetic-customer-not-cron",
     cookie: "sb-synthetic-auth-token=synthetic-session", "content-type": "application/x-www-form-urlencoded" },
   ...(method === "POST" ? { body: "consent=synthetic" } : {}),
 });

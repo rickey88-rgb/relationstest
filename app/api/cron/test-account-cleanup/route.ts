@@ -1,4 +1,5 @@
 import { accountLaunchUnavailable, accountPortalEnabled } from "../../../_lib/accountLaunch.server";
+import { accountCleanupHandler } from "../../../_lib/accountCleanupContext.server";
 import { NextRequest } from "next/server";
 import { accountCronAuthorized, accountMaintenanceAuthorized } from "../../../_lib/accountCron.server";
 import { accountResponse, readAccountForm, sameAccountOrigin } from "../../../_lib/accountHttp.server";
@@ -6,8 +7,7 @@ import { cleanup, health, reconcile, eraseOwner } from "../../../_lib/testAccoun
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 300;
-export async function GET(request: NextRequest) {
-  if (!accountPortalEnabled()) return accountLaunchUnavailable();
+async function readOrRunCleanup(request: NextRequest) {
   if (!accountCronAuthorized(request)) return accountResponse({ error: "Unauthorized" }, 401);
   try {
     if (request.nextUrl.searchParams.get("health") === "true") {
@@ -16,6 +16,7 @@ export async function GET(request: NextRequest) {
     await cleanup(); return accountResponse({ ok: true }, 200);
   } catch { return accountResponse({ error: "Cleanup unavailable" }, 503); }
 }
+export const GET = accountCleanupHandler("tests", readOrRunCleanup);
 export async function POST(request: NextRequest) {
   if (!accountPortalEnabled()) return accountLaunchUnavailable();
   if (!accountMaintenanceAuthorized(request) || !sameAccountOrigin(request)) return accountResponse({ error: "Unauthorized" }, 401);

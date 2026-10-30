@@ -1,4 +1,4 @@
-import { accountLaunchUnavailable, accountPortalEnabled } from "../../../../_lib/accountLaunch.server";
+import { accountCleanupHandler } from "../../../../_lib/accountCleanupContext.server";
 import { NextRequest } from "next/server";
 import { accountCronAuthorized } from "../../../../_lib/accountCron.server";
 import { accountResponse } from "../../../../_lib/accountHttp.server";
@@ -10,13 +10,14 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 /** Read-only: an independent monitor must call this, never the deletion URL. */
-export async function GET(request: NextRequest) {
-  if (!accountPortalEnabled()) return accountLaunchUnavailable();
+async function readHealth(request: NextRequest) {
   if (!accountCronAuthorized(request)) return accountResponse({ error: "Unauthorized" }, 401);
   try {
-    if (accountStorageMode() !== "active" || !accountMonitoringConfigured()) throw new Error("Account maintenance not active");
+    if (!["active", "maintenance"].includes(accountStorageMode()) || !accountMonitoringConfigured()) throw new Error("Account maintenance not active");
     await assertErasureJournalAvailable();
     const health = await accountCleanupHealth();
     return accountResponse(health, health.healthy ? 200 : 503);
   } catch { return accountResponse({ healthy: false, error: "Cleanup health unavailable" }, 503); }
 }
+
+export const GET = accountCleanupHandler("audhd", readHealth);
