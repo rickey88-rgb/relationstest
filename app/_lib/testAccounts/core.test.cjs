@@ -19,7 +19,8 @@ for (const [name, expected] of Object.entries({
   "copy.ts": "d13531b0b1fbb934eff813bfb145b89c2e0acc29e56ec11e97f161070f739e2f",
 })) assert.equal(createHash("sha256").update(fs.readFileSync(path.join(__dirname, "../../adhd-test/test", name), "utf8").replace(/\r\n/g, "\n")).digest("hex"), expected, `Versioned ADHD material changed: ${name}`);
 process.env.TEST_ACCOUNTS_ENCRYPTION_KEY = randomBytes(32).toString("base64url");
-assert.throws(() => adapter("audhd_test"), /Unsupported/);
+assert.equal(adapter("audhd_test").amount, 7900);
+assert.throws(() => adapter("unregistered_test"), /Unsupported/);
 assert.deepEqual(flags("adhd_test"), { checkout: false, save: false, read: false, legacyImport: false });
 assert.throws(() => assertFlag("adhd_test", "checkout"));
 process.env.TEST_ACCOUNTS_ADHD_SAVE_ENABLED = "true";

@@ -44,4 +44,5 @@ for (const slug of ["hsp", "angest", "ptsd"]) {
   delete process.env[`${a.flagPrefix}_SAVE_ENABLED`];
   console.log(`PASS: ${slug}: ${samples.length} exact score + frozen-original + portal report comparisons; schema/version, independent flags and unchanged legacy checkout.`);
 }
-assert.throws(() => registry.adapterForSlug("audhd"));
+assert.equal(registry.adapterForSlug("audhd").product, "audhd_test");
+assert.throws(() => registry.adapterForSlug("unregistered"));

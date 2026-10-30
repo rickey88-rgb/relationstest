@@ -1,4 +1,9 @@
 # Logs
+# Generated from canonical sources; run build-customer-edge.cjs before local serve/deploy.
+/supabase/functions/customer-tests/_generated/
+/supabase/functions/customer-tests/source-manifest.json
+/supabase/functions/customer-tests/node_modules/
+/supabase/functions/customer-tests/_fixtures.json
 logs
 *.log
 npm-debug.log*

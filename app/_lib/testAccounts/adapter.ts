@@ -1,5 +1,6 @@
 import { iq } from "./adapters/iq";
-import { accountPortalEnabled } from "../accountLaunch.server";
+import { accountPortalEnabled } from "../accountGate.server";
+import { audhd } from "./adapters/audhd";
 import { partner } from "./adapters/partner";
 import { traumaBond } from "./adapters/traumaBond";
 import { psychologicalAbuse } from "./adapters/psychologicalAbuse";
@@ -33,7 +34,7 @@ const adhd: Adapter<Result> = {
     return [...value.answers];
   }, calculate,
 };
-const adapters = { iq_test: iq, adhd_test: adhd, hsp_test: hsp, angest_test: angest, ptsd_test: ptsd, narcissism_selftest: narcissism, screening_test: screening, autism_test: autism, attachment_test: attachment, codependency_test: codependency, gaslighting_test: gaslighting, narcissist_partner: partner, trauma_bond_test: traumaBond, psychological_abuse_test: psychologicalAbuse };
+const adapters = { audhd_test: audhd, iq_test: iq, adhd_test: adhd, hsp_test: hsp, angest_test: angest, ptsd_test: ptsd, narcissism_selftest: narcissism, screening_test: screening, autism_test: autism, attachment_test: attachment, codependency_test: codependency, gaslighting_test: gaslighting, narcissist_partner: partner, trauma_bond_test: traumaBond, psychological_abuse_test: psychologicalAbuse };
 export function adapter(product: string): Adapter {
   if (!Object.hasOwn(adapters, product)) throw new Error("Unsupported test");
   return adapters[product as keyof typeof adapters];

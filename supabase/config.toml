@@ -1,0 +1,6 @@
+project_id = "relationsvarning-local"
+
+[functions.customer-tests]
+# Checkout is anonymous. Customer operations verify tokens with Auth in the handler.
+# No sensitive route trusts the gateway flag or a client-supplied user ID.
+verify_jwt = false

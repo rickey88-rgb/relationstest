@@ -1,9 +1,10 @@
 import postgres from "postgres";
 import { accountDatabaseTls } from "../accountDatabaseTls.server";
-import { assertAccountDatabaseAccess } from "../accountCleanupContext.server";
+import { assertAccountDatabaseAccess } from "../accountCleanupScope.server";
 import { randomUUID } from "node:crypto";
 import { adapter, consentVersion } from "./adapter";
 import { context, seal, secretHash } from "./crypto.server";
+import { guestProcessingConsentVersion } from "./consent";
 import { accountErasureIdentity, assertAccountStorageActive, assertErasureJournalAvailable, writeAnalysisErasure } from "../accountErasureJournal.server";
 
 const globals = globalThis as typeof globalThis & { testAccountsSql?: ReturnType<typeof postgres> };
@@ -23,14 +24,16 @@ export type Attempt = { id: string; analysis_id: string; product: string; questi
 export type Owned = { id: string; product: string; session_id: string; price_id: string; live_mode: boolean;
   generation_id: string; journal_identity: string; question_version: string; report_version: string; ciphertext: string; expires_at: Date };
 export const validId = (id: string) => /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id);
-export async function createAttempt(product: string, input: unknown, browserSecret: string, price: string) {
+export async function createAttempt(product: string, input: unknown, browserSecret: string, price: string, guestConsent?: string) {
   assertAccountStorageActive();
   if (process.env.TEST_ACCOUNTS_STORAGE_MODE !== "active") throw new Error("Test accounts unavailable");
   const model = adapter(product), answers = model.parse(input);
   await assertErasureJournalAvailable();
   const id = randomUUID(), generation = randomUUID();
   const row = { product, question_version: model.questionVersion, report_version: model.reportVersion };
-  const ciphertext = seal({ answers, questionVersion: model.questionVersion, reportVersion: model.reportVersion }, context(row, id));
+  if (guestConsent !== undefined && guestConsent !== guestProcessingConsentVersion) throw new Error("Explicit processing consent required");
+  const ciphertext = seal({ answers, questionVersion: model.questionVersion, reportVersion: model.reportVersion,
+    ...(guestConsent ? { guestConsent: { version: guestConsent, acceptedAt: new Date().toISOString() } } : {}) }, context(row, id));
   await db().begin(async tx => {
     // Anonymous endpoint: bound storage/Stripe resource use without storing IPs or answers in a rate-limit log.
     await tx`select pg_advisory_xact_lock(20261026)`;

@@ -4,6 +4,7 @@ import { verifyPayment } from "./payment.server";
 import * as store from "./store.server";
 import { accountErasureIdentity, assertAccountStorageActive, readAnalysisErasure } from "../accountErasureJournal.server";
 import type { Result as AdhdResult } from "../../adhd-test/test/model";
+import { guestProcessingConsentVersion } from "./consent";
 
 export function active() {
   assertAccountStorageActive();
@@ -16,7 +17,9 @@ function payload(row: { product: string; question_version: string; report_versio
   const model = adapter(row.product);
   if (model.questionVersion !== row.question_version || model.reportVersion !== row.report_version) throw new Error("Unsupported report version");
   const data = unseal(row.ciphertext, context(row, id, owner, purchase));
-  const answers = model.parse(data);
+  const stored = data as { guestConsent?: { version: string; acceptedAt: string }; answers: unknown; questionVersion: unknown; reportVersion: unknown };
+  if (stored.guestConsent && (stored.guestConsent.version !== guestProcessingConsentVersion || !Number.isFinite(Date.parse(stored.guestConsent.acceptedAt)))) throw new Error("Consent unavailable");
+  const answers = model.parse(stored.guestConsent ? { answers: stored.answers, questionVersion: stored.questionVersion, reportVersion: stored.reportVersion } : data);
   return { data, result: model.calculate(answers) };
 }
 export async function guest(id: string, secret: string) {
@@ -55,6 +58,10 @@ export async function open(id: string, owner: string) {
   return await openForProduct(id, owner, "adhd_test") as AdhdResult;
 }
 export async function openForProduct(id: string, owner: string, expectedProduct: string) {
+  return (await openEntryForProduct(id, owner, expectedProduct)).result;
+}
+/** Answers and report share the exact same ownership/payment/journal checks. */
+export async function openEntryForProduct(id: string, owner: string, expectedProduct: string) {
   active();
   const row = await store.owned(id, owner); // owner predicate BEFORE Stripe, journal or decryption
   if (!row || row.product !== expectedProduct) throw new Error("Analysis unavailable");
@@ -68,7 +75,7 @@ export async function openForProduct(id: string, owner: string, expectedProduct:
   const current = await store.owned(id, owner);
   if (!current || current.generation_id !== row.generation_id || current.ciphertext !== row.ciphertext) throw new Error("Analysis changed");
   await notErased(row.generation_id, row.journal_identity);
-  return payload(row, row.generation_id, owner, row.id).result;
+  return { row: current, ...payload(row, row.generation_id, owner, row.id) };
 }
 export async function remove(id: string, owner: string) {
   active(); // Remains available when new saving/reading is disabled.

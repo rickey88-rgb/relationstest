@@ -4,12 +4,15 @@ import { NextRequest } from "next/server";
 import { accountCronAuthorized, accountMaintenanceAuthorized } from "../../../_lib/accountCron.server";
 import { accountResponse, readAccountForm, sameAccountOrigin } from "../../../_lib/accountHttp.server";
 import { cleanup, health, reconcile, eraseOwner } from "../../../_lib/testAccounts/operations.server";
+import { forwardDirectCleanup } from "../../../_lib/testAccounts/directCleanup.server";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 300;
 async function readOrRunCleanup(request: NextRequest) {
   if (!accountCronAuthorized(request)) return accountResponse({ error: "Unauthorized" }, 401);
   try {
+    const forwarded = await forwardDirectCleanup(request.nextUrl.searchParams.get("health") === "true");
+    if (forwarded) return accountResponse(forwarded, 200);
     if (request.nextUrl.searchParams.get("health") === "true") {
       const healthy = await health(); return accountResponse({ healthy }, healthy ? 200 : 503);
     }

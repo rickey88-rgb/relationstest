@@ -8,6 +8,8 @@ import { accountStorageReady, listAccountPurchases, type AccountPurchaseSummary 
 import styles from "./page.module.css";
 import { redirect } from "next/navigation";
 import TestAccountEntry from "./TestAccountEntry";
+import DirectAccountPortal from "./DirectAccountPortal";
+import { directPortalEnabled } from "../_lib/testAccounts/directPublic";
 
 export const metadata: Metadata = {
   title: "Mina sidor | Relationsvarning",
@@ -34,6 +36,7 @@ const purchaseStatus: Record<AccountPurchaseSummary["status"], string> = {
 const date = (value: Date) => value.toLocaleDateString("sv-SE", { timeZone: "Europe/Stockholm" });
 
 export default async function MyPages({ searchParams }: { searchParams: Promise<{ status?: string }> }) {
+  if (directPortalEnabled()) return <DirectAccountPortal />;
   let user = null;
   try {
     user = await authenticatedUser();

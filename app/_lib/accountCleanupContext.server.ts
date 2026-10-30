@@ -1,16 +1,9 @@
-import { AsyncLocalStorage } from "node:async_hooks";
 import type { NextRequest, NextResponse } from "next/server";
 import { accountCronAuthorized } from "./accountCron.server";
 import { accountLaunchUnavailable, accountPortalEnabled } from "./accountLaunch.server";
 
-type CleanupJob = "audhd" | "tests";
-const cleanupContext = new AsyncLocalStorage<CleanupJob>();
-const enabledMode = (mode: string | undefined) => mode === "maintenance" || mode === "active";
-
-function jobEnabled(job: CleanupJob) {
-  return enabledMode(process.env.ACCOUNT_STORAGE_MODE)
-    && (job === "audhd" || enabledMode(process.env.TEST_ACCOUNTS_STORAGE_MODE));
-}
+import { jobEnabled, runCleanupScope, type CleanupJob } from "./accountCleanupScope.server";
+export { hasCleanupContext, assertAccountDatabaseAccess } from "./accountCleanupScope.server";
 
 /** Exact GET-only scheduler routes. Customer/admin POST paths never gain an exception. */
 export function authorizedCleanupJob(request: NextRequest): CleanupJob | null {
@@ -21,19 +14,10 @@ export function authorizedCleanupJob(request: NextRequest): CleanupJob | null {
   return job && jobEnabled(job) && accountCronAuthorized(request) ? job : null;
 }
 
-export function hasCleanupContext(job: CleanupJob) {
-  return cleanupContext.getStore() === job && jobEnabled(job);
-}
-
-/** A maintenance setting alone must never grant a database exception. */
-export function assertAccountDatabaseAccess(job: CleanupJob) {
-  if (!accountPortalEnabled() && !hasCleanupContext(job)) throw new Error("Account portal unavailable");
-}
-
 /** The original handler retains its own Auth check and redacted error handling. */
 export function accountCleanupHandler(job: CleanupJob, handler: (request: NextRequest) => Promise<NextResponse>) {
   return (request: NextRequest): Promise<NextResponse> => {
-    if (authorizedCleanupJob(request) === job) return cleanupContext.run(job, () => handler(request));
+    if (authorizedCleanupJob(request) === job) return runCleanupScope(job, () => handler(request));
     // Preserve the existing active-portal handler behavior. Closed customer
     // traffic has no database exception, even if maintenance is configured.
     if (accountPortalEnabled()) return handler(request);

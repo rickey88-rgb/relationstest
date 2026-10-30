@@ -1,6 +1,6 @@
 import { createHash, createHmac, timingSafeEqual } from "node:crypto";
 import { GetObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
-import { assertAccountPortalEnabled } from "./accountLaunch.server";
+import { assertAccountPortalEnabled } from "./accountGate.server";
 
 export type ErasureReason = "user_deleted" | "expired" | "revoked";
 type Receipt = { v: 1; registryId: string; generationHash: string; reason: ErasureReason; deletedAt: string };

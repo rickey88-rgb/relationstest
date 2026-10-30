@@ -1,7 +1,7 @@
 import { db, erase } from "./store.server";
 import { active, notErased } from "./service.server";
 import { assertErasureJournalAvailable } from "../accountErasureJournal.server";
-import { hasCleanupContext } from "../accountCleanupContext.server";
+import { hasCleanupContext } from "../accountCleanupScope.server";
 
 export function monitorUrl() {
   const value = process.env.TEST_ACCOUNTS_HEALTHCHECKS_URL ?? "";

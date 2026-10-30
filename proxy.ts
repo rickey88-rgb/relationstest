@@ -3,6 +3,7 @@ import { ACCOUNT_PATH, loginUrl } from "./app/_lib/authConfig.server";
 import { copyResponseCookies, refreshAuthSession } from "./app/_lib/authSession.server";
 import { accountLaunchUnavailable, accountPortalEnabled, isAccountLaunchPath } from "./app/_lib/accountLaunch.server";
 import { authorizedCleanupJob } from "./app/_lib/accountCleanupContext.server";
+import { directPortalEnabled } from "./app/_lib/testAccounts/directPublic";
 
 // Next's configured redirects are case-insensitive. These exact request paths
 // therefore live here so a misspelled URL cannot catch the real landing page.
@@ -53,6 +54,10 @@ export function proxy(request: NextRequest) {
     return NextResponse.redirect(url, 308);
   }
 
+  // Only the generic direct-client shell is public. Old SSR/API routes retain their gate.
+  if (pathname === "/mina-sidor" && directPortalEnabled()) return NextResponse.next();
+  if (directPortalEnabled() && pathname === "/logga-in" && request.method === "GET") return NextResponse.redirect(new URL("/mina-sidor", request.nextUrl.origin), 303);
+  if (directPortalEnabled() && isAccountLaunchPath(pathname) && !authorizedCleanupJob(request)) return accountLaunchUnavailable();
   // Fail closed before Auth/session refresh, rendering or server actions.
   if (!accountPortalEnabled() && isAccountLaunchPath(pathname) && !authorizedCleanupJob(request)) return accountLaunchUnavailable();
 

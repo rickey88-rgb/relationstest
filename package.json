@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "build:customer-edge": "node scripts/build-customer-edge.cjs",
     "test:account": "node scripts/test-account-phase2.cjs",
     "dev": "next dev",
     "build": "next build",

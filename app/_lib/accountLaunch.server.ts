@@ -1,13 +1,7 @@
 import { NextResponse } from "next/server";
 
 /** Server-only rollout gate, independent of storage modes and per-product flags. */
-export function accountPortalEnabled() {
-  return process.env.ACCOUNT_PORTAL_ENABLED === "true";
-}
-
-export function assertAccountPortalEnabled() {
-  if (!accountPortalEnabled()) throw new Error("Account portal unavailable");
-}
+export { accountPortalEnabled, assertAccountPortalEnabled } from "./accountGate.server";
 
 /** Existing guest payments/recovery/books and logout deliberately remain available. */
 export function isAccountLaunchPath(pathname: string) {
