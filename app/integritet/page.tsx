@@ -8,6 +8,9 @@ export const metadata: Metadata = {
   },
 };
 
+const controllerName = "Rickey Hammarstedt";
+const controllerAddress = "villavägen 17";
+
 export default function IntegritetPage() {
   return (
     <main
@@ -40,19 +43,23 @@ export default function IntegritetPage() {
         <li><b>Frivilligt konto:</b> Supabase hanterar din inloggning via mejllänk. Köp som du själv kopplar till kontot sparas separat från analysens underlag.</li>
       </ul>
 
-      <h2 style={{ marginTop: 22, fontSize: 18 }}>2. Lagring av testsvar</h2>
-      <p style={{ opacity: 0.9 }}>
-        I nuvarande version sparas dina testsvar främst <b>lokalt i din webbläsare</b>{" "}
-        för funktionalitet (t.ex. om sidan laddas om). AuDHD använder också krypterad
-        serverlagring med sju dagars giltighet för det ursprungliga köp- och återställningsflödet.
-      </p>
-      <h3 style={{ marginTop: 18, fontSize: 16 }}>Sparad AuDHD-analys på Mina sidor</h3>
-      <p style={{ opacity: 0.9 }}>Om du aktivt väljer att spara analysen på ditt konto lagras en separat, krypterad kopia av dess underlag i Supabase. Underlaget kan innehålla känsliga uppgifter om din hälsa. Vi använder det för att du ska kunna öppna din betalda analys igen, även från en annan enhet. Du behöver inte spara analysen på ett konto för att köpa eller använda resultatet.</p>
-      <p style={{ opacity: 0.9 }}>Den exakta sista tillgänglighetsdagen visas på Mina sidor. Åtkomsten upphör senast tio dagar före tolv månader från sparningen. Kontokopian rensas därefter ur den aktiva databasen. Marginalen är avsedd för daglig rensning, hantering av driftfel och sju dagars säkerhetskopiering.</p>
-      <p style={{ opacity: 0.9 }}>Du kan radera kontots sparade analys tidigare från Mina sidor. Köpposten finns då kvar utan testsvar, poäng eller profil. Kontots kopia, den ursprungliga gästlagringen och webbläsarens lokala data har separata giltighets- och raderingsflöden. Kontakta oss om du vill få hjälp att radera alla återstående kopior eller ditt konto.</p>
-      <p style={{ opacity: 0.9 }}>Radering från den aktiva databasen innebär inte att tidigare säkerhetskopior omedelbart skrivs om. Kopior kan finnas kvar tills säkerhetskopiornas lagringstid löper ut. Innan en återställd säkerhetskopia används i tjänsten behöver tidigare raderingsbegäranden och utgångna lagringstider tillämpas igen. Kontakta oss för information om den aktuella backuphanteringen.</p>
-      <p style={{ opacity: 0.9 }}>För att en raderad analys inte ska visas efter återställning sparas ett separat raderingskvitto utan testsvar eller mejladress. Kvittot innehåller en skyddad identifierare och tidpunkt. Det hanteras separat från analysens underlag.</p>
+      <h2 style={{ marginTop: 22, fontSize: 18 }}>2. Testsvar, analyser och Mina sidor</h2>
+      <p style={{ opacity: 0.9 }}>För nya köp i Mina sidors testflöde behandlas testsvar och analyser direkt i Supabase. Svaren lagras krypterat med testets och rapportens version så att samma resultat kan återskapas. Uppgifterna kan röra din hälsa. Köp- och betalningsreferenser hanteras separat från testsvar och rapporter. Alla våra 15 betaltester omfattas. Ingen PLUS-prenumeration krävs för att se köpta resultat.</p>
+      <p style={{ opacity: 0.9 }}>Du kan genomföra testet och köpa resultatet utan konto. För den tillfälliga gästleveransen ber vi om ditt uttryckliga samtycke till behandlingen. Gäståtkomsten gäller högst sju dagar. Därefter spärras åtkomsten och underlaget gallras dagligen. Säkerhetskopior kan finnas kvar under en begränsad tid efter gallringen.</p>
+      <h3 style={{ marginTop: 18, fontSize: 16 }}>Frivillig kontosparning i högst tolv månader</h3>
+      <p style={{ opacity: 0.9 }}>Efter köpet kan du separat och frivilligt samtycka till att spara alla dina testsvar och din fullständiga analys på ditt konto. Resultaten finns kvar när du loggar ut. Ett aktivt konto förlänger inte lagringstiden: kontoåtkomsten upphör senast tio dagar före tolv månader från sparningen. Den sista dagen visas på Mina sidor. Marginalen används för daglig gallring och sju dagars säkerhetskopiering.</p>
+      <p style={{ opacity: 0.9 }}>Du kan radera en sparad analys och återkalla lagringssamtycket på Mina sidor. Då tas även dess kvarvarande gästkopia bort. Köp- och betalningsuppgifter innehåller inga svar eller rapporter och raderas inte automatiskt tillsammans med analysen. Kontakta support@relationsvarning.se för hjälp med konto, kvarvarande kopior eller andra dataskyddsrättigheter. Återkallandet påverkar inte lagligheten av tidigare behandling.</p>
+      <h3 style={{ marginTop: 18, fontSize: 16 }}>Samtyckesbevis, köphistorik och säkerhetskopior</h3>
+      <p style={{ opacity: 0.9 }}>Vi dokumenterar samtyckets version och tidpunkt tillsammans med det underlag som samtycket gäller. Uppgifterna sparas bara så länge motsvarande underlag finns kvar: gästunderlag enligt sjudagarsflödet och kontosparat underlag i högst tolv månader. När underlaget raderas tas även dessa samtyckesuppgifter bort. Vi sparar ingen separat långvarig kopia av samtyckesbeviset efter raderingen.</p>
+      <p style={{ opacity: 0.9 }}>Köphistorik sparas endast så länge den behövs för kundservice, köpverifiering eller rättsliga skyldigheter. Behovet prövas vid konto- och raderingsärenden samt vid en årlig manuell genomgång. Uppgifter som inte längre behövs tas bort. Eventuellt bokföringsunderlag hålls separat och följer tillämpliga lagkrav. Analysens tidsgräns innebär inte automatisk radering av köphistorik.</p>
+      <p style={{ opacity: 0.9 }}>Raderade analyser kan finnas kvar tills skyddade säkerhetskopior löper ut. En separat privat raderingsjournal hindrar att de åter visas efter återställning. Journalen innehåller en skyddad teknisk referens och raderingstid, inga testsvar eller mejladresser. Raderingskvitton skyddas i 400 dagar. Journalen har detta särskilda återställningsändamål och är inte ett samtyckesregister.</p>
+      <p style={{ opacity: 0.9 }}>Äldre köp och återställningslänkar behåller sina befintliga flöden och importeras inte till Mina sidor. I äldre tester kan svar finnas lokalt i webbläsaren; äldre AuDHD-flöden använder också krypterad serverlagring med sju dagars giltighet. Kontakta oss om du behöver hjälp med dessa uppgifter.</p>
+      <h3 style={{ marginTop: 18, fontSize: 16 }}>Varför uppgifterna behandlas och av vilka</h3>
+      <p style={{ opacity: 0.9 }}>Nödvändig köp- och kontoadministration behandlas för att fullgöra avtalet med dig. Behandling av testsvar och analyser bygger på ditt samtycke, och på ditt uttryckliga samtycke när uppgifterna rör hälsa. Gästleverans och frivillig kontosparning är separata val. Eventuella uppgifter som måste bevaras enligt lag behandlas för den rättsliga skyldigheten.</p>
+      <p style={{ opacity: 0.9 }}>Supabase hanterar konto, databas och känslig analysbehandling; Stripe betalningar; Resend inloggningsmejl; Cloudflare R2 raderingsjournalen. Vercel levererar webbplatsen och befintliga äldre flöden. Healthchecks får tomma driftpingar. I det nya testflödet skickas testsvar, rapporter och inloggningstoken direkt mellan webbläsaren och Supabase. Leverantörer kan använda underleverantörer och behandling utanför EU/EES kan förekomma. Kontakta oss för information om tillämpliga biträdesavtal och överföringsskydd.</p>
       <p style={{ opacity: 0.9 }}>Testsvar och sparade analyser används inte för reklam eller statistik. Mina sidor och inloggningsflödet är undantagna från vår Google Analytics-mätning.</p>
+      <h3 style={{ marginTop: 18, fontSize: 16 }}>Dina rättigheter</h3>
+      <p style={{ opacity: 0.9 }}>Du kan begära tillgång till dina uppgifter, rättelse, radering, begränsning och, där det är tillämpligt, dataportabilitet eller invända mot behandling. Du kan återkalla samtycke när som helst. Skriv till support@relationsvarning.se. Vi kan behöva kontrollera din identitet för att skydda dina uppgifter. Du kan också lämna klagomål till Integritetsskyddsmyndigheten, IMY.</p>
 
       <h2 style={{ marginTop: 22, fontSize: 18 }}>3. Cookies och lokal lagring</h2>
       <p style={{ opacity: 0.9 }}>
@@ -80,7 +87,8 @@ export default function IntegritetPage() {
         egna villkor och integritetspolicy.
       </p>
 
-      <h2 style={{ marginTop: 22, fontSize: 18 }}>5. Kontakt</h2>
+      <h2 style={{ marginTop: 22, fontSize: 18 }}>5. Personuppgiftsansvarig och kontakt</h2>
+      <p style={{ opacity: 0.9 }}>Personuppgiftsansvarig: {controllerName}. Kontaktadress: {controllerAddress}.</p>
       <p style={{ opacity: 0.9 }}>
         Frågor om integritet:{" "}
         <a href="mailto:support@relationsvarning.se">support@relationsvarning.se</a>
@@ -93,7 +101,7 @@ export default function IntegritetPage() {
       </nav>
 
       <p style={{ marginTop: 26, fontSize: 12, opacity: 0.7 }}>
-        Senast uppdaterad: {new Date().toISOString().slice(0, 10)}
+        Senast uppdaterad: 2026-10-30
       </p>
     </main>
   );
