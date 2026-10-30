@@ -57,6 +57,8 @@ Checkout nekar nya köp om den befintliga hälsokontrollen för gallring/monitor
 
 Supabase URL och Auth-nycklarna som plattformen ger Edge finns redan som SUPABASE_URL/SUPABASE_ANON_KEY och ska inte återskapas som reserverade hemlighetsnamn. Den hemliga nyckeln till krypteringen och externa journalcredentials får aldrig hamna i Git, rapporter eller klientkod.
 
+Edge-starten återanvänder plattformens SUPABASE_DB_URL om ingen separat DATABASE_URL har angetts. Den gemensamma klientens CA-, certifikat- och värdnamnskontroll är fortfarande obligatorisk; det riktiga anslutningsprovet återstår tills den behöriga hälsoanropningen kan köras med befintlig cronhemlighet. Vid ett certifikatfel ska rätt verifierad anslutning konfigureras, aldrig svagare TLS.
+
 ## Integritet – förslag inför godkännande, inte publicerad policy
 
 Skilj mellan nödvändig administration av ett engångsköp och känsliga svar/analyser. Föreslagen grund för köpadministration är avtal; uttryckligt samtycke föreslås för hälsorelaterad analysbehandling och separat frivillig kontolagring. Rättslig grund/undantag för respektive behandling måste slutligt beslutas, inte förutsättas löst av kryptering.

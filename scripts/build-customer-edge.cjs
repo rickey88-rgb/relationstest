@@ -27,6 +27,15 @@ function emit(file) {
   const js = ts.transpileModule(source.toString("utf8"), { compilerOptions: { module: ts.ModuleKind.ES2022, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.ReactJSX } }).outputText;
   const result = ts.transform(ts.createSourceFile(file + ".js", js, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS), [context => source => {
     function visit(node) {
+      if (ts.isCallExpression(node) && node.expression.kind === ts.SyntaxKind.ImportKeyword) {
+        const argument = node.arguments[0];
+        if (!argument || !ts.isStringLiteral(argument)) throw new Error("Non-literal dynamic import entered Edge core");
+        const name = argument.text;
+        let specifier;
+        if (name.startsWith(".")) { specifier = path.relative(path.dirname(dest), emit(resolve(file, name))).replaceAll("\\", "/"); if (!specifier.startsWith(".")) specifier = "./" + specifier; }
+        else specifier = packageSpecifier(name);
+        return ts.factory.updateCallExpression(node, node.expression, node.typeArguments, [ts.factory.createStringLiteral(specifier), ...node.arguments.slice(1)]);
+      }
       if ((ts.isImportDeclaration(node) || ts.isExportDeclaration(node)) && node.moduleSpecifier) {
         const name = node.moduleSpecifier.text;
         let specifier;
