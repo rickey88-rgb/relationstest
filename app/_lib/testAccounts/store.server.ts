@@ -11,7 +11,7 @@ const globals = globalThis as typeof globalThis & { testAccountsSql?: ReturnType
 export function db() {
   assertAccountDatabaseAccess("tests");
   if (!globals.testAccountsSql) {
-    const url = process.env.DATABASE_URL?.trim();
+    const url = (process.env.DATABASE_URL ?? process.env.SUPABASE_DB_URL)?.trim();
     if (!url) throw new Error("Test storage unavailable");
     globals.testAccountsSql = postgres(url, { max: 1, prepare: false, idle_timeout: 20, connect_timeout: 10,
       ssl: accountDatabaseTls(), connection: { statement_timeout: 20000, lock_timeout: 5000 } });
