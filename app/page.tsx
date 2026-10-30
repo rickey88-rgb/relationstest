@@ -1,4 +1,3 @@
-import Brand from "./_components/Brand";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -127,17 +126,6 @@ export default function Landing() {
   return (
     <main className={styles.home}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData).replace(/</g, "\\u003c") }} />
-      <header className={styles.header}>
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-          <Brand className={styles.brand} markClassName={styles.brandMark} />
-          <div className="flex items-center gap-3 text-xs text-neutral-600">
-            <span className="inline-flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-neutral-900" />Anonymt</span>
-            <span className="hidden sm:inline">•</span><span className="hidden sm:inline">Ingen registrering</span>
-            <span className="hidden sm:inline">•</span><span className="hidden sm:inline">Direkt resultat</span>
-          </div>
-        </div>
-      </header>
-
       <section className={styles.hero} aria-labelledby="home-heading">
         <div className={styles.heroGrid}>
           <div className={styles.heroCopy}>

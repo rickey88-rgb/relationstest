@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Analytics from "./_analytics/AnalyticsProvider";
 import SiteFooter from "./_components/SiteFooter";
+import SiteHeader from "./_components/SiteHeader";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.relationsvarning.se"),
@@ -34,6 +35,7 @@ export default function RootLayout({
     <html lang="sv">
       <body className="antialiased">
         <Analytics />
+        <SiteHeader />
         {children}
         <SiteFooter />
       </body>

@@ -1,5 +1,4 @@
 import EditorialSurface from "../_components/EditorialSurface";
-import Brand from "../_components/Brand";
 import Link from "next/link";
 import type { Metadata } from "next";
 
@@ -15,23 +14,6 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <EditorialSurface><main className="min-h-screen bg-white text-neutral-900">
-      {/* Topbar */}
-      <header data-rv="site-header" className="border-b border-neutral-200/70">
-        <div data-rv="wide-container" className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-          <Link href="/" className="text-sm font-semibold tracking-tight">
-            <Brand />
-          </Link>
-          <div className="hidden sm:flex items-center gap-3 text-xs text-neutral-600">
-            <span className="inline-flex items-center gap-2">
-              <span data-rv="dot" className="h-1.5 w-1.5 rounded-full bg-neutral-900" />
-              Resurs
-            </span>
-            <span>•</span>
-            <span>Varningssignaler</span>
-          </div>
-        </div>
-      </header>
-
       {/* Content */}
       <article data-rv="wide-container" className="mx-auto max-w-5xl px-6 py-10 sm:py-14">
         <div className="grid gap-10 lg:grid-cols-12 lg:gap-12">
