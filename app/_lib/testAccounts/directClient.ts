@@ -47,6 +47,11 @@ function restoredSecrets(): Record<string, string> {
   } catch { return {}; }
 }
 export type GuestRestore = PendingPurchase & { secret: string };
+export function readGuestRecovery(hash: string): string | null {
+  if(!hash.startsWith("#recover?"))return null;
+  const params=new URLSearchParams(hash.slice(9)),token=params.get("token");
+  return params.size===1&&token&&/^[A-Za-z0-9_-]{43}$/.test(token)?token:null;
+}
 export function readGuestRestore(hash: string): GuestRestore | null {
   if (!hash.startsWith("#restore?")) return null;
   const params = new URLSearchParams(hash.slice(9)), id = params.get("id"), product = params.get("product"), secret = params.get("secret");

@@ -1,4 +1,5 @@
 import type Stripe from "stripe";
+import { guestRecoveryEnabled, indexGuestRecovery } from "./guestRecovery.server";
 type ObjectReference = string | { id: string } | null | undefined;
 type WebhookObject = { metadata?: Record<string, string> | null; client_reference_id?: string | null; payment_intent?: ObjectReference; charge?: ObjectReference };
 const idOf = (value: ObjectReference) => typeof value === "string" ? value : value?.id;
@@ -34,7 +35,13 @@ export async function directStripeWebhook(request: Request, stripe: Stripe, rela
       }
       if (intentId) isDirect = direct(await stripe.paymentIntents.retrieve(intentId));
     }
-    if (isDirect) return respond(true, 200); // guest/save/open independently verify Stripe and refunds
+    if (isDirect) {
+      if (guestRecoveryEnabled() && ["checkout.session.completed","checkout.session.async_payment_succeeded"].includes(event.type)) {
+        const session = event.data.object as Stripe.Checkout.Session;
+        if (session.payment_status === "paid") await indexGuestRecovery(session.id);
+      }
+      return respond(true, 200); // guest/save/open independently verify Stripe and refunds
+    }
     if (!["checkout.session.", "payment_intent.", "charge."].some(prefix => event.type.startsWith(prefix))) return respond(true, 200);
     const result = await relay("https://www.relationsvarning.se/api/stripe/webhook", {
       method: "POST", headers: { "Content-Type": "application/json", "stripe-signature": signature },

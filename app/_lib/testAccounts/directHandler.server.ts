@@ -10,6 +10,7 @@ import { describeAnswers } from "./answerDescriptions";
 import { directIdentity } from "./directAuth.server";
 import { guestProcessingConsentVersion } from "./consent";
 import { directStripeWebhook } from "./directWebhook.server";
+import { guestRecoveryEnabled, requestGuestRecovery, redeemGuestRecovery } from "./guestRecovery.server";
 
 const defaults = { adapter, registeredAdapters, flags, paymentConfig, stripeClient, store, service, cleanup, health, describeAnswers, directIdentity };
 const neutral = { error: "Åtgärden kunde inte genomföras. Försök igen från Mina sidor." };
@@ -68,7 +69,14 @@ export function directCustomerHandler(overrides: Partial<typeof defaults> = {}) 
       if (action === "capabilities") return respond({ tests: d.registeredAdapters().map(model => ({
         product: model.product, slug: model.slug, title: model.title, questionVersion: model.questionVersion, reportVersion: model.reportVersion,
         checkout: d.flags(model.product).checkout && d.flags(model.product).save && d.flags(model.product).read,
-      })), consentVersion });
+      })), consentVersion, guestRecovery: guestRecoveryEnabled() });
+      if (action === "recovery-request") {
+        if (!guestRecoveryEnabled()) return respond(neutral, 503);
+        try { await requestGuestRecovery(body.email); }
+        catch { console.error(JSON.stringify({event:"guest_recovery_request_failed"})); }
+        return respond({ requested: true }, 202); // Identical for unknown, expired, owned, throttled and matching email.
+      }
+      if (action === "recovery-redeem") return respond(await redeemGuestRecovery(body.token));
       if (!["checkout", "guest", "save", "list", "open", "delete"].includes(String(action))) return respond(neutral, 404);
       // Non-guest actions verify Auth BEFORE looking at IDs, data or purchase ownership.
       const identity = action === "checkout" || action === "guest" ? null : await d.directIdentity(request.headers.get("authorization"));

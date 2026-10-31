@@ -8,7 +8,7 @@ const session=user=>({user:{id:user,email:user+'@example.invalid'}});
 function fixture(product){const model=models.find(m=>m.product===product);let answers;
  for(let n=1;n<=100;n++){try{const value=Array(n).fill(0);model.parse({answers:value,questionVersion:model.questionVersion,reportVersion:model.reportVersion});answers=value;break;}catch{}}
  assert(answers);return {product,title:model.title,result:model.calculate(answers),answers:describeAnswers(product,answers),expiresAt:'2026-11-06T12:00:00Z'};}
-function harness(product,{failGuest=false,hash='#attempt='+id,pending=true,loginError=false,noSession=false,blockedStorage=false,deferGuest=false}={}){
+function harness(product,{failGuest=false,hash='#attempt='+id,pending=true,loginError=false,noSession=false,blockedStorage=false,deferGuest=false,recoveryEnabled=false}={}){
  const slots=[],calls=[],cleanups=[];let cursor=0,effects=[],listener,tree,focused=0,scrolled=0,closed=false;
  const item={id,product},entry=fixture(product),list=[{id,product,purchased_at:'2026-10-31',expires_at:entry.expiresAt}],events=new Map();
  let completeGuest;const guestReady=deferGuest?new Promise(resolve=>{completeGuest=resolve;}):Promise.resolve();
@@ -23,8 +23,10 @@ function harness(product,{failGuest=false,hash='#attempt='+id,pending=true,login
   verifyOtp:async body=>{calls.push({body:{action:'verifyOtp',...body}});assert.equal(body.type,'email');if(body.token){assert.equal(body.email,'synthetic@example.invalid');assert.equal(body.token,'123456');}if(loginError)return {error:{code:'otp_expired'},data:{session:null,user:null}};
    if(noSession)return {error:null,data:{session:null,user:null}};const value=session('account-a');listener('SIGNED_IN',value);return {error:null,data:{session:value,user:value.user}};}}};},
   pendingPurchase:()=>pending?item:null,pendingPurchases:()=>pending?[item]:[],forgetPending:()=>{},readLoginFragment:parseLogin,directLoginRedirect:()=>'/mina-sidor#login',
-  readGuestRestore:parseClient.readGuestRestore,restoreGuestPurchase:async restored=>{const value=await client.directRequest({action:'guest',id:restored.id,product:restored.product},{possession:true});pending=true;return value;},
-  directRequest:async(body,options)=>{calls.push({body,options});if(body.action==='capabilities')return {tests:models,consentVersion:'test-account-storage-v1'};
+  readGuestRecovery:parseClient.readGuestRecovery,readGuestRestore:parseClient.readGuestRestore,restoreGuestPurchase:async restored=>{const value=await client.directRequest({action:'guest',id:restored.id,product:restored.product},{possession:true});pending=true;return value;},
+  directRequest:async(body,options)=>{calls.push({body,options});if(body.action==='capabilities')return {tests:models,consentVersion:'test-account-storage-v1',guestRecovery:recoveryEnabled};
+   if(body.action==='recovery-redeem')return {...item,secret:'r'.repeat(43)};
+   if(body.action==='recovery-request')return {requested:true};
    if(body.action==='guest'){assert.deepEqual(options,{possession:true});await guestReady;if(failGuest)throw Error('Synthetic unpaid, refunded or unavailable');return entry;}
    if(body.action==='open'){assert.deepEqual(options,{authenticated:true});return entry;}
    if(body.action==='list')return {purchases:list};if(body.action==='save'){assert.equal(body.consent,'test-account-storage-v1');assert.deepEqual(options,{authenticated:true,possession:true});return {saved:true};}
@@ -43,6 +45,7 @@ function harness(product,{failGuest=false,hash='#attempt='+id,pending=true,login
   click:async label=>{const button=find(n=>n.type==='button'&&text(n.props.children)===label);assert(!button.props.disabled);button.props.onClick();return settle();},
   consent:value=>{find(n=>n.type==='input'&&n.props.type==='checkbox').props.onChange({target:{checked:value}});render();},
   sendCode:async()=>{find(n=>n.type==='input'&&n.props.type==='email').props.onChange({target:{value:'synthetic@example.invalid'}});render();find(n=>n.type==='form').props.onSubmit({preventDefault:()=>{}});return settle();},
+  requestRecovery:async()=>{let input;walk(find(n=>n.type==='form'&&text(n).includes('Hitta din köpta analys')),n=>{if(n.type==='input')input=n;});input.props.onChange({target:{value:'buyer@example.invalid'}});render();find(n=>n.type==='form'&&text(n).includes('Hitta din köpta analys')).props.onSubmit({preventDefault:()=>{}});return settle();},
   enterCode:value=>{find(n=>n.type==='input'&&n.props.autoComplete==='one-time-code').props.onChange({target:{value}});render();},
   submitCode:async()=>{find(n=>n.type==='form').props.onSubmit({preventDefault:()=>{}});return settle();},
   returnHash:(value,event='hashchange')=>{window.location.hash=value;events.get(event)?.();render();},resolveGuest:()=>completeGuest?.(),

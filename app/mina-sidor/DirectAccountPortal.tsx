@@ -4,7 +4,7 @@ import ReportView from "./tester/ReportView";
 import AudhdReport from "../audhd-test/test/ReportView";
 import type { Report as AudhdResult } from "../audhd-test/test/model";
 import type { AnswerDescription } from "../_lib/testAccounts/answerDescriptions";
-import { directAuthClient, directLoginRedirect, directRequest, forgetPending, pendingPurchase, pendingPurchases, readLoginFragment, readGuestRestore, restoreGuestPurchase, type PendingPurchase } from "../_lib/testAccounts/directClient";
+import { directAuthClient, directLoginRedirect, directRequest, forgetPending, pendingPurchase, pendingPurchases, readLoginFragment, readGuestRestore, readGuestRecovery, restoreGuestPurchase, type PendingPurchase } from "../_lib/testAccounts/directClient";
 
 type Purchase = { id: string; product: string; purchased_at: string; expires_at: string | null };
 type Entry = { product: string; title: string; result: unknown; answers: AnswerDescription[]; expiresAt: string };
@@ -22,6 +22,8 @@ export default function DirectAccountPortal() {
   const [consent, setConsent] = useState(false), [notice, setNotice] = useState(""), [busy, setBusy] = useState(false);
   const [loginToken, setLoginToken] = useState<string | null>(null), [ownedId, setOwnedId] = useState<string | null>(null);
   const [opening, setOpening] = useState(true);
+  const [recoveryEnabled,setRecoveryEnabled]=useState(false),[recoveryEmail,setRecoveryEmail]=useState("");
+  const [recoveryToken,setRecoveryToken]=useState<string|null>(null);
   const analysis = useRef<HTMLElement>(null), entryOwner = useRef<string | null>(null);
   const loginReturn = useRef<string | null>(null), loginInFlight = useRef(false), viewRevision = useRef(0);
   const fail = useCallback(() => setNotice("Det gick inte att genomföra åtgärden. Försök igen. Dina befintliga köp påverkas inte."), []);
@@ -44,8 +46,15 @@ export default function DirectAccountPortal() {
   useEffect(() => {
     let mounted = true;
     const captureLogin = () => {
+      const recovery=readGuestRecovery(window.location.hash);
+      if(recovery){
+        ++viewRevision.current;loginReturn.current=null;setLoginToken(null);setRecoveryToken(recovery);
+        setEntry(null);setSelected(null);setOwnedId(null);entryOwner.current=null;setOpening(false);setBusy(false);
+        history.replaceState(null,"","/mina-sidor");return "recovery";
+      }
       const restored = readGuestRestore(window.location.hash);
       if (restored) {
+        setRecoveryToken(null);
         loginReturn.current = null; setLoginToken(null); setCodeEmail(null); setLoginCode("");
         history.replaceState(null, "", "/mina-sidor");
         void guest({ id: restored.id, product: restored.product }, restored.secret);
@@ -54,6 +63,7 @@ export default function DirectAccountPortal() {
       const token = readLoginFragment(window.location.hash);
       if (!token) return;
       loginReturn.current = token;
+      setRecoveryToken(null);
       ++viewRevision.current;
       setLoginToken(token); setOpening(false); setBusy(false); setNotice("");
       setCodeEmail(null); setLoginCode("");
@@ -72,7 +82,7 @@ export default function DirectAccountPortal() {
     const candidate = returned ? attempts.find(item => item.id === returned) : pendingPurchase();
     // Strip credential fragments before any subsequent navigation/referrer.
     if (window.location.hash) history.replaceState(null, "", "/mina-sidor");
-    void directRequest({ action: "capabilities" }).then(value => { if (mounted) { setTests(value.tests); setConsentVersion(value.consentVersion); } }).catch(fail);
+    void directRequest({ action: "capabilities" }).then(value => { if (mounted) { setTests(value.tests); setConsentVersion(value.consentVersion); setRecoveryEnabled(value.guestRecovery===true); } }).catch(fail);
     if (!handled && candidate && !token) void guest(candidate); else if (handled !== "restore") setOpening(false);
     const cleanupReturn = () => {
       mounted = false;
@@ -106,6 +116,17 @@ export default function DirectAccountPortal() {
     analysis.current?.focus({ preventScroll: true });
     analysis.current?.scrollIntoView({ block: "start", behavior: "instant" });
   }, [entry]);
+  async function requestRecovery(){
+    setBusy(true);setNotice("");
+    try{await directRequest({action:"recovery-request",email:recoveryEmail.trim()});setNotice("Om mejladressen hör till ett giltigt, osparat köp skickas en personlig återställningslänk. Kontrollera även skräpposten. Vänta minst en minut innan du försöker igen.");}
+    catch{fail();}finally{setBusy(false);}
+  }
+  async function confirmRecovery(){
+    if(!recoveryToken||busy)return;setBusy(true);setNotice("");
+    try{const grant=await directRequest({action:"recovery-redeem",token:recoveryToken});setRecoveryToken(null);await guest({id:grant.id,product:grant.product},grant.secret);}
+    catch{setNotice("Länken har gått ut, har redan använts eller köpet kunde inte verifieras. Begär en ny länk. Analysens ursprungliga giltighetstid förlängs inte.");}
+    finally{setBusy(false);}
+  }
   useEffect(() => { if (userId) void refresh().catch(fail); }, [userId, refresh, fail]);
   async function login() {
     setBusy(true); setNotice("");
@@ -193,6 +214,8 @@ export default function DirectAccountPortal() {
     </section>}
     {!entry && <header><p className="text-sm uppercase tracking-widest text-[#27666A]">Relationsvarning</p><h1 className="mt-3 text-4xl font-semibold">Mina sidor</h1><p className="mt-3 text-neutral-600">Dina köpta tester, svar och personliga analyser. Ingen prenumeration behövs.</p></header>}
     {notice && <p className={card} role="status">{notice}</p>}
+    {recoveryToken && <section className={card}><h2 className="text-xl font-semibold">Återöppna din köpta analys</h2><p className="my-4">Konto krävs inte. Tryck för att använda engångslänken.</p><button className={button} disabled={busy} onClick={()=>void confirmRecovery()}>Öppna min analys</button></section>}
+    {recoveryEnabled && !entry && <form className={card} onSubmit={event=>{event.preventDefault();void requestRecovery();}}><h2 className="text-xl font-semibold">Hitta din köpta analys</h2><p className="mt-3">Ange mejladressen från betalningen. Du behöver inget konto eller din gamla webbläsarflik. Återställning gäller inom analysens ursprungliga sjudagarsperiod.</p><label className="my-4 block">Köpmejl<input type="email" required autoComplete="email" value={recoveryEmail} onChange={event=>setRecoveryEmail(event.target.value)} className="mt-2 block min-h-12 w-full rounded-xl border p-3"/></label><button className={button} disabled={busy}>Skicka återställningslänk</button></form>}
     {loginToken && <section className={card}><h2 className="text-xl font-semibold">Bekräfta din inloggning</h2><p className="my-4">Tryck här för att använda din personliga inloggningslänk.</p><button className={button} disabled={busy} onClick={() => void confirmLogin()}>Logga in</button></section>}
     {userEmail ? <section className={card}><p>Inloggad som {userEmail}</p><button className="mt-3 underline" disabled={busy} onClick={() => void logout()}>Logga ut</button></section>
       : !loginToken && (codeEmail ? <form className={card} onSubmit={event => { event.preventDefault(); void confirmLogin("code"); }}><h2 className="text-xl font-semibold">Skriv in koden från mejlet</h2><p className="mt-3">Stanna i den här fliken för att behålla åtkomsten till ditt köp.</p><label className="my-4 block">Engångskod<input type="text" inputMode="numeric" autoComplete="one-time-code" required pattern="[0-9]{6,10}" maxLength={14} value={loginCode} onChange={event => setLoginCode(event.target.value.replace(/\D/g, "").slice(0, 10))} className="mt-2 block min-h-12 w-full rounded-xl border p-3 text-xl tracking-widest" /></label><button className={button} disabled={busy || !/^[0-9]{6,10}$/.test(loginCode)}>Logga in med koden</button><button type="button" className="mt-4 block min-h-11 underline" disabled={busy} onClick={() => { setCodeEmail(null); setLoginCode(""); setNotice(""); }}>Ändra mejladress eller begär ny kod</button></form>
