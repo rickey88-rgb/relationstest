@@ -4,7 +4,7 @@ import ReportView from "./tester/ReportView";
 import AudhdReport from "../audhd-test/test/ReportView";
 import type { Report as AudhdResult } from "../audhd-test/test/model";
 import type { AnswerDescription } from "../_lib/testAccounts/answerDescriptions";
-import { directAuthClient, directLoginRedirect, directRequest, forgetPending, pendingPurchase, pendingPurchases, readLoginFragment, type PendingPurchase } from "../_lib/testAccounts/directClient";
+import { directAuthClient, directLoginRedirect, directRequest, forgetPending, pendingPurchase, pendingPurchases, readLoginFragment, readGuestRestore, restoreGuestPurchase, type PendingPurchase } from "../_lib/testAccounts/directClient";
 
 type Purchase = { id: string; product: string; purchased_at: string; expires_at: string | null };
 type Entry = { product: string; title: string; result: unknown; answers: AnswerDescription[]; expiresAt: string };
@@ -30,13 +30,13 @@ export default function DirectAccountPortal() {
     const value = await directRequest({ action: "list" }, { authenticated: true });
     if (owner && owner === authUser.current) setPurchases(value.purchases);
   }, []);
-  const guest = useCallback(async (item: PendingPurchase) => {
+  const guest = useCallback(async (item: PendingPurchase, restoredSecret?: string) => {
     const revision = ++viewRevision.current;
     setBusy(true); setOpening(true); setNotice(""); setConsent(false);
     setEntry(null); setSelected(null); setOwnedId(null); entryOwner.current = null;
     try {
-      const value = await directRequest({ action: "guest", ...item }, { possession: true });
-      if (revision === viewRevision.current) { setEntry(value); setSelected(item); setOwnedId(null); }
+      const value = restoredSecret ? await restoreGuestPurchase({ ...item, secret: restoredSecret }) : await directRequest({ action: "guest", ...item }, { possession: true });
+      if (revision === viewRevision.current) { setEntry(value); setSelected(item); setOwnedId(null); if (restoredSecret) setPending(pendingPurchases()); }
     }
     catch { if (revision === viewRevision.current) fail(); }
     finally { if (revision === viewRevision.current) { setBusy(false); setOpening(false); } }
@@ -44,6 +44,13 @@ export default function DirectAccountPortal() {
   useEffect(() => {
     let mounted = true;
     const captureLogin = () => {
+      const restored = readGuestRestore(window.location.hash);
+      if (restored) {
+        loginReturn.current = null; setLoginToken(null); setCodeEmail(null); setLoginCode("");
+        history.replaceState(null, "", "/mina-sidor");
+        void guest({ id: restored.id, product: restored.product }, restored.secret);
+        return "restore";
+      }
       const token = readLoginFragment(window.location.hash);
       if (!token) return;
       loginReturn.current = token;
@@ -52,10 +59,11 @@ export default function DirectAccountPortal() {
       setCodeEmail(null); setLoginCode("");
       setEntry(null); setSelected(null); setOwnedId(null); entryOwner.current = null;
       history.replaceState(null, "", "/mina-sidor");
+      return "login";
     };
     // Email apps/Safari may reuse this document and change only its fragment.
     // Keep the token in memory; merely opening/scanning the link never consumes it.
-    captureLogin();
+    const handled = captureLogin();
     window.addEventListener("hashchange", captureLogin);
     window.addEventListener("pageshow", captureLogin);
     const token = loginReturn.current;
@@ -65,7 +73,7 @@ export default function DirectAccountPortal() {
     // Strip credential fragments before any subsequent navigation/referrer.
     if (window.location.hash) history.replaceState(null, "", "/mina-sidor");
     void directRequest({ action: "capabilities" }).then(value => { if (mounted) { setTests(value.tests); setConsentVersion(value.consentVersion); } }).catch(fail);
-    if (candidate && !token) void guest(candidate); else setOpening(false);
+    if (!handled && candidate && !token) void guest(candidate); else if (handled !== "restore") setOpening(false);
     const cleanupReturn = () => {
       mounted = false;
       window.removeEventListener("hashchange", captureLogin);

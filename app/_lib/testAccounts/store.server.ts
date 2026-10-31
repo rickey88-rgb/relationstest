@@ -74,7 +74,7 @@ export async function claim(row: Attempt, owner: string, intent: string, purchas
   return db().begin(async tx => {
     // Lock the original attempt to serialize claim, deletion and cleanup. Never take an owner from the client.
     const current = await tx<Attempt[]>`select * from public.test_account_attempts where id = ${row.id} and expires_at > now() for update`;
-    if (current[0]?.ciphertext !== row.ciphertext || current[0]?.session_id !== row.session_id) throw new Error("Attempt changed");
+    if (current[0]?.ciphertext !== row.ciphertext || current[0]?.session_id !== row.session_id || current[0]?.browser_hash !== row.browser_hash) throw new Error("Attempt changed");
     await tx`insert into public.test_account_purchases(id, owner_id, product, session_id, price_id, payment_intent_id, purchased_at, amount, currency)
       values (${row.id}, ${owner}, ${row.product}, ${row.session_id}, ${row.price_id}, ${intent}, ${purchasedAt}, ${adapter(row.product).amount}, 'sek')
       on conflict (id) do nothing`;

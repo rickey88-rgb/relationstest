@@ -33,7 +33,7 @@ export async function guestForProduct(id: string, secret: string, expectedProduc
   await notErased(row.analysis_id, row.journal_identity);
   const payment = await verifyPayment(row);
   const current = await store.attempt(id);
-  if (!current || current.ciphertext !== row.ciphertext || current.session_id !== row.session_id) throw new Error("Attempt changed");
+  if (!current || current.ciphertext !== row.ciphertext || current.session_id !== row.session_id || current.browser_hash !== row.browser_hash) throw new Error("Attempt changed");
   await notErased(row.analysis_id, row.journal_identity);
   return { row, payment, ...payload(row, row.id) };
 }

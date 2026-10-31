@@ -16,12 +16,14 @@ function harness(product,{failGuest=false,hash='#attempt='+id,pending=true,login
  const memo=(fn,deps)=>{const i=cursor++;if(!slots[i]||changed(slots[i].deps,deps))slots[i]={value:fn,deps};return slots[i].value;};
  global.window={location:{hash,origin:'https://synthetic.example.invalid'},addEventListener:(name,fn)=>events.set(name,fn),removeEventListener:(name,fn)=>{if(events.get(name)===fn)events.delete(name);}};
  global.history={replaceState:()=>{window.location.hash='';}};
- const parseLogin=createLoader({'@supabase/supabase-js':{}})(path.join(__dirname,'../_lib/testAccounts/directClient.ts')).readLoginFragment;
+ const parseClient=createLoader({'@supabase/supabase-js':{}})(path.join(__dirname,'../_lib/testAccounts/directClient.ts'));
+ const parseLogin=parseClient.readLoginFragment;
  const client={directAuthClient:()=>{if(blockedStorage)throw Error('Synthetic Safari storage denial');return {auth:{onAuthStateChange:fn=>{listener=fn;return {data:{subscription:{unsubscribe:()=>{closed=true;}}}}},signOut:async()=>{listener('SIGNED_OUT',null);return {};},
   signInWithOtp:async body=>{calls.push({body:{action:'sendOtp',...body}});return {error:null};},
   verifyOtp:async body=>{calls.push({body:{action:'verifyOtp',...body}});assert.equal(body.type,'email');if(body.token){assert.equal(body.email,'synthetic@example.invalid');assert.equal(body.token,'123456');}if(loginError)return {error:{code:'otp_expired'},data:{session:null,user:null}};
    if(noSession)return {error:null,data:{session:null,user:null}};const value=session('account-a');listener('SIGNED_IN',value);return {error:null,data:{session:value,user:value.user}};}}};},
   pendingPurchase:()=>pending?item:null,pendingPurchases:()=>pending?[item]:[],forgetPending:()=>{},readLoginFragment:parseLogin,directLoginRedirect:()=>'/mina-sidor#login',
+  readGuestRestore:parseClient.readGuestRestore,restoreGuestPurchase:async restored=>{const value=await client.directRequest({action:'guest',id:restored.id,product:restored.product},{possession:true});pending=true;return value;},
   directRequest:async(body,options)=>{calls.push({body,options});if(body.action==='capabilities')return {tests:models,consentVersion:'test-account-storage-v1'};
    if(body.action==='guest'){assert.deepEqual(options,{possession:true});await guestReady;if(failGuest)throw Error('Synthetic unpaid, refunded or unavailable');return entry;}
    if(body.action==='open'){assert.deepEqual(options,{authenticated:true});return entry;}
