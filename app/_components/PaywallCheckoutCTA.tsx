@@ -17,7 +17,7 @@ export default function PaywallCheckoutCTA({ onClick, separated = false, label =
         <input ref={consent} type="checkbox" name="guest-processing-consent" required className="mt-1 size-5 shrink-0 accent-[#27666A]" />
         <span>Jag samtycker till att mina testsvar, inklusive eventuella hälsouppgifter, behandlas för att skapa och leverera min analys.</span>
       </label>
-      <p className="mt-1 text-xs leading-5">Gäståtkomst i högst sju dagar. Kontosparning är ett separat, frivilligt val. <a href="/integritet" target="_blank" rel="noopener noreferrer" className="underline underline-offset-4">Läs fullständig integritetsinformation</a>.</p>
+      <p className="mt-1 text-xs leading-5"><a href="/integritet" target="_blank" rel="noopener noreferrer" className="underline underline-offset-4">Läs fullständig integritetsinformation</a>.</p>
     </div>
     <button data-flow="cta"
       type="submit"

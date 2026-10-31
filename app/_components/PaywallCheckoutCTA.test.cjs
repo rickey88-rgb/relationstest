@@ -14,7 +14,7 @@ assert(!/\schecked(?:=|\s|>)/.test(html),'consent starts unchecked');
 assert(html.includes('Jag samtycker till att mina testsvar, inklusive eventuella hälsouppgifter, behandlas för att skapa och leverera min analys.'));
 assert(html.includes('href="/integritet"')&&html.includes('target="_blank"'));
 assert(html.indexOf('data-checkout-consent')<html.indexOf('data-flow="cta"'));
-assert(html.includes('högst sju dagar')&&html.includes('separat, frivilligt val'));
+assert(!html.includes('Gäståtkomst i högst sju dagar.')&&!html.includes('Kontosparning är ett separat, frivilligt val.'));
 assert(html.includes('type="submit"'));
 const submit=()=>tree.props.onSubmit({preventDefault:()=>{prevented++;}});
 submit();assert.equal(purchases,0);assert.equal(validations,1);
@@ -22,6 +22,8 @@ checkbox.checked=true;submit();assert.equal(purchases,1,'explicit checked consen
 checkbox.checked=false;submit();assert.equal(purchases,1,'withdrawing before purchase blocks checkout again');
 assert.equal(prevented,3,'form never sends sensitive inputs to the website server');
 const root=path.resolve(__dirname,'..');
+const privacy=fs.readFileSync(path.join(root,'integritet/page.tsx'),'utf8');
+assert(privacy.includes('Gäståtkomsten gäller högst sju dagar.')&&privacy.includes('Efter köpet kan du separat och frivilligt samtycka'));
 const routes=['adhd-test/test','autism-test/test','audhd-test/test','hsp-test/test','angest-test/test','ptsd-test/test','iq-test/test',
  'narcissism-sjalvtest/test','test','anknytningstest/test','medberoendetest/test','gaslightingtest/test','narcissist-i-en-relation/test','traumabindningtest/test','psykisk-misshandel-relation/test'];
 for(const route of routes){const page=fs.readFileSync(path.join(root,route,'page.tsx'),'utf8');
