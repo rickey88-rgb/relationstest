@@ -22,6 +22,7 @@ export default function DirectAccountPortal() {
   const [loginToken, setLoginToken] = useState<string | null>(null), [ownedId, setOwnedId] = useState<string | null>(null);
   const [opening, setOpening] = useState(true);
   const analysis = useRef<HTMLElement>(null), entryOwner = useRef<string | null>(null);
+  const loginReturn = useRef<string | null>(null), loginInFlight = useRef(false), viewRevision = useRef(0);
   const fail = useCallback(() => setNotice("Det gick inte att genomföra åtgärden. Försök igen. Dina befintliga köp påverkas inte."), []);
   const refresh = useCallback(async () => {
     const owner = authUser.current;
@@ -29,15 +30,33 @@ export default function DirectAccountPortal() {
     if (owner && owner === authUser.current) setPurchases(value.purchases);
   }, []);
   const guest = useCallback(async (item: PendingPurchase) => {
+    const revision = ++viewRevision.current;
     setBusy(true); setOpening(true); setNotice(""); setConsent(false);
     setEntry(null); setSelected(null); setOwnedId(null); entryOwner.current = null;
-    try { setEntry(await directRequest({ action: "guest", ...item }, { possession: true })); setSelected(item); setOwnedId(null); }
-    catch { fail(); } finally { setBusy(false); setOpening(false); }
+    try {
+      const value = await directRequest({ action: "guest", ...item }, { possession: true });
+      if (revision === viewRevision.current) { setEntry(value); setSelected(item); setOwnedId(null); }
+    }
+    catch { if (revision === viewRevision.current) fail(); }
+    finally { if (revision === viewRevision.current) { setBusy(false); setOpening(false); } }
   }, [fail]);
   useEffect(() => {
     let mounted = true;
-    const token = readLoginFragment(window.location.hash);
-    setLoginToken(token);
+    const captureLogin = () => {
+      const token = readLoginFragment(window.location.hash);
+      if (!token) return;
+      loginReturn.current = token;
+      ++viewRevision.current;
+      setLoginToken(token); setOpening(false); setBusy(false); setNotice("");
+      setEntry(null); setSelected(null); setOwnedId(null); entryOwner.current = null;
+      history.replaceState(null, "", "/mina-sidor");
+    };
+    // Email apps/Safari may reuse this document and change only its fragment.
+    // Keep the token in memory; merely opening/scanning the link never consumes it.
+    captureLogin();
+    window.addEventListener("hashchange", captureLogin);
+    window.addEventListener("pageshow", captureLogin);
+    const token = loginReturn.current;
     const attempts = pendingPurchases(); setPending(attempts);
     const returned = new URLSearchParams(window.location.hash.slice(1)).get("attempt");
     const candidate = returned ? attempts.find(item => item.id === returned) : pendingPurchase();
@@ -45,7 +64,18 @@ export default function DirectAccountPortal() {
     if (window.location.hash) history.replaceState(null, "", "/mina-sidor");
     void directRequest({ action: "capabilities" }).then(value => { if (mounted) { setTests(value.tests); setConsentVersion(value.consentVersion); } }).catch(fail);
     if (candidate && !token) void guest(candidate); else setOpening(false);
-    const auth = directAuthClient();
+    const cleanupReturn = () => {
+      mounted = false;
+      window.removeEventListener("hashchange", captureLogin);
+      window.removeEventListener("pageshow", captureLogin);
+    };
+    let auth;
+    try { auth = directAuthClient(); }
+    catch {
+      setOpening(false);
+      setNotice("Inloggningen kunde inte startas i webbläsaren. Öppna länken i din vanliga webbläsare och kontrollera att webbplatsdata tillåts.");
+      return cleanupReturn;
+    }
     const { data: subscription } = auth.auth.onAuthStateChange((_event, session) => {
       if (!mounted) return;
       setUserEmail(session?.user.email ?? null);
@@ -59,7 +89,7 @@ export default function DirectAccountPortal() {
         authUser.current = next;
       }
     });
-    return () => { mounted = false; subscription.subscription.unsubscribe(); };
+    return () => { cleanupReturn(); subscription.subscription.unsubscribe(); };
   }, [guest, fail]);
   useEffect(() => {
     if (!entry) return;
@@ -76,13 +106,24 @@ export default function DirectAccountPortal() {
     } catch { fail(); } finally { setBusy(false); }
   }
   async function confirmLogin() {
-    if (!loginToken) return;
-    setBusy(true);
+    if (!loginToken || loginInFlight.current) return;
+    loginInFlight.current = true;
+    setBusy(true); setNotice("");
     try {
-      const { error } = await directAuthClient().auth.verifyOtp({ token_hash: loginToken, type: "email" });
-      if (error) throw error;
+      const { data, error } = await directAuthClient().auth.verifyOtp({ token_hash: loginToken, type: "email" });
+      if (loginReturn.current !== loginToken) return;
+      if (error) {
+        if (error.code === "otp_expired") {
+          loginReturn.current = null; setLoginToken(null);
+          setNotice("Inloggningslänken har gått ut eller har redan använts. Begär en ny länk nedan.");
+          return;
+        }
+        throw error;
+      }
+      if (!data.session || !data.user) throw new Error("Session unavailable");
+      loginReturn.current = null;
       setLoginToken(null); setNotice("Du är inloggad. Välj en analys och bekräfta om du vill spara den på kontot.");
-    } catch { fail(); } finally { setBusy(false); }
+    } catch { fail(); } finally { loginInFlight.current = false; setBusy(false); }
   }
   async function logout() {
     setBusy(true);
@@ -102,13 +143,15 @@ export default function DirectAccountPortal() {
     } catch { fail(); } finally { setBusy(false); }
   }
   async function open(purchase: Purchase) {
+    const revision = ++viewRevision.current;
     setBusy(true); setOpening(true); setNotice(""); setSelected(null); setEntry(null); setOwnedId(null); entryOwner.current = null;
     const owner = authUser.current;
     try {
       const value = await directRequest({ action: "open", id: purchase.id, product: purchase.product }, { authenticated: true });
-      if (owner && owner === authUser.current) { entryOwner.current = owner; setEntry(value); setOwnedId(purchase.id); }
+      if (revision === viewRevision.current && owner && owner === authUser.current) { entryOwner.current = owner; setEntry(value); setOwnedId(purchase.id); }
     }
-    catch { fail(); } finally { setBusy(false); setOpening(false); }
+    catch { if (revision === viewRevision.current) fail(); }
+    finally { if (revision === viewRevision.current) { setBusy(false); setOpening(false); } }
   }
   async function remove() {
     if (!ownedId || !entry || !window.confirm("Radera de sparade svaren och analysen? Köphistoriken finns kvar. Det går inte att ångra.")) return;
