@@ -28,7 +28,6 @@ export function useTestAccountCheckout(slug: "audhd" | "iq" | "adhd" | "hsp" | "
     if (directCustomerEnabled()) {
       if (busy.current) return true;
       if (!directModel?.checkout) { onError(); return true; } // never fall through to an unsavable legacy purchase
-      if (!window.confirm("För att leverera din betalda analys behandlar vi dina testsvar och gör dem tillgängliga krypterat via Supabase i högst sju dagar. Därefter spärras åtkomsten och underlaget gallras dagligen. Säkerhetskopior kan finnas kvar en begränsad tid enligt integritetsinformationen. Uppgifterna kan röra din hälsa. Kontosparning i högst tolv månader är ett separat, frivilligt val efter köpet. Genom att trycka OK samtycker du uttryckligen till behandlingen för gästleveransen. Läs integritetsinformationen före köpet.")) return true;
       busy.current = true;
       void startDirectCheckout(directModel.product, { answers, questionVersion: directModel.questionVersion, reportVersion: directModel.reportVersion })
         .catch(() => { busy.current = false; onError(); });
