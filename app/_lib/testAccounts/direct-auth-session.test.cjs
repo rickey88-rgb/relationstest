@@ -12,7 +12,7 @@ global.BroadcastChannel=undefined;
 Object.assign(process.env,{NEXT_PUBLIC_SUPABASE_URL:'https://synthetic.supabase.co',NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:'synthetic-public-key'});
 async function transport(input,init={}){
  const url=new URL(String(input));assert.equal(url.origin,'https://synthetic.supabase.co');const body=init.body?JSON.parse(init.body):null;requests.push({path:url.pathname,body});
- if(url.pathname.endsWith('/verify')){assert.equal(body.token_hash,requestedToken);assert.equal(body.type,'email');assert(!body.code_verifier);return Response.json(session);}
+ if(url.pathname.endsWith('/verify')){if(body.token_hash)assert.equal(body.token_hash,requestedToken);else{assert.equal(body.email,user.email);assert.equal(body.token,'123456');}assert.equal(body.type,'email');assert(!body.code_verifier);return Response.json(session);}
  if(url.pathname.endsWith('/user')){assert.equal(new Headers(init.headers).get('authorization'),'Bearer '+jwt);return Response.json(user);}
  if(url.pathname.endsWith('/logout'))return new Response(null,{status:204});
  throw Error('Unexpected synthetic Auth request');
@@ -31,7 +31,8 @@ function clientFor(storage){window.sessionStorage=storage;return createLoader({'
   assert.equal((await reloaded.auth.getUser()).data.user.id,user.id,'server validation confirms account identity');
   const separate=clientFor(memory());assert.equal((await separate.auth.getSession()).data.session,null,'unrelated tab is not silently authenticated');
   await reloaded.auth.signOut();assert.equal(mailTab.getItem('rv-direct-auth-v1'),null);assert.equal((await reloaded.auth.getSession()).data.session,null);
-  assert.equal(requests.filter(x=>x.path.endsWith('/verify')).length,1);assert(!requests.some(x=>x.path.endsWith('/token')),'token hash does not need original-browser PKCE verifier');
+  const code=await reloaded.auth.verifyOtp({email:user.email,token:'123456',type:'email'});assert.equal(code.error,null);assert.equal((await reloaded.auth.getSession()).data.session.user.id,user.id);await reloaded.auth.signOut();
+  assert.equal(requests.filter(x=>x.path.endsWith('/verify')).length,2);assert(!requests.some(x=>x.path.endsWith('/token')),'email code/token hash does not need original-browser PKCE verifier');
   console.log('PASS: real Supabase SDK OTP/session event, sessionStorage persistence/reload, server identity, independent tabs and logout; no PKCE/cookies/Vercel transport or real account/payment.');
  }finally{for(const client of clients)await client.auth.stopAutoRefresh();}
 })().catch(error=>{console.error(error);process.exitCode=1;});

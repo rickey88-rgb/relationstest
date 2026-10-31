@@ -14,6 +14,7 @@ const button = "min-h-12 rounded-xl bg-[#27666A] px-5 py-3 font-semibold text-wh
 /** Vercel renders only this public shell. All personal requests and Auth go directly to Supabase. */
 export default function DirectAccountPortal() {
   const [email, setEmail] = useState(""), [userEmail, setUserEmail] = useState<string | null>(null);
+  const [codeEmail, setCodeEmail] = useState<string | null>(null), [loginCode, setLoginCode] = useState("");
   const [userId, setUserId] = useState<string | null>(null), authUser = useRef<string | null>(null);
   const [purchases, setPurchases] = useState<Purchase[]>([]), [pending, setPending] = useState<PendingPurchase[]>([]);
   const [entry, setEntry] = useState<Entry | null>(null), [selected, setSelected] = useState<PendingPurchase | null>(null);
@@ -48,6 +49,7 @@ export default function DirectAccountPortal() {
       loginReturn.current = token;
       ++viewRevision.current;
       setLoginToken(token); setOpening(false); setBusy(false); setNotice("");
+      setCodeEmail(null); setLoginCode("");
       setEntry(null); setSelected(null); setOwnedId(null); entryOwner.current = null;
       history.replaceState(null, "", "/mina-sidor");
     };
@@ -100,28 +102,38 @@ export default function DirectAccountPortal() {
   async function login() {
     setBusy(true); setNotice("");
     try {
-      const { error } = await directAuthClient().auth.signInWithOtp({ email, options: { shouldCreateUser: true, emailRedirectTo: directLoginRedirect(window.location.origin) } });
+      const address = email.trim();
+      const { error } = await directAuthClient().auth.signInWithOtp({ email: address, options: { shouldCreateUser: true, emailRedirectTo: directLoginRedirect(window.location.origin) } });
       if (error) throw error;
-      setNotice("Kontrollera din mejl. Öppna länken och bekräfta inloggningen. Spara köpet i samma webbläsare som du använde vid betalningen.");
+      setCodeEmail(address); setLoginCode("");
+      setNotice("Kontrollera din mejl och skriv in engångskoden här i samma flik. Då finns ditt köp kvar även i privat Safari. Mejllänken fungerar också som alternativ.");
     } catch { fail(); } finally { setBusy(false); }
   }
-  async function confirmLogin() {
-    if (!loginToken || loginInFlight.current) return;
+  async function confirmLogin(method: "link" | "code" = "link") {
+    if (loginInFlight.current || (method === "link" ? !loginToken : !codeEmail || !/^[0-9]{6,10}$/.test(loginCode))) return;
     loginInFlight.current = true;
     setBusy(true); setNotice("");
     try {
-      const { data, error } = await directAuthClient().auth.verifyOtp({ token_hash: loginToken, type: "email" });
-      if (loginReturn.current !== loginToken) return;
+      const { data, error } = await directAuthClient().auth.verifyOtp(method === "link"
+        ? { token_hash: loginToken!, type: "email" }
+        : { email: codeEmail!, token: loginCode, type: "email" });
+      if (method === "link" && loginReturn.current !== loginToken) return;
       if (error) {
         if (error.code === "otp_expired") {
-          loginReturn.current = null; setLoginToken(null);
-          setNotice("Inloggningslänken har gått ut eller har redan använts. Begär en ny länk nedan.");
+          if (method === "link") {
+            loginReturn.current = null; setLoginToken(null);
+            setNotice("Inloggningslänken har gått ut eller har redan använts. Begär en ny länk nedan.");
+          } else {
+            setLoginCode("");
+            setNotice("Koden är felaktig, har gått ut eller har redan använts. Kontrollera koden eller begär en ny.");
+          }
           return;
         }
         throw error;
       }
       if (!data.session || !data.user) throw new Error("Session unavailable");
       loginReturn.current = null;
+      setCodeEmail(null); setLoginCode("");
       setLoginToken(null); setNotice("Du är inloggad. Välj en analys och bekräfta om du vill spara den på kontot.");
     } catch { fail(); } finally { loginInFlight.current = false; setBusy(false); }
   }
@@ -175,7 +187,8 @@ export default function DirectAccountPortal() {
     {notice && <p className={card} role="status">{notice}</p>}
     {loginToken && <section className={card}><h2 className="text-xl font-semibold">Bekräfta din inloggning</h2><p className="my-4">Tryck här för att använda din personliga inloggningslänk.</p><button className={button} disabled={busy} onClick={() => void confirmLogin()}>Logga in</button></section>}
     {userEmail ? <section className={card}><p>Inloggad som {userEmail}</p><button className="mt-3 underline" disabled={busy} onClick={() => void logout()}>Logga ut</button></section>
-      : !loginToken && <form className={card} onSubmit={event => { event.preventDefault(); void login(); }}><h2 className="text-xl font-semibold">Logga in med en mejllänk</h2><label className="my-4 block">Mejladress<input type="email" required autoComplete="email" value={email} onChange={event => setEmail(event.target.value)} className="mt-2 block min-h-12 w-full rounded-xl border p-3" /></label><button className={button} disabled={busy}>Skicka inloggningslänk</button></form>}
+      : !loginToken && (codeEmail ? <form className={card} onSubmit={event => { event.preventDefault(); void confirmLogin("code"); }}><h2 className="text-xl font-semibold">Skriv in koden från mejlet</h2><p className="mt-3">Stanna i den här fliken för att behålla åtkomsten till ditt köp.</p><label className="my-4 block">Engångskod<input type="text" inputMode="numeric" autoComplete="one-time-code" required pattern="[0-9]{6,10}" maxLength={14} value={loginCode} onChange={event => setLoginCode(event.target.value.replace(/\D/g, "").slice(0, 10))} className="mt-2 block min-h-12 w-full rounded-xl border p-3 text-xl tracking-widest" /></label><button className={button} disabled={busy || !/^[0-9]{6,10}$/.test(loginCode)}>Logga in med koden</button><button type="button" className="mt-4 block min-h-11 underline" disabled={busy} onClick={() => { setCodeEmail(null); setLoginCode(""); setNotice(""); }}>Ändra mejladress eller begär ny kod</button></form>
+        : <form className={card} onSubmit={event => { event.preventDefault(); void login(); }}><h2 className="text-xl font-semibold">Logga in med mejl</h2><p className="mt-3">Få en engångskod och skriv in den här. Du behöver inget lösenord.</p><label className="my-4 block">Mejladress<input type="email" required autoComplete="email" value={email} onChange={event => setEmail(event.target.value)} className="mt-2 block min-h-12 w-full rounded-xl border p-3" /></label><button className={button} disabled={busy}>Skicka inloggningskod</button></form>)}
     {pending.length > 0 && <section className={card}><h2 className="text-xl font-semibold">Köp i den här webbläsaren</h2><p className="my-3">Öppna ditt betalda resultat. Välj sedan om du vill spara det på kontot. Gäståtkomsten gäller i högst sju dagar.</p><ul className="space-y-3">{pending.map(item => <li key={item.id}><button className="min-h-11 underline" disabled={busy} onClick={() => void guest(item)}>Öppna {title(item.product)}</button></li>)}</ul></section>}
     {userEmail && <section className={card}><h2 className="text-xl font-semibold">Sparat på ditt konto</h2>{purchases.length === 0 ? <p className="mt-3">Du har inga kontosparade tester ännu.</p> : <ul className="mt-4 space-y-4">{purchases.map(item => <li key={item.id} className="flex flex-wrap items-center justify-between gap-3"><span>{title(item.product)} · {new Date(item.purchased_at).toLocaleDateString("sv-SE")}</span>{item.expires_at ? <button className="min-h-11 underline" disabled={busy} onClick={() => void open(item)}>Öppna svar och analys</button> : <span>Analysen är raderad eller har löpt ut</span>}</li>)}</ul>}</section>}
   </main>;

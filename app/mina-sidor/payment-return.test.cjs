@@ -18,7 +18,8 @@ function harness(product,{failGuest=false,hash='#attempt='+id,pending=true,login
  global.history={replaceState:()=>{window.location.hash='';}};
  const parseLogin=createLoader({'@supabase/supabase-js':{}})(path.join(__dirname,'../_lib/testAccounts/directClient.ts')).readLoginFragment;
  const client={directAuthClient:()=>{if(blockedStorage)throw Error('Synthetic Safari storage denial');return {auth:{onAuthStateChange:fn=>{listener=fn;return {data:{subscription:{unsubscribe:()=>{closed=true;}}}}},signOut:async()=>{listener('SIGNED_OUT',null);return {};},
-  verifyOtp:async body=>{calls.push({body:{action:'verifyOtp',...body}});assert.equal(body.type,'email');if(loginError)return {error:{code:'otp_expired'},data:{session:null,user:null}};
+  signInWithOtp:async body=>{calls.push({body:{action:'sendOtp',...body}});return {error:null};},
+  verifyOtp:async body=>{calls.push({body:{action:'verifyOtp',...body}});assert.equal(body.type,'email');if(body.token){assert.equal(body.email,'synthetic@example.invalid');assert.equal(body.token,'123456');}if(loginError)return {error:{code:'otp_expired'},data:{session:null,user:null}};
    if(noSession)return {error:null,data:{session:null,user:null}};const value=session('account-a');listener('SIGNED_IN',value);return {error:null,data:{session:value,user:value.user}};}}};},
   pendingPurchase:()=>pending?item:null,pendingPurchases:()=>pending?[item]:[],forgetPending:()=>{},readLoginFragment:parseLogin,directLoginRedirect:()=>'/mina-sidor#login',
   directRequest:async(body,options)=>{calls.push({body,options});if(body.action==='capabilities')return {tests:models,consentVersion:'test-account-storage-v1'};
@@ -39,13 +40,16 @@ function harness(product,{failGuest=false,hash='#attempt='+id,pending=true,login
  return {entry,calls,render,settle,event:value=>listener('AUTH',value),focus:()=>({focused,scrolled}),
   click:async label=>{const button=find(n=>n.type==='button'&&text(n.props.children)===label);assert(!button.props.disabled);button.props.onClick();return settle();},
   consent:value=>{find(n=>n.type==='input'&&n.props.type==='checkbox').props.onChange({target:{checked:value}});render();},
+  sendCode:async()=>{find(n=>n.type==='input'&&n.props.type==='email').props.onChange({target:{value:'synthetic@example.invalid'}});render();find(n=>n.type==='form').props.onSubmit({preventDefault:()=>{}});return settle();},
+  enterCode:value=>{find(n=>n.type==='input'&&n.props.autoComplete==='one-time-code').props.onChange({target:{value}});render();},
+  submitCode:async()=>{find(n=>n.type==='form').props.onSubmit({preventDefault:()=>{}});return settle();},
   returnHash:(value,event='hashchange')=>{window.location.hash=value;events.get(event)?.();render();},resolveGuest:()=>completeGuest?.(),
   cleanup:()=>{cleanups.forEach(fn=>fn());assert.equal(events.size,0);assert(closed||blockedStorage);}};
 }
 async function renderVerifiedReturn(product='adhd_test'){const h=harness(product);h.render();await h.settle();return h.render();}
 async function run(){
- for(const model of models){const h=harness(model.product);let html=h.render();assert(!html.includes('Betalningen lyckades'));assert(!html.includes('Logga in med en mejllänk'));
-  html=await h.settle();const report=html.indexOf('data-paid-analysis'),save=html.indexOf('Spara frivilligt'),login=html.indexOf('Logga in med en mejllänk');
+ for(const model of models){const h=harness(model.product);let html=h.render();assert(!html.includes('Betalningen lyckades'));assert(!html.includes('Logga in med mejl'));
+  html=await h.settle();const report=html.indexOf('data-paid-analysis'),save=html.indexOf('Spara frivilligt'),login=html.indexOf('Logga in med mejl');
   assert(report>=0&&report<save&&save<login,model.product+' displays report before storage and login');
   assert(html.includes('Betalningen lyckades! Här är din personliga analys.'));assert(!html.includes('<h1 class="mt-3'));
   assert(html.indexOf('Alla dina testsvar')<save,'all answer access precedes storage');
