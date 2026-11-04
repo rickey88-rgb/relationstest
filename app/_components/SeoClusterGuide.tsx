@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import { Fragment } from "react";
 import Link from "next/link";
 import GuideNextSteps from "./GuideNextSteps";
 import { guideRecommendations } from "./guideRecommendations";
 import { getArticleImageMetadata, getArticleImageSchema } from "../_seo/articleImages";
+import { NewsletterArticleSignup } from "./NewsletterSignup";
 
 type LinkedParagraph = { before: string; href: string; label: string; after: string };
 export type ClusterSection = { heading: string; paragraphs: Array<string | LinkedParagraph>; bullets?: string[]; links?: Array<Pick<ClusterLink, "href" | "label">> };
@@ -64,12 +66,12 @@ export default function SeoClusterGuide({ data }: { data: ClusterGuideData }) {
       </header>
 
       <div className="mt-11 space-y-11">
-        {data.sections.map((section) => <section key={section.heading} className="space-y-4">
+        {data.sections.map((section, index) => <Fragment key={section.heading}><section className="space-y-4">
           <h2 className="text-2xl font-semibold tracking-tight text-neutral-950">{section.heading}</h2>
           {section.paragraphs.map((paragraph) => <p key={typeof paragraph === "string" ? paragraph : `${paragraph.href}-${paragraph.label}`} className="leading-7 text-neutral-700">{typeof paragraph === "string" ? paragraph : <>{paragraph.before}<Link href={paragraph.href} className={textLink}>{paragraph.label}</Link>{paragraph.after}</>}</p>)}
           {section.bullets && <ul className="list-disc space-y-3 pl-6 leading-7 text-neutral-700">{section.bullets.map((item) => <li key={item}>{item}</li>)}</ul>}
           {section.links?.length ? <p className="text-sm leading-7 text-neutral-600">Läs vidare: {section.links.map((item, index) => <span key={item.href}>{index > 0 ? ", " : ""}<Link href={item.href} className={textLink}>{item.label}</Link></span>)}.</p> : null}
-        </section>)}
+        </section>{data.sections.length >= 3 && index === Math.floor(data.sections.length / 2) && <NewsletterArticleSignup />}</Fragment>)}
       </div>
 
       {additionalLinks.length > 0 && (data.relatedTitle ? <section className="mt-12 border-t border-neutral-200 pt-9"><h2 className="text-2xl font-semibold tracking-tight">{data.relatedTitle}</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{additionalLinks.map((item) => <Link key={item.href} href={item.href} className="block rounded-2xl border border-neutral-200 bg-neutral-50 p-4 hover:border-neutral-300 hover:bg-white"><span className="font-semibold text-neutral-950">{item.label} <span aria-hidden="true">→</span></span><span className="mt-1 block text-sm leading-6 text-neutral-600">{item.description}</span></Link>)}</div></section> : <p className="mt-9 text-sm leading-7 text-neutral-600">Fler fördjupningar: {additionalLinks.map((item, index) => <span key={item.href}>{index > 0 ? ", " : ""}<Link href={item.href} className={textLink}>{item.label}</Link></span>)}.</p>)}

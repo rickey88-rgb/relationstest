@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { NewsletterAfterResult } from "../../_components/NewsletterSignup";
 import ReportView from "./ReportView";
 import { useTestAccountCheckout } from "../../_components/useTestAccountCheckout";
 import PaywallCheckoutCTA from "../../_components/PaywallCheckoutCTA";
@@ -278,6 +279,6 @@ export default function AudhdTestPage() {
     {checkoutUnavailable && <p role="alert">Vi kunde inte starta betalningen just nu. Dina svar finns kvar. Försök igen om en stund – du har inte debiterats.</p>}
   </section><div data-audhd-restart className="mt-3"><button type="button" className="text-sm underline" onClick={restart}>Gör om testet</button></div></>;
   const [recommendedTest, fallbackTest] = audhdRecommendations(report);
-  return <><ReportView report={report} onRestart={restart} /><aside className={card}><h2 className="text-xl font-semibold">Vill du hitta tillbaka till analysen?</h2><p>Du kan välja att spara en krypterad kopia på ditt konto i upp till 12 månader. Inloggning är frivillig.</p><a href="/mina-sidor/koppla" className={`${btn} bg-[#27666A] text-white`}>Spara analysen på Mina sidor</a></aside><PostPurchaseRecommendation sourceProduct="audhd_test" preferredProductIds={[recommendedTest, fallbackTest]} /></>;
+  return <><ReportView report={report} onRestart={restart} /><aside className={card}><h2 className="text-xl font-semibold">Vill du hitta tillbaka till analysen?</h2><p>Du kan välja att spara en krypterad kopia på ditt konto i upp till 12 månader. Inloggning är frivillig.</p><a href="/mina-sidor/koppla" className={`${btn} bg-[#27666A] text-white`}>Spara analysen på Mina sidor</a></aside><NewsletterAfterResult><PostPurchaseRecommendation sourceProduct="audhd_test" preferredProductIds={[recommendedTest, fallbackTest]} /></NewsletterAfterResult></>;
 }
 

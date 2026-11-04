@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import NewsletterSignup from "./_components/NewsletterSignup";
 import styles from "./home.module.css";
 import adhdGuides from "../content/adhd-guides.json";
 import autismGuides from "../content/autism-guides.json";
@@ -234,6 +235,7 @@ export default function Landing() {
         <HomeGuideDirectory guides={homeGuides} />
       </section>
 
+      <div className="mx-auto max-w-5xl px-4 sm:px-6"><NewsletterSignup source="home" /></div>
       <section className={styles.closing} aria-labelledby="closing-heading">
         <p className={styles.eyebrow}>Ett stöd för självreflektion</p><h2 id="closing-heading">Börja där det känns mest relevant för dig.</h2><p>Välj ett test, läs en guide eller ta ett steg i taget.</p>
         <HomeScrollLink targetId="test-directory" className={styles.primary}>Se alla tester <span aria-hidden="true">→</span></HomeScrollLink>

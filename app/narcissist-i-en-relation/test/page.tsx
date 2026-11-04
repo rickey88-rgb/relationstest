@@ -1,6 +1,7 @@
 "use client";
 
 import PaywallCheckoutCTA from "../../_components/PaywallCheckoutCTA";
+import { NewsletterAfterResult } from "../../_components/NewsletterSignup";
 import PostPurchaseRecommendation from "../../_components/PostPurchaseRecommendation";
 import { buildPaywallTeaser } from "../../_lib/paywallTeaser";
 
@@ -420,7 +421,7 @@ export default function Page() {
 
       {checkoutUnavailable && <p role="alert">Köpet kunde inte öppnas just nu. Dina svar finns kvar. Försök igen om en stund.</p>}
       {isFinished && unlocked && <ReportView result={result} onRestart={restart} />}
-      {isFinished && unlocked && <PostPurchaseRecommendation sourceProduct="narcissist_partner" />}
+      {isFinished && unlocked && <NewsletterAfterResult><PostPurchaseRecommendation sourceProduct="narcissist_partner" /></NewsletterAfterResult>}
 
       <p style={{ marginTop: 26, fontSize: 12, lineHeight: 1.6, color: "#777" }}>
         Testet är ett orienteringsverktyg och kan inte avgöra om en person

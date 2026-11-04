@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { NewsletterAfterResult } from "../../_components/NewsletterSignup";
 import ReportView from "./ReportView";
 import { useTestAccountCheckout } from "../../_components/useTestAccountCheckout";
 import { topAreaSummary } from "./interpretation";
@@ -140,7 +141,7 @@ export default function PtsdTestPage() {
       </> : <>
 <ReportView result={result} heading={heading} />
         <div className="mt-6 flex flex-wrap gap-3"><button type="button" onClick={() => { moveFocus.current = true; setEditing(true); setIndex(0); }} className={secondary}>Granska mina svar</button><button type="button" onClick={restart} className={secondary}>Börja om</button></div>
-        <PostPurchaseRecommendation sourceProduct="ptsd_test" />
+        <NewsletterAfterResult><PostPurchaseRecommendation sourceProduct="ptsd_test" /></NewsletterAfterResult>
       </>}
     </div>}
   </>;

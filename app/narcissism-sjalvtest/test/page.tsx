@@ -1,6 +1,7 @@
 "use client";
 
 import ReportView from "./ReportView";
+import { NewsletterAfterResult } from "../../_components/NewsletterSignup";
 import { useTestAccountCheckout } from "../../_components/useTestAccountCheckout";
 import PaywallCheckoutCTA from "../../_components/PaywallCheckoutCTA";
 import { buildPaywallTeaser } from "../../_lib/paywallTeaser";
@@ -146,7 +147,7 @@ export default function NarcissismSelfTestPage() {
         {!unlocked && <><p className="text-neutral-200">{preview.body}</p><div className="space-y-4 border-t border-white/15 pt-5"><h3 className="text-xl font-semibold">I din fullständiga analys ser du</h3><ul className="space-y-2 text-neutral-200"><li>✓ vilket drag som väger tyngst i dina svar</li><li>✓ vad som förstärker eller nyanserar helhetsbilden</li><li>✓ hur de olika delarna samverkar i din profil</li></ul><div><p className="font-semibold">{PRICE_SEK} kr</p><p className="text-sm text-neutral-300">Engångsbetalning · Ingen prenumeration</p><p className="text-sm text-neutral-300">Resultatet visas direkt efter betalning</p></div><PaywallCheckoutCTA onClick={checkout} /><button type="button" onClick={restart} className="min-h-11 w-full text-sm text-neutral-300 underline underline-offset-4 hover:text-white">Gör om testet</button>{checkoutUnavailable && <p role="status" className="text-sm text-neutral-300">Köp av fullständig profil är inte tillgängligt just nu. Dina svar finns kvar i den här webbläsaren.</p>}</div></>}
         {unlocked && <p className="rounded-xl bg-neutral-50 p-4"><span className="block text-sm text-neutral-600">Profiltyp</span><strong>{result.profileType}</strong></p>}
       </section>
-      </> : <ReportView result={result} heading={heading} />}
+      </> : <NewsletterAfterResult><ReportView result={result} heading={heading} /></NewsletterAfterResult>}
 
       <div className="mt-6 flex flex-wrap gap-3"><button type="button" onClick={() => { moveFocus.current = true; setEditing(true); setIndex(0); }} className={secondary}>Granska mina svar</button><button type="button" onClick={restart} className={secondary}>Börja om</button></div>
     </div>}

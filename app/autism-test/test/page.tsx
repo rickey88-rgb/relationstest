@@ -1,6 +1,7 @@
 "use client";
 
 import ReportView from "./ReportView";
+import { NewsletterAfterResult } from "../../_components/NewsletterSignup";
 import { useTestAccountCheckout } from "../../_components/useTestAccountCheckout";
 import PaywallCheckoutCTA from "../../_components/PaywallCheckoutCTA";
 import PostPurchaseRecommendation from "../../_components/PostPurchaseRecommendation";
@@ -187,7 +188,7 @@ export default function AutismSelfTestPage() {
         <button data-flow="restart" type="button" onClick={restart} className="text-sm underline underline-offset-4">Gör om testet</button>
       </section> : <>
         <ReportView result={result} heading={heading} />
-        <PostPurchaseRecommendation sourceProduct="autism_test" />
+        <NewsletterAfterResult><PostPurchaseRecommendation sourceProduct="autism_test" /></NewsletterAfterResult>
       </>}
       <div className="mt-6 flex flex-wrap gap-3"><button type="button" onClick={() => { moveFocus.current = true; setEditing(true); setIndex(0); }} className={secondary}>Granska mina svar</button><button type="button" onClick={restart} className={secondary}>Börja om</button></div>
     </div>}

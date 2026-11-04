@@ -1,5 +1,6 @@
 import Link from "next/link";
-import type { ReactNode } from "react";
+import { Children, Fragment, isValidElement, type ReactNode } from "react";
+import { NewsletterArticleSignup } from "./NewsletterSignup";
 import { sources, type ContentLink } from "../../content/behaviors";
 
 export const textLink = "underline underline-offset-4 decoration-neutral-300 hover:decoration-neutral-700";
@@ -10,6 +11,9 @@ export function ContentGuide({ title, intro, breadcrumbs = [], children }: {
   breadcrumbs?: ContentLink[];
   children: ReactNode;
 }) {
+  const nodes = Children.toArray(children);
+  const sections = nodes.filter(node => isValidElement(node) && node.type === GuideSection);
+  const midpoint = sections.length >= 4 ? sections[Math.floor(sections.length / 2) - 1] : null;
   return (
     <main data-rv="container" className="mx-auto max-w-3xl px-4 py-10 text-neutral-900 [overflow-wrap:anywhere] sm:px-6 sm:py-14">
       <nav aria-label="Brödsmulor" className="text-sm text-neutral-600">
@@ -24,7 +28,7 @@ export function ContentGuide({ title, intro, breadcrumbs = [], children }: {
           <h1 className="text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">{title}</h1>
           <p className="mt-5 text-lg leading-8 text-neutral-700">{intro}</p>
         </header>
-        {children}
+        {nodes.map((node, index) => <Fragment key={index}>{node}{node === midpoint && <NewsletterArticleSignup />}</Fragment>)}
       </article>
     </main>
   );

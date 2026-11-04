@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { AnalyticsSettings } from "../_analytics/AnalyticsProvider";
+import { NewsletterFooterSignup } from "./NewsletterSignup";
 
 export default function SiteFooter() {
   return (
     <footer className="border-t border-neutral-200/70 bg-white text-neutral-600">
       <div className="mx-auto max-w-5xl px-4 py-6 sm:px-6">
+        <NewsletterFooterSignup />
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
           <p className="text-sm">© 2026 Relationsvarning.se</p>
           <nav aria-label="Information om Relationsvarning">

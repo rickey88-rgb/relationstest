@@ -1,6 +1,7 @@
 "use client";
 
 import PaywallCheckoutCTA from "../../_components/PaywallCheckoutCTA";
+import { NewsletterAfterResult } from "../../_components/NewsletterSignup";
 import PostPurchaseRecommendation from "../../_components/PostPurchaseRecommendation";
 
 import { hasPaidReturn, usePaymentRecovery } from "../../_components/usePaymentRecovery";
@@ -181,7 +182,7 @@ export default function ADHDSelfTestPage() {
         <AdhdReport result={result} heading={heading} />
       </>}
       <div className="mt-6 flex flex-wrap gap-3"><button type="button" onClick={() => { moveFocus.current = true; setEditing(true); setIndex(0); }} className={secondary}>Granska mina svar</button><button type="button" onClick={restart} className={secondary}>Börja om</button></div>
-      {unlocked && <PostPurchaseRecommendation sourceProduct="adhd_test" />}
+      {unlocked && <NewsletterAfterResult><PostPurchaseRecommendation sourceProduct="adhd_test" /></NewsletterAfterResult>}
     </div>}
   </>;
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import PaywallCheckoutCTA from "../../_components/PaywallCheckoutCTA";
+import { NewsletterAfterResult } from "../../_components/NewsletterSignup";
 import PostPurchaseRecommendation from "../../_components/PostPurchaseRecommendation";
 import { buildPaywallTeaser } from "../../_lib/paywallTeaser";
 
@@ -400,7 +401,7 @@ export default function Page() {
       )}
 
       {isFinished && unlocked && <ReportView result={result} onRestart={restart} />}
-      {isFinished && unlocked && <PostPurchaseRecommendation sourceProduct="attachment_test" />}
+      {isFinished && unlocked && <NewsletterAfterResult><PostPurchaseRecommendation sourceProduct="attachment_test" /></NewsletterAfterResult>}
 
       <style jsx>{`
         .answer-button {

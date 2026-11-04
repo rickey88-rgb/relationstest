@@ -17,6 +17,8 @@ module.exports = {
   exclude: [
     '/autism-bok/tack',
     '/autism-bok/tack/*',
+    '/nyhetsbrev/bekrafta',
+    '/nyhetsbrev/avsluta',
     '/angest-test/test',
     '/adhd-test/test',
     '/autism-test/test',
