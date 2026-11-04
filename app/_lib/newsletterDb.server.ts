@@ -40,12 +40,12 @@ export async function requestNewsletterConfirmation(email: string, source: Newsl
 }
 
 export async function confirmNewsletter(tokenHash: string) {
-  const rows = await database()<{ source: NewsletterSource }[]>`
+  const rows = await database()<{ id: string; source: NewsletterSource; unsubscribe_nonce: string }[]>`
     update public.newsletter_subscribers set status = 'active', confirmed_at = now(), unsubscribed_at = null,
       registered_at = requested_at, unsubscribe_nonce = ${randomUUID()}, confirmation_hash = null, confirmation_expires_at = null
     where confirmation_hash = ${tokenHash} and confirmation_expires_at > now() and status <> 'active'
-    returning source`;
-  return rows[0]?.source ?? null;
+    returning id, source, unsubscribe_nonce`;
+  return rows[0] ?? null;
 }
 
 export async function unsubscribeNewsletter(id: string, nonce: string) {
@@ -67,8 +67,9 @@ export async function newsletterRecipients(afterId = "00000000-0000-0000-0000-00
 
 /** Run daily before activation; deliberately touches newsletter tables only. */
 export async function cleanupNewsletter() {
-  await database()`delete from public.newsletter_rate_limits where window_start < now() - interval '48 hours'`;
+  // A daily sweep needs a full interval of margin to respect the published 48h/30d maxima.
+  await database()`delete from public.newsletter_rate_limits where window_start < now() - interval '24 hours'`;
   await database()`delete from public.newsletter_subscribers
-    where (status = 'pending' and requested_at < now() - interval '30 days')
-       or (status = 'unsubscribed' and unsubscribed_at < now() - interval '30 days')`;
+    where (status = 'pending' and requested_at < now() - interval '29 days')
+       or (status = 'unsubscribed' and unsubscribed_at < now() - interval '29 days')`;
 }

@@ -12,9 +12,9 @@ export async function POST(request: NextRequest, context: { params: Promise<{ ac
   catch { return NextResponse.json({ ok: false }, { status: 400, headers: newsletterHeaders }); }
   try {
     const token = body.token;
-    const source = action === "confirm" ? await confirmNewsletterToken(token) : null;
-    const ok = action === "confirm" ? Boolean(source) : await unsubscribeNewsletterToken(token);
-    return NextResponse.json({ ok, ...(source ? { source } : {}) }, { status: ok ? 200 : 410, headers: newsletterHeaders });
+    const confirmation = action === "confirm" ? await confirmNewsletterToken(token) : null;
+    const ok = action === "confirm" ? Boolean(confirmation) : await unsubscribeNewsletterToken(token);
+    return NextResponse.json({ ok, ...(confirmation ?? {}) }, { status: ok ? 200 : 410, headers: newsletterHeaders });
   } catch {
     console.error(JSON.stringify({ event: "newsletter_action_unavailable", reason: "service_unavailable" }));
     return NextResponse.json({ ok: false }, { status: 503, headers: newsletterHeaders });

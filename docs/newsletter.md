@@ -4,25 +4,37 @@ Nyhetsbrevet har inget beroende av kund-, konto-, betalnings- eller analysregist
 
 ## Före aktivering
 
-1. Granska och godkänn `supabase/migrations/202611040001_newsletter.sql`. Den skapar endast `newsletter_subscribers`, `newsletter_rate_limits`, ett index och deras serverbehörigheter i en transaktion. Migrationen har inte körts i Supabase av implementationen. Ingen `IF NOT EXISTS` döljer ett oväntat befintligt schema.
+1. `supabase/migrations/202611040001_newsletter.sql` är granskad och körd i produktion den 4 november 2026. Den skapar endast `newsletter_subscribers`, `newsletter_rate_limits`, ett index och deras serverbehörigheter i en transaktion. Kör den inte igen. Ingen `IF NOT EXISTS` döljer ett oväntat befintligt schema.
 2. Säkerställ backup/återställningsväg innan kontrollerad produktionsmigration. Kontrollera att `DATABASE_URL`-rollen har åtkomst och kan kringgå RLS enligt projektets befintliga servermodell. Tabellen ska inte öppnas för `anon` eller `authenticated`.
 3. Återanvänd befintliga `DATABASE_URL`, `RESEND_API_KEY`. Ange ny separat `NEWSLETTER_TOKEN_SECRET` med minst 32 slumpmässiga tecken, helst 32 slumpmässiga byte som base64url. Visa eller versionshantera inte hemligheten. Behåll den stabil; rotation gör tidigare avregistreringslänkar ogiltiga. Planera rotation med supportväg.
 4. Ange `NEWSLETTER_EMAIL_FROM` som verifierad Resend-avsändare, eller återanvänd befintlig `AUDHD_RECOVERY_EMAIL_FROM` om separat avsändare saknas. Verifiera domänens SPF/DKIM och DMARC samt att Resend click/open tracking är avstängt för bekräftelsemejl. Fragmentlänkarna måste bevaras genom e-postleverantören.
 5. Lägg upp daglig rensning med nedanstående SQL via befintlig databasdrift, exempelvis Supabase Cron om `pg_cron` redan finns. Det är en separat, godkännandepliktig produktionsinställning. Ändra inte befintliga rensnings- eller GA4-jobb. Funktionen `cleanupNewsletter()` kör exakt denna avgränsade rensning och testas lokalt.
-6. Bekräfta korrekt personuppgiftsansvarig juridisk part och leverantörernas personuppgiftsbiträdesvillkor/överföringsunderlag. Granska nya `/nyhetsbrev/integritet` innan publicering. Lagringstiden är ett föreslaget driftsbeslut: aktiva tills samtycket återkallas, obekräftade/avregistrerade uppgifter högst 30 dagar, missbruksskydd högst 48 timmar.
+6. Bekräfta korrekt personuppgiftsansvarig juridisk part och leverantörernas personuppgiftsbiträdesvillkor/överföringsunderlag. Granska `/nyhetsbrev/integritet` innan aktivering. Godkända lagringstider i aktiv databas: aktiva tills samtycket återkallas, obekräftade/avregistrerade uppgifter högst 30 dagar, missbruksskydd högst 48 timmar. Säkerhetskopior och leverantörernas mejlloggar beskrivs separat i integritetstexten.
 7. Sätt `NEWSLETTER_ENABLED=true` först efter migration, rensning och ett uttryckligen godkänt testutskick till ägarens egen testadress. Utan flaggan eller nödvändig konfiguration visas inga formulär. Avregistrerings-API:t fortsätter fungera när insamlingen stängs av.
 
 Rensning (inga kundtabeller):
 
 ```sql
 delete from public.newsletter_rate_limits
-where window_start < now() - interval '48 hours';
+where window_start < now() - interval '24 hours';
 delete from public.newsletter_subscribers
-where (status = 'pending' and requested_at < now() - interval '30 days')
-   or (status = 'unsubscribed' and unsubscribed_at < now() - interval '30 days');
+where (status = 'pending' and requested_at < now() - interval '29 days')
+   or (status = 'unsubscribed' and unsubscribed_at < now() - interval '29 days');
 ```
 
 Ingen bakgrundssändare eller kampanj skickar befintliga kunder mejl. Ingen migration eller skarp mejlsändning görs av lokala tester.
+
+### Kontrollerad driftsättning 4 november 2026
+
+- Migrationen är körd i det befintliga produktionsprojektet. RLS och spärr för `anon`/`authenticated` har kontrollerats. Inga kunder importeras.
+- `LEGAL_RESPONSIBLE_NAME` och `LEGAL_BUSINESS_ADDRESS` är serverinställningar för `/juridisk-information`. Personuppgifterna får inte skrivas i källkod, metadata eller nyhetsbrevets avsändare.
+- Daglig Supabase Cron: `newsletter-retention-daily`, `45 4 * * *` (UTC), 30 sekunders statement timeout. Frågorna ovan har en dags marginal till maximalt 30 dagar respektive 48 timmar vid daglig körning. Övervaka fel och uteblivna körningar; en driftstörning får inte passera obemärkt.
+- Resend har biträdesvillkor som gäller vid kontoregistrering. Supabase och Vercel har biträdesvillkor som ingår i deras tjänstevillkor; Vercel-kontot använder Pro. Läs aktuella leverantörsvillkor och underbiträdeslistor vid ändringar. EU-region betyder inte att all behandling stannar inom EU.
+- `NEWSLETTER_ENABLED=false` håller publika formulär stängda. Ett uttryckligen godkänt test kan använda `NEWSLETTER_TEST_EMAIL` för en enda normaliserad adress. Samtycke, hastighetsbegränsning, token och verkliga leverantörer fungerar som vanligt. Ingen adress får hårdkodas. Testinställningen ger inte tillgång till kundregister eller kampanjutskick och kan inte kringgå övrig konfiguration. Ta bort den när testet är klart; aktivera publikt först efter godkänt helhetstest.
+- Efter lyckad bekräftelse får besökaren en personlig avregistreringslänk direkt på bekräftelsesidan, utöver kravet på avregistreringslänk i framtida nyhetsbrev. Den innehåller inga mejladresser och cachas inte.
+- Före återställning av databasbackup: stoppa all insamling och alla utskick. En återställd prenumerantlista får inte återanvändas för utskick förrän senare avregistreringar och gallringar säkert tillämpats. Om detta inte kan säkerställas ska den återställda listan inte användas; ny frivillig registrering och bekräftelse krävs. Ingen automatisk återaktivering får ske från backup.
+
+Kontrollerat underlag: [Resends GDPR- och lagringsinformation](https://resend.com/security/gdpr), [Supabase DPA](https://supabase.com/legal/customer-resources/data-processing-addendum), [Supabase överföringar](https://supabase.com/legal/privacy-resources/data-residency-and-transfers-faq), [Vercel DPA](https://vercel.com/legal/dpa) och [Vercels tjänstevillkor](https://vercel.com/legal/terms).
 
 ## Flöde
 

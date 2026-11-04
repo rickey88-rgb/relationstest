@@ -9,8 +9,17 @@ function secret() {
   if (!value || value.length < 32) throw new Error("Newsletter unavailable");
   return value;
 }
+function newsletterSettingsPresent() {
+  return Boolean(process.env.DATABASE_URL?.trim() && process.env.RESEND_API_KEY?.trim() && (process.env.NEWSLETTER_EMAIL_FROM?.trim() || process.env.AUDHD_RECOVERY_EMAIL_FROM?.trim()) && (process.env.NEWSLETTER_TOKEN_SECRET?.trim().length ?? 0) >= 32);
+}
 export function newsletterConfigured() {
-  return process.env.NEWSLETTER_ENABLED === "true" && Boolean(process.env.DATABASE_URL?.trim() && process.env.RESEND_API_KEY?.trim() && (process.env.NEWSLETTER_EMAIL_FROM?.trim() || process.env.AUDHD_RECOVERY_EMAIL_FROM?.trim()) && (process.env.NEWSLETTER_TOKEN_SECRET?.trim().length ?? 0) >= 32);
+  return process.env.NEWSLETTER_ENABLED === "true" && newsletterSettingsPresent();
+}
+function newsletterRegistrationAllowed(email: string) {
+  if (newsletterConfigured()) return true;
+  // Rehearsal permits only the owner's explicitly configured address. Public forms stay hidden.
+  return process.env.NEWSLETTER_ENABLED === "false" && newsletterSettingsPresent()
+    && newsletterEmail(process.env.NEWSLETTER_TEST_EMAIL) === email;
 }
 export function newsletterHash(value: string) { return createHash("sha256").update(value).digest("hex"); }
 function mac(value: string) { return createHmac("sha256", secret()).update(value).digest("base64url"); }
@@ -24,7 +33,7 @@ export async function subscribeNewsletter(input: { email?: unknown; source?: unk
   const email = newsletterEmail(input.email), source = newsletterSource(input.source);
   if (!email || !source || input.consent !== true || input.version !== NEWSLETTER_CONSENT_VERSION) return "invalid" as const;
   if (input.website) return "accepted" as const;
-  if (!newsletterConfigured()) return "unavailable" as const;
+  if (!newsletterRegistrationAllowed(email)) return "unavailable" as const;
   try {
     // No raw IP, referrer, page URL, account, product or test data is stored.
     if (!await newsletterRateLimit(mac(`ip:${ip}`), 20) || !await newsletterRateLimit(mac(`email:${email}`), 3)) return "accepted" as const;
@@ -50,7 +59,9 @@ export async function subscribeNewsletter(input: { email?: unknown; source?: unk
 
 export async function confirmNewsletterToken(token: unknown) {
   if (typeof token !== "string" || !/^[A-Za-z0-9_-]{43}$/.test(token)) return null;
-  return confirmNewsletter(newsletterHash(token));
+  const confirmed = await confirmNewsletter(newsletterHash(token));
+  if (!confirmed) return null;
+  return { source: confirmed.source, unsubscribeUrl: newsletterUnsubscribeUrl(confirmed.id, confirmed.unsubscribe_nonce) };
 }
 
 export async function unsubscribeNewsletterToken(token: unknown) {

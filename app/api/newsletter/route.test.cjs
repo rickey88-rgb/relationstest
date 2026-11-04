@@ -19,11 +19,15 @@ async function main() {
   assert.equal(accepted.headers.get("cache-control"), "private, no-store");
   configured = false;
   assert.deepEqual(await (await route.GET()).json(), { enabled: false });
-  const actions = createLoader({ "../../../_lib/newsletter.server": { confirmNewsletterToken: async token => token === "valid" ? "home" : null, unsubscribeNewsletterToken: async token => token === "valid" } })(path.join(__dirname, "[action]/route.ts"));
+  const confirmation = { source: "home", unsubscribeUrl: "https://www.relationsvarning.se/nyhetsbrev/avsluta#token=test-only" };
+  const actions = createLoader({ "../../../_lib/newsletter.server": { confirmNewsletterToken: async token => token === "valid" ? confirmation : null, unsubscribeNewsletterToken: async token => token === "valid" } })(path.join(__dirname, "[action]/route.ts"));
   assert.equal(actions.GET, undefined, "GET/link previews never activate or unsubscribe");
   const context = action => ({ params: Promise.resolve({ action }) });
   assert.equal((await actions.POST(request({ token: "invalid" }), context("confirm"))).status, 410);
-  assert.equal((await actions.POST(request({ token: "valid" }), context("confirm"))).status, 200);
+  const confirmed = await actions.POST(request({ token: "valid" }), context("confirm"));
+  assert.equal(confirmed.status, 200);
+  assert.deepEqual(await confirmed.json(), { ok: true, ...confirmation });
+  assert.equal(confirmed.headers.get("cache-control"), "private, no-store", "personal unsubscribe link must not be cached");
   assert.equal((await actions.POST(request({ token: "valid" }), context("unsubscribe"))).status, 200);
   console.log("PASS: newsletter HTTP origin/body protections, neutral responses, disabled capability and explicit POST-only actions.");
 }
