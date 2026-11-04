@@ -4,16 +4,16 @@ import Link from "next/link";
 import GuideNextSteps from "../_components/GuideNextSteps";
 
 export const metadata: Metadata = {
-  title: "Silent treatment i relation – när tystnad blir makt och kontroll",
+  title: "Silent treatment på svenska – straffande tystnad i relationer",
   description:
-    "Vad betyder silent treatment på svenska? Lär dig känna igen straffande tystnad i en relation och skillnaden mot en sund paus.",
+    "Vad betyder silent treatment? Läs om straffande tystnad i en relation, skillnaden mot en sund paus och hur du kan bemöta mönstret och söka stöd.",
   alternates: {
     canonical: "/silent-treatment-relation",
   },
   openGraph: {
-    title: "Silent treatment i relation – när tystnad blir makt och kontroll",
+    title: "Silent treatment på svenska – straffande tystnad i relationer",
     description:
-      "Vad betyder silent treatment på svenska? En saklig guide om straffande tystnad i relationer och skillnaden mot en sund paus.",
+      "Vad betyder silent treatment? Läs om straffande tystnad i en relation, skillnaden mot en sund paus och hur du kan bemöta mönstret och söka stöd.",
     url: "/silent-treatment-relation",
     type: "article",
   },
@@ -66,6 +66,7 @@ const whatToDo = [
 ];
 
 const faqs = [
+  { question: "Vad betyder silent treatment på svenska?", answer: "Silent treatment brukar kallas straffande tystnad eller tyst behandling. I en relation handlar det om att kontakt eller respons dras undan på ett sätt som kan skapa press och ovisshet. En tydligt kommunicerad paus med en plan för att återkomma är något annat." },
   {
     question: "Är silent treatment samma sak som att någon behöver vara ifred?",
     answer:
@@ -101,7 +102,7 @@ const faqs = [
 const articleJsonLd = {
   "@context": "https://schema.org",
   "@type": "Article",
-  headline: "Silent treatment i relation – när tystnad blir makt och kontroll",
+  headline: "Silent treatment på svenska – straffande tystnad i relationer",
   description:
     "Vad betyder silent treatment på svenska? En guide om straffande tystnad i relationer och skillnaden mot en sund paus.",
   author: {
@@ -114,7 +115,7 @@ const articleJsonLd = {
   },
   mainEntityOfPage: {
     "@type": "WebPage",
-    "@id": "/silent-treatment-relation",
+    "@id": "https://www.relationsvarning.se/silent-treatment-relation",
   },
 };
 
@@ -158,7 +159,7 @@ export default function SilentTreatmentRelationPage() {
           </div>
 
           <h1 className="mt-5 text-4xl font-semibold tracking-tight text-neutral-950 md:text-5xl">
-            Silent treatment i relation – när tystnad blir makt och kontroll
+            Silent treatment på svenska – straffande tystnad i relationer
           </h1>
 
           <p className="mt-6 max-w-3xl text-lg leading-8 text-neutral-700 md:text-xl">
@@ -211,7 +212,7 @@ export default function SilentTreatmentRelationPage() {
         <article className="space-y-14">
           <section id="vad-ar" className="space-y-5">
             <h2 className="text-3xl font-semibold tracking-tight text-neutral-950">
-              Vad betyder silent treatment i en relation?
+              Vad betyder silent treatment på svenska?
             </h2>
 
             <div className="space-y-5 text-[1.05rem] leading-8 text-neutral-700">
@@ -622,7 +623,7 @@ export default function SilentTreatmentRelationPage() {
 
           <section id="vad-gora" className="space-y-6">
             <h2 className="text-3xl font-semibold tracking-tight text-neutral-950">
-              Vad du kan göra om du känner igen dig
+              Hur kan du bemöta silent treatment?
             </h2>
 
             <p className="text-[1.05rem] leading-8 text-neutral-700">
@@ -631,6 +632,12 @@ export default function SilentTreatmentRelationPage() {
               mönstret med mig över tid?”. Silent treatment lever ofta på att du blir
               kvar i akutläget. När du börjar se strukturen försvagas dess grepp lite.
             </p>
+
+            <div className="rounded-2xl border border-neutral-200 bg-neutral-50 p-5 space-y-3">
+              <h3 className="text-xl font-semibold">Ett konkret sätt att föreslå en paus</h3>
+              <p>Om det känns tryggt kan du säga: ”Vi kan ta en paus nu. Kan vi bestämma när vi fortsätter prata?” Lägg märke till om personen återkommer och om ni båda får utrymme i samtalet. Du behöver inte ta hela ansvaret för att kontakten ska fungera.</p>
+              <p>Om du är rädd för reaktionen, sök <Link href="/psykiskt-vald/hjalp" className="underline underline-offset-4">stöd utanför relationen</Link> i stället för att pröva en konfrontation. Läs också om <Link href="/beteenden/partner-ignorerar-mig-som-straff" className="underline underline-offset-4">när partnern ignorerar dig som straff</Link>.</p>
+            </div>
 
             <div className="grid gap-4">
               {whatToDo.map((item, index) => (

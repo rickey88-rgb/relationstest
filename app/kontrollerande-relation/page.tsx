@@ -4,19 +4,19 @@ import Image from "next/image";
 import { EditorialArticleJsonLd, getEditorialArticleSchema, getEditorialMetadata } from "../_seo/editorialSeo";
 
 const title = "Kontrollerande partner – tecken på kontrollerande beteende";
-const description = "Hur märks en kontrollerande partner? Läs om tidiga tecken, skillnaden mellan omtanke och kontroll och ett test för att reflektera över relationen.";
+const description = "Tecken på en kontrollerande partner och kontrollbehov i relationer. Se skillnaden mellan omtanke och kontroll, konkreta exempel och vägar till stöd.";
 
 export const metadata = {
   title,
   description,
-  ...getEditorialMetadata({ route: "/kontrollerande-relation", title, description, datePublished: "2026-02-22T13:39:05+01:00", dateModified: "2026-10-16T12:00:00+02:00" }),
+  ...getEditorialMetadata({ route: "/kontrollerande-relation", title, description, datePublished: "2026-02-22T13:39:05+01:00", dateModified: "2026-11-04T12:00:00+01:00" }),
 };
 
-const articleJsonLd = getEditorialArticleSchema({ route: "/kontrollerande-relation", title, description, datePublished: "2026-02-22T13:39:05+01:00", dateModified: "2026-10-16T12:00:00+02:00" });
+const articleJsonLd = getEditorialArticleSchema({ route: "/kontrollerande-relation", title, description, datePublished: "2026-02-22T13:39:05+01:00", dateModified: "2026-11-04T12:00:00+01:00" });
 
 export default function Page() {
   return (
-    <EditorialSurface><main data-rv="container" className="mx-auto max-w-3xl px-6 py-12">
+    <EditorialSurface><main data-rv="container" className="mx-auto max-w-3xl px-6 py-12 [overflow-wrap:anywhere]">
       <EditorialArticleJsonLd data={articleJsonLd} />
       <article className="space-y-6">
         <h1 className="text-3xl font-semibold">
@@ -89,6 +89,10 @@ export default function Page() {
           <li><strong>Kläder och vardagsval:</strong> partnern bestämmer vad du får ha på dig eller pressar dig att ändra planer som du själv valt.</li>
           <li><strong>Konsekvenser när du säger nej:</strong> gränser möts med skuldbeläggning, ilska, hot eller bestraffande tystnad. Du anpassar dig för att undvika reaktionen.</li>
         </ul>
+
+        <p className="text-sm leading-7 text-neutral-700">
+          Fördjupa dig i konkreta situationer: <Link href="/beteenden/partner-kontrollerar-min-mobil" className="underline underline-offset-4">partnern kontrollerar min mobil</Link>, <Link href="/ekonomiskt-vald" className="underline underline-offset-4">ekonomisk kontroll</Link> och <Link href="/beteenden/partner-bestammer-vad-jag-far-ha-pa-mig" className="underline underline-offset-4">partnern bestämmer vad jag får ha på mig</Link>.
+        </p>
 
         <h2 className="text-2xl font-semibold">
           Kontrollbehov i en relation – när blir det ett problem?
@@ -213,6 +217,9 @@ export default function Page() {
           Du behöver inte göra ett test eller köpa en analys för att söka stöd.
           <strong> Vid akut fara, ring 112.</strong>
         </p>
+
+        <h2 className="text-2xl font-semibold">Så kan du beskriva kontrollen när du söker stöd</h2>
+        <p>Utgå från en konkret situation: vad ville du göra, vilket krav ställdes och vad hände när du sa nej? Beskriv också om du har börjat avstå från egna val för att undvika reaktionen. Det ger ett tydligare underlag än att försöka hitta en etikett för partnern. Välj ett sätt att söka stöd som känns tryggt för dig.</p>
 
         <h2 className="text-2xl font-semibold">
           Finns det ett test för en kontrollerande partner?
