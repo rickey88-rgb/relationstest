@@ -7,21 +7,29 @@ import { getPublishedArticleImage } from "../_seo/articleImages";
 import { EditorialArticleJsonLd, getEditorialArticleSchema, getEditorialMetadata } from "../_seo/editorialSeo";
 
 const title = "Gaslighting i relation: tecken, exempel och skillnaden mot konflikt";
-const description = "En saklig guide till gaslighting i relationer: vad det betyder, vanliga tecken, konkreta exempel, skillnaden mot vanlig konflikt och praktiska sätt att skydda dig.";
+const description = "Vad betyder gaslighting? Se exempel på förnekande och skuldvändning i en relation, skillnaden mot vanlig konflikt och hur du kan bemöta mönstret och söka stöd.";
 
 export const metadata: Metadata = {
   title,
   description,
-  ...getEditorialMetadata({ route: "/gaslighting-relation", title, description, datePublished: "2026-03-13T21:44:14+01:00", dateModified: "2026-10-16T12:00:00+02:00" }),
+  ...getEditorialMetadata({ route: "/gaslighting-relation", title, description, datePublished: "2026-03-13T21:44:14+01:00", dateModified: "2026-11-04T12:00:00+01:00" }),
 };
 
+const faqs = [
+  { question: "Vad betyder gaslighting på svenska?", answer: "Gaslighting beskriver ett återkommande mönster av förnekande eller förvrängning som får någon att tvivla på sitt minne eller sin upplevelse. Det engelska ordet används ofta även på svenska." },
+  { question: "Är olika minnen av ett bråk alltid gaslighting?", answer: "Nej. Två personer kan minnas olika utan att det är gaslighting. Se på om din upplevelse upprepat avfärdas och om det finns utrymme för ansvar och att reda ut sakfrågan." },
+  { question: "Hur kan jag bemöta gaslighting?", answer: "Utgå från konkreta situationer och prata med någon du litar på för att få perspektiv. Om du är rädd för partnerns reaktion, prioritera stöd och säkerhet framför att försöka vinna en diskussion. Du behöver inte ett testresultat för att söka hjälp." },
+];
+const faqJsonLd = { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faqs.map(({question,answer}) => ({ "@type": "Question", name: question, acceptedAnswer: { "@type": "Answer", text: answer } })) };
+
 const gaslightingImage = getPublishedArticleImage("/gaslighting-relation");
-const articleJsonLd = getEditorialArticleSchema({ route: "/gaslighting-relation", title, description, datePublished: "2026-03-13T21:44:14+01:00", dateModified: "2026-10-16T12:00:00+02:00" });
+const articleJsonLd = getEditorialArticleSchema({ route: "/gaslighting-relation", title, description, datePublished: "2026-03-13T21:44:14+01:00", dateModified: "2026-11-04T12:00:00+01:00" });
 
 export default function GaslightingRelationPage() {
   return (
-    <EditorialSurface><main data-rv="container" className="mx-auto max-w-3xl px-4 py-12">
+    <EditorialSurface><main data-rv="container" className="mx-auto max-w-3xl px-4 py-12 [overflow-wrap:anywhere]">
       <EditorialArticleJsonLd data={articleJsonLd} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd).replace(/</g, "\\u003c") }} />
       <header className="mb-10">
         <p className="text-sm text-neutral-500">Relationsvarning • Kunskapssida</p>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight text-neutral-900">
@@ -45,7 +53,7 @@ export default function GaslightingRelationPage() {
 
       <article className="space-y-10 text-neutral-800">
         <section className="space-y-4">
-          <h2 className="text-2xl font-semibold tracking-tight">Vad betyder gaslighting</h2>
+          <h2 className="text-2xl font-semibold tracking-tight">Vad betyder gaslighting?</h2>
           <p className="leading-7">
             <strong>Gaslighting</strong> i en relation beskriver ett återkommande mönster där
             någon förnekar eller förvränger det som hänt och undergräver den andres upplevelse.
@@ -114,6 +122,8 @@ export default function GaslightingRelationPage() {
     Gör gaslightingtestet →
   </Link>
 </div>
+
+        <p className="leading-7">Läs också om <Link href="/beteenden/partner-fornekar-saker-som-hant" className="underline underline-offset-4">när partnern förnekar saker som hänt</Link> och <Link href="/beteenden/partner-sager-att-jag-ar-for-kanslig" className="underline underline-offset-4">säger att du är för känslig</Link> för fler vardagsexempel.</p>
 
         <section className="space-y-4">
           <h2 className="text-2xl font-semibold tracking-tight">Hur gaslighting brukar kännas</h2>
@@ -465,7 +475,8 @@ export default function GaslightingRelationPage() {
 
         </section>
 
-        <p className="pt-2 text-sm leading-6 text-neutral-500">Senast uppdaterad: 2026-09-21</p>
+        <section className="space-y-5" aria-labelledby="gaslighting-faq"><h2 id="gaslighting-faq" className="text-2xl font-semibold tracking-tight">Vanliga frågor om gaslighting</h2>{faqs.map(({question,answer}) => <div key={question} className="space-y-2"><h3 className="text-lg font-semibold">{question}</h3><p className="leading-7">{answer}</p></div>)}</section>
+        <p className="pt-2 text-sm leading-6 text-neutral-500">Senast uppdaterad: 2026-11-04</p>
       </article>
     </main></EditorialSurface>
   );

@@ -1,10 +1,20 @@
 import EditorialSurface from "../_components/EditorialSurface";
 import Link from "next/link";
+import type { Metadata } from "next";
 
-export const metadata = {
-  title: "Manipulativ partner – tecken, mönster och varningssignaler",
-  description:
-    "Tecken på en manipulativ partner. Saklig genomgång av beteendemönster, varningssignaler och hur du kan orientera dig tryggt utan att fastna i diagnoser.",
+const title = "Manipulativ partner – tecken, mönster och varningssignaler";
+const description = "Vad betyder manipulativ? Läs om 10 tecken hos en partner, konkreta exempel och skillnaden mot vanlig konflikt. Se hur du kan få stöd och reflektera med ett test.";
+const faqs = [
+  { question: "Vad betyder manipulativ i en relation?", answer: "Manipulativt beteende kan handla om att pressa fram eftergifter genom skuld, förskjutet ansvar eller att dina gränser ifrågasätts. Titta på återkommande beteenden och deras följder. En enstaka konflikt avgör inte att någon är manipulativ." },
+  { question: "Finns det ett test för en manipulativ partner?", answer: "Ett relationstest kan hjälpa dig att strukturera egna upplevelser av till exempel manipulation, kontroll och otrygghet. Det kan inte avgöra partnerns avsikter eller ställa en diagnos. Du behöver inte göra ett test för att söka stöd." },
+];
+const faqJsonLd = { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faqs.map(({question,answer}) => ({ "@type": "Question", name: question, acceptedAnswer: { "@type": "Answer", text: answer } })) };
+
+export const metadata: Metadata = {
+  title,
+  description,
+  openGraph: { title, description, url: "https://www.relationsvarning.se/manipulativ-partner", type: "article" },
+  twitter: { card: "summary", title, description },
   alternates: {
     canonical: "https://www.relationsvarning.se/manipulativ-partner",
   },
@@ -12,7 +22,8 @@ export const metadata = {
 
 export default function Page() {
   return (
-    <EditorialSurface><main data-rv="container" className="mx-auto max-w-3xl px-6 py-12">
+    <EditorialSurface><main data-rv="container" className="mx-auto max-w-3xl px-6 py-12 [overflow-wrap:anywhere]">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd).replace(/</g, "\\u003c") }} />
       <article className="space-y-6">
         <h1 className="text-3xl font-semibold">
           Manipulativ partner: tecken, mönster och hur du kan orientera dig tryggt
@@ -34,7 +45,7 @@ export default function Page() {
         <p>
           Vill du få en strukturerad bild av din situation kan du också{" "}
           <Link href="/test" className="underline">
-            göra vårt test här
+            göra relationstestet om återkommande mönster
           </Link>
           .
         </p>
@@ -174,6 +185,8 @@ export default function Page() {
             din reaktion var rimlig.
           </li>
         </ol>
+
+        <p>Fördjupa dig i <Link href="/beteenden/partner-skyller-allt-pa-mig" className="underline underline-offset-4">när partnern skyller allt på dig</Link> eller <Link href="/beteenden/partner-sager-att-jag-ar-for-kanslig" className="underline underline-offset-4">avfärdar dig som för känslig</Link>. Exemplen hjälper dig beskriva situationer utan att behöva avgöra vad partnern har för personlighet.</p>
 
         <h2 className="text-2xl font-semibold">
           Hur en manipulativ partner ofta låter
@@ -449,7 +462,7 @@ export default function Page() {
             När något har pågått länge blir det lätt att normalisera det. Om du vill
             få en mer strukturerad överblick över beteenden och mönster kan du{" "}
             <Link href="/test" className="underline">
-              göra vårt test här
+              göra relationstestet om återkommande mönster
             </Link>
             .
           </p>
@@ -465,6 +478,8 @@ export default function Page() {
         <h2 className="text-2xl font-semibold">
           Vanliga frågor om manipulativ partner
         </h2>
+
+        {faqs.map(({question,answer}) => <div key={question} className="space-y-3"><h3 className="text-xl font-semibold">{question}</h3><p>{answer}</p></div>)}
 
         <h3 className="text-xl font-semibold">
           Är en manipulativ partner alltid medveten om vad den gör?
@@ -489,6 +504,36 @@ export default function Page() {
           .
           Om du känner igen just sådana mönster kan du också <Link href="/gaslightingtest/test" className="underline">göra gaslightingtestet</Link> för att reflektera över dina erfarenheter.
         </p>
+
+
+        <h3 className="text-xl font-semibold">
+          Kan någon vara manipulativ utan att vara psykopat eller narcissist?
+        </h3>
+        <p>
+          Ja. Manipulativa beteenden är inte samma sak som en viss diagnos eller
+          personlighetsetikett. Därför är det ofta klokare att börja i mönster och
+          konsekvenser än i spekulationer om vad personen “är”.
+        </p>
+
+        <h3 className="text-xl font-semibold">
+          Hur vet jag om det är manipulation eller bara en svår period?
+        </h3>
+        <p>
+          Titta mindre på enstaka dagar och mer på återkommande logik. Om samma typ av
+          skuld, dimma, ansvarsförskjutning eller gränspress återkommer trots att du
+          försöker prata, förstå och justera – då är det rimligt att ta mönstret på
+          allvar.
+        </p>
+
+        <h3 className="text-xl font-semibold">
+          Vad är det första jag bör göra om jag känner igen flera tecken?
+        </h3>
+        <p>
+          Börja med att skapa klarhet. Skriv ner situationer, prata med någon du
+          litar på och lägg märke till hur du mår före, under och efter konflikter.
+          Om du känner otrygghet eller rädsla är det viktigt att söka stöd tidigt.
+        </p>
+
         <section data-rv="card" className="rounded-3xl border border-neutral-200 bg-white p-7 shadow-sm md:p-8">
   <h2 className="text-2xl font-semibold tracking-tight text-neutral-950">
     Läs också
@@ -526,34 +571,6 @@ export default function Page() {
     </p>
   </div>
 </section>
-
-        <h3 className="text-xl font-semibold">
-          Kan någon vara manipulativ utan att vara psykopat eller narcissist?
-        </h3>
-        <p>
-          Ja. Manipulativa beteenden är inte samma sak som en viss diagnos eller
-          personlighetsetikett. Därför är det ofta klokare att börja i mönster och
-          konsekvenser än i spekulationer om vad personen “är”.
-        </p>
-
-        <h3 className="text-xl font-semibold">
-          Hur vet jag om det är manipulation eller bara en svår period?
-        </h3>
-        <p>
-          Titta mindre på enstaka dagar och mer på återkommande logik. Om samma typ av
-          skuld, dimma, ansvarsförskjutning eller gränspress återkommer trots att du
-          försöker prata, förstå och justera – då är det rimligt att ta mönstret på
-          allvar.
-        </p>
-
-        <h3 className="text-xl font-semibold">
-          Vad är det första jag bör göra om jag känner igen flera tecken?
-        </h3>
-        <p>
-          Börja med att skapa klarhet. Skriv ner situationer, prata med någon du
-          litar på och lägg märke till hur du mår före, under och efter konflikter.
-          Om du känner otrygghet eller rädsla är det viktigt att söka stöd tidigt.
-        </p>
 
         <hr className="my-8" />
 
