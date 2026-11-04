@@ -1,4 +1,5 @@
 import postgres from "postgres";
+import { accountDatabaseTls } from "./accountDatabaseTls.server";
 import { randomUUID } from "node:crypto";
 import { NEWSLETTER_CONSENT_TEXT, NEWSLETTER_CONSENT_VERSION, type NewsletterSource } from "./newsletter";
 
@@ -7,7 +8,7 @@ const globals = globalThis as typeof globalThis & { newsletterSql?: Sql };
 function database() {
   const url = process.env.DATABASE_URL?.trim();
   if (!url) throw new Error("Newsletter unavailable");
-  return globals.newsletterSql ??= postgres(url, { max: 1, prepare: false, idle_timeout: 20, connect_timeout: 10, ssl: "verify-full" });
+  return globals.newsletterSql ??= postgres(url, { max: 1, prepare: false, idle_timeout: 20, connect_timeout: 10, ssl: accountDatabaseTls() });
 }
 
 export async function newsletterRateLimit(keyHash: string, maximum: number) {

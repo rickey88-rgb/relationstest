@@ -10,6 +10,7 @@ async function main() {
   const originalFetch = global.fetch, originalError = console.error;
   const messages = [], logs = [];
   let mailFailure = false;
+  let connectionOptions;
   process.env.DATABASE_URL = "postgres://isolated-newsletter-test";
   process.env.NEWSLETTER_ENABLED = "true";
   process.env.NEWSLETTER_TOKEN_SECRET = "test-only-newsletter-secret-of-at-least-32-characters";
@@ -34,7 +35,7 @@ async function main() {
     await pg.exec("create role anon; create role authenticated; create role service_role bypassrls; create table public.existing_customer_fixture(email text); insert into public.existing_customer_fixture values ('buyer@example.invalid'); alter default privileges in schema public grant all on tables to anon, authenticated;");
     await pg.exec(fs.readFileSync(path.join(__dirname, "../../supabase/migrations/202611040001_newsletter.sql"), "utf8"));
     delete global.newsletterSql;
-    const load = createLoader({ postgres: { default: () => adapter(pg) } });
+    const load = createLoader({ postgres: { default: (_url, options) => { connectionOptions = options; return adapter(pg); } } });
     const shared = load(path.join(__dirname, "newsletter.ts"));
     const db = load(path.join(__dirname, "newsletterDb.server.ts"));
     const service = load(path.join(__dirname, "newsletter.server.ts"));
@@ -53,6 +54,9 @@ async function main() {
     assert.equal(await service.subscribeNewsletter({ email: "new@example.invalid", source: "audhd_test", consent: true, version: shared.NEWSLETTER_CONSENT_VERSION }, "ip"), "invalid");
     assert.equal(await register(" Buyer@Example.Invalid "), "accepted");
     assert.equal(await register("buyer@example.invalid"), "accepted");
+    assert.equal(connectionOptions.ssl.rejectUnauthorized, true, "newsletter TLS must verify the certificate chain");
+    assert.equal(typeof connectionOptions.ssl.checkServerIdentity, "function", "newsletter TLS must verify hostnames");
+    assert(connectionOptions.ssl.ca.includes("BEGIN CERTIFICATE"), "newsletter uses the existing published Supabase CA");
     assert.equal(messages.length, 1, "duplicate registration does not send duplicate confirmation");
     let rows = (await pg.query("select * from public.newsletter_subscribers")).rows;
     assert.equal(rows.length, 1);
