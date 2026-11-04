@@ -13,6 +13,7 @@ export default function SiteFooter() {
             <ul className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
               {[
                 { href: "/integritet", label: "Integritet" },
+                { href: "/juridisk-information", label: "Juridisk information" },
                 { href: "/villkor", label: "Villkor" },
                 { href: "/kontakt", label: "Kontakt" },
                 { href: "/metodik", label: "Metodik" },

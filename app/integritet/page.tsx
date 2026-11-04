@@ -8,8 +8,6 @@ export const metadata: Metadata = {
   },
 };
 
-const controllerName = "Rickey Hammarstedt";
-const controllerAddress = "villavägen 17";
 
 export default function IntegritetPage() {
   return (
@@ -28,6 +26,11 @@ export default function IntegritetPage() {
 
       <p style={{ opacity: 0.85 }}>
         Här beskriver vi hur vi hanterar uppgifter när du använder våra tester och Mina sidor.
+      </p>
+
+      <p style={{ opacity: 0.9 }}>
+        Uppgifter om personuppgiftsansvarig och kontakt finns på sidan{" "}
+        <Link href="/juridisk-information" style={{ textDecoration: "underline" }}>Juridisk information</Link>.
       </p>
 
       <h2 style={{ marginTop: 22, fontSize: 18 }}>1. Vilka uppgifter vi hanterar</h2>
@@ -88,8 +91,7 @@ export default function IntegritetPage() {
         egna villkor och integritetspolicy.
       </p>
 
-      <h2 style={{ marginTop: 22, fontSize: 18 }}>5. Personuppgiftsansvarig och kontakt</h2>
-      <p style={{ opacity: 0.9 }}>Personuppgiftsansvarig: {controllerName}. Kontaktadress: {controllerAddress}.</p>
+      <h2 style={{ marginTop: 22, fontSize: 18 }}>5. Kontakt</h2>
       <p style={{ opacity: 0.9 }}>
         Frågor om integritet:{" "}
         <a href="mailto:support@relationsvarning.se">support@relationsvarning.se</a>
