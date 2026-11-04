@@ -1,5 +1,5 @@
 import { testConfig, type TestId } from "../_analytics/config";
-import { BOOK_OFFER_PRICES } from "../_lib/bookOffers";
+import { BOOK_OFFER_PRICES, getAdhdDeluxeBookOffer, getAudhdBookOffer, getAutismBookOffer } from "../_lib/bookOffers";
 import { ADHD_DELUXE_SALE_ENABLED, AUTISM_BOOK_SALE_ENABLED } from "../_lib/featureFlags";
 
 export type ProductType = "test" | "book";
@@ -12,6 +12,7 @@ type ProductDefinition = {
   type: ProductType;
   name: string;
   path?: string;
+  purchasePath?: string;
   price: number;
   ordinaryPrice?: number;
   currency: "SEK";
@@ -59,6 +60,7 @@ export const productCatalog = {
     type: "book",
     name: "Världens bästa bok om AuDHD",
     path: "/audhd-bok?offer=analysis",
+    purchasePath: getAudhdBookOffer("analysis").paymentLink,
     price: BOOK_OFFER_PRICES.audhd.analysis,
     ordinaryPrice: BOOK_OFFER_PRICES.audhd.ordinary,
     currency: "SEK",
@@ -71,6 +73,7 @@ export const productCatalog = {
     type: "book",
     name: "AUTISM ALL INCLUSIVE",
     path: "/autism-bok?offer=analysis",
+    purchasePath: getAutismBookOffer("analysis").paymentLink,
     price: BOOK_OFFER_PRICES.autism.analysis,
     ordinaryPrice: BOOK_OFFER_PRICES.autism.ordinary,
     currency: "SEK",
@@ -83,6 +86,7 @@ export const productCatalog = {
     type: "book",
     name: "ADHD Deluxe",
     path: "/adhd-deluxe?offer=analysis",
+    purchasePath: getAdhdDeluxeBookOffer("analysis").paymentLink,
     price: BOOK_OFFER_PRICES.adhdDeluxe.analysis,
     ordinaryPrice: BOOK_OFFER_PRICES.adhdDeluxe.ordinary,
     currency: "SEK",
@@ -138,17 +142,17 @@ function bookOffer(productId: BookProductId, position: OfferPosition, priority: 
 
 export const crossSellOffers: Partial<Record<ProductId, readonly ConfiguredOffer[]>> = {
   adhd_test: [
-    bookOffer("adhd_deluxe", "primary", 10),
-    testOffer("adhd_test", "audhd_test", "secondary", 20, { path: "/audhd-test" }),
+    testOffer("adhd_test", "audhd_test", "primary", 10, { path: "/audhd-test" }),
+    bookOffer("adhd_deluxe", "secondary", 20),
   ],
   autism_test: [
-    bookOffer("autism_book", "primary", 10),
-    testOffer("autism_test", "audhd_test", "secondary", 20, { path: "/audhd-test" }),
+    testOffer("autism_test", "audhd_test", "primary", 10, { path: "/audhd-test" }),
+    bookOffer("autism_book", "secondary", 20),
   ],
   audhd_test: [
-    bookOffer("audhd_book", "primary", 10),
-    testOffer("audhd_test", "adhd_test", "secondary", 20, { selectionGroup: "audhd-focus", path: "/adhd-test" }),
-    testOffer("audhd_test", "autism_test", "secondary", 21, { selectionGroup: "audhd-focus", path: "/autism-test" }),
+    testOffer("audhd_test", "adhd_test", "primary", 10, { selectionGroup: "audhd-focus", path: "/adhd-test" }),
+    testOffer("audhd_test", "autism_test", "primary", 11, { selectionGroup: "audhd-focus", path: "/autism-test" }),
+    bookOffer("audhd_book", "secondary", 20),
   ],
   hsp_test: [
     testOffer("hsp_test", "autism_test", "primary", 10, { selectionGroup: "neurodevelopmental", path: "/autism-test" }),
@@ -189,7 +193,11 @@ export function resolveCrossSellOffers(sourceProduct: ProductId, options: Resolv
   const candidates = (crossSellOffers[sourceProduct] ?? [])
     .filter((offer) => active === undefined || active.includes(offer.productId))
     .filter((offer) => !offer.conditions?.requiresActiveProduct || active?.includes(offer.productId))
-    .filter((offer) => productCatalog[offer.productId].enabled)
+    .filter((offer) => offer.productId !== sourceProduct)
+    .filter((offer) => {
+      const product: ProductDefinition | undefined = productCatalog[offer.productId];
+      return product?.enabled && Boolean(offer.path ?? product.path);
+    })
     .filter((offer) => productCatalog[offer.productId].type !== "test" || offer.conditions?.hideIfTargetTestUnlocked === false || !options.hasTestAccess?.(offer.productId as TestId));
 
   const selected = new Map<string, ConfiguredOffer>();

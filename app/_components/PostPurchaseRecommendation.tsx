@@ -87,27 +87,22 @@ export default function PostPurchaseRecommendation({ sourceProduct: sourceProduc
   const destination = useMemo(() => (offer: ResolvedOffer) => offer.path ?? offer.product.path ?? "", []);
   if (!sourceProduct || !offers.length) return null;
 
-  const [primary, secondary] = offers;
-  return <section aria-label="Möjliga nästa steg" className="mt-10 rounded-2xl border border-neutral-200 bg-neutral-50 p-5 text-neutral-900 sm:p-6">
-    <p className="text-xs font-semibold uppercase tracking-[0.16em] text-neutral-500">Nästa steg</p>
-    <article ref={(node) => { if (node) cardNodes.current.set(primary.productId, node); else cardNodes.current.delete(primary.productId); }} className="mt-3">
-      {primary.product.type === "book" && productCatalog[sourceProduct].type === "test" && <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#27666A]">Exklusivt för dig som gjort testet</p>}
-      <div className={primary.product.image ? "mt-3 grid gap-5 sm:grid-cols-[minmax(0,1fr)_150px] sm:items-center" : ""}>
-        <div className={primary.product.image ? "order-2 sm:order-1" : ""}>
-          <h2 className="text-xl font-semibold tracking-tight">{primary.title}</h2>
-          <p className="mt-3 max-w-2xl leading-7 text-neutral-700">{primary.description}</p>
-          {primary.product.ordinaryPrice && <p className="mt-4 text-sm text-neutral-600"><span className="line-through">{primary.product.ordinaryPrice} kr</span> · <strong className="text-neutral-900">{primary.product.price} kr</strong></p>}
-          <Link data-flow="cta" href={destination(primary)} onClick={() => trackEvent("cross_sell_click", productEventParams(sourceProduct, primary))} className="mt-5 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[#27666A] px-5 py-3 text-center font-semibold text-white transition-colors hover:bg-[#1F5357] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#27666A] sm:w-auto">{primary.label}</Link>
-          {primary.product.type === "book" && <p className="mt-3 text-sm text-neutral-600">Digital bok · Direkt tillgång efter betalning</p>}
+  return <section aria-label="Möjliga nästa steg" className="mt-10 text-neutral-900 print:hidden">
+    <h2 className="text-2xl font-semibold tracking-tight">Fortsätt i din egen takt</h2>
+    <p className="mt-2 text-sm leading-6 text-neutral-600">{productCatalog[sourceProduct].type === "test" ? "Din analys är klar." : "Din bok är redo att laddas ner."} Här finns fler sätt att fördjupa dig om du vill.</p>
+    <div className={`mt-5 grid gap-5 ${offers.length > 1 ? "md:grid-cols-2" : ""}`}>
+      {offers.map((offer) => <article key={offer.productId} ref={(node) => { if (node) cardNodes.current.set(offer.productId, node); else cardNodes.current.delete(offer.productId); }} className="flex min-w-0 flex-col rounded-2xl border border-neutral-200 bg-neutral-50 p-5 sm:p-6">
+        <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#27666A]">{offer.product.type === "test" ? "Rekommenderat nästa test" : "Fördjupa dig med en bok"}</p>
+        {offer.product.image && <Image src={offer.product.image.src} alt={offer.product.image.alt} width={offer.product.image.width} height={offer.product.image.height} sizes="160px" className="mx-auto mt-4 h-32 w-40 object-contain" />}
+        <h3 className="mt-4 text-xl font-semibold tracking-tight">{offer.title}</h3>
+        <p className="mt-3 leading-7 text-neutral-700">{offer.description}</p>
+        <div className="mt-auto pt-5">
+          <p className="text-sm text-neutral-600">{offer.product.type === "test" ? "Fullständig analys" : "Digital bok (PDF)"}</p>
+          <p className="mt-1 text-xl font-semibold">{offer.product.ordinaryPrice && <span className="mr-2 text-sm font-normal text-neutral-500 line-through">{offer.product.ordinaryPrice} kr</span>}{offer.product.price} kr</p>
+          <Link data-flow="cta" href={offer.product.purchasePath ?? destination(offer)} onClick={() => trackEvent("cross_sell_click", productEventParams(sourceProduct, offer))} className="mt-4 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[#27666A] px-4 py-3 text-center font-semibold text-white transition-colors hover:bg-[#1F5357] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#27666A]">{offer.product.type === "book" ? "Köp boken" : offer.label}</Link>
+          {offer.product.type === "book" && <Link href={destination(offer)} className="mt-3 inline-flex min-h-11 items-center text-sm text-[#27666A] underline underline-offset-4">Läs mer om boken</Link>}
         </div>
-        {primary.product.image && <Image src={primary.product.image.src} alt={primary.product.image.alt} width={primary.product.image.width} height={primary.product.image.height} sizes="(max-width: 640px) 180px, 150px" className="order-1 mx-auto h-auto w-40 sm:order-2 sm:w-[150px]" />}
-      </div>
-    </article>
-    {secondary && <article ref={(node) => { if (node) cardNodes.current.set(secondary.productId, node); else cardNodes.current.delete(secondary.productId); }} className="mt-6 border-t border-neutral-200 pt-5">
-      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-neutral-500">Utforska vidare</p>
-      <h3 className="mt-2 text-lg font-semibold tracking-tight">{secondary.title}</h3>
-      <p className="mt-2 max-w-2xl text-sm leading-6 text-neutral-700">{secondary.description}</p>
-      <Link data-flow="cta" href={destination(secondary)} onClick={() => trackEvent("cross_sell_click", productEventParams(sourceProduct, secondary))} className="mt-4 inline-flex min-h-11 items-center font-semibold text-[#27666A] underline decoration-[#27666A]/40 underline-offset-4 transition-colors hover:text-[#1F5357] hover:decoration-[#1F5357] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#27666A]">{secondary.label}</Link>
-    </article>}
+      </article>)}
+    </div>
   </section>;
 }
