@@ -47,6 +47,58 @@ const isReportView = test => test.nodes().some(node => node.type?.name === "Repo
 (async () => {
   async function ready(options) { const test = environment(options); if (test.runEffects) await test.flush(); return test; }
 
+  // Exercise the actual page, including the question-48/context boundary.
+  // Keep the section introduction separate from the accessible question label.
+  const model = createLoader()(path.join(__dirname, "model.ts"));
+  const originalSetTimeout = global.setTimeout, originalClearTimeout = global.clearTimeout;
+  const timers = new Map(); let timerId = 0;
+  global.setTimeout = callback => { timers.set(++timerId, callback); return timerId; };
+  global.clearTimeout = id => timers.delete(id);
+  try {
+    const flow = await ready();
+    const heading = () => flow.nodes().find(node => node.props?.id === "question");
+    const options = () => flow.nodes().filter(node => node.type === "button" && Object.hasOwn(node.props, "aria-pressed"));
+    async function click(node) {
+      assert(node && !node.props.disabled);
+      node.props.onClick(); await flow.flush();
+      const callbacks = [...timers.values()]; timers.clear(); callbacks.forEach(callback => callback());
+      await flow.flush();
+    }
+    for (const question of model.questions) {
+      assert.equal(flow.text(heading()), question.text);
+      assert.deepEqual(options().map(flow.text), model.answerLabels);
+      await click(options()[2]);
+    }
+    const expectedContext = [3, 2, 1, 4, 0, 3];
+    for (const [index, question] of model.contextQuestions.entries()) {
+      assert.equal(flow.text(heading()), question.text, `context ${question.id} must display its prompt`);
+      const group = flow.nodes().find(node => node.props?.role === "group");
+      assert.equal(group.props["aria-labelledby"], heading().props.id);
+      assert.deepEqual(options().map(flow.text), [...question.options]);
+      assert.equal(flow.text(flow.tree).includes("Några sista frågor hjälper oss"), index === 0);
+      if (index === 1) {
+        await click(flow.nodes().find(node => node.type === "button" && flow.text(node) === "Tillbaka"));
+        assert.equal(flow.text(heading()), model.contextQuestions[0].text);
+        assert.equal(options()[3].props["aria-pressed"], true, "back preserves the childhood answer");
+        await click(options()[3]);
+      }
+      await click(options()[expectedContext[index]]);
+    }
+    // Finish the analysis timers, then inspect the unchanged checkout payload.
+    const callbacks = [...timers.values()]; timers.clear(); callbacks.forEach(callback => callback());
+    await flow.flush();
+    const saved = JSON.parse(flow.data.get(key));
+    assert.deepEqual(saved.answers, answers);
+    assert.deepEqual(saved.contextAnswers, expectedContext);
+    assert.deepEqual(saved.report, model.calculateReport(answers, expectedContext));
+    flow.nodes().find(node => node.type === flow.PaywallCheckoutCTA).props.onClick();
+    await flow.completeCheckout();
+    const payload = JSON.parse(flow.requests.find(request => request.url === "/api/audhd-checkout/prepare").options.body);
+    assert.deepEqual(payload, { reportVersion: "audhd-v1", answers, contextAnswers: expectedContext });
+  } finally {
+    global.setTimeout = originalSetTimeout; global.clearTimeout = originalClearTimeout;
+  }
+
   let test = await ready({ secureRestore: restored });
   assert(isReportView(test));
   assert.equal(test.nodes().some(node => node.type === test.PaywallCheckoutCTA), false);
