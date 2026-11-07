@@ -15,6 +15,7 @@ module.exports = {
     { loc: '/adhd-deluxe' },
   ],
   exclude: [
+    "/persona/test",
     '/juridisk-information',
     '/autism-bok/tack',
     '/autism-bok/tack/*',

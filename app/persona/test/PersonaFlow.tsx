@@ -10,6 +10,7 @@ import { positionStep } from "./viewport";
 import { answeredCount, chapterAt, chapterStarts, currentAnswer, currentQuestion, toSubmission } from "./state";
 import { getPersonaPreview, type PreviewResult } from "./actions";
 import styles from "../persona.module.css";
+import PersonaPaywall from "./PersonaPaywall";
 import PersonaJourney from "./PersonaJourney";
 import PersonaQuestion from "./PersonaQuestion";
 import journeyStyles from "./persona-journey.module.css";
@@ -81,7 +82,7 @@ export default function PersonaFlow() {
     viewKey={viewKey} transition={navigationSnapshot.phase}
     footer={<>
       <button type="button" className={styles.resetLink} disabled={count === 0} onClick={confirmRestart}>Radera svar och börja om</button>
-      <details className={journeyStyles.storage}><summary>Om dina sparade svar</summary><p>Dina svar sparas i den här webbläsaren. När du avslutar skickas de för beräkning av din förhandsvisning utan att lagras på servern. Du kan radera de lokala svaren genom att börja om. På en delad enhet kan andra som använder samma webbläsare se dem.</p></details>
+      <details className={journeyStyles.storage}><summary>Om dina sparade svar</summary><p>Dina svar sparas i den här webbläsaren. För den kostnadsfria förhandsvisningen skickas de för beräkning utan att lagras på servern. Vid köp lagras svaren krypterat efter ditt separata samtycke. Du kan radera de lokala svaren genom att börja om. På en delad enhet kan andra som använder samma webbläsare se dem.</p></details>
       {restartConfirm && <section className={styles.restartConfirmation} aria-labelledby="restart-heading" role="alert">
         <h2 id="restart-heading">Börja med ett tomt blad?</h2><p>Alla dina sparade PERSONA-svar i den här webbläsaren tas bort.</p>
         <div><button type="button" className={styles.secondary} onClick={() => setRestartConfirm(false)}>Behåll mina svar</button><button type="button" className={styles.primary} onClick={restart}>Radera och börja om</button></div>
@@ -141,8 +142,7 @@ export default function PersonaFlow() {
           <p>Åtta perspektiv på dina prioriteringar, relationer och inre avvägningar — med en personlig kompass att ta vidare.</p>
           <ol className={styles.lockedSections}>{reportSections.map((title, i) => <li key={title}><span>0{i + 1}</span>{title}<span aria-hidden="true">↗</span></li>)}</ol>
           <div className={styles.price}><span>Premiumrapport</span><strong>{PRICE_SEK} <small>kr</small></strong><span>Engångsbetalning</span></div>
-          <button type="button" disabled className={styles.lockedButton}>Rapporten är låst</button>
-          <p className={styles.finePrint}>Köp är inte tillgängligt ännu. Ingen betalning kan göras här.</p>
+          <PersonaPaywall submission={submission} eligible={result?.result?.kind === "insight" && !previewError} />
         </section>
         <div className={styles.previewActions}><button type="button" className={styles.secondary} disabled={entering} onClick={() => navigation.navigate("review", stepKey)}>Granska mina svar</button><button type="button" className={styles.back} onClick={confirmRestart}>Börja om</button></div>
       </section>}
@@ -154,7 +154,7 @@ export default function PersonaFlow() {
       <h2 id="restart-heading">Börja med ett tomt blad?</h2><p>Alla dina sparade PERSONA-svar i den här webbläsaren tas bort.</p>
       <div><button type="button" className={styles.secondary} onClick={() => setRestartConfirm(false)}>Behåll mina svar</button><button type="button" className={styles.primary} onClick={restart}>Radera och börja om</button></div>
     </section>}
-    <p className={styles.storageNote}>Dina svar sparas i den här webbläsaren. När du avslutar skickas de för beräkning av din förhandsvisning utan att lagras på servern. Du kan radera de lokala svaren genom att börja om. På en delad enhet kan andra som använder samma webbläsare se dem.</p>
+    <p className={styles.storageNote}>Dina svar sparas i den här webbläsaren. För den kostnadsfria förhandsvisningen skickas de för beräkning utan att lagras på servern. Vid köp lagras svaren krypterat efter ditt separata samtycke. Du kan radera de lokala svaren genom att börja om. På en delad enhet kan andra som använder samma webbläsare se dem.</p>
     </div>
   </div>;
 }

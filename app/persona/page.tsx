@@ -40,7 +40,7 @@ export default function PersonaLanding() {
       <Fingerprint className={styles.smallFingerprint} />
       <p className={styles.eyebrow}>Börja med nyfikenhet</p>
       <h2 id="begin-title" className={styles.editorialTitle}>Du behöver inte ha<br />en färdig bild av dig själv.</h2>
-      <p>Genomför testet utan kostnad och få en insikt grundad i dina svar. En fullständig premiumrapport är planerad för {PRICE_SEK} kr som engångsbetalning. Köp är inte tillgängligt ännu.</p>
+      <p>Genomför testet utan kostnad och få en insikt grundad i dina svar. Välj sedan om du vill låsa upp hela ditt porträtt med åtta avsnitt, personliga perspektiv och utskrift för {PRICE_SEK} kr som engångsbetalning.</p>
       <Link href="/persona/test" className={styles.primary}>Upptäck din personlighet <span aria-hidden="true">↗</span></Link>
       <p className={styles.finePrint}>Egna frågor med personlighetspsykologi som orienteringsram. PERSONA är inte en validerad frågeskala.</p>
     </section>

@@ -350,7 +350,7 @@ test("landing and shell render semantic content and locked brand without browser
 test("client boundary contains no report engine, payment recovery or unlock path", () => {
   const source=fs.readFileSync(path.join(__dirname,"PersonaFlow.tsx"),"utf8");
   assert(!/buildPersonaReport|usePaymentRecovery|useTestAccountCheckout|paid=true|window\.location\.search|URLSearchParams/.test(source));
-  assert(source.includes('disabled className={styles.lockedButton}'));
+  assert(source.includes('<PersonaPaywall submission={submission}'));
   assert(source.includes("getPersonaPreview"));
   const css=fs.readFileSync(path.join(__dirname,"../persona.module.css"),"utf8");
   assert(css.includes("#101626"));assert(css.includes("#C9A86B"));
@@ -381,7 +381,7 @@ test("question markup has native radio groups, selection, navigation and no hidd
   assert(html.includes('data-question-id="P02"'));assert.equal((html.match(/type="radio"/g)||[]).length,5);
   assert(html.includes("Någon annans namn"));assert(html.includes("Tillbaka"));
   const completed=finish().draft;html=render(completed);
-  assert(html.includes("Rapporten är låst"));assert(html.includes("Köp är inte tillgängligt ännu"));
+  assert(html.includes("Lås upp mitt porträtt – 79 kr"));assert(html.includes("Kontosparning är frivillig"));
   assert(html.includes('disabled=""'));assert(!html.includes("I flera av scenarierna gör du ansvar synligt"));
   const unknown=Array(34).fill(5);
   const reserve={...completed,fixed:unknown,followups:api.selectAdaptive(unknown).selectedIds.map(questionId=>({questionId,answer:null})),cursor:34,phase:"chapter"};

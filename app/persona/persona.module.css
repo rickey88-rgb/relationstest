@@ -206,3 +206,11 @@
 @media (prefers-reduced-motion: reduce) {
   .surface *, .surface *::before, .surface *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
+
+.paywall { margin-top: 20px; }
+.processingConsent { display: flex; align-items: flex-start; gap: 12px; margin: 18px 0; font-size: 12px; line-height: 1.7; color: var(--muted); text-align: left; }
+.processingConsent input { flex-shrink: 0; width: 20px; height: 20px; margin-top: 2px; accent-color: var(--gold); }
+.processingConsent a, .paywall a { color: var(--gold); text-decoration: underline; text-underline-offset: 3px; }
+.purchaseButton { width: 100%; min-height: 52px; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 18px; background: var(--gold); color: var(--navy); border: 1px solid var(--gold); border-radius: 4px; font-size: 14px !important; }
+.purchaseButton:disabled { opacity: .5; }
+.paywall > .finePrint { margin-top: 12px; }
