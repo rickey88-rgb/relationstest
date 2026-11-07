@@ -1,0 +1,48 @@
+import type { Condition } from "../types";
+import { immutable } from "../immutable";
+import { c } from "./findings";
+
+type Experiment = Readonly<{ id: string; conditions: readonly Condition[]; title: string; opportunity: string; tradeoff: string; action: string; reflection: string }>;
+/** Conditional possibilities, never assertions of an observed strength or difficulty. */
+export const experiments: readonly Experiment[] = immutable([
+  { id: "precise-feedback", conditions: [c("P10", [0, 2, 3]), c("P33", [0, 3])], title: "Vad vill du få bedömt?",
+    opportunity: "Att precisera vad du vill få respons på kan ge andra bättre möjlighet att möta det arbete du försöker göra.",
+    tradeoff: "Om du redan har tillräckligt underlag för din egen bedömning kan ytterligare respons bli mindre användbar än ett nästa steg. Undersök om det gäller i en aktuell situation.",
+    action: "Inför nästa återkoppling: skriv vilken del du vill få bedömd och vilken fråga du själv redan har besvarat.",
+    reflection: "Vilken respons gav ny information, och vilken respons ville du mest bli förstådd genom?" },
+  { id: "transition", conditions: [c("P04", [0, 1]), c("P11", [0, 1, 3])], title: "Valet och övergången",
+    opportunity: "Att göra övergången konkret kan hjälpa ett eget beslut och hänsynen till berörda att få varsin uppgift.",
+    tradeoff: "Om hänsynen växer till ett krav på att alla ska känna sig nöjda kan gränsen för ditt ansvar bli svår att se. Det är en möjlighet att pröva, inte ett fastställt mönster.",
+    action: "Skriv två meningar inför nästa möjlighet: Det här väljer jag. Det här tar jag ansvar för i övergången.",
+    reflection: "Vilka följder kan du påverka, och vilka kan du bara erkänna?" },
+  { id: "boundary-language", conditions: [c("P18", [1, 2]), c("P28", [1, 3])], title: "Vad betyder gränsen?",
+    opportunity: "En uttalad gräns kan göra det lättare att förstå vilken kontakt som fortfarande är möjlig.",
+    tradeoff: "Om din gräns bara märks genom mindre kontakt kan den andra behöva gissa vad förändringen betyder. Se om mer information skulle vara hjälpsam i just din situation.",
+    action: "Beskriv vad en paus eller minskad insyn innebär i praktiken och vad du ännu inte vet om fortsättningen.",
+    reflection: "Vad kan du säga tydligt utan att lova en återgång du inte vet att du vill ha?" },
+  { id: "responsibility", conditions: [c("P14", [0]), c("P20", [0, 1, 2, 3])], title: "Förklaring och ansvar",
+    opportunity: "Att skilja ditt ansvar från förutsättningarna kan göra en svår genomgång mer begriplig.",
+    tradeoff: "Om en förklaring tar all plats kan lyssnaren behöva gissa vilken del du själv äger. Om sammanhanget helt utelämnas kan bilden också bli ofullständig.",
+    action: "Efter ett svårt beslut: formulera vad som var känt då, vad du själv valde och vad du vill ändra nu.",
+    reflection: "Får någon av de tre delarna betydligt större utrymme än de andra?" },
+  { id: "support-contract", conditions: [c("P22", [1]), c("P24", [1, 2, 3]), c("P26", [0, 2])], title: "Vilket samtal behöver du?",
+    opportunity: "Att ge stöd en tydlig uppgift kan göra det lättare att både be om hjälp och behålla eget ansvar.",
+    tradeoff: "Om behovet måste vara färdigformulerat före varje kontakt kan det bli svårare att få hjälp i själva bearbetningen. Pröva om en mindre färdig förfrågan skulle tillföra något.",
+    action: "Säg före ett samtal om du önskar lyssnande, praktisk hjälp eller kritisk prövning. Du kan också säga att du inte vet än.",
+    reflection: "Vad blev lättare när uppgiften uttalades, och vad fick fortfarande vara öppet?" },
+  { id: "help-role", conditions: [c("P30", [0, 1, 2, 3]), c("P22", [0, 2, 3])], title: "Insatsen och rollen",
+    opportunity: "Att skilja ett enskilt löfte från en återkommande roll kan ge fler sätt att förändra hjälpen.",
+    tradeoff: "Om villkoren alltid bestäms efter ett ja kan förväntningarna hinna bli olika. Det är en konkret risk att undersöka, utan att anta att det redan är ett problem.",
+    action: "Beskriv före nästa ja vad du erbjuder, hur länge och vad som inte ingår. Fråga hur den andra uppfattar det.",
+    reflection: "Ville du göra just den insatsen, eller behålla en roll som du uppskattar?" },
+  { id: "comparison", conditions: [c("P16", [0, 1, 2, 3])], title: "Efter jämförelsen",
+    opportunity: "Att ge jämförelsen en egen stund kan hjälpa dig skilja en annans framgång från det du själv fortfarande vill.",
+    tradeoff: "Om ett nästa steg väljs enbart i jämförelsens stund kan det vara värt att pröva om samma steg lockar senare. Svaren avgör inte om det gäller dig.",
+    action: "Skriv vad beskedet väckte och ett möjligt eget nästa steg. Återvänd till anteckningen när reaktionen fått lägga sig.",
+    reflection: "Vilken del av önskan finns kvar när jämförelsen blivit mindre aktuell?" },
+  { id: "own-decision", conditions: [c("P34", [0, 1, 2, 3])], title: "Vad ska responsen hjälpa med?",
+    opportunity: "Att skilja stöd från beslutsprövning kan göra en viktig persons respons lättare att använda.",
+    tradeoff: "Om varje reaktion får ändra själva beslutet kan det bli svårt att veta vilken fråga du försöker besvara. Undersök samtidigt om invändningen faktiskt innehåller ny information.",
+    action: "Skriv före ett viktigt samtal om du vill ha ny information, prövning av resonemanget eller personligt stöd.",
+    reflection: "Vad var nytt underlag och vad var en känsla inför att bli bedömd?" },
+]);
