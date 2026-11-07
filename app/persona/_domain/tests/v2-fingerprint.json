@@ -1,0 +1,57 @@
+{
+  "version": "persona-everyday-revision-v2",
+  "files": [
+    {
+      "path": "app/persona/_domain/v2/adaptive.ts",
+      "sha256": "8c994f37079d8157748079ad0931225e92b3377fbc7e22e2bf5b814335cc54e8"
+    },
+    {
+      "path": "app/persona/_domain/v2/answers.ts",
+      "sha256": "a6dbcaa0963eb0ef3d015b4553c6a7022d3d4e0054a2369c5fd05e1f5b146b29"
+    },
+    {
+      "path": "app/persona/_domain/v2/content.ts",
+      "sha256": "46b215bb289f0d3be32da628799d3d91454bc88af4ddc30d91327a999bd65121"
+    },
+    {
+      "path": "app/persona/_domain/v2/copy.ts",
+      "sha256": "ade46b08347baa1dc3ca74c5ac19715cac9c8402ac6ba103fe47064ad7eff008"
+    },
+    {
+      "path": "app/persona/_domain/v2/editing.ts",
+      "sha256": "6b9e606319362f72b2d391cdd3c81615880f49fc207535a46ed10a3e5975126e"
+    },
+    {
+      "path": "app/persona/_domain/v2/experiments.ts",
+      "sha256": "55f7d5b4d822bee9470fcd0366dfc9565487d4954e8984e8a582f2378ebc11cf"
+    },
+    {
+      "path": "app/persona/_domain/v2/findings.ts",
+      "sha256": "d2954603ec8266435650b600ecfe7ab6e0c5d7d37888bbf5fe3e212f59824c95"
+    },
+    {
+      "path": "app/persona/_domain/v2/interpretations.ts",
+      "sha256": "ca0a31d38a7b121b5b79cc2530429ff6e6f19ea4ee08154948fead38d2b13e99"
+    },
+    {
+      "path": "app/persona/_domain/v2/manifest.ts",
+      "sha256": "2907d23dac33d4f86ddb65ec84e8ad5a97305044d7e0e0db0fec7aa11fdf3b22"
+    },
+    {
+      "path": "app/persona/_domain/v2/questions.ts",
+      "sha256": "162ed74388e8a94f1bf02e92d571fdcddeffe6b3495503701316f8f1d99497aa"
+    },
+    {
+      "path": "app/persona/_domain/v2/report.ts",
+      "sha256": "59a69dbffe99d636b4b3a75a64529badc9253e0689ecfd020b0e681cc46b1136"
+    },
+    {
+      "path": "app/persona/_domain/v2/score.ts",
+      "sha256": "2009b467ffd574deec4de0238c3e17ee8bc09e390e4c2b8f3df17e4285d3f5db"
+    },
+    {
+      "path": "app/persona/_domain/v2/submission.ts",
+      "sha256": "3a82bec0ef831db851b869c96c436648e09fe7575a1e3feffa6c9bdff40e0fa8"
+    }
+  ]
+}

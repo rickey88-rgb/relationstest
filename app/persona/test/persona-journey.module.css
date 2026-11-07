@@ -30,7 +30,7 @@
 .prompt { font: 400 18px/1.65 Georgia, serif; color: #E4E1DC; }
 .choices { border: 0; padding: 0; margin: 18px 0 0; min-width: 0; }
 .choiceLegend { font-size: 12px; line-height: 1.5; color: var(--muted); padding: 0 0 8px; }
-.options { display: grid; gap: 8px; }
+.options { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
 .choice, .unknown { position: relative; display: flex; align-items: center; gap: 12px; min-width: 0; padding: 12px 14px; min-height: 48px; border: 1px solid rgb(255 255 255 / .15); border-radius: 4px; background: rgb(255 255 255 / .025); cursor: pointer; transition: border-color .15s, background .15s; }
 .choiceText { flex: 1; min-width: 0; font-size: 15px; line-height: 1.5; overflow-wrap: anywhere; }
 .letter { flex-shrink: 0; width: 24px; height: 24px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 50%; color: var(--gold); font-size: 12px; }
@@ -74,9 +74,6 @@
   .options { gap: 6px; }
   .choice { min-height: 48px; padding: 7px 12px; }
   .choiceText { font-size: 14px; line-height: 1.45; }
-  .options[data-kind="rating"] { grid-template-columns: repeat(5, minmax(0, 1fr)); }
-  .options[data-kind="rating"] .choice { flex-direction: column; align-items: flex-start; gap: 6px; }
-  .options[data-kind="rating"] .check { position: absolute; top: 12px; right: 10px; }
   .unknown { min-height: 36px; padding: 5px 12px; margin-top: 4px; }
   .navigation { flex-wrap: nowrap; margin-top: 6px; }
   .alternateNext { width: auto; min-height: 32px; padding: 4px 0; border: 0; background: transparent; color: var(--gold); font-size: 12px !important; white-space: nowrap; text-decoration: underline; text-underline-offset: 4px; }

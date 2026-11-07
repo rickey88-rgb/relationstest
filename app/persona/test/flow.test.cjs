@@ -13,7 +13,7 @@ const {getPersonaPreview} = load(path.join(__dirname,"actions.ts"));
 const {createAutoAdvance,navigationKey,AUTO_ADVANCE_MS,EXIT_MS,ENTER_MS} = load(path.join(__dirname,"autoAdvance.ts"));
 const {positionStep} = load(path.join(__dirname,"viewport.ts"));
 const api = load(path.join(__dirname,"../_domain/index.ts"));
-const {profiles,fixed} = require("../_domain/tests/fixtures.cjs");
+const {profiles,fixed} = require("../_domain/tests/v2-fixtures.cjs");
 function finish(profile=profiles[0]) {
   let draft=state.initialDraft();
   const chapters=[];
@@ -105,7 +105,7 @@ test("CSS at laptop, desktop and mobile sizes budgets available height without f
     assert.equal(declarations('.title',width,height)["font-size"],"clamp(28px, 3.4vh, 32px)");
     const next=declarations('.alternateNext',width,height);
     assert.equal(next.background,"transparent");assert.equal(next.width,"auto");assert.equal(next["min-height"],"32px");
-    assert.equal(declarations('.options[data-kind="rating"]',width,height)["grid-template-columns"],"repeat(5, minmax(0, 1fr))");
+    assert.equal(declarations(".options",width,height)["grid-template-columns"],"minmax(0, 1fr)");
     assert.equal(declarations(':global([data-persona-root]):has(.journey) > :global(#persona-content)',width,height)["min-height"],"0");
   }
   assert.equal(declarations('.prompt',1366,768)["font-size"],"17px");
@@ -222,7 +222,7 @@ test("all 40 questions follow the approved four-chapter journey", () => {
     assert.deepEqual(draft,state.parseDraft(JSON.stringify(draft)));
   }
 });
-test("navigation requires a real answer; neutral and unknown remain distinct", () => {
+test("navigation requires a real answer; ordinary choices and unknown remain distinct", () => {
   let draft=state.initialDraft();
   assert.equal(state.reduceDraft(draft,{type:"answer",value:2}),draft);
   draft=state.reduceDraft(draft,{type:"start"});
@@ -266,7 +266,7 @@ test("editing recomputes adaptive IDs and retains surviving answers by ID", () =
 test("untrusted persistence rejects foreign versions, payloads and unlock flags", () => {
   const {draft}=finish();
   for(const raw of [null,"", "{bad", "null", "[]", "x".repeat(12001)])assert.equal(state.parseDraft(raw),null);
-  for(const patch of [{version:2},{questionVersion:"other"},{reportVersion:"other"},{unlocked:true},{paid:true},{sections:[]},{cursor:40},{cursor:-1},{phase:"paid"},{fixed:[]},{followups:[{questionId:"P02",answer:1}]}]) {
+  for(const patch of [{version:1},{questionVersion:"other"},{reportVersion:"other"},{unlocked:true},{paid:true},{sections:[]},{cursor:40},{cursor:-1},{phase:"paid"},{fixed:[]},{followups:[{questionId:"P02",answer:1}]}]) {
     assert.equal(state.parseDraft(JSON.stringify({...draft,...patch})),null);
   }
   const bad={...draft,fixed:[...draft.fixed]};bad.fixed[1]=4;
@@ -372,14 +372,14 @@ test("question markup has native radio groups, selection, navigation and no hidd
   };
   let draft=state.reduceDraft(state.initialDraft(),{type:"start"});
   let html=render(draft);
-  assert.equal((html.match(/type="radio"/g)||[]).length,6);
+  assert.equal((html.match(/type="radio"/g)||[]).length,5);
   assert(html.includes('<legend class="persona_choiceLegend">Hur väl stämmer det på dig?</legend>'));
   assert(html.includes('disabled=""'));
   draft=state.reduceDraft(draft,{type:"answer",value:3});
   html=render(draft);assert(html.includes('checked=""'));assert(!html.includes('disabled=""'));
   draft=state.reduceDraft(draft,{type:"next"});html=render(draft);
   assert(html.includes('data-question-id="P02"'));assert.equal((html.match(/type="radio"/g)||[]).length,5);
-  assert(html.includes("Någon annans namn"));assert(html.includes("Tillbaka"));
+  assert(html.includes("Bilden du helst slipper"));assert(html.includes("Tillbaka"));
   const completed=finish().draft;html=render(completed);
   assert(html.includes("Lås upp mitt porträtt – 79 kr"));assert(html.includes("Kontosparning är frivillig"));
   assert(html.includes('disabled=""'));assert(!html.includes("I flera av scenarierna gör du ansvar synligt"));

@@ -1,15 +1,15 @@
 import { FIXED_COUNT, TOTAL_COUNT, UNKNOWN, VERSIONS } from "../_domain/versions";
-import { fixedQuestions, getQuestion } from "../_domain/v1/questions";
-import { validAnswer } from "../_domain/v1/answers";
-import { selectAdaptive } from "../_domain/v1/adaptive";
-import { parseSubmission } from "../_domain/v1/submission";
+import { fixedQuestions, getQuestion } from "../_domain/v2/questions";
+import { validAnswer } from "../_domain/v2/answers";
+import { selectAdaptive } from "../_domain/v2/adaptive";
+import { parseSubmission } from "../_domain/v2/submission";
 import type { Question, Submission } from "../_domain/types";
 
-export const STORAGE_KEY = "relationsvarning_persona_flow_v1";
-export const FLOW_VERSION = 1;
+export const STORAGE_KEY = "relationsvarning_persona_flow_v2";
+export const FLOW_VERSION = 2;
 export type Followup = { questionId: string; answer: number | null };
 export type Draft = {
-  version: 1; questionVersion: string; reportVersion: string;
+  version: 2; questionVersion: string; reportVersion: string;
   fixed: (number | null)[]; followups: Followup[];
   cursor: number; phase: "chapter" | "question" | "preview";
 };

@@ -1,4 +1,5 @@
 {
   "version": "persona-creative-revision-v1",
-  "sha256": "dc6a89e715d2823bc4a7dc8782b0ff6ebea0aa4e29326c81dd3081f2fe311ed7"
+  "sha256": "dfbc42695c5d16ba690d975be4cf3121933701bae948070778cc2bcca59d5246",
+  "note": "v1 implementation remains byte-identical; mutable current-version alias and registry now also register v2. Archive suite imports v1/index explicitly."
 }

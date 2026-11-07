@@ -3,7 +3,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalS
 import Link from "next/link";
 import Fingerprint from "../_components/Fingerprint";
 import { CHAPTERS, PRICE_SEK, TOTAL_COUNT } from "../_domain/versions";
-import { selectAdaptive } from "../_domain/v1/adaptive";
+import { selectAdaptive } from "../_domain/v2/adaptive";
 import { createPersonaSession } from "./session";
 import { createAutoAdvance, navigationKey } from "./autoAdvance";
 import { positionStep } from "./viewport";

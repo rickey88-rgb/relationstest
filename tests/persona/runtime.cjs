@@ -8,7 +8,7 @@ const owner="11111111-1111-4111-8111-111111111111",other="22222222-2222-4222-822
 const token="A".repeat(50),otherToken="B".repeat(50),origin="https://persona-test.example.invalid";
 function payloadFor(load,index=0) {
   const api=load(path.join(root,"app/persona/_domain/index.ts"));
-  const {profiles,fixed}=require("../../app/persona/_domain/tests/fixtures.cjs");
+  const {profiles,fixed}=require("../../app/persona/_domain/tests/v2-fixtures.cjs");
   const profile=profiles[index],answers=fixed(profile);
   return {questionVersion:api.VERSIONS.question,reportVersion:api.VERSIONS.report,
     answers:[...answers,...api.selectAdaptive(answers).selectedIds.map(id=>"ABCD".indexOf(profile.followups[id]))]};

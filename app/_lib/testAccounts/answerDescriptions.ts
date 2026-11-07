@@ -1,4 +1,4 @@
-import { describeAnswers as describePersonaAnswers } from "../../persona/_domain/v1/submission";
+import { describeAnswers as describePersonaAnswers } from "../../persona/_domain/v2/submission";
 import { VERSIONS as PERSONA_VERSIONS } from "../../persona/_domain/versions";
 import * as adhd from "../../adhd-test/test/model";
 import * as autism from "../../autism-test/test/model";

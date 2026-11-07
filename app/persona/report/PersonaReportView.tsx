@@ -1,5 +1,5 @@
 import type { Evidence, PersonaReport } from "../_domain/types";
-import { getQuestion, unknownLabel } from "../_domain/v1/questions";
+import { getQuestion, unknownLabel } from "../_domain/v2/questions";
 import { UNKNOWN } from "../_domain/versions";
 import Fingerprint from "../_components/Fingerprint";
 import PrintPersonaButton from "./PrintPersonaButton";

@@ -8,7 +8,7 @@ const api=load(path.join(root,"app/persona/_domain/index.ts"));
 const Report=load(path.join(root,"app/persona/report/PersonaReportView.tsx")).default;
 const encode=text=>renderToStaticMarkup(React.createElement("span",null,text)).slice(6,-7);
 test("eight premium sections render every approved paragraph and evidence, with accessible unnormed visualizations",()=>{
-  for(let i=0;i<3;i++) {
+  for(let i=0;i<5;i++) {
     const report=api.buildPersonaReport(payloadFor(load,i)),html=renderToStaticMarkup(React.createElement(Report,{report}));
     assert(html.includes('id="persona-premium-report"'));assert(html.includes("Skriv ut eller spara som PDF"));
     assert.equal((html.match(/<meter /g)||[]).length,report.dimensions.filter(d=>d.value!==null).length);

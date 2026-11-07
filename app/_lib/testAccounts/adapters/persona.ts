@@ -1,5 +1,5 @@
 import { buildPersonaReport } from "../../../persona/_domain/registry";
-import { parseSubmission } from "../../../persona/_domain/v1/submission";
+import { parseSubmission } from "../../../persona/_domain/v2/submission";
 import { VERSIONS, PRICE_SEK } from "../../../persona/_domain/versions";
 
 /** One frozen model for checkout, encrypted storage and every paid reopening. */

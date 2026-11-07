@@ -1,7 +1,7 @@
 import type { RefObject } from "react";
 import type { Question } from "../_domain/types";
 import { UNKNOWN } from "../_domain/versions";
-import { unknownLabel } from "../_domain/v1/questions";
+import { unknownLabel } from "../_domain/v2/questions";
 import styles from "./persona-journey.module.css";
 
 type Props = {
