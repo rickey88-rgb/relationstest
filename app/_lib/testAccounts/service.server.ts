@@ -28,6 +28,7 @@ export async function guest(id: string, secret: string) {
 }
 export async function guestForProduct(id: string, secret: string, expectedProduct: string) {
   active(); // Also closes guest reads in restore quarantine; an Auth account is still never required.
+  if (expectedProduct === "persona_test") assertFlag(expectedProduct, "read");
   const row = await store.attempt(id);
   if (!row || row.product !== expectedProduct || !matchesSecret(secret, row.browser_hash)) throw new Error("Attempt unavailable");
   await notErased(row.analysis_id, row.journal_identity);

@@ -1,4 +1,5 @@
 export const PAYMENT_PRODUCT_KEYS = [
+  "persona_test",
   "adhd_test",
   "autism_test",
   "audhd_test",

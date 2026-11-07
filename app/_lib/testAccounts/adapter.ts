@@ -1,3 +1,4 @@
+import { persona } from "./adapters/persona";
 import { iq } from "./adapters/iq";
 import { accountPortalEnabled } from "../accountGate.server";
 import { audhd } from "./adapters/audhd";
@@ -34,12 +35,12 @@ const adhd: Adapter<Result> = {
     return [...value.answers];
   }, calculate,
 };
-const adapters = { audhd_test: audhd, iq_test: iq, adhd_test: adhd, hsp_test: hsp, angest_test: angest, ptsd_test: ptsd, narcissism_selftest: narcissism, screening_test: screening, autism_test: autism, attachment_test: attachment, codependency_test: codependency, gaslighting_test: gaslighting, narcissist_partner: partner, trauma_bond_test: traumaBond, psychological_abuse_test: psychologicalAbuse };
+const adapters = { persona_test: persona, audhd_test: audhd, iq_test: iq, adhd_test: adhd, hsp_test: hsp, angest_test: angest, ptsd_test: ptsd, narcissism_selftest: narcissism, screening_test: screening, autism_test: autism, attachment_test: attachment, codependency_test: codependency, gaslighting_test: gaslighting, narcissist_partner: partner, trauma_bond_test: traumaBond, psychological_abuse_test: psychologicalAbuse };
 export function adapter(product: string): Adapter {
   if (!Object.hasOwn(adapters, product)) throw new Error("Unsupported test");
   return adapters[product as keyof typeof adapters];
 }
-export function registeredAdapters(): Adapter[] { return Object.values(adapters); }
+export function registeredAdapters(): Adapter[] { return Object.values(adapters).filter(model => model.product !== "persona_test" || process.env.TEST_ACCOUNTS_PERSONA_ENABLED === "true"); }
 export function adapterForSlug(slug: string): Adapter {
   const model = registeredAdapters().find(item => item.slug === slug);
   if (!model) throw new Error("Unsupported test");
@@ -47,7 +48,7 @@ export function adapterForSlug(slug: string): Adapter {
 }
 export function flags(product: string) {
   const model = adapter(product);
-  const enabled = (name: string) => accountPortalEnabled() && process.env[`${model.flagPrefix}_${name}_ENABLED`] === "true";
+  const enabled = (name: string) => accountPortalEnabled() && (product !== "persona_test" || process.env.TEST_ACCOUNTS_PERSONA_ENABLED === "true") && process.env[`${model.flagPrefix}_${name}_ENABLED`] === "true";
   return { checkout: enabled("CHECKOUT"), save: enabled("SAVE"), read: enabled("READ"), legacyImport: enabled("LEGACY_IMPORT") };
 }
 export function assertFlag(product: string, flag: keyof ReturnType<typeof flags>) {

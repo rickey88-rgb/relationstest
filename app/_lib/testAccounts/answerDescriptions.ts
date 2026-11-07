@@ -1,3 +1,5 @@
+import { describeAnswers as describePersonaAnswers } from "../../persona/_domain/v1/submission";
+import { VERSIONS as PERSONA_VERSIONS } from "../../persona/_domain/versions";
 import * as adhd from "../../adhd-test/test/model";
 import * as autism from "../../autism-test/test/model";
 import * as audhd from "../../audhd-test/test/model";
@@ -26,6 +28,7 @@ const definitions: Record<string, Definition> = {
 export type AnswerDescription = { question: string; answer: string; value: number; visual?: iq.MatrixVisual };
 /** Only public question wording + the validated answer. Never expose IQ answer keys. */
 export function describeAnswers(product: string, answers: number[]): AnswerDescription[] {
+  if (product === "persona_test") return [...describePersonaAnswers({ answers, questionVersion: PERSONA_VERSIONS.question, reportVersion: PERSONA_VERSIONS.report })];
   const definition = definitions[product];
   if (!definition || answers.length !== definition.questions.length) throw new Error("Answers unavailable");
   return definition.questions.map((question, index) => {

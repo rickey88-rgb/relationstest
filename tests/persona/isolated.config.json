@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "environment": "persona-offline-contract-tests",
+  "network": "deny",
+  "stripe": "in-memory-contract-fixture",
+  "supabaseAuth": "sdk-with-in-memory-transport",
+  "supabaseDatabase": "pglite-with-canonical-migrations",
+  "resend": "in-memory-outbox",
+  "erasureJournal": "in-memory-fail-closed-journal",
+  "productionCredentials": false
+}
