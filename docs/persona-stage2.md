@@ -1,3 +1,5 @@
+> Historisk leveransbeskrivning. Aktuell frågebank och analys är nu PERSONA v2; se [persona-v2.md](persona-v2.md).
+
 # PERSONA – etapp 2: lokal visuell testupplevelse
 
 ## Omfattning

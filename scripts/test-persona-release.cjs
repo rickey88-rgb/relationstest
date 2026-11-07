@@ -28,7 +28,7 @@ for(const file of [...new Set(tests)].sort()) {
 }
 run("typescript",[require.resolve("typescript/bin/tsc"),"--noEmit","--incremental","false"]);
 run("persona-lint",[path.join(path.dirname(require.resolve("eslint/package.json")),"bin/eslint.js"),"--config","eslint.config.mjs","--max-warnings","0",
-  "app/persona","tests/persona","scripts/test-persona-release.cjs","scripts/render-persona-samples.cjs","deploy/merge-persona-map.cjs","app/_lib/testAccounts/adapters/persona.ts","app/_lib/testAccounts/adapter.ts","app/_lib/testAccounts/answerDescriptions.ts","app/_lib/testAccounts/service.server.ts","app/_lib/paymentProductCatalog.server.ts","app/mina-sidor/tester/ReportView.tsx","app/mina-sidor/tester/integritet/page.tsx"]);
+  "app/persona","tests/persona","scripts/test-persona-release.cjs","scripts/render-persona-samples.cjs","scripts/audit-persona-v2.cjs","deploy/merge-persona-map.cjs","app/_lib/testAccounts/adapters/persona.ts","app/_lib/testAccounts/adapter.ts","app/_lib/testAccounts/answerDescriptions.ts","app/_lib/testAccounts/service.server.ts","app/_lib/paymentProductCatalog.server.ts","app/mina-sidor/tester/ReportView.tsx","app/mina-sidor/tester/integritet/page.tsx"]);
 run("eslint",[path.join(path.dirname(require.resolve("eslint/package.json")),"bin/eslint.js"),"--config","eslint.config.mjs","--max-warnings","0"]);
 fs.writeFileSync(path.join(output,"summary.json"),JSON.stringify({isolation:require("../tests/persona/isolated.config.json"),quick,results},null,2));
 console.log(`${results.filter(r=>r.passed).length}/${results.length} commands passed. Logs: ${output}`);

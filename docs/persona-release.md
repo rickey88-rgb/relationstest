@@ -1,3 +1,5 @@
+> Historisk leveransbeskrivning. Aktuell frågebank och analys är nu PERSONA v2; se [persona-v2.md](persona-v2.md).
+
 # PERSONA – leverans och releasegrind
 
 Datum: 2026-11-07. Gren: `codex/persona-stage1`. Ingen push eller deploy ingår.
