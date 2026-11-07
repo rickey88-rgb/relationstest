@@ -14,7 +14,7 @@ function payloadFor(load,index=0) {
     answers:[...answers,...api.selectAdaptive(answers).selectedIds.map(id=>"ABCD".indexOf(profile.followups[id]))]};
 }
 async function createRuntime() {
-  assert.equal(config.productionCredentials,false);assert.equal(config.network,"deny");
+  assert.equal(config.productionCredentials,false);assert.equal(config.network,"deny-external-loopback-only");
   const pg=new PGlite(),sessions=new Map(),intents=new Map(),journal=new Map(),outbox=[];
   let sequence=0,journalOffline=false,mailFailure=false,priceAmount=7900;
   const price="price_PersonaIsolated",webhookSecret="whsec_persona_synthetic_fixture";

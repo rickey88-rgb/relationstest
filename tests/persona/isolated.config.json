@@ -1,7 +1,7 @@
 {
   "version": 1,
   "environment": "persona-offline-contract-tests",
-  "network": "deny",
+  "network": "deny-external-loopback-only",
   "stripe": "in-memory-contract-fixture",
   "supabaseAuth": "sdk-with-in-memory-transport",
   "supabaseDatabase": "pglite-with-canonical-migrations",

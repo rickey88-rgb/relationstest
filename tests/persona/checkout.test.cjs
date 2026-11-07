@@ -40,6 +40,10 @@ test("PERSONA isolated purchase, access, accounts, recovery and revocation",asyn
       assert.equal((await r.request({action:"guest",product:"persona_test",id:receipt.id},null,"z".repeat(43))).status,503);
       assert.equal((await r.request({action:"guest",product:"adhd_test",id:receipt.id},null,receipt.secret)).status,503);
       assert.equal((await r.request({action:"open",product:"persona_test",id:receipt.id})).status,401);
+      process.env.TEST_ACCOUNTS_PERSONA_READ_ENABLED="false";
+      const service=r.load(path.join(root,"app/_lib/testAccounts/service.server.ts"));
+      await assert.rejects(service.guestForProduct(receipt.id,receipt.secret,"persona_test"),/Feature disabled/);
+      process.env.TEST_ACCOUNTS_PERSONA_READ_ENABLED="true";
     });
     await t.test("verified email recovery rotates possession, is single-use and sends no psychological data",async()=>{
       await r.recovery.indexGuestRecovery(receipt.row.session_id);
