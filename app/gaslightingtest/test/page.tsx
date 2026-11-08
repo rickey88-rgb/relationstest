@@ -91,7 +91,6 @@ export default function Page() {
     const params = new URLSearchParams(window.location.search);
 
     if (params.get("paid") === "true") {
-      tracking.purchase();
       setUnlocked(true);
       window.history.replaceState({}, "", window.location.pathname);
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -180,7 +179,7 @@ export default function Page() {
     }
 
     if (!payment.prepareCheckout({ index, answers, unlocked })) return;
-    tracking.checkout(() => { window.location.href = CHECKOUT_URL; });
+    tracking.checkout(() => { window.location.href = CHECKOUT_URL; }, CHECKOUT_URL);
   }
 
   if (!hydrated) {
@@ -409,4 +408,3 @@ export default function Page() {
     </>
   );
 }
-

@@ -5,7 +5,6 @@ import { NewsletterAfterResult } from "../../_components/NewsletterSignup";
 import PaywallCheckoutCTA from "../../_components/PaywallCheckoutCTA";
 import { hasPaidReturn, usePaymentRecovery } from "../../_components/usePaymentRecovery";
 import { useTestAnalytics } from "../../_analytics/useTestAnalytics";
-import { purchaseEvent } from "../../_analytics/testEvents";
 import { FullAnalysis } from "./ReportView";
 import { useTestAccountCheckout } from "../../_components/useTestAccountCheckout";
 import { IQ_TEST_STRIPE_URL } from "./payment";
@@ -35,7 +34,7 @@ export default function IqTestPage() {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- synchronizes browser-only persisted test state after hydration.
     try { const saved = parseState(localStorage.getItem(STORAGE_KEY)); if (saved) { setAnswers(saved.answers); setIndex(saved.index); setUnlocked(saved.unlocked); setResponseTimes(saved.responseTimes); } }
     catch { setStorageUnavailable(true); }
-    if (new URLSearchParams(window.location.search).get("paid") === "true") { purchaseEvent("iq_test"); setUnlocked(true); window.history.replaceState({}, "", window.location.pathname); }
+    if (new URLSearchParams(window.location.search).get("paid") === "true") { setUnlocked(true); window.history.replaceState({}, "", window.location.pathname); }
     startedQuestionAt.current = Date.now(); setHydrated(true);
   }, []);
   // eslint-disable-next-line react-hooks/set-state-in-effect -- reports a non-critical storage failure without affecting the test.
@@ -67,7 +66,7 @@ export default function IqTestPage() {
     const checkoutState = { version: STATE_VERSION, index, answers, unlocked, responseTimes };
     if (!payment.prepareCheckout(checkoutState)) return;
     if (!IQ_TEST_STRIPE_URL.startsWith("https://buy.stripe.com/")) { setCheckoutUnavailable(true); return; }
-    tracking.checkout(() => { window.location.assign(IQ_TEST_STRIPE_URL); });
+    tracking.checkout(() => { window.location.assign(IQ_TEST_STRIPE_URL); }, IQ_TEST_STRIPE_URL);
   }
 
   if (!hydrated) return <p className="mt-6" role="status">Laddar testet…</p>;

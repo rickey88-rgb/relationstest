@@ -73,16 +73,15 @@ export default function IntegritetPage() {
 
       <h3 style={{ marginTop: 18, fontSize: 16 }}>Valfri besöksstatistik med Google Analytics</h3>
       <p style={{ opacity: 0.9 }}>
-        Om du godkänner statistik använder vi Google Analytics 4 för att förstå sidbesök
-        och hur test- och köpflöden används. Det omfattar testets namn, start, framsteg,
-        slutförande, tidsåtgång och köpbelopp. För AuDHD kan ett Stripe-verifierat köp
-        kopplas till Google Analytics pseudonyma klient- och sessionsidentifierare för att
-        mätningen ska räknas en gång och tillskrivas rätt besök. Testsvar, testpoäng och
-        profiltyper skickas inte.
+        Om du godkänner statistik använder vi Google Analytics 4 för att förstå sidbesök och hur test- och köpflöden används.
+        För vissa produkter kan vi koppla ett verifierat köp till ditt besök med Googles pseudonyma klient- och sessionsidentifierare.
+        Tillfälliga mätuppgifter kan innehålla landningssidor, hänvisande webbplats och kampanjkoder. De gallras efter 72 timmar
+        vid nästa schemalagda körning. Testsvar, testpoäng, profiler och mejladresser ingår inte i köpmätningen.
         Google Analytics använder cookies efter ditt godkännande. Du kan avvisa statistik
         och ändå använda testerna och köpa resultat. Ändra eller återkalla ditt val via
-        Statistikinställningar i sidfoten; då stoppas fortsatt mätning och sajtens
-        Google Analytics-cookies tas bort.
+        Statistikinställningar i sidfoten. Då stoppas mätningen i webbläsaren, Google Analytics-cookies tas bort och
+        vi begär radering av den väntande köpkopplingen. Ett köp som redan har rapporterats till Google påverkas inte av att du ändrar valet.
+        Stripe-verifierade köp och återbetalningar registreras separat för köpadministration även om du avvisar statistik.
       </p>
 
       <h2 style={{ marginTop: 22, fontSize: 18 }}>4. Betalningsleverantör (Stripe)</h2>

@@ -14,8 +14,7 @@ type PendingDelivery = {
 };
 
 // GA4 accepts Measurement Protocol events backdated by at most 72 hours.
-// Older payments remain deliverable, but use the delivery time rather than an
-// invalid historical timestamp.
+// Never report an old payment as a new purchase during a delayed retry.
 const MAX_GA4_BACKDATE_MS = 72 * 60 * 60 * 1000;
 
 function paidAtTimestampMicros(paidAt: Date | null, now = Date.now()) {
@@ -57,7 +56,8 @@ async function claimDelivery(checkoutSessionId: string, leaseToken: string) {
     from public.stripe_payments as payment
     where delivery.stripe_checkout_session_id = ${checkoutSessionId}
       and payment.stripe_checkout_session_id = delivery.stripe_checkout_session_id
-      and delivered_at is null
+      and payment.paid_at >= now() - interval '72 hours' and payment.paid_at <= now()
+      and delivered_at is null and ga4_client_id is not null and ga4_session_id is not null
       and (delivery_lease_expires_at is null or delivery_lease_expires_at < now())
     returning delivery.stripe_checkout_session_id, delivery.transaction_id,
       delivery.ga4_client_id, delivery.ga4_session_id, payment.paid_at
@@ -103,6 +103,10 @@ export async function deliverPendingGa4Purchase(checkoutSessionId: string) {
   try {
     const secret = apiSecret();
     const timestampMicros = paidAtTimestampMicros(delivery.paid_at);
+    if (timestampMicros === null) {
+      await releaseClaim(checkoutSessionId, leaseToken);
+      return { kind: "not_pending" as const };
+    }
     const query = new URLSearchParams({ measurement_id: GA_MEASUREMENT_ID, api_secret: secret });
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 8_000);
@@ -114,7 +118,7 @@ export async function deliverPendingGa4Purchase(checkoutSessionId: string) {
         signal: controller.signal,
         body: JSON.stringify({
           client_id: delivery.ga4_client_id,
-          ...(timestampMicros ? { timestamp_micros: timestampMicros } : {}),
+          timestamp_micros: timestampMicros,
           events: [
             {
               name: "purchase",
@@ -160,11 +164,13 @@ export async function deliverPendingGa4Purchase(checkoutSessionId: string) {
 export async function deliverPendingGa4Purchases(limit = 50) {
   const safeLimit = Math.min(Math.max(Math.floor(limit), 1), 100);
   const rows = await database()<Array<{ stripe_checkout_session_id: string }>>`
-    select stripe_checkout_session_id
-    from public.ga4_purchase_deliveries
-    where delivered_at is null
+    select delivery.stripe_checkout_session_id
+    from public.ga4_purchase_deliveries delivery
+    join public.stripe_payments payment using (stripe_checkout_session_id)
+    where payment.paid_at >= now() - interval '72 hours' and payment.paid_at <= now()
+      and delivered_at is null and ga4_client_id is not null and ga4_session_id is not null
       and (delivery_lease_expires_at is null or delivery_lease_expires_at < now())
-    order by created_at asc
+    order by delivery.created_at asc
     limit ${safeLimit}
   `;
   let delivered = 0;

@@ -1,4 +1,8 @@
 "use client";
+import { consent } from "../_analytics/analytics";
+import { captureCheckoutReference } from "../_analytics/checkoutMeasurement.client";
+import { navigateAfterVerifiedCheckout } from "../_analytics/testEvents";
+import { testConfig } from "../_analytics/config";
 import { useEffect, useRef, useState } from "react";
 import { directCustomerEnabled } from "../_lib/testAccounts/directPublic";
 import { directRequest, startDirectCheckout } from "../_lib/testAccounts/directClient";
@@ -37,12 +41,17 @@ export function useTestAccountCheckout(slug: "audhd" | "iq" | "adhd" | "hsp" | "
     if (busy.current) return true;
     busy.current = true;
     const body = new URLSearchParams({ payload: JSON.stringify({ answers, questionVersion: versions?.questionVersion ?? `${slug}-questions-v1`, reportVersion: versions?.reportVersion ?? `${slug}-report-v1` }) });
-    fetch(`/api/test-accounts/${slug}/checkout`, { method: "POST", body, credentials: "same-origin", cache: "no-store" })
-      .then(async response => {
+    const product = Object.entries(testConfig).find(([, entry]) => entry.path === (typeof window === "undefined" ? null : window.location?.pathname))?.[0];
+    const post = (reference: string | null) => {
+      if (reference) body.set("measurement", reference);
+      return fetch(`/api/test-accounts/${slug}/checkout`, { method: "POST", body, credentials: "same-origin", cache: "no-store" });
+    };
+    const checkout = product && consent() === "granted" ? captureCheckoutReference(product).then(post) : post(null);
+    void checkout.then(async response => {
         if (!response.ok) throw new Error("Unavailable");
         const value = await response.json();
         if (typeof value.url !== "string" || new URL(value.url).origin !== "https://checkout.stripe.com") throw new Error("Unavailable");
-        window.location.assign(value.url);
+        navigateAfterVerifiedCheckout(product ?? slug, () => window.location.assign(value.url));
       }).catch(() => { busy.current = false; onError(); });
     return true;
   };

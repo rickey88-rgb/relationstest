@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { bookPaymentProduct, openMeasuredPaymentLink } from "../_analytics/checkoutMeasurement.client";
 import { trackEvent } from "../_analytics/analytics";
 
 type BookPurchaseAnalyticsProps = {
@@ -36,12 +37,10 @@ export default function BookPurchaseAnalytics({ productId, productName, price, o
     data-rv="button"
     href={paymentLink}
     className={className}
-    onClick={() => trackEvent("book_checkout_click", {
-      product_id: productId,
-      product_name: productName,
-      price,
-      currency: "SEK",
-      offer_type: offerType,
-    })}
+    onClick={event => {
+      const params = { product_id: productId, product_name: productName, price, currency: "SEK", offer_type: offerType };
+      trackEvent("book_checkout_click", params);
+      openMeasuredPaymentLink(event, paymentLink, bookPaymentProduct(productId), params);
+    }}
   >{children}</a>;
 }

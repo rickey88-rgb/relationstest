@@ -1,3 +1,4 @@
+import { attributionReference } from "../checkoutMeasurement.server";
 import { randomBytes, timingSafeEqual } from "node:crypto";
 import { accountPortalEnabled } from "../accountGate.server";
 import { runCleanupScope } from "../accountCleanupScope.server";
@@ -96,9 +97,10 @@ export function directCustomerHandler(overrides: Partial<typeof defaults> = {}) 
         const supplied = request.headers.get("x-test-possession") ?? "";
         const secret = /^[A-Za-z0-9_-]{43}$/.test(supplied) ? supplied : randomBytes(32).toString("base64url");
         const id = await d.store.createAttempt(product, body.payload, secret, config.price, guestProcessingConsentVersion);
+        const measurement = attributionReference(body.measurement);
         // Identifiers are in a fragment: the Vercel HTTP request never receives them.
         const session = await stripe.checkout.sessions.create({ mode: "payment", client_reference_id: "ta:" + id,
-          metadata: { rv_flow: "direct_customer_v1" }, payment_intent_data: { metadata: { rv_flow: "direct_customer_v1" } },
+          metadata: { rv_flow: "direct_customer_v1", ...(measurement ? { rv_measurement: measurement } : {}) }, payment_intent_data: { metadata: { rv_flow: "direct_customer_v1" } },
           line_items: [{ price: config.price, quantity: 1 }], allow_promotion_codes: false,
           success_url: allowed + "/mina-sidor#attempt=" + id, cancel_url: allowed + (model.testPath ?? "/" + model.slug + "-test/test"),
           expires_at: Math.floor(Date.now() / 1000) + 1800,

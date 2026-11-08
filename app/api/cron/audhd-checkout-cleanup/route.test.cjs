@@ -38,12 +38,13 @@ function request(authorization = "") { return new NextRequest("https://www.relat
 
   const originalError = console.error, errors = [];
   console.error = value => errors.push(value);
-  failure = Object.assign(new Error("postgres://must-not-appear@example.test"), { name: "DatabaseError" });
+  failure = Object.assign(new Error("postgres://must-not-appear@example.test"), { name: "DatabaseError", code: "23502" });
   response = await route.GET(request(`Bearer ${process.env.CRON_SECRET}`));
   console.error = originalError;
   failure = null;
   assert.equal(response.status, 503);
-  assert.deepEqual(errors, [JSON.stringify({ event: "audhd_checkout_maintenance_failed", error_class: "DatabaseError" })]);
+  assert.deepEqual(errors, ["retention", "ga4_delivery"].map(stage =>
+    JSON.stringify({ event: "audhd_checkout_maintenance_failed", stage, error_class: "DatabaseError", database_code: "23502" })));
   assert(!errors[0].includes("postgres://"), "logs never contain database details or customer data");
   console.log("PASS: AuDHD cron cleanup requires CRON_SECRET, logs only counts or safe error classes, and is safe when no expired attempts exist.");
 })().catch(error => { console.error(error); process.exitCode = 1; });

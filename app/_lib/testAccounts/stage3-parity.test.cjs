@@ -105,7 +105,7 @@ for (const [key, product, dir, count] of [["narcissism", "narcissism_selftest", 
   const source = fs.readFileSync(path.join(__dirname, `../../${dir}/page.tsx`), "utf8").replace(/\r\n/g, "\n");
   const ast = ts.createSourceFile("page.tsx", source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
   let checkout; function visit(node) { if (ts.isFunctionDeclaration(node) && node.name?.text === "checkout") checkout = node.getText(ast); ts.forEachChild(node, visit); } visit(ast);
-  assert.equal(checkout.replace(" if (accountCheckout()) return;", "").replace(/\s+/g, " "), material[key].checkout.replace(/\s+/g, " "));
+  assert.equal(checkout.replace(" if (accountCheckout()) return;", "").replace(/\s+/g, " "), material[key].checkout.replace(/(tracking\.checkout\(.*?window\.location[^}]+\})(\);)/, "$1, " + (material[key].checkout.match(/window\.location\.(?:href = |assign\()([A-Z0-9_]+)/)?.[1]) + "$2").replace(/\s+/g, " "));
   assert(source.includes('usePaymentRecovery(STORAGE_KEY') && source.includes('hasPaidReturn(STORAGE_KEY)'));
   if (key === "screening") assert(source.includes('profile.safety && <aside'), "free safety guidance must remain outside the paywall");
   process.env[`${a.flagPrefix}_SAVE_ENABLED`] = "true";

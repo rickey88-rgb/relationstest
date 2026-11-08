@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { bookPaymentProduct, openMeasuredPaymentLink } from "../_analytics/checkoutMeasurement.client";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { trackEvent } from "../_analytics/analytics";
 import type { TestId } from "../_analytics/config";
@@ -99,7 +100,11 @@ export default function PostPurchaseRecommendation({ sourceProduct: sourceProduc
         <div className="mt-auto pt-5">
           <p className="text-sm text-neutral-600">{offer.product.type === "test" ? "Fullständig analys" : "Digital bok (PDF)"}</p>
           <p className="mt-1 text-xl font-semibold">{offer.product.ordinaryPrice && <span className="mr-2 text-sm font-normal text-neutral-500 line-through">{offer.product.ordinaryPrice} kr</span>}{offer.product.price} kr</p>
-          <Link data-flow="cta" href={offer.product.purchasePath ?? destination(offer)} onClick={() => trackEvent("cross_sell_click", productEventParams(sourceProduct, offer))} className="mt-4 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[#27666A] px-4 py-3 text-center font-semibold text-white transition-colors hover:bg-[#1F5357] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#27666A]">{offer.product.type === "book" ? "Köp boken" : offer.label}</Link>
+          <Link data-flow="cta" href={offer.product.purchasePath ?? destination(offer)} onClick={event => {
+            const params = productEventParams(sourceProduct, offer);
+            trackEvent("cross_sell_click", params);
+            if (offer.product.purchasePath) openMeasuredPaymentLink(event, offer.product.purchasePath, bookPaymentProduct(offer.productId), params);
+          }} className="mt-4 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[#27666A] px-4 py-3 text-center font-semibold text-white transition-colors hover:bg-[#1F5357] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#27666A]">{offer.product.type === "book" ? "Köp boken" : offer.label}</Link>
           {offer.product.type === "book" && <Link href={destination(offer)} className="mt-3 inline-flex min-h-11 items-center text-sm text-[#27666A] underline underline-offset-4">Läs mer om boken</Link>}
         </div>
       </article>)}

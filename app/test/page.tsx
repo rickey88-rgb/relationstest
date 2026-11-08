@@ -56,7 +56,6 @@ export default function ScreeningPage() {
     } catch { setStorageUnavailable(true); }
     const params = new URLSearchParams(window.location.search);
     if (params.get("paid") === "true") {
-      tracking.purchase();
       setUnlocked(true);
       window.history.replaceState({}, "", window.location.pathname);
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -121,7 +120,7 @@ export default function ScreeningPage() {
       if (!parseState(localStorage.getItem(STORAGE_KEY))) throw new Error("storage unavailable");
     } catch { setStorageUnavailable(true); return; }
     if (!payment.prepareCheckout({ version: STATE_VERSION, index, answers, unlocked })) return;
-    tracking.checkout(() => { window.location.href = SCREENING_CHECKOUT_URL; });
+    tracking.checkout(() => { window.location.href = SCREENING_CHECKOUT_URL; }, SCREENING_CHECKOUT_URL);
   }
 
   if (!hydrated) return <p className="mt-6" role="status">Laddar testet...</p>;

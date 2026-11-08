@@ -1,3 +1,4 @@
+import { attributionReference } from "../checkoutMeasurement.server";
 import { randomBytes } from "node:crypto";
 import { NextRequest } from "next/server";
 import { accountLaunchUnavailable, accountPortalEnabled } from "../accountLaunch.server";
@@ -35,7 +36,8 @@ async function POST(request: NextRequest, { params }: Context) {
       const cookie = request.cookies.get(browserCookie)?.value;
       const secret = cookie && /^[A-Za-z0-9_-]{43}$/.test(cookie) ? cookie : randomBytes(32).toString("base64url");
       const id = await createAttempt(model.product, input, secret, config.price);
-      const session = await stripe.checkout.sessions.create({ mode: "payment", client_reference_id: `ta:${id}`,
+      const measurement = attributionReference(form.get("measurement"));
+      const session = await stripe.checkout.sessions.create({ ...(measurement ? { metadata: { rv_measurement: measurement } } : {}), mode: "payment", client_reference_id: `ta:${id}`,
         line_items: [{ price: config.price, quantity: 1 }], allow_promotion_codes: false,
         success_url: `${origin}/mina-sidor/gast/${slug}/${id}`, cancel_url: `${origin}${model.testPath ?? `/${slug}-test/test`}`,
         expires_at: Math.floor(Date.now() / 1000) + 1800,

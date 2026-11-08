@@ -100,8 +100,8 @@ for (const [slug, product] of cases) {
   function visit(node) { if(ts.isFunctionDeclaration(node) && material[slug].functions[node.name?.text]) functions[node.name.text] = node.getText(ast); ts.forEachChild(node,visit); } visit(ast);
   const effects = [];
   function visitEffects(node) { if(ts.isCallExpression(node) && node.expression.getText(ast) === "useEffect") effects.push(node.getText(ast)); ts.forEachChild(node,visitEffects); } visitEffects(ast);
-  assert.deepEqual(effects, material[slug].effects, "guest restore/persistence/payment effects changed");
-  for(const [name, text] of Object.entries(material[slug].functions)) assert.equal(normalized(functions[name].replace(" if (accountCheckout()) return;", "").replace("    setCheckoutUnavailable(false);\n", "")), normalized(text), `legacy ${name} changed`);
+  assert.deepEqual(effects, material[slug].effects.map(effect => effect.replace(/tracking\.purchase\(\);\s*|purchaseEvent\("iq_test"\); /g, "")), "guest restore/persistence/payment effects changed");
+  for(const [name, text] of Object.entries(material[slug].functions)) assert.equal(normalized(functions[name].replace(" if (accountCheckout()) return;", "").replace("    setCheckoutUnavailable(false);\n", "")), normalized(text.replace(/(tracking\.checkout\(.*?window\.location[^}]+\})(\);)/, "$1, " + text.match(/window\.location\.(?:href = |assign\()([A-Z0-9_]+)/)?.[1] + "$2")), `legacy ${name} changed`);
   assert(source.includes('usePaymentRecovery(LS_KEY') && source.includes('hasPaidReturn(LS_KEY)') && source.includes('localStorage.getItem(LS_KEY)'));
   process.env[`${a.flagPrefix}_SAVE_ENABLED`] = "true"; registry.registeredAdapters().forEach(other => assert.equal(registry.flags(other.product).save, other.product === product)); delete process.env[`${a.flagPrefix}_SAVE_ENABLED`];
   totalReports += samples.size;

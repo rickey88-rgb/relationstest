@@ -37,7 +37,7 @@ export type ExistingAudhdStripeCheckout =
   | { kind: "unavailable" };
 
 /** Creates one hosted live Checkout Session for a server-reserved attempt. */
-export async function createAudhdStripeCheckout(checkoutReferenceId: string): Promise<AudhdStripeCheckout> {
+export async function createAudhdStripeCheckout(checkoutReferenceId: string, measurement?: string | null): Promise<AudhdStripeCheckout> {
   let stripe: Stripe;
   let priceId: string;
   try {
@@ -63,6 +63,7 @@ export async function createAudhdStripeCheckout(checkoutReferenceId: string): Pr
       mode: "payment",
       line_items: [{ price: priceId, quantity: 1 }],
       client_reference_id: checkoutReferenceId,
+      ...(measurement ? { metadata: { rv_measurement: measurement } } : {}),
       expires_at: Math.floor(Date.now() / 1000) + AUDHD_STRIPE_CHECKOUT_SESSION_SECONDS,
       success_url: `${SITE_ORIGIN}/api/audhd-checkout/return?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${SITE_ORIGIN}/audhd-test/test?checkout=cancelled`,

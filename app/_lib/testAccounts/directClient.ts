@@ -1,4 +1,7 @@
 "use client";
+import { consent } from "../../_analytics/analytics";
+import { captureCheckoutReference } from "../../_analytics/checkoutMeasurement.client";
+import { navigateAfterVerifiedCheckout } from "../../_analytics/testEvents";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { directEndpoint } from "./directPublic";
 import { guestProcessingConsentVersion } from "./consent";
@@ -88,12 +91,13 @@ export async function directRequest(body: Record<string, unknown>, options: { au
   return response.json();
 }
 export async function startDirectCheckout(product: string, payload: unknown) {
-  const value = await directRequest({ action: "checkout", product, payload, consent: guestProcessingConsentVersion }, { possession: true, createPossession: true });
+  const measurement = consent() === "granted" ? await captureCheckoutReference(product) : null;
+  const value = await directRequest({ action: "checkout", product, payload, consent: guestProcessingConsentVersion, ...(measurement ? { measurement } : {}) }, { possession: true, createPossession: true });
   if (typeof value.id !== "string" || !/^[A-Za-z0-9_-]{43}$/.test(value.secret) || typeof value.url !== "string" || new URL(value.url).origin !== "https://checkout.stripe.com") throw new Error("Checkout unavailable");
   localStorage.setItem(secretKey, value.secret);
   localStorage.setItem(pendingKey, JSON.stringify({ id: value.id, product }));
   localStorage.setItem(pendingListKey, JSON.stringify([...pendingPurchases().filter(item => item.id !== value.id), { id: value.id, product }]));
-  window.location.assign(value.url);
+  navigateAfterVerifiedCheckout(product, () => window.location.assign(value.url));
 }
 /** Existing Auth email template appends ?token_hash after RedirectTo. Keep it in the fragment. */
 export function directLoginRedirect(origin: string) { return new URL("/mina-sidor#login", origin).href; }

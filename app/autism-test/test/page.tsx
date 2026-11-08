@@ -8,7 +8,6 @@ import PostPurchaseRecommendation from "../../_components/PostPurchaseRecommenda
 import { hasPaidReturn, usePaymentRecovery } from "../../_components/usePaymentRecovery";
 
 import { useTestAnalytics } from "../../_analytics/useTestAnalytics";
-import { purchaseEvent } from "../../_analytics/testEvents";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { answerLabels, calculate, emptyAnswers, parseState, paywallFinding, questions, PRICE_SEK, STATE_VERSION, STORAGE_KEY } from "./model";
@@ -54,7 +53,6 @@ export default function AutismSelfTestPage() {
     } catch { setStorageUnavailable(true); }
     const params = new URLSearchParams(window.location.search);
     if (params.get("paid") === "true") {
-      purchaseEvent("autism_test");
       setUnlocked(true);
       window.history.replaceState({}, "", window.location.pathname);
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -147,7 +145,7 @@ export default function AutismSelfTestPage() {
   function checkout() { if (accountCheckout()) return;
     if (!payment.prepareCheckout({ version: STATE_VERSION, index, answers, unlocked })) return;
     if (!AUTISM_STRIPE_URL.startsWith("https://buy.stripe.com/")) { setCheckoutUnavailable(true); return; }
-    tracking.checkout(() => { window.location.assign(AUTISM_STRIPE_URL); });
+    tracking.checkout(() => { window.location.assign(AUTISM_STRIPE_URL); }, AUTISM_STRIPE_URL);
   }
 
   if (!hydrated) return <p className="mt-6" role="status">Laddar testet...</p>;

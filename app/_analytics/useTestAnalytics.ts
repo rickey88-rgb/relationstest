@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { CONSENT_EVENT } from "./analytics";
-import { answerEvent, checkoutEvent, diagnosticEvent, paywallEvent, purchaseEvent, restartEvents, teaserEvent } from "./testEvents";
+import { answerEvent, checkoutEvent, diagnosticEvent, paywallEvent, restartEvents, teaserEvent } from "./testEvents";
 import type { TestId } from "./config";
 
 export function useTestAnalytics(id: TestId, total: number) {
@@ -23,6 +23,6 @@ export function useTestAnalytics(id: TestId, total: number) {
   },[id,paywall]);
   return useMemo(() => ({ paywallRef,
     answer: (answered: number, currentQuestion: number) => answerEvent(id,answered,currentQuestion,total),
-    checkout: (navigate: () => void) => checkoutEvent(id, navigate), purchase: () => purchaseEvent(id), teaser: () => teaserEvent(id), analysisView: () => diagnosticEvent(id, "analysis_view"), resultView: () => diagnosticEvent(id, "result_view"), restart: () => restartEvents(id),
+    checkout: (navigate: () => void, paymentLink?: string) => checkoutEvent(id, navigate, paymentLink), teaser: () => teaserEvent(id), analysisView: () => diagnosticEvent(id, "analysis_view"), resultView: () => diagnosticEvent(id, "result_view"), restart: () => restartEvents(id),
   }), [id, paywallRef, total]);
 }

@@ -37,7 +37,7 @@ for (const slug of ["hsp", "angest", "ptsd"]) {
   let checkout;
   function visit(node) { if (ts.isFunctionDeclaration(node) && node.name?.text === "checkout") checkout = node.getText(ast); ts.forEachChild(node, visit); }
   visit(ast);
-  assert.equal(checkout.replace(' if (accountCheckout()) return;', '').replace(/\s+/g, " "), originals[slug].checkout.replace(/\s+/g, " "), "flags-off legacy checkout must remain identical");
+  assert.equal(checkout.replace(' if (accountCheckout()) return;', '').replace(/\s+/g, " "), originals[slug].checkout.replace(/(tracking\.checkout\(.*?window\.location[^}]+\})(\);)/, "$1, " + (originals[slug].checkout.match(/window\.location\.(?:href = |assign\()([A-Z0-9_]+)/)?.[1]) + "$2").replace(/\s+/g, " "), "flags-off legacy checkout must remain identical");
   assert(page.includes('unlocked') && page.includes('hasPaidReturn(STORAGE_KEY)') && page.includes('usePaymentRecovery(STORAGE_KEY'), "existing guest unlock/recovery retained");
   process.env[`${a.flagPrefix}_SAVE_ENABLED`] = "true";
   for (const other of registry.registeredAdapters()) assert.equal(registry.flags(other.product).save, other.product === a.product, "flags must be independent");

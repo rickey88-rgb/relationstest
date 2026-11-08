@@ -1,3 +1,7 @@
+import { recordStripeRefunds, REFUND_EVENT_TYPES } from "../stripeRefundLedger.server";
+import { processStripeWebhookEvent } from "../stripeWebhook.server";
+import { recordVerifiedStripePayment } from "../paymentsDb.server";
+import { deliverVerifiedPurchase } from "../verifiedPurchaseDelivery.server";
 import type Stripe from "stripe";
 import { guestRecoveryEnabled, indexGuestRecovery } from "./guestRecovery.server";
 type ObjectReference = string | { id: string } | null | undefined;
@@ -27,7 +31,7 @@ export async function directStripeWebhook(request: Request, stripe: Stripe, rela
       // Missing/incorrect classification must not leak a new session into legacy processing.
       return respond(false, 503);
     }
-    if (!isDirect && event.type.startsWith("charge.")) {
+    if (!isDirect && (event.type.startsWith("charge.") || REFUND_EVENT_TYPES.has(event.type))) {
       let intentId = idOf(item.payment_intent);
       if (!intentId && item.charge) {
         const charge = await stripe.charges.retrieve(idOf(item.charge)!);
@@ -36,13 +40,28 @@ export async function directStripeWebhook(request: Request, stripe: Stripe, rela
       if (intentId) isDirect = direct(await stripe.paymentIntents.retrieve(intentId));
     }
     if (isDirect) {
+      if (process.env.PAYMENT_LEDGER_V2_ENABLED === "true") {
+        const testMode = process.env.STRIPE_LEDGER_MODE === "test" && !process.env.SB_REGION;
+        if (event.livemode === testMode) return respond(false, 400);
+        await recordStripeRefunds(event, stripe);
+        const payment = await processStripeWebhookEvent(event, {
+          ledgerV2: true,
+          retrieveSession: id => stripe.checkout.sessions.retrieve(id),
+          listLineItems: id => stripe.checkout.sessions.listLineItems(id, { limit: 100 }),
+          recordPayment: recordVerifiedStripePayment,
+        });
+        if (payment.kind === "recorded") {
+          try { await deliverVerifiedPurchase(payment.checkoutSessionId); }
+          catch { console.error(JSON.stringify({ event: "verified_purchase_delivery_failed" })); }
+        }
+      }
       if (guestRecoveryEnabled() && ["checkout.session.completed","checkout.session.async_payment_succeeded"].includes(event.type)) {
         const session = event.data.object as Stripe.Checkout.Session;
         if (session.payment_status === "paid") await indexGuestRecovery(session.id);
       }
       return respond(true, 200); // guest/save/open independently verify Stripe and refunds
     }
-    if (!["checkout.session.", "payment_intent.", "charge."].some(prefix => event.type.startsWith(prefix))) return respond(true, 200);
+    if (!["checkout.session.", "payment_intent.", "charge."].some(prefix => event.type.startsWith(prefix)) && !REFUND_EVENT_TYPES.has(event.type)) return respond(true, 200);
     const result = await relay("https://www.relationsvarning.se/api/stripe/webhook", {
       method: "POST", headers: { "Content-Type": "application/json", "stripe-signature": signature },
       body: bytes, redirect: "error", signal: AbortSignal.timeout(45000),

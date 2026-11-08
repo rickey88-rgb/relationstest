@@ -1,7 +1,8 @@
+import { paymentLinkWithMeasurement } from "./checkoutMeasurement.client";
 import { ATTEMPT_PREFIX, consent, trackEvent, trackEventBeforeNavigation, type EcommerceItem } from "./analytics";
 import { ANALYTICS_RELEASE_ID, testConfig, type TestId } from "./config";
 
-type Attempt = { version: 1; updatedAt: number; id: string; startedAt: number | null; completedAt: number | null; started: boolean; milestones: number[]; complete: boolean; teaser?: boolean; paywall: boolean; purchase: boolean };
+type Attempt = { version: 1; updatedAt: number; id: string; startedAt: number | null; completedAt: number | null; started: boolean; milestones: number[]; complete: boolean; teaser?: boolean; paywall: boolean };
 const memory = new Map<TestId, Attempt>();
 let checkoutNavigationInFlight = false;
 // Bump a test's value only when its pre-purchase presentation changes. These labels
@@ -12,7 +13,7 @@ const paywallVersion: Partial<Record<TestId, string>> = {
   audhd_test: "personal-finding-v2",
 };
 function fresh(): Attempt {
-  return {version:1,updatedAt:Date.now(),id:typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`,startedAt:null,completedAt:null,started:false,milestones:[],complete:false,paywall:false,purchase:false};
+  return {version:1,updatedAt:Date.now(),id:typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`,startedAt:null,completedAt:null,started:false,milestones:[],complete:false,paywall:false};
 }
 function read(id: TestId): Attempt {
   const candidates: Attempt[] = memory.has(id) ? [memory.get(id)!] : [];
@@ -71,11 +72,17 @@ export function diagnosticEvent(id: TestId, name: "analysis_view" | "result_view
   try { if (consent() === "granted") { const attempt = read(id); trackEvent(name, identity(id, attempt)); save(id, attempt); } }
   catch { /* Optional diagnostics never change the test flow. */ }
 }
-export function checkoutEvent(id: TestId, navigate?: () => void) {
+export function checkoutEvent(id: TestId, navigate?: () => void, paymentLink?: string) {
   if (checkoutNavigationInFlight) return false;
   checkoutNavigationInFlight = true;
   const finish = () => {
-    try { navigate?.(); }
+    try {
+      if (paymentLink && consent() === "granted") void paymentLinkWithMeasurement(paymentLink, id).then(url => {
+        if (url === paymentLink) navigate?.();
+        else window.location.assign(url);
+      });
+      else navigate?.();
+    }
     finally { if (!navigate) checkoutNavigationInFlight = false; }
   };
   try {
@@ -88,14 +95,19 @@ export function checkoutEvent(id: TestId, navigate?: () => void) {
     return tracked;
   } catch { finish(); return false; }
 }
-export function purchaseEvent(id: TestId) {
-  try { if (consent() !== "granted") return; const attempt=read(id); if (attempt.purchase) return;
-    // This is a paid=true return, not a Stripe-verified transaction. Stripe Dashboard/webhooks
-    // remain the source of truth for actual purchases; this stable ID only enables GA4 deduplication.
-    attempt.purchase=trackEvent("purchase",{...commerce(id,attempt),transaction_id:`rv-${id}-${attempt.id}`}); save(id,attempt);
-  } catch { /* Never affect unlock. */ }
-}
 export function restartEvents(id: TestId) {
   try { memory.delete(id); for (const storage of ["localStorage","sessionStorage"] as const) { try { window[storage].removeItem(ATTEMPT_PREFIX+id); } catch { /* Optional store. */ } } if (consent() === "granted") save(id,fresh()); } catch { /* Never affect restart. */ }
 }
 export function clearAttemptMemory() { memory.clear(); checkoutNavigationInFlight = false; }
+
+export function navigateAfterVerifiedCheckout(product: string, navigate: () => void) {
+  if (consent() !== "granted") { navigate(); return; }
+  let params: ReturnType<typeof commerce> | { test_id: string } = { test_id: product };
+  if (Object.hasOwn(testConfig, product)) {
+    const id = product as TestId;
+    const attempt = read(id);
+    save(id, attempt);
+    params = commerce(id, attempt);
+  }
+  trackEventBeforeNavigation("begin_checkout", params, navigate);
+}

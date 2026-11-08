@@ -1,5 +1,10 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "git": {
+    "deploymentEnabled": {
+      "codex/verified-conversion-tracking-main": false
+    }
+  },
   "crons": [
     {
       "path": "/api/cron/audhd-checkout-cleanup",
@@ -12,6 +17,10 @@
     {
       "path": "/api/cron/test-account-cleanup",
       "schedule": "30 3 * * *"
+    },
+    {
+      "path": "/api/cron/stripe-measurement",
+      "schedule": "*/15 * * * *"
     }
   ]
 }

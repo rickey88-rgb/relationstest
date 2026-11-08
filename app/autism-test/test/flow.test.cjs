@@ -60,6 +60,7 @@ a.completeCheckout();
 assert.equal(window.location.href,"https://buy.stripe.com/7sY6oG5ON6Eh0q3b720gw0n");
 assert.deepEqual(JSON.parse(a.data.get(key)).answers,Array(30).fill(2));
 a=mount({data:a.data,paid:true});assert(a.text().includes('Ditt test är upplåst'));assert(a.text().includes('Din övergripande profil'));assert(a.text().includes('50 / 100'));
+assert(!a.events.some(event=>event[0]==='purchase'));
 assert(!a.text().includes('Se min fullständiga analys · 39 kr'));assert.equal(a.data.get(key+':paid'),'true');
 a=mount({data:a.data});assert(a.text().includes('Din övergripande profil'));a.click('Börja om');assert(a.text().includes('Ditt test är upplåst'));
 a=mount();complete(a,[...Array(5).fill(4),...Array(25).fill(0)]);a.advance(3000);assert(a.text().includes('Dina svar pekar inte tydligt åt ett enda håll.'));assert(!a.text().includes('Svagt autismrelaterat mönster'));assert(!a.text().includes('Socialt samspel'));

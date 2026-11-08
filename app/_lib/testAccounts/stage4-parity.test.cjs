@@ -84,9 +84,9 @@ for (const answers of samples.values()) {
 const source = fs.readFileSync(path.join(__dirname, "../../autism-test/test/page.tsx"), "utf8").replace(/\r\n/g, "\n");
 const ast = ts.createSourceFile("page.tsx", source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX), functions = {};
 function visit(node) { if (ts.isFunctionDeclaration(node) && ["checkout", "restart", "restoreSupportRecovery"].includes(node.name?.text)) functions[node.name.text] = node.getText(ast); ts.forEachChild(node, visit); } visit(ast);
-assert.equal(functions.checkout.replace(" if (accountCheckout()) return;", "").replace(/\s+/g, " "), material.checkout.replace(/\s+/g, " "));
+assert.equal(functions.checkout.replace(" if (accountCheckout()) return;", "").replace(/\s+/g, " "), material.checkout.replace(/(tracking\.checkout\(.*?window\.location[^}]+\})(\);)/, "$1, " + (material.checkout.match(/window\.location\.(?:href = |assign\()([A-Z0-9_]+)/)?.[1]) + "$2").replace(/\s+/g, " "));
 assert.equal(functions.restart, material.restart); assert.equal(functions.restoreSupportRecovery, material.recovery);
-assert(source.includes('purchaseEvent("autism_test")') && source.includes('usePaymentRecovery(STORAGE_KEY') && source.includes('<PostPurchaseRecommendation sourceProduct="autism_test" />'));
+assert(!source.includes('purchaseEvent("autism_test")') && source.includes('usePaymentRecovery(STORAGE_KEY') && source.includes('<PostPurchaseRecommendation sourceProduct="autism_test" />'));
 process.env.TEST_ACCOUNTS_AUTISM_SAVE_ENABLED = "true";
 registry.registeredAdapters().forEach(other => assert.equal(registry.flags(other.product).save, other.product === "autism_test"));
 console.log(`PASS: autism: ${samples.size} exact original/client/server/portal premium report cases; 15,625 subscale/profile and 3,125 impact/history combinations, five profiles, four modifiers, exact boundaries, strict schema and independent flags. Legacy checkout/restart/recovery functions and signed-cookie implementation unchanged.`);

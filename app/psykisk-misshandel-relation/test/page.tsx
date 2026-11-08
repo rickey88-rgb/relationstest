@@ -89,7 +89,6 @@ export default function Page() {
     );
 
     if (params.get("paid") === "true") {
-      tracking.purchase();
       setUnlocked(true);
       setShowIntro(false);
 
@@ -235,7 +234,7 @@ export default function Page() {
     }
 
     if (!payment.prepareCheckout({ index, answers, unlocked })) return;
-    tracking.checkout(() => { window.location.href = STRIPE_PAYMENT_LINK; });
+    tracking.checkout(() => { window.location.href = STRIPE_PAYMENT_LINK; }, STRIPE_PAYMENT_LINK);
   }
 
   function startTest() {

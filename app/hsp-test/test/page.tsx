@@ -33,7 +33,7 @@ export default function HspTestPage() {
   const analyzing = analysisStep !== null;
   useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
   /* eslint-disable react-hooks/set-state-in-effect -- restore browser state before test UI is rendered. */
-  useEffect(() => { try { const saved = parseState(localStorage.getItem(STORAGE_KEY)); if (saved) { setAnswers(saved.answers); setIndex(saved.index); setUnlocked(saved.unlocked); } if (new URLSearchParams(window.location.search).get("paid") === "true") { tracking.purchase(); setUnlocked(true); window.history.replaceState({}, "", window.location.pathname); } } catch { setStorageUnavailable(true); } setHydrated(true); }, []);
+  useEffect(() => { try { const saved = parseState(localStorage.getItem(STORAGE_KEY)); if (saved) { setAnswers(saved.answers); setIndex(saved.index); setUnlocked(saved.unlocked); } if (new URLSearchParams(window.location.search).get("paid") === "true") { setUnlocked(true); window.history.replaceState({}, "", window.location.pathname); } } catch { setStorageUnavailable(true); } setHydrated(true); }, []);
   useEffect(() => { if (!hydrated) return; try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ version: STATE_VERSION, index, answers, unlocked })); } catch { setStorageUnavailable(true); } }, [answers, hydrated, index, unlocked]);
   /* eslint-enable react-hooks/set-state-in-effect */
   useEffect(() => { if (!analyzing) return; const second = setTimeout(() => setAnalysisStep(1), 1000); const third = setTimeout(() => setAnalysisStep(2), 2000); const done = setTimeout(() => { moveFocus.current = true; setAnalysisStep(null); }, 3000); return () => { clearTimeout(second); clearTimeout(third); clearTimeout(done); }; }, [analyzing]);
@@ -55,7 +55,7 @@ export default function HspTestPage() {
   function checkout() { if (accountCheckout()) return;
     if (!payment.prepareCheckout({ version: STATE_VERSION, index, answers, unlocked })) return;
     if (!HSP_STRIPE_URL.startsWith("https://buy.stripe.com/")) { setCheckoutUnavailable(true); return; }
-    tracking.checkout(() => { window.location.assign(HSP_STRIPE_URL); });
+    tracking.checkout(() => { window.location.assign(HSP_STRIPE_URL); }, HSP_STRIPE_URL);
   }
 
   if (!hydrated) return <p className="mt-6" role="status">Laddar testet…</p>;

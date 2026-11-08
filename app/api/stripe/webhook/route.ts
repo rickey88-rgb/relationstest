@@ -1,3 +1,5 @@
+import { recordStripeRefunds } from "../../../_lib/stripeRefundLedger.server";
+import { deliverVerifiedPurchase } from "../../../_lib/verifiedPurchaseDelivery.server";
 import Stripe from "stripe";
 import { NextRequest, NextResponse } from "next/server";
 import { recordVerifiedStripePayment } from "../../../_lib/paymentsDb.server";
@@ -90,7 +92,14 @@ export async function POST(request: NextRequest) {
 
   try {
     const stripe = new Stripe(required("STRIPE_SECRET_KEY"));
+    const ledgerV2 = process.env.PAYMENT_LEDGER_V2_ENABLED === "true";
+    if (ledgerV2) {
+      const testMode = process.env.STRIPE_LEDGER_MODE === "test" && process.env.VERCEL_ENV !== "production";
+      if (event.livemode === testMode) return noStore(400);
+      await recordStripeRefunds(event, stripe);
+    }
     const processed = await processStripeWebhookEvent(event, {
+      ledgerV2,
       retrieveSession: (sessionId) => stripe.checkout.sessions.retrieve(sessionId),
       listLineItems: (sessionId) => stripe.checkout.sessions.listLineItems(sessionId, { limit: 100, expand: ["data.price.product"] }),
       recordPayment: recordVerifiedStripePayment,
@@ -99,7 +108,10 @@ export async function POST(request: NextRequest) {
       // The payment ledger and optional GA4 outbox are already committed. A
       // Measurement Protocol outage must not turn a verified Stripe payment
       // into a failed webhook delivery.
-      try { await deliverPendingGa4Purchase(processed.checkoutSessionId); }
+      try {
+        if (ledgerV2) await deliverVerifiedPurchase(processed.checkoutSessionId);
+        else await deliverPendingGa4Purchase(processed.checkoutSessionId);
+      }
       catch (error) { logProcessingFailure(error); }
       // Only a newly-ledgered, live verified AuDHD purchase can request the
       // personal safety email. A duplicate webhook does not send again.

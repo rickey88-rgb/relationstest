@@ -1,3 +1,4 @@
+import { attributionReference } from "../../../_lib/checkoutMeasurement.server";
 import { NextRequest, NextResponse } from "next/server";
 import { AUDHD_CHECKOUT_ATTEMPT_COOKIE, hashAudhdCheckoutBrowserSecret } from "../../../_lib/audhdCheckoutAttempt.server";
 import { parseAudhdCheckoutAnalyticsAttribution } from "../../../_lib/audhdCheckoutAnalytics.server";
@@ -60,6 +61,7 @@ export async function POST(request: NextRequest) {
     const body: unknown = await request.json();
     const attemptId = body && typeof body === "object" && !Array.isArray(body) ? (body as { attemptId?: unknown }).attemptId : null;
     const analyticsAttribution = body && typeof body === "object" && !Array.isArray(body) ? parseAudhdCheckoutAnalyticsAttribution((body as { analytics?: unknown }).analytics) : null;
+    const measurement = body && typeof body === "object" ? attributionReference((body as { measurement?: unknown }).measurement) : null;
     const browserSecret = request.cookies.get(AUDHD_CHECKOUT_ATTEMPT_COOKIE)?.value ?? "";
     if (!isAttemptId(attemptId) || !/^[A-Za-z0-9_-]{43}$/.test(browserSecret)) return response({ error: "Checkout attempt is unavailable." }, 404);
 
@@ -87,7 +89,7 @@ export async function POST(request: NextRequest) {
       if (retry.kind !== "reserved") return response({ error: "Checkout is no longer available." }, 409);
       pendingReservation = { attemptId, browserSecretHash, checkoutReferenceId: retry.checkoutReferenceId };
       stage = "stripe_create";
-      const renewedCheckout = await createAudhdStripeCheckout(retry.checkoutReferenceId);
+      const renewedCheckout = await createAudhdStripeCheckout(retry.checkoutReferenceId, measurement);
       stage = "bind";
       await bindAudhdCheckoutSession({ attemptId, browserSecretHash, checkoutReferenceId: retry.checkoutReferenceId, checkoutSessionId: renewedCheckout.checkoutSessionId });
       pendingReservation = null;
@@ -96,7 +98,7 @@ export async function POST(request: NextRequest) {
 
     pendingReservation = { attemptId, browserSecretHash, checkoutReferenceId: reservation.checkoutReferenceId };
     stage = "stripe_create";
-    const checkout = await createAudhdStripeCheckout(reservation.checkoutReferenceId);
+    const checkout = await createAudhdStripeCheckout(reservation.checkoutReferenceId, measurement);
     stage = "bind";
     await bindAudhdCheckoutSession({ attemptId, browserSecretHash, checkoutReferenceId: reservation.checkoutReferenceId, checkoutSessionId: checkout.checkoutSessionId });
     pendingReservation = null;

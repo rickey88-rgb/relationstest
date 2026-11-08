@@ -53,7 +53,6 @@ export default function PtsdTestPage() {
       const saved = parseState(localStorage.getItem(STORAGE_KEY));
       if (saved) { setAnswers(saved.answers); setIndex(saved.index); setUnlocked(saved.unlocked); }
       if (new URLSearchParams(window.location.search).get("paid") === "true") {
-        tracking.purchase();
         setUnlocked(true);
         window.history.replaceState({}, "", window.location.pathname);
       }
@@ -118,7 +117,7 @@ export default function PtsdTestPage() {
   function checkout() { if (accountCheckout()) return;
     if (!payment.prepareCheckout({ version: STATE_VERSION, index, answers, unlocked })) return;
     if (!PTSD_STRIPE_URL.startsWith("https://buy.stripe.com/")) { setCheckoutUnavailable(true); return; }
-    tracking.checkout(() => { window.location.assign(PTSD_STRIPE_URL); });
+    tracking.checkout(() => { window.location.assign(PTSD_STRIPE_URL); }, PTSD_STRIPE_URL);
   }
 
   if (!hydrated) return <p className="mt-6" role="status">Laddar testet…</p>;
