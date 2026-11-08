@@ -68,7 +68,7 @@ export default function ADHDLanding() {
     <nav aria-label="Brödsmulor" className="text-sm text-neutral-600"><Link href="/" className={textLink + " inline-flex min-h-11 items-center"}>Relationsvarning</Link><span aria-hidden="true"> / </span><span aria-current="page">ADHD-test</span></nav>
     <article><header className="mt-5"><h1 className="text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">ADHD-test för vuxna</h1>
       <p className="mt-5 text-lg leading-8 text-neutral-700">30 frågor om fokus, planering, rastlöshet och vardag. Räkna med ungefär fem minuter.</p>
-      <p className="mt-4 leading-7 text-neutral-700">Du får ett personligt fynd gratis. Den fullständiga analysen är valfri och kostar 39 kr.</p>
+      <p className="mt-4 leading-7 text-neutral-700">Du får ett personligt fynd gratis.</p>
       <div className="mt-6"><Link data-rv="button" href="/adhd-test/test" className={cta}>Starta ADHD-testet</Link></div><p className="mt-3 text-sm text-neutral-600">Ingen registrering krävs för att starta. Självtestet kan varken bekräfta eller utesluta ADHD.</p>
     </header>
     <figure className="mt-8 overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50">
