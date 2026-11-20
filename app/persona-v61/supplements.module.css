@@ -1,0 +1,2 @@
+.questions label { display: block; margin-top: 24px; font-size: 15px; line-height: 1.6; color: #F5F0E7; }
+.questions select { display: block; width: 100%; min-width: 0; max-width: 100%; min-height: 48px; margin-top: 10px; padding: 10px 8px; border: 1px solid #C9A86B; border-radius: 4px; color: #F5F0E7; background: #101626; font: inherit; }

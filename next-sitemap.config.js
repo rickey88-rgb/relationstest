@@ -6,7 +6,7 @@ module.exports = {
   autoLastmod: false,
   changefreq: undefined,
   transform: async (_config, path) => {
-    if (path === '/icon.png') return null;
+    if (path.startsWith('/persona-v61') || path.startsWith('/persona/dev-') || path === '/icon.png') return null;
     return { loc: path };
   },
   additionalPaths: async () => [
@@ -15,7 +15,9 @@ module.exports = {
     { loc: '/adhd-deluxe' },
   ],
   exclude: [
+    "/persona-v61", "/persona-v61/*",
     "/persona/test",
+    "/persona/dev-report",
     '/juridisk-information',
     '/autism-bok/tack',
     '/autism-bok/tack/*',

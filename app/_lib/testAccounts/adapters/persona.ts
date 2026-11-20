@@ -1,8 +1,8 @@
 import { buildPersonaReport } from "../../../persona/_domain/registry";
-import { parseSubmission } from "../../../persona/_domain/v2/submission";
+import { parseSubmission } from "../../../persona/_domain/v5/submission";
 import { VERSIONS, PRICE_SEK } from "../../../persona/_domain/versions";
 
-/** One frozen model for checkout, encrypted storage and every paid reopening. */
+/** The active PERSONA model for new checkouts. Stored reports dispatch by their sealed version. */
 export const persona = {
   product: "persona_test" as const, slug: "persona", title: "PERSONA", amount: PRICE_SEK * 100,
   testPath: "/persona/test", questionVersion: VERSIONS.question, reportVersion: VERSIONS.report,

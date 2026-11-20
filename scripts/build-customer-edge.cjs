@@ -20,10 +20,17 @@ function packageSpecifier(name) {
   return "npm:" + packageName + "@" + info.version + name.slice(packageName.length);
 }
 function emit(file) {
-  const relative = path.relative(root, file).replaceAll("\\", "/"), dest = path.join(output, relative.replace(/\.tsx?$/, ".mjs"));
+  const relative = path.relative(root, file).replaceAll("\\", "/"), dest = path.join(output, relative.replace(/\.(?:tsx?|cjs)$/, ".mjs"));
   if (modules.has(relative)) return dest;
   const source = fs.readFileSync(file);
   modules.set(relative, { path: relative, sha256: createHash("sha256").update(source).digest("hex") });
+  if (file.endsWith("snapshot.cjs")) {
+    // Frozen release is a self-contained CommonJS graph. Keep its bytes unchanged
+    // inside a server-only ESM wrapper for Deno; no runtime require is external.
+    fs.mkdirSync(path.dirname(dest), { recursive: true });
+    fs.writeFileSync(dest, "const module = { exports: {} };\n" + source.toString("utf8") + "\nexport default module.exports;\n");
+    return dest;
+  }
   const js = ts.transpileModule(source.toString("utf8"), { compilerOptions: { module: ts.ModuleKind.ES2022, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.ReactJSX } }).outputText;
   const result = ts.transform(ts.createSourceFile(file + ".js", js, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS), [context => source => {
     function visit(node) {
@@ -38,6 +45,7 @@ function emit(file) {
       }
       if ((ts.isImportDeclaration(node) || ts.isExportDeclaration(node)) && node.moduleSpecifier) {
         const name = node.moduleSpecifier.text;
+        if (name === "server-only") return undefined; // Next compile-time boundary; this entire package is server-only.
         let specifier;
         if (name.startsWith(".")) { specifier = path.relative(path.dirname(dest), emit(resolve(file, name))).replaceAll("\\", "/"); if (!specifier.startsWith(".")) specifier = "./" + specifier; }
         else specifier = packageSpecifier(name);

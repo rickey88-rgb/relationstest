@@ -1,4 +1,5 @@
 import { adapter, assertFlag, consentVersion } from "./adapter";
+import { resolvePersonaVersion } from "../../persona/_domain/registry";
 import { context, matchesSecret, seal, unseal } from "./crypto.server";
 import { verifyPayment } from "./payment.server";
 import * as store from "./store.server";
@@ -13,13 +14,28 @@ export function active() {
 export async function notErased(generation: string, identity: string) {
   if (identity !== accountErasureIdentity() || await readAnalysisErasure(generation)) throw new Error("Analysis unavailable");
 }
-function payload(row: { product: string; question_version: string; report_version: string; ciphertext: string }, id: string, owner?: string, purchase?: string) {
+async function payload(row: { product: string; question_version: string; report_version: string; ciphertext: string }, id: string, owner?: string, purchase?: string) {
   const model = adapter(row.product);
-  if (model.questionVersion !== row.question_version || model.reportVersion !== row.report_version) throw new Error("Unsupported report version");
+  if (row.product === "persona_test" && row.report_version === "persona-report-v61-release1") {
+    if (row.question_version !== "persona-questions-v3") throw new Error("Unsupported report version");
+    const data = unseal(row.ciphertext, context(row, id, owner, purchase));
+    const stored = data as { guestConsent?: { version: string; acceptedAt: string } };
+    if (stored.guestConsent && (stored.guestConsent.version !== guestProcessingConsentVersion || !Number.isFinite(Date.parse(stored.guestConsent.acceptedAt)))) throw new Error("Consent unavailable");
+    const { openV61Purchase } = await import("./personaV61Commerce.server");
+    return { data, result: openV61Purchase(data) };
+  }
+  const persona = row.product === "persona_test" ? resolvePersonaVersion(row.question_version, row.report_version) : null;
+  if (!persona && (model.questionVersion !== row.question_version || model.reportVersion !== row.report_version)) throw new Error("Unsupported report version");
   const data = unseal(row.ciphertext, context(row, id, owner, purchase));
   const stored = data as { guestConsent?: { version: string; acceptedAt: string }; answers: unknown; questionVersion: unknown; reportVersion: unknown };
   if (stored.guestConsent && (stored.guestConsent.version !== guestProcessingConsentVersion || !Number.isFinite(Date.parse(stored.guestConsent.acceptedAt)))) throw new Error("Consent unavailable");
-  const answers = model.parse(stored.guestConsent ? { answers: stored.answers, questionVersion: stored.questionVersion, reportVersion: stored.reportVersion } : data);
+  const submission = stored.guestConsent ? { answers: stored.answers, questionVersion: stored.questionVersion, reportVersion: stored.reportVersion } : data;
+  if (persona) {
+    const result = persona.buildReport(submission);
+    if (!result.quality.eligible) throw new Error("Insufficient PERSONA answers");
+    return { data, result };
+  }
+  const answers = model.parse(submission);
   return { data, result: model.calculate(answers) };
 }
 export async function guest(id: string, secret: string) {
@@ -36,7 +52,7 @@ export async function guestForProduct(id: string, secret: string, expectedProduc
   const current = await store.attempt(id);
   if (!current || current.ciphertext !== row.ciphertext || current.session_id !== row.session_id || current.browser_hash !== row.browser_hash) throw new Error("Attempt changed");
   await notErased(row.analysis_id, row.journal_identity);
-  return { row, payment, ...payload(row, row.id) };
+  return { row, payment, ...await payload(row, row.id) };
 }
 export async function save(id: string, secret: string, owner: string, consent: string, expectedProduct?: string) {
   active();
@@ -76,7 +92,7 @@ export async function openEntryForProduct(id: string, owner: string, expectedPro
   const current = await store.owned(id, owner);
   if (!current || current.generation_id !== row.generation_id || current.ciphertext !== row.ciphertext) throw new Error("Analysis changed");
   await notErased(row.generation_id, row.journal_identity);
-  return { row: current, ...payload(row, row.generation_id, owner, row.id) };
+  return { row: current, ...await payload(row, row.generation_id, owner, row.id) };
 }
 export async function remove(id: string, owner: string) {
   active(); // Remains available when new saving/reading is disabled.

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-require-imports -- content, causal evidence and deterministic model audit. */
 const test=require("node:test"),assert=require("node:assert/strict"),fs=require("node:fs"),path=require("node:path"),crypto=require("node:crypto");
 const root=path.resolve(__dirname,"../.."),load=require("../../app/autism-test/test/test-loader.cjs")();
-const api=load(path.join(root,"app/persona/_domain/index.ts"));
+const api=load(path.join(root,"app/persona/_domain/v2/index.ts"));
 const {profiles,fixed,submission,ratingIds}=require("../../app/persona/_domain/tests/v2-fixtures.cjs");
 const {adaptiveRules}=load(path.join(root,"app/persona/_domain/v2/adaptive.ts"));
 const {narrativeRules,deriveFindings}=load(path.join(root,"app/persona/_domain/v2/findings.ts"));
@@ -148,8 +148,8 @@ test("v2 reports are reproducible, immutable and version isolated from v1",()=>{
   const old=api.resolvePersonaVersion("persona-questions-v1","persona-report-v1");assert.equal(old.versions.analysis,"persona-analysis-v1");
   assert.throws(()=>api.resolvePersonaVersion("persona-questions-v2","persona-report-v1"));
   const state=load(path.join(root,"app/persona/test/state.ts"));
-  assert.equal(state.STORAGE_KEY,"relationsvarning_persona_flow_v2");
-  assert.equal(state.parseDraft(JSON.stringify({...state.initialDraft(),version:1,questionVersion:"persona-questions-v1",reportVersion:"persona-report-v1"})),null);
+  assert.equal(state.STORAGE_KEY,"relationsvarning_persona_flow_v3");
+  assert.equal(state.parseDraft(JSON.stringify({...state.initialDraft(),version:2,questionVersion:"persona-questions-v2",reportVersion:"persona-report-v2"})),null);
 });
 test("v2 content/model fingerprint requires an explicit future revision",()=>{
   const manifest=require("../../app/persona/_domain/tests/v2-fingerprint.json");

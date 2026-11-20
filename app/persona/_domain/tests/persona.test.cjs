@@ -299,7 +299,7 @@ test("domain dependency boundary: no providers, framework, secrets, randomness o
 });
 
 test("versioned material fingerprint: wording, scoring, selection and report copy are pinned", () => {
-  const files=["versions.ts","registry.ts","v1/manifest.ts","v1/questions.ts","v1/answers.ts","v1/adaptive.ts","v1/submission.ts","v1/score.ts","v1/copy.ts","v1/findings.ts","v1/experiments.ts","v1/report.ts","v1/editing.ts"];
+  const files=["v1/manifest.ts","v1/questions.ts","v1/answers.ts","v1/adaptive.ts","v1/submission.ts","v1/score.ts","v1/copy.ts","v1/findings.ts","v1/experiments.ts","v1/report.ts","v1/editing.ts"];
   const digest=createHash("sha256").update(files.map(file=>`${file}\n${fs.readFileSync(path.join(domain,file),"utf8").replace(/\r\n/g,"\n")}`).join("\n")).digest("hex");
   const expected=JSON.parse(fs.readFileSync(path.join(__dirname,"v1-fingerprint.json"),"utf8"));
   assert.equal(digest,expected.sha256,"A sold content/model version must be preserved; introduce a new implementation/version deliberately.");

@@ -1,6 +1,6 @@
 import type { createPersonaSession } from "./session";
-import { currentAnswer, currentQuestion, type Action, type Draft } from "./state";
-import { validAnswer } from "../_domain/v1/answers";
+import { currentAnswer, type Action, type Draft } from "./state";
+import { validAnswer } from "../_domain/v3/submission";
 
 export const AUTO_ADVANCE_MS = 350;
 export const EXIT_MS = 120;
@@ -43,11 +43,13 @@ export function createAutoAdvance(session: Session, scheduler: Scheduler = defau
     if (navigationKey(session.getSnapshot().draft) !== navigationKey(before) || type === "restart") enter();
     return true;
   };
+  const canSelect = (value: number, expectedKey: string) => matches(expectedKey) && snapshot.phase === "idle"
+    && session.getSnapshot().draft.phase === "question" && validAnswer(value);
+  const select = (value: number, expectedKey: string) => {
+    if (canSelect(value, expectedKey)) session.dispatch({ type: "answer", value });
+  };
   const answer = (value: number, expectedKey: string) => {
-    if (!matches(expectedKey) || snapshot.phase !== "idle") return false;
-    const before = session.getSnapshot().draft;
-    const question = currentQuestion(before);
-    if (before.phase !== "question" || !question || !validAnswer(question, value)) return false;
+    if (!canSelect(value, expectedKey)) return false;
     // Synchronous lock closes the gap before React updates disabled controls.
     setPhase("selected");
     session.dispatch({ type: "answer", value });
@@ -69,6 +71,6 @@ export function createAutoAdvance(session: Session, scheduler: Scheduler = defau
     }, AUTO_ADVANCE_MS));
     return true;
   };
-  return { answer, navigate, cancel, getSnapshot: () => snapshot, getServerSnapshot: () => initial,
+  return { answer, select, navigate, cancel, getSnapshot: () => snapshot, getServerSnapshot: () => initial,
     subscribe: (listener: () => void) => { listeners.add(listener); return () => { listeners.delete(listener); }; } };
 }

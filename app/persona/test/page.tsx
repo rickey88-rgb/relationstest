@@ -1,2 +1,6 @@
 import PersonaFlow from "./PersonaFlow";
-export default function PersonaTestPage() { return <PersonaFlow />; }
+import { canOpenLocalReport } from "../dev-report/access";
+
+export default async function PersonaTestPage() {
+  return <PersonaFlow localReportAvailable={await canOpenLocalReport()} />;
+}

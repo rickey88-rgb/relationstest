@@ -1,4 +1,4 @@
-import { describeAnswers as describePersonaAnswers } from "../../persona/_domain/v2/submission";
+import { resolvePersonaVersion } from "../../persona/_domain/registry";
 import { VERSIONS as PERSONA_VERSIONS } from "../../persona/_domain/versions";
 import * as adhd from "../../adhd-test/test/model";
 import * as autism from "../../autism-test/test/model";
@@ -27,8 +27,13 @@ const definitions: Record<string, Definition> = {
 };
 export type AnswerDescription = { question: string; answer: string; value: number; visual?: iq.MatrixVisual };
 /** Only public question wording + the validated answer. Never expose IQ answer keys. */
-export function describeAnswers(product: string, answers: number[]): AnswerDescription[] {
-  if (product === "persona_test") return [...describePersonaAnswers({ answers, questionVersion: PERSONA_VERSIONS.question, reportVersion: PERSONA_VERSIONS.report })];
+export function describeAnswers(product: string, answers: number[], questionVersion: string = PERSONA_VERSIONS.question, reportVersion: string = PERSONA_VERSIONS.report): AnswerDescription[] {
+  if (product === "persona_test" && reportVersion === "persona-report-v61-release1") {
+    // Identical frozen Q01–Q40 wording and coding; only the report identity differs.
+    if (questionVersion !== "persona-questions-v3") throw new Error("Answers unavailable");
+    return [...resolvePersonaVersion(questionVersion, PERSONA_VERSIONS.report).describeAnswers({ answers, questionVersion, reportVersion: PERSONA_VERSIONS.report })];
+  }
+  if (product === "persona_test") return [...resolvePersonaVersion(questionVersion, reportVersion).describeAnswers({ answers, questionVersion, reportVersion })];
   const definition = definitions[product];
   if (!definition || answers.length !== definition.questions.length) throw new Error("Answers unavailable");
   return definition.questions.map((question, index) => {

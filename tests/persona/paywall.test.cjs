@@ -2,7 +2,7 @@
 const test=require("node:test"),assert=require("node:assert/strict"),path=require("node:path");
 const createLoader=require("../../app/autism-test/test/test-loader.cjs"),{root,payloadFor}=require("./runtime.cjs");
 const load=createLoader(),input=payloadFor(load);
-function fixture({eligible=true,version=input.questionVersion}={}) {
+function fixture({eligible=true,version=input.questionVersion,submission=input,additionalReportVersions=[]}={}) {
   const values=[],refs=[],effects=[],calls=[];let cursor=0,refCursor=0,first=true,reject;
   const styles=new Proxy({}, {get:(_,key)=>String(key)});
   const loader=createLoader({
@@ -12,11 +12,11 @@ function fixture({eligible=true,version=input.questionVersion}={}) {
     "../persona.module.css":{default:styles},
     "../../_lib/testAccounts/directPublic":{directCustomerEnabled:()=>true},
     "../../_lib/testAccounts/directClient":{pendingPurchases:()=>[],
-      directRequest:async()=>({tests:[{product:"persona_test",checkout:true,questionVersion:version,reportVersion:input.reportVersion}]}),
+      directRequest:async()=>({tests:[{product:"persona_test",checkout:true,questionVersion:version,reportVersion:input.reportVersion,additionalReportVersions}]}),
       startDirectCheckout:async(...args)=>{calls.push(args);await new Promise((_,fail)=>{reject=fail;});}},
   });
   const Paywall=loader(path.join(root,"app/persona/test/PersonaPaywall.tsx")).default;
-  function render(){cursor=refCursor=0;const element=Paywall({submission:input,eligible});first=false;return element;}
+  function render(){cursor=refCursor=0;const element=Paywall({submission,eligible});first=false;return element;}
   function consent(element){const label=element.props.children.find(item=>item?.type==="label");label.props.children[0].props.onChange({target:{checked:true}});}
   const submit=element=>element.props.onSubmit({preventDefault:()=>{}});
   return {calls,effects,render,consent,submit,reject:()=>reject(Error("Synthetic payment transport failure"))};
@@ -33,5 +33,12 @@ test("ineligible answers or mismatched server capability versions never start a 
   for(const options of [{eligible:false},{version:"future-question-version"}]) {
     const f=fixture(options);let view=f.render();f.effects.forEach(effect=>effect());await new Promise(resolve=>setImmediate(resolve));
     view=f.render();f.consent(view);view=f.render();f.submit(view);assert.equal(f.calls.length,0);
+  }
+});
+
+test("V6.1 uses the existing paywall only when the server explicitly advertises its version",async()=>{
+  const submission={...input,reportVersion:"persona-report-v61-release1",supplement:null};
+  for(const enabled of [false,true]) {
+    const f=fixture({submission,additionalReportVersions:enabled?[submission.reportVersion]:[]});let view=f.render();f.effects.forEach(effect=>effect());await new Promise(resolve=>setImmediate(resolve));view=f.render();f.consent(view);view=f.render();f.submit(view);assert.equal(f.calls.length,enabled?1:0);if(enabled){assert.deepEqual(f.calls[0],["persona_test",submission]);f.reject();await new Promise(resolve=>setImmediate(resolve));}
   }
 });

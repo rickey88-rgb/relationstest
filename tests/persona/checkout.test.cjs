@@ -14,7 +14,7 @@ test("PERSONA isolated purchase, access, accounts, recovery and revocation",asyn
     });
     await t.test("reject forged versions, adaptive IDs, missing/low-quality answers, wrong price, consent and origin",async()=>{
       const input=payloadFor(r.load),body={action:"checkout",product:"persona_test",payload:input,consent:"test-guest-processing-v1"};
-      for(const payload of [{...input,paid:true},{...input,questionVersion:"forged"},{...input,answers:input.answers.slice(0,39)},{...input,answers:Array(40).fill(5)},{...input,adaptiveIds:["A01"]}])
+      for(const payload of [{...input,paid:true},{...input,questionVersion:"forged"},{...input,answers:input.answers.slice(0,39)},{...input,answers:Array(40).fill(0)},{...input,adaptiveIds:["A01"]}])
         assert.equal((await r.request({...body,payload})).status,503);
       assert.equal((await r.request({...body,consent:""})).status,400);
       assert.equal((await r.request(body,null,null,"https://other.example.invalid")).status,403);
@@ -29,14 +29,15 @@ test("PERSONA isolated purchase, access, accounts, recovery and revocation",asyn
       r.sessions.get(receipt.row.session_id).status="expired";
       assert.equal((await r.request({action:"guest",product:"persona_test",id:receipt.id},null,receipt.secret)).status,503);
     });
-    await t.test("paid reopening returns the exact frozen engine with six reconstructed followups",async()=>{
+    await t.test("paid reopening returns the exact V5 report and fixed answer wording",async()=>{
       receipt=await r.checkout();r.pay(receipt);
       const response=await r.request({action:"guest",product:"persona_test",id:receipt.id},null,receipt.secret);
       assert.equal(response.status,200);assert.match(response.headers.get("cache-control"),/no-store/);paidResult=await response.json();
       const model=r.load(path.join(root,"app/_lib/testAccounts/adapter.ts")).adapter("persona_test");
-      assert.deepEqual(paidResult.result,model.calculate(payloadFor(r.load).answers));assert.equal(paidResult.result.sections.length,8);
-      assert.equal(paidResult.answers.length,40);assert.equal(paidResult.result.selection.selectedIds.length,6);
-      assert.deepEqual(paidResult.answers.slice(34).map(item=>item.questionId),paidResult.result.selection.selectedIds);
+      assert.deepEqual(paidResult.result,model.calculate(payloadFor(r.load).answers));assert(paidResult.result.sections.length >= 5 && paidResult.result.sections.length <= 6);
+      assert.equal(paidResult.answers.length,40);
+      assert.equal(paidResult.answers[30].questionId,"Q31");
+      assert.equal(paidResult.answers[30].answer,"Stämmer helt");
       assert.equal((await r.request({action:"guest",product:"persona_test",id:receipt.id},null,"z".repeat(43))).status,503);
       assert.equal((await r.request({action:"guest",product:"adhd_test",id:receipt.id},null,receipt.secret)).status,503);
       assert.equal((await r.request({action:"open",product:"persona_test",id:receipt.id})).status,401);
@@ -82,6 +83,31 @@ test("PERSONA isolated purchase, access, accounts, recovery and revocation",asyn
       intent.latest_charge.disputed=true;assert.equal((await r.request({action:"guest",product:"persona_test",id:current.id},null,current.secret)).status,503);intent.latest_charge.disputed=false;
       r.setJournalOffline(true);assert.equal((await r.request({action:"guest",product:"persona_test",id:current.id},null,current.secret)).status,503);r.setJournalOffline(false);
       intent.latest_charge.refunded=true;assert.equal((await r.request({action:"guest",product:"persona_test",id:current.id},null,current.secret)).status,503);
+    });
+    await t.test("sealed V2, V3 and V4 checkouts retain their reports after V5",async()=>{
+      const old=r.load(path.join(root,"app/persona/_domain/v2/index.ts"));
+      const {profiles,fixed}=require("../../app/persona/_domain/tests/v2-fixtures.cjs");
+      const profile=profiles[0],first=fixed(profile);
+      const input={questionVersion:old.VERSIONS.question,reportVersion:old.VERSIONS.report,
+        answers:[...first,...old.selectAdaptive(first).selectedIds.map(id=>"ABCD".indexOf(profile.followups[id]))]};
+      const model=r.load(path.join(root,"app/_lib/testAccounts/adapter.ts")).adapter("persona_test");
+      const current={...model};
+      const v3={...payloadFor(r.load),reportVersion:"persona-report-v3"};
+      const registry=r.load(path.join(root,"app/persona/_domain/registry.ts"));
+      for (const legacy of [input,v3,{...v3,reportVersion:"persona-report-v4"}]) {
+        const archived=registry.resolvePersonaVersion(legacy.questionVersion,legacy.reportVersion);
+        let historical;
+        try {
+          Object.assign(model,{questionVersion:legacy.questionVersion,reportVersion:legacy.reportVersion,parse:value=>archived.parseSubmission(value).answers});
+          historical=await r.checkout(0,legacy);
+        } finally { Object.assign(model,current); }
+        r.pay(historical);
+        const response=await r.request({action:"guest",product:"persona_test",id:historical.id},null,historical.secret);
+        assert.equal(response.status,200);
+        const data=await response.json();
+        assert.deepEqual(data.result,archived.buildReport(legacy));
+        assert.deepEqual(data.answers,archived.describeAnswers(legacy));
+      }
     });
     await t.test("signed direct webhooks are handled without forwarding to production; invalid signatures rejected",async()=>{
       const current=await r.checkout(2);r.pay(current);

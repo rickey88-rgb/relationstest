@@ -7,27 +7,30 @@ const load=createLoader({"./report.module.css":{default:styles}});
 const api=load(path.join(root,"app/persona/_domain/index.ts"));
 const Report=load(path.join(root,"app/persona/report/PersonaReportView.tsx")).default;
 const encode=text=>renderToStaticMarkup(React.createElement("span",null,text)).slice(6,-7);
-test("eight premium sections render every approved paragraph and evidence, with accessible unnormed visualizations",()=>{
+test("the compact report render every approved paragraph and evidence, with accessible unnormed visualizations",()=>{
   for(let i=0;i<5;i++) {
     const report=api.buildPersonaReport(payloadFor(load,i)),html=renderToStaticMarkup(React.createElement(Report,{report}));
+    assert(report.sections.length >= 5 && report.sections.length <= 6);
     assert(html.includes('id="persona-premium-report"'));assert(html.includes("Skriv ut eller spara som PDF"));
     assert.equal((html.match(/<meter /g)||[]).length,report.dimensions.filter(d=>d.value!==null).length);
-    assert(html.includes("inte percentil"));assert(html.includes("inte en validerad klinisk skala"));
+    assert(html.includes("inte percentil"));assert(html.includes("inte normerat eller validerat"));assert(html.includes('min="1" max="5"'));
     for(const section of report.sections) {
       assert(html.includes('id="persona-'+section.id+'"'));
       section.paragraphs.forEach(p=>assert(html.includes(encode(p.text)),p.id));
       for(const paragraph of section.paragraphs)for(const findingId of paragraph.findingIds) {
         const finding=report.findings.find(f=>f.id===findingId);assert(finding);
-        for(const evidence of finding.evidence)assert(html.includes(encode(api.getQuestion(evidence.questionId).options[evidence.answer])));
+        for(const evidence of finding.evidence)assert(html.includes(encode(api.ratingLabels[evidence.answer - 1])));
       }
     }
   }
 });
 test("single free insight never returns the premium payload even for forged unlock flags",async()=>{
   const {getPersonaPreview}=load(path.join(root,"app/persona/test/actions.ts"));
-  const input=payloadFor(load),preview=await getPersonaPreview(input);
-  assert.deepEqual(Object.keys(preview).sort(),["evidenceCount","kind","text"]);
-  assert.equal(preview.kind,"insight");assert.equal(preview.text,api.buildPersonaReport(input).preview.text);
+  const input=payloadFor(load); input.answers[34]=input.answers[35]=input.answers[39]=5;
+  const preview=await getPersonaPreview(input);
+  assert.deepEqual(Object.keys(preview).sort(),["counterEvidence","deeper","evidence","evidenceCount","headline","kind","qualified","text","why"]);
+  assert.equal(preview.kind,"insight");assert(preview.headline);assert(preview.evidenceCount>=2);
+  assert.equal(preview.evidenceCount,preview.evidence.length);
   assert.equal((await getPersonaPreview({...input,unlocked:true})).kind,"invalid");
 });
 test("print styling isolates the paid report and includes an explicit evidence appendix",()=>{

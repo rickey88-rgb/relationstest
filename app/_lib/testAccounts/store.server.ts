@@ -3,7 +3,7 @@ import { accountDatabaseTls } from "../accountDatabaseTls.server";
 import { assertAccountDatabaseAccess } from "../accountCleanupScope.server";
 import { randomUUID } from "node:crypto";
 import { adapter, consentVersion } from "./adapter";
-import { context, seal, secretHash } from "./crypto.server";
+import { context, seal, unseal, secretHash } from "./crypto.server";
 import { guestProcessingConsentVersion } from "./consent";
 import { accountErasureIdentity, assertAccountStorageActive, assertErasureJournalAvailable, writeAnalysisErasure } from "../accountErasureJournal.server";
 
@@ -27,13 +27,18 @@ export const validId = (id: string) => /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[8
 export async function createAttempt(product: string, input: unknown, browserSecret: string, price: string, guestConsent?: string) {
   assertAccountStorageActive();
   if (process.env.TEST_ACCOUNTS_STORAGE_MODE !== "active") throw new Error("Test accounts unavailable");
-  const model = adapter(product), answers = model.parse(input);
+  const model = adapter(product);
+  const isV61 = product === "persona_test" && (input as { reportVersion?: unknown } | null)?.reportVersion === "persona-report-v61-release1";
+  const v61 = isV61 ? await import("./personaV61Commerce.server") : null;
+  const prepared = v61 ? v61.prepareV61Checkout(input) : null;
+  const answers = prepared ? null : model.parse(input);
   await assertErasureJournalAvailable();
   const id = randomUUID(), generation = randomUUID();
-  const row = { product, question_version: model.questionVersion, report_version: model.reportVersion };
+  const row = { product, question_version: prepared?.questionVersion ?? model.questionVersion, report_version: prepared?.reportVersion ?? model.reportVersion };
   if (guestConsent !== undefined && guestConsent !== guestProcessingConsentVersion) throw new Error("Explicit processing consent required");
-  const ciphertext = seal({ answers, questionVersion: model.questionVersion, reportVersion: model.reportVersion,
+  const ciphertext = seal({ ...(prepared?.envelope ?? { answers, questionVersion: model.questionVersion, reportVersion: model.reportVersion }),
     ...(guestConsent ? { guestConsent: { version: guestConsent, acceptedAt: new Date().toISOString() } } : {}) }, context(row, id));
+  if (v61) v61.openV61Purchase(unseal(ciphertext, context(row, id))); // Verify deliverability before creating Checkout.
   await db().begin(async tx => {
     // Anonymous endpoint: bound storage/Stripe resource use without storing IPs or answers in a rate-limit log.
     await tx`select pg_advisory_xact_lock(20261026)`;
@@ -43,7 +48,7 @@ export async function createAttempt(product: string, input: unknown, browserSecr
     if (quota[0].total >= 500 || quota[0].browser >= 10) throw new Error("Checkout temporarily limited");
     await tx`insert into public.test_account_attempts
     (id, analysis_id, product, question_version, report_version, browser_hash, journal_identity, ciphertext, price_id, live_mode, expires_at)
-    values (${id}, ${generation}, ${product}, ${model.questionVersion}, ${model.reportVersion}, ${secretHash(browserSecret)},
+    values (${id}, ${generation}, ${product}, ${row.question_version}, ${row.report_version}, ${secretHash(browserSecret)},
       ${accountErasureIdentity()}, ${ciphertext}, ${price}, true, now() + interval '7 days')`;
   });
   return id;

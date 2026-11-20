@@ -123,11 +123,18 @@
 .preview { text-align: center; padding: 45px 0 10px; max-width: 700px; margin: auto; }
 .preview > .editorialTitle { margin: 19px 0 30px; }
 .preview > .smallFingerprint { margin-bottom: 20px; }
-.insight { text-align: left; border: 1px solid var(--gold); border-radius: 5px; background: linear-gradient(135deg,rgb(201 168 107 / .075),rgb(255 255 255 / .01)); padding: 34px; position: relative; }
-.insight::before { content: "“"; position: absolute; top: 5px; right: 24px; color: rgb(201 168 107 / .2); font: 5rem Georgia,serif; line-height: 1; }
-.insightText { font: 400 clamp(1.15rem,2.7vw,1.5rem)/1.75 Georgia,serif; margin-top: 20px !important; }
-.insightFootnote { color: var(--muted); font-size: .7rem; line-height: 1.8; margin-top: 24px !important; padding-top: 16px; border-top: 1px solid var(--line); }
-.insight > .finePrint { margin-top: 12px; }
+.insight { text-align: left; border: 1px solid rgb(201 168 107 / .50); border-radius: 9px; background: radial-gradient(ellipse at top left, rgb(201 168 107 / .14), transparent 74%), #151C2E; padding: 38px; box-shadow: 0 16px 42px rgb(0 0 0 / .22); }
+.insightTitle { color: var(--paper); font: 400 clamp(1.65rem, 4vw, 2.5rem)/1.17 Georgia, serif; letter-spacing: -.025em; margin: 12px 0 0 !important; text-wrap: balance; }
+.insightText { color: #E3DFD6; font: 400 clamp(1rem, 2.4vw, 1.22rem)/1.65 Georgia, serif; margin-top: 16px !important; max-width: 58ch; }
+.insightFootnote { color: var(--muted); font-size: .83rem; line-height: 1.6; margin-top: 18px !important; }
+.insightEvidence, .reportContents { border-top: 1px solid var(--line); margin-top: 22px; font-size: .83rem; }
+.insightEvidence summary, .reportContents summary { color: var(--gold); cursor: pointer; padding: 14px 0; min-height: 44px; }
+.insightEvidence summary span { color: var(--muted); margin-inline-start: 8px; }
+.insightEvidence ul, .reportValue { list-style: none; margin: 0; padding: 0; }
+.insightEvidence li { padding: 10px 0; color: var(--muted); line-height: 1.5; }
+.insightEvidence li strong { display: block; color: var(--paper); margin-top: 2px; font-size: .75rem; }
+.localReportBar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px 20px; padding: 14px 16px; margin: 20px 0; border: 1px solid var(--line); border-radius: 5px; }
+.localReportBar .textLink { font-size: .82rem; }
 .insightLoading { padding: 45px 20px; color: var(--muted); font-size: .9rem; line-height: 1.8; }
 .loadingDot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--gold); margin-right: 13px; animation: breathe 1.5s ease-in-out infinite; }
 @keyframes breathe { 50% { opacity: .25; } }
@@ -136,7 +143,11 @@
 .lock { white-space: nowrap; color: var(--gold); font-size: .6rem; letter-spacing: .12em; }
 .premium h2 { font: 400 clamp(1.7rem,3.5vw,2.3rem)/1.3 Georgia,serif; margin: 20px 0 15px; }
 .premium > p:not(.finePrint) { color: var(--muted); font-size: .85rem; line-height: 1.9; }
-.lockedSections { list-style: none; padding: 23px 0 0; }
+.reportValue { display: grid; gap: 12px; margin-top: 22px; }
+.reportValue li { display: grid; gap: 5px; padding: 12px 14px; border-inline-start: 2px solid var(--gold); background: rgb(201 168 107 / .055); }
+.reportValue strong { color: var(--paper); font-size: .88rem; }
+.reportValue li span { color: var(--muted); font-size: .8rem; line-height: 1.55; }
+.lockedSections { list-style: none; padding: 0; }
 .lockedSections li { display: grid; grid-template-columns: 23px 1fr 15px; gap: 14px; padding: 13px 0; border-bottom: 1px solid rgb(255 255 255 / .075); font-size: .8rem; line-height: 1.5; }
 .lockedSections li span { color: var(--gold); font-size: .65rem; }
 .lockedSections li span:last-child { opacity: .45; }

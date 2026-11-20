@@ -1,6 +1,8 @@
 import dynamic from "next/dynamic";
 import type { PersonaReport } from "../../persona/_domain/types";
 const Persona = dynamic(() => import("../../persona/report/PersonaReportView"));
+import type { PersonaV61Purchase } from "../../persona/report/PersonaV61PaidReport";
+const PersonaV61 = dynamic(() => import("../../persona/report/PersonaV61PaidReport"));
 import Iq from "../../iq-test/test/ReportView";
 import type { Result as IqResult } from "../../iq-test/test/model";
 import Partner from "../../narcissist-i-en-relation/test/ReportView";
@@ -32,7 +34,7 @@ import type { calculate } from "../../angest-test/test/model";
 /** Input comes only from the verified server reader, never request JSON or localStorage. */
 export default function ReportView({ product, result }: { product: string; result: unknown }) {
   switch (product) {
-    case "persona_test": return <Persona report={result as PersonaReport} />;
+    case "persona_test": return (result as { reportVersion?: string }).reportVersion === "persona-report-v61-release1" ? <PersonaV61 report={result as PersonaV61Purchase} /> : <Persona report={result as PersonaReport} />;
     case "iq_test": return <Iq result={result as IqResult} />;
     case "narcissist_partner": return <Partner result={result as partnerResult} />;
     case "trauma_bond_test": return <TraumaBond result={result as traumaBondResult} />;

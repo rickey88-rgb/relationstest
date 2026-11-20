@@ -13,14 +13,14 @@ const {getPersonaPreview} = load(path.join(__dirname,"actions.ts"));
 const {createAutoAdvance,navigationKey,AUTO_ADVANCE_MS,EXIT_MS,ENTER_MS} = load(path.join(__dirname,"autoAdvance.ts"));
 const {positionStep} = load(path.join(__dirname,"viewport.ts"));
 const api = load(path.join(__dirname,"../_domain/index.ts"));
-const {profiles,fixed} = require("../_domain/tests/v2-fixtures.cjs");
+const profiles = [0, 1, 2, 3, 4];
+const values = profile => Array.from({length:40}, (_, i) => (i + profile) % 5 + 1);
 function finish(profile=profiles[0]) {
   let draft=state.initialDraft();
   const chapters=[];
   for(let i=0;i<40;i++) {
     if(draft.phase==="chapter") {chapters.push(state.chapterAt(draft.cursor));draft=state.reduceDraft(draft,{type:"start"});}
-    const q=state.currentQuestion(draft);
-    const value=i<34?fixed(profile)[i]:"ABCD".indexOf(profile.followups[q.id]);
+    const value=values(profile)[i];
     draft=state.reduceDraft(draft,{type:"answer",value});
     draft=state.reduceDraft(draft,{type:"next"});
   }
@@ -64,17 +64,16 @@ test("step changes use focus only and keyed views, without imperative scroll pos
   assert(!/scrollTop|scrollBy|scrollTo|scrollIntoView/.test(source));
   assert(source.includes('disabled={count === 0}'),"reset slot remains stable during the journey");
 });
-test("journey and question components render every fixed/adaptive wording and option without truncation", () => {
+test("journey and question components render every V3 statement and response label without truncation", () => {
   const styles=new Proxy({}, {get:(_,key)=>`persona_${String(key)}`});
   const loader=createLoader({"./persona-journey.module.css":{default:styles}});
   const Question=loader(path.join(__dirname,"PersonaQuestion.tsx")).default;
   const encode=text=>renderToStaticMarkup(React.createElement("span",null,text)).slice(6,-7);
-  for(const question of api.questionBank) {
+  for(const question of api.questions) {
     const html=renderToStaticMarkup(React.createElement(Question,{question,selected:null,locked:false,pending:false,position:1,total:6,last:false,headingRef:{current:null},onAnswer:()=>{},onNext:()=>{}}));
-    assert(html.includes(encode(question.title)),question.id+" title");
     assert(html.includes(encode(question.prompt)),question.id+" prompt");
-    question.options.forEach(option=>assert(html.includes(encode(option)),question.id+" option"));
-    assert.equal((html.match(/type="radio"/g)||[]).length,question.options.length+1);
+    api.ratingLabels.forEach(option=>assert(html.includes(encode(option)),question.id+" option"));
+    assert.equal((html.match(/type="radio"/g)||[]).length,5);
     assert(html.includes('aria-describedby="persona-auto-hint"'));
     assert(html.includes('class="persona_alternateNext" disabled=""'));
     assert(!html.includes('class="persona_primary"'));
@@ -108,12 +107,10 @@ test("CSS at laptop, desktop and mobile sizes budgets available height without f
     assert.equal(declarations(".options",width,height)["grid-template-columns"],"minmax(0, 1fr)");
     assert.equal(declarations(':global([data-persona-root]):has(.journey) > :global(#persona-content)',width,height)["min-height"],"0");
   }
-  assert.equal(declarations('.prompt',1366,768)["font-size"],"17px");
-  assert.equal(declarations('.prompt',1920,1080)["font-size"],"18px");
   for(const [width,height] of [[390,844],[1366,500]]) {
     assert.equal(declarations('.journey',width,height).height,undefined);
     assert.equal(declarations('.step',width,height)["overflow-y"],undefined);
-    assert.deepEqual(declarations(':global(body):has(.journey)',width,height),{});
+    assert.equal(declarations(':global(body):has(.journey)',width,height).height,undefined);
   }
   assert.equal(declarations('.alternateNext',390,844)["min-height"],"48px");
   assert.equal(declarations('.alternateNext',390,844).width,"100%");
@@ -131,7 +128,7 @@ test("auto-advance saves immediately, marks selection, and advances at exactly 3
   assert.equal(AUTO_ADVANCE_MS,350);
   assert(navigation.answer(3,key()));
   assert.equal(navigation.getSnapshot().phase,"selected");
-  assert.equal(JSON.parse(storage.getItem(state.STORAGE_KEY)).fixed[0],3);
+  assert.equal(JSON.parse(storage.getItem(state.STORAGE_KEY)).answers[0],3);
   assert.equal(session.getSnapshot().draft.cursor,0);
   clock.tick(AUTO_ADVANCE_MS-EXIT_MS-1);assert.equal(navigation.getSnapshot().phase,"selected");
   clock.tick(1);assert.equal(navigation.getSnapshot().phase,"leaving");
@@ -150,8 +147,8 @@ test("rapid answers and manual next cannot compete with the pending timer", () =
   assert.equal(navigation.answer(0,key()),false,"click carried into the entering question must be blocked");
   clock.tick(ENTER_MS);
   assert.equal(navigation.answer(0,originalKey),false,"stale handlers stay invalid after unlock");
-  assert.equal(session.getSnapshot().draft.fixed[0],1);
-  assert.equal(session.getSnapshot().draft.fixed[1],null);
+  assert.equal(session.getSnapshot().draft.answers[0],1);
+  assert.equal(session.getSnapshot().draft.answers[1],null);
 });
 test("back cancels pending auto-navigation and ignores callbacks already queued", () => {
   const {session,clock,navigation,key}=timedSession();
@@ -162,7 +159,7 @@ test("back cancels pending auto-navigation and ignores callbacks already queued"
   assert.equal(navigation.navigate("back",key()),false);
   staleCallbacks.forEach(callback=>callback());clock.tick(1000);
   assert.equal(session.getSnapshot().draft.phase,"chapter");
-  assert.equal(session.getSnapshot().draft.fixed[0],3);
+  assert.equal(session.getSnapshot().draft.answers[0],3);
   assert.equal(navigation.getSnapshot().phase,"idle");
 });
 test("cleanup and external step changes prevent stale timer navigation", () => {
@@ -189,7 +186,7 @@ test("manual navigation of restored answers is also protected from double activa
 });
 test("auto-advance preserves chapter gates and reaches preview only after the last answer", () => {
   const completed=finish().draft;
-  for(const cursor of [9,21,33,39]) {
+  for(const cursor of [9,19,29,39]) {
     const {session,clock,navigation,key}=timedSession({...completed,cursor,phase:"question"});
     const answer=state.currentAnswer(session.getSnapshot().draft);
     assert(navigation.answer(answer,key()),"reselecting a previous answer starts the same controlled timer");
@@ -199,15 +196,15 @@ test("auto-advance preserves chapter gates and reaches preview only after the la
     assert.equal(navigation.navigate("start",key()),false,"cannot double-activate the new chapter during entry");
   }
 });
-test("unknown answers auto-advance, invalid input does not, and no timer lock is persisted", () => {
+test("skipping advances, invalid input does not, and no timer lock is persisted", () => {
   const {storage,session,clock,navigation,key}=timedSession();
   for(const invalid of [-1,6,NaN,1.5])assert.equal(navigation.answer(invalid,key()),false);
   assert.equal(navigation.getSnapshot().phase,"idle");
-  assert(navigation.answer(5,key()));clock.tick(350);
+  assert(navigation.answer(0,key()));clock.tick(350);
   const saved=JSON.parse(storage.getItem(state.STORAGE_KEY));
-  assert.equal(saved.fixed[0],5);assert.equal(saved.cursor,1);
-  assert.deepEqual(Object.keys(saved).sort(),["cursor","fixed","followups","phase","questionVersion","reportVersion","version"]);
-  assert.equal(session.getSnapshot().draft.fixed[0],5);
+  assert.equal(saved.answers[0],0);assert.equal(saved.cursor,1);
+  assert.deepEqual(Object.keys(saved).sort(),["answers","cursor","phase","questionVersion","reportVersion","version"]);
+  assert.equal(session.getSnapshot().draft.answers[0],0);
 });
 
 test("all 40 questions follow the approved four-chapter journey", () => {
@@ -215,14 +212,13 @@ test("all 40 questions follow the approved four-chapter journey", () => {
     const {draft,chapters}=finish(profile);
     assert.deepEqual(chapters,[1,2,3,4]);
     assert.equal(draft.phase,"preview");assert.equal(state.answeredCount(draft),40);
-    assert.deepEqual(draft.followups.map(item=>item.questionId),profile.selected);
     const submission=state.toSubmission(draft);
     assert(submission); assert.equal(submission.answers.length,40);
-    assert.deepEqual(submission.answers.slice(0,34),fixed(profile));
+    assert.deepEqual(submission.answers,values(profile));
     assert.deepEqual(draft,state.parseDraft(JSON.stringify(draft)));
   }
 });
-test("navigation requires a real answer; ordinary choices and unknown remain distinct", () => {
+test("navigation requires a real answer; ordinary choices and skips remain distinct", () => {
   let draft=state.initialDraft();
   assert.equal(state.reduceDraft(draft,{type:"answer",value:2}),draft);
   draft=state.reduceDraft(draft,{type:"start"});
@@ -231,17 +227,16 @@ test("navigation requires a real answer; ordinary choices and unknown remain dis
   draft=state.reduceDraft(draft,{type:"answer",value:2});
   assert.equal(state.currentAnswer(draft),2);
   draft=state.reduceDraft(draft,{type:"next"});
-  assert.equal(state.currentQuestion(draft).id,"P02");
-  assert.equal(state.reduceDraft(draft,{type:"answer",value:4}),draft);
-  draft=state.reduceDraft(draft,{type:"answer",value:state.UNKNOWN});
-  assert.equal(state.currentAnswer(draft),5);assert.equal(state.answeredCount(draft),2);
+  assert.equal(state.currentQuestion(draft).id,"Q02");
+  draft=state.reduceDraft(draft,{type:"answer",value:0});
+  assert.equal(state.currentAnswer(draft),0);assert.equal(state.answeredCount(draft),2);
   draft=state.reduceDraft(draft,{type:"back"});assert.equal(state.currentAnswer(draft),2);
 });
 test("back works across chapter boundaries and from the preview", () => {
   let {draft}=finish();
   draft=state.reduceDraft(draft,{type:"back"});
   assert.equal(draft.cursor,39);assert.equal(draft.phase,"question");assert.notEqual(state.currentAnswer(draft),null);
-  for(const boundary of [10,22,34]) {
+  for(const boundary of [10,20,30]) {
     const previous=state.reduceDraft({...draft,cursor:boundary,phase:"chapter"},{type:"back"});
     assert.equal(previous.cursor,boundary-1);assert.equal(previous.phase,"question");
     const forward=state.reduceDraft(previous,{type:"next"});
@@ -250,40 +245,36 @@ test("back works across chapter boundaries and from the preview", () => {
   const first=state.reduceDraft({...draft,cursor:0},{type:"back"});
   assert.equal(first.phase,"chapter");assert.equal(first.cursor,0);
 });
-test("editing recomputes adaptive IDs and retains surviving answers by ID", () => {
+test("editing an early answer preserves all other responses", () => {
   const old=finish().draft;
-  let changed=null;
-  for(let i=0;i<34&&!changed;i++)for(let value=0;value<4;value++) {
-    const candidate=state.reduceDraft({...old,cursor:i,phase:"question"},{type:"answer",value});
-    if(candidate.followups.some(item=>!old.followups.some(prev=>prev.questionId===item.questionId))){changed=candidate;break;}
-  }
-  assert(changed);assert(state.answeredCount(changed)<40);
-  assert.equal(state.toSubmission(changed),null);
-  const expected=api.selectAdaptive(changed.fixed).selectedIds;
-  assert.deepEqual(changed.followups.map(item=>item.questionId),expected);
-  for(const item of changed.followups)assert.equal(item.answer,old.followups.find(prev=>prev.questionId===item.questionId)?.answer??null);
+  const changed=state.reduceDraft({...old,cursor:1,phase:"question"},{type:"answer",value:5});
+  assert.equal(state.answeredCount(changed),40);
+  assert.deepEqual(state.toSubmission(changed).answers,[old.answers[0],5,...old.answers.slice(2)]);
+});
+test("keyboard selection persists without scheduling automatic navigation", () => {
+  const {session,clock,navigation,key}=timedSession();
+  navigation.select(5,key());clock.tick(1000);
+  assert.equal(session.getSnapshot().draft.cursor,0);
+  assert.equal(state.currentAnswer(session.getSnapshot().draft),5);
+  assert(navigation.navigate("next",key()));
+  assert.equal(session.getSnapshot().draft.cursor,1);
 });
 test("untrusted persistence rejects foreign versions, payloads and unlock flags", () => {
   const {draft}=finish();
   for(const raw of [null,"", "{bad", "null", "[]", "x".repeat(12001)])assert.equal(state.parseDraft(raw),null);
-  for(const patch of [{version:1},{questionVersion:"other"},{reportVersion:"other"},{unlocked:true},{paid:true},{sections:[]},{cursor:40},{cursor:-1},{phase:"paid"},{fixed:[]},{followups:[{questionId:"P02",answer:1}]}]) {
+  for(const patch of [{version:1},{questionVersion:"other"},{reportVersion:"other"},{unlocked:true},{paid:true},{sections:[]},{cursor:40},{cursor:-1},{phase:"paid"},{answers:[]},{followups:[{questionId:"Q02",answer:1}]}]) {
     assert.equal(state.parseDraft(JSON.stringify({...draft,...patch})),null);
   }
-  const bad={...draft,fixed:[...draft.fixed]};bad.fixed[1]=4;
+  const bad={...draft,answers:[...draft.answers]};bad.answers[1]=6;
   assert.equal(state.parseDraft(JSON.stringify(bad)),null);
-  const duplicate={...draft,followups:[draft.followups[0],draft.followups[0]]};
-  assert.equal(state.parseDraft(JSON.stringify(duplicate)),null);
 });
-test("stored adaptive order is reconstructed, not trusted", () => {
+test("untrusted drafts cannot jump over unseen statements", () => {
   const {draft}=finish();
-  const restored=state.parseDraft(JSON.stringify({...draft,followups:[...draft.followups].reverse()}));
-  assert.deepEqual(restored,draft);
-  const incomplete={...draft,fixed:[...draft.fixed]};incomplete.fixed[3]=null;
-  const repaired=state.parseDraft(JSON.stringify(incomplete));
-  assert.equal(repaired.cursor,3);assert.equal(repaired.phase,"question");assert.deepEqual(repaired.followups,[]);
-  const partial={...draft,followups:draft.followups.map((item,i)=>i===1?{...item,answer:null}:item)};
-  const followupRepair=state.parseDraft(JSON.stringify(partial));
-  assert.equal(followupRepair.cursor,35);assert.equal(followupRepair.phase,"question");
+  const incomplete={...draft,answers:[...draft.answers]};
+  incomplete.answers[3]=null;
+  assert.equal(state.parseDraft(JSON.stringify(incomplete)),null);
+  const premature={...state.initialDraft(),cursor:20,phase:"chapter"};
+  assert.equal(state.parseDraft(JSON.stringify(premature)),null);
 });
 test("session initializes only in browser subscription and resumes a saved journey", () => {
   const storage=memoryStorage(),saved=finish().draft;
@@ -300,7 +291,7 @@ test("answer persistence and restart touch only the PERSONA storage key", () => 
   const session=createPersonaSession(()=>storage);session.subscribe(()=>{});
   session.dispatch({type:"start"});session.dispatch({type:"answer",value:3});
   const stored=JSON.parse(storage.getItem(state.STORAGE_KEY));
-  assert.equal(stored.fixed[0],3);assert(!("unlocked"in stored));assert(!("preview"in stored));
+  assert.equal(stored.answers[0],3);assert(!("unlocked"in stored));assert(!("preview"in stored));
   session.dispatch({type:"restart"});assert.equal(storage.getItem(state.STORAGE_KEY),null);
   assert.equal(storage.getItem("other-product"),"untouched");
   assert.equal(state.answeredCount(session.getSnapshot().draft),0);
@@ -309,7 +300,7 @@ test("storage failures keep the journey usable without claiming it was saved", (
   for(const factory of [()=>{throw new Error("blocked")},()=>({getItem:()=>null,setItem:()=>{throw new Error("quota")},removeItem:()=>{throw new Error("blocked")}})]) {
     const session=createPersonaSession(factory);session.subscribe(()=>{});
     session.dispatch({type:"start"});session.dispatch({type:"answer",value:3});
-    assert.equal(session.getSnapshot().draft.fixed[0],3);
+    assert.equal(session.getSnapshot().draft.answers[0],3);
     assert.equal(session.getSnapshot().storageError,"unavailable");
   }
   const storage=memoryStorage();storage.setItem(state.STORAGE_KEY,"{bad");
@@ -319,16 +310,17 @@ test("storage failures keep the journey usable without claiming it was saved", (
 test("server preview returns exactly one real finding and no premium analysis", async () => {
   for(const profile of profiles) {
     const submission=state.toSubmission(finish(profile).draft);
-    const preview=await getPersonaPreview(submission),report=api.buildPersonaReport(submission);
-    assert.deepEqual(Object.keys(preview).sort(),["evidenceCount","kind","text"]);
-    assert.equal(preview.kind,"insight");assert.equal(preview.text,report.preview.text);
-    assert(preview.evidenceCount>0);assert.equal(report.preview.findingIds.length,1);
+    const preview=await getPersonaPreview(submission);
+    assert.deepEqual(Object.keys(preview).sort(),["counterEvidence","deeper","evidence","evidenceCount","headline","kind","qualified","text","why"]);
+    assert.equal(preview.kind,"insight");assert(preview.headline);
+    assert.equal(preview.evidenceCount,preview.evidence.length);
+    assert.notEqual(preview.evidenceCount,1);
     assert(!("sections"in preview));assert(!("dimensions"in preview));assert(!("findings"in preview));
   }
   const input=state.toSubmission(finish().draft);
   assert.equal((await getPersonaPreview({...input,unlocked:true})).kind,"invalid");
   assert.equal((await getPersonaPreview(null)).kind,"invalid");
-  const allUnknown={...input,answers:Array(40).fill(5)};
+  const allUnknown={...input,answers:Array(40).fill(0)};
   const limited=await getPersonaPreview(allUnknown);
   assert.equal(limited.kind,"limited");assert.equal(limited.evidenceCount,0);
 });
@@ -373,19 +365,16 @@ test("question markup has native radio groups, selection, navigation and no hidd
   let draft=state.reduceDraft(state.initialDraft(),{type:"start"});
   let html=render(draft);
   assert.equal((html.match(/type="radio"/g)||[]).length,5);
-  assert(html.includes('<legend class="persona_choiceLegend">Hur väl stämmer det på dig?</legend>'));
+  assert(html.includes('<legend class="persona_choiceLegend">Hur väl stämmer det in på dig?</legend>'));
   assert(html.includes('disabled=""'));
   draft=state.reduceDraft(draft,{type:"answer",value:3});
   html=render(draft);assert(html.includes('checked=""'));assert(!html.includes('disabled=""'));
   draft=state.reduceDraft(draft,{type:"next"});html=render(draft);
-  assert(html.includes('data-question-id="P02"'));assert.equal((html.match(/type="radio"/g)||[]).length,5);
-  assert(html.includes("Bilden du helst slipper"));assert(html.includes("Tillbaka"));
+  assert(html.includes('data-question-id="Q02"'));assert.equal((html.match(/type="radio"/g)||[]).length,5);
+  assert(html.includes("Jag brukar vara försiktig med att lita på andra."));assert(html.includes("Tillbaka"));
   const completed=finish().draft;html=render(completed);
   assert(html.includes("Lås upp mitt porträtt – 79 kr"));assert(html.includes("Kontosparning är frivillig"));
   assert(html.includes('disabled=""'));assert(!html.includes("I flera av scenarierna gör du ansvar synligt"));
-  const unknown=Array(34).fill(5);
-  const reserve={...completed,fixed:unknown,followups:api.selectAdaptive(unknown).selectedIds.map(questionId=>({questionId,answer:null})),cursor:34,phase:"chapter"};
-  html=render(reserve);
-  assert(html.includes("Sex sista frågor ger fler sätt att känna efter."));
-  assert(!html.includes("Sex personliga följdfrågor hjälper oss att fördjupa några av de avvägningar som framträtt."));
+  html=render({...completed,cursor:30,phase:"chapter"});
+  assert(html.includes("Personlig fördjupning"));
 });

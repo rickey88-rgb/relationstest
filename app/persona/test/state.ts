@@ -1,51 +1,36 @@
-import { FIXED_COUNT, TOTAL_COUNT, UNKNOWN, VERSIONS } from "../_domain/versions";
-import { fixedQuestions, getQuestion } from "../_domain/v2/questions";
-import { validAnswer } from "../_domain/v2/answers";
-import { selectAdaptive } from "../_domain/v2/adaptive";
-import { parseSubmission } from "../_domain/v2/submission";
-import type { Question, Submission } from "../_domain/types";
+import { CHAPTER_SIZE, TOTAL_COUNT, VERSIONS as previous } from "../_domain/v3/manifest";
+import { VERSIONS as v4 } from "../_domain/v4/manifest";
+import { VERSIONS } from "../_domain/v5/manifest";
+import { questions } from "../_domain/v3/questions";
+import { validAnswer } from "../_domain/v3/submission";
+import { parseSubmission } from "../_domain/v5/submission";
+import type { Submission } from "../_domain/types";
 
-export const STORAGE_KEY = "relationsvarning_persona_flow_v2";
-export const FLOW_VERSION = 2;
-export type Followup = { questionId: string; answer: number | null };
+export const STORAGE_KEY = "relationsvarning_persona_flow_v3";
+export const FLOW_VERSION = 3;
 export type Draft = {
-  version: 2; questionVersion: string; reportVersion: string;
-  fixed: (number | null)[]; followups: Followup[];
-  cursor: number; phase: "chapter" | "question" | "preview";
+  version: typeof FLOW_VERSION; questionVersion: string; reportVersion: string;
+  answers: (number | null)[]; cursor: number; phase: "chapter" | "question" | "preview";
 };
 export type Action = { type: "answer"; value: number } | { type: "next" | "back" | "start" | "review" | "restart" };
-export const chapterStarts = [0, 10, 22, 34] as const;
-export function chapterAt(cursor: number): 1 | 2 | 3 | 4 {
-  return cursor < 10 ? 1 : cursor < 22 ? 2 : cursor < 34 ? 3 : 4;
-}
+
+export const chapterStarts = [0, CHAPTER_SIZE, CHAPTER_SIZE * 2, CHAPTER_SIZE * 3] as const;
+export function chapterAt(cursor: number) { return questions[cursor].chapter; }
+
 export function initialDraft(): Draft {
   return { version: FLOW_VERSION, questionVersion: VERSIONS.question, reportVersion: VERSIONS.report,
-    fixed: Array(FIXED_COUNT).fill(null), followups: [], cursor: 0, phase: "chapter" };
+    answers: Array(TOTAL_COUNT).fill(null), cursor: 0, phase: "chapter" };
 }
-function completeFixed(fixed: readonly (number | null)[]): fixed is readonly number[] {
-  return fixed.every((value, i) => validAnswer(fixedQuestions[i], value));
-}
-function selectedFollowups(fixed: readonly (number | null)[], previous: readonly Followup[]): Followup[] {
-  if (!completeFixed(fixed)) return [];
-  const previousById = new Map(previous.map(item => [item.questionId, item.answer]));
-  return selectAdaptive(fixed).selectedIds.map(questionId => ({ questionId, answer: previousById.get(questionId) ?? null }));
-}
-export function currentQuestion(draft: Draft): Question | null {
-  if (draft.cursor < FIXED_COUNT) return fixedQuestions[draft.cursor];
-  const item = draft.followups[draft.cursor - FIXED_COUNT];
-  return item ? getQuestion(item.questionId) : null;
-}
-export function currentAnswer(draft: Draft): number | null {
-  return draft.cursor < FIXED_COUNT ? draft.fixed[draft.cursor] : draft.followups[draft.cursor - FIXED_COUNT]?.answer ?? null;
-}
-export function answeredCount(draft: Draft): number {
-  return draft.fixed.filter(value => value !== null).length + draft.followups.filter(item => item.answer !== null).length;
-}
+
+export function currentQuestion(draft: Draft) { return questions[draft.cursor]; }
+export function currentAnswer(draft: Draft) { return draft.answers[draft.cursor]; }
+export function answeredCount(draft: Draft) { return draft.answers.filter(answer => answer !== null).length; }
+
 export function toSubmission(draft: Draft): Submission | null {
-  if (!completeFixed(draft.fixed) || draft.followups.length !== 6 || draft.followups.some(f => f.answer === null)) return null;
-  return parseSubmission({ questionVersion: draft.questionVersion, reportVersion: draft.reportVersion,
-    answers: [...draft.fixed, ...draft.followups.map(f => f.answer)] });
+  if (!draft.answers.every(validAnswer)) return null;
+  return parseSubmission({ questionVersion: draft.questionVersion, reportVersion: draft.reportVersion, answers: draft.answers });
 }
+
 export function reduceDraft(draft: Draft, action: Action): Draft {
   if (action.type === "restart") return initialDraft();
   if (action.type === "review") return { ...draft, cursor: 0, phase: "question" };
@@ -55,14 +40,9 @@ export function reduceDraft(draft: Draft, action: Action): Draft {
     return draft.cursor === 0 ? { ...draft, phase: "chapter" } : { ...draft, cursor: draft.cursor - 1, phase: "question" };
   }
   if (draft.phase !== "question") return draft;
-  if (action.type === "answer") {
-    const question = currentQuestion(draft);
-    if (!question || !validAnswer(question, action.value)) return draft;
-    if (draft.cursor < FIXED_COUNT) {
-      const fixed = draft.fixed.map((value, i) => i === draft.cursor ? action.value : value);
-      return { ...draft, fixed, followups: selectedFollowups(fixed, draft.followups) };
-    }
-    return { ...draft, followups: draft.followups.map((item, i) => i === draft.cursor - FIXED_COUNT ? { ...item, answer: action.value } : item) };
+  if (action.type === "answer" && validAnswer(action.value)) {
+    if (currentAnswer(draft) === action.value) return draft;
+    return { ...draft, answers: draft.answers.map((answer, index) => index === draft.cursor ? action.value : answer) };
   }
   if (action.type === "next" && currentAnswer(draft) !== null) {
     if (draft.cursor === TOTAL_COUNT - 1) return toSubmission(draft) ? { ...draft, phase: "preview" } : draft;
@@ -72,44 +52,22 @@ export function reduceDraft(draft: Draft, action: Action): Draft {
   return draft;
 }
 
-/** Browser storage is untrusted: no unlock flag, scores, preview or client-selected order survives. */
+/** Only answers and navigation state may be restored from untrusted browser storage. */
 export function parseDraft(raw: string | null): Draft | null {
   try {
     if (!raw || raw.length > 12000) return null;
     const saved: unknown = JSON.parse(raw);
     if (!saved || typeof saved !== "object" || Array.isArray(saved)) return null;
     const value = saved as Record<string, unknown>;
-    if (Object.keys(value).sort().join(",") !== "cursor,fixed,followups,phase,questionVersion,reportVersion,version"
-      || value.version !== FLOW_VERSION || value.questionVersion !== VERSIONS.question || value.reportVersion !== VERSIONS.report
-      || !Array.isArray(value.fixed) || value.fixed.length !== FIXED_COUNT
-      || !Array.from(value.fixed).every((answer, i) => answer === null || validAnswer(fixedQuestions[i], answer))
-      || !Array.isArray(value.followups) || value.followups.length > 6
-      || !Number.isInteger(value.cursor) || (value.cursor as number) < 0 || (value.cursor as number) >= TOTAL_COUNT
-      || !["chapter", "question", "preview"].includes(value.phase as string)) return null;
-    const fixed = [...value.fixed] as (number | null)[];
-    const followups: Followup[] = [];
-    const ids = new Set<string>();
-    for (const item of value.followups) {
-      if (!item || typeof item !== "object" || Array.isArray(item)
-        || Object.keys(item).sort().join(",") !== "answer,questionId"
-        || typeof item.questionId !== "string" || ids.has(item.questionId)
-        || !/^A\d{2}$/.test(item.questionId)) return null;
-      const question = getQuestion(item.questionId);
-      if (item.answer !== null && !validAnswer(question, item.answer)) return null;
-      ids.add(item.questionId); followups.push({ questionId: item.questionId, answer: item.answer });
-    }
-    const canonical = selectedFollowups(fixed, followups);
-    const draft: Draft = { version: FLOW_VERSION, questionVersion: VERSIONS.question, reportVersion: VERSIONS.report,
-      fixed, followups: canonical, cursor: value.cursor as number, phase: value.phase as Draft["phase"] };
-    if (draft.cursor >= FIXED_COUNT && !completeFixed(fixed)) {
-      draft.cursor = fixed.findIndex(answer => answer === null); draft.phase = "question";
-    }
-    if (draft.phase === "preview" && !toSubmission(draft)) {
-      const first = [...draft.fixed, ...draft.followups.map(f => f.answer)].findIndex(answer => answer === null);
-      draft.cursor = first >= 0 ? first : 0; draft.phase = "question";
-    }
-    if (draft.phase === "chapter" && !chapterStarts.some(start => start === draft.cursor)) draft.phase = "question";
-    return draft;
+    if (Object.keys(value).sort().join(",") !== "answers,cursor,phase,questionVersion,reportVersion,version"
+      || value.version !== FLOW_VERSION || value.questionVersion !== VERSIONS.question || (value.reportVersion !== VERSIONS.report && value.reportVersion !== v4.report && value.reportVersion !== previous.report)
+      || !Array.isArray(value.answers) || value.answers.length !== TOTAL_COUNT
+      || !value.answers.every(answer => answer === null || validAnswer(answer))
+      || typeof value.cursor !== "number" || !Number.isInteger(value.cursor) || value.cursor < 0 || value.cursor >= TOTAL_COUNT
+      || (value.phase !== "chapter" && value.phase !== "question" && value.phase !== "preview")) return null;
+    const firstPending = value.answers.indexOf(null);
+    if (firstPending >= 0 && (firstPending < value.cursor || value.phase === "preview")) return null;
+    if (value.phase === "chapter" && !chapterStarts.some(start => start === value.cursor)) return null;
+    return { ...initialDraft(), answers: [...value.answers], cursor: value.cursor, phase: value.phase };
   } catch { return null; }
 }
-export { UNKNOWN };

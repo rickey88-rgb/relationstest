@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // The development-only PGlite lab uses native Node/WASM package loading.
+  serverExternalPackages: ["@electric-sql/pglite"],
   async redirects() {
     return [
       {

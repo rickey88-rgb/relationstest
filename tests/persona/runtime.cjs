@@ -8,12 +8,11 @@ const owner="11111111-1111-4111-8111-111111111111",other="22222222-2222-4222-822
 const token="A".repeat(50),otherToken="B".repeat(50),origin="https://persona-test.example.invalid";
 function payloadFor(load,index=0) {
   const api=load(path.join(root,"app/persona/_domain/index.ts"));
-  const {profiles,fixed}=require("../../app/persona/_domain/tests/v2-fixtures.cjs");
-  const profile=profiles[index],answers=fixed(profile);
-  return {questionVersion:api.VERSIONS.question,reportVersion:api.VERSIONS.report,
-    answers:[...answers,...api.selectAdaptive(answers).selectedIds.map(id=>"ABCD".indexOf(profile.followups[id]))]};
+  const sets = [[7,31,32,34,37,39], [11,33,35,36,38,40], [10,15,31,34,38], [3,18,32,33,37], [7,21,35,36,37,39,40]];
+  const answers = Array.from({length:40},(_,i) => sets[index].includes(i + 1) ? 5 : i < 30 ? (i + index) % 3 + 2 : 3);
+  return {questionVersion:api.VERSIONS.question,reportVersion:api.VERSIONS.report,answers};
 }
-async function createRuntime() {
+async function createRuntime(extraOverrides={}) {
   assert.equal(config.productionCredentials,false);assert.equal(config.network,"deny-external-loopback-only");
   const pg=new PGlite(),sessions=new Map(),intents=new Map(),journal=new Map(),outbox=[];
   let sequence=0,journalOffline=false,mailFailure=false,priceAmount=7900;
@@ -50,7 +49,7 @@ async function createRuntime() {
         assert.equal(input.mode,"payment");assert.equal(input.allow_promotion_codes,false);
         assert.equal(input.line_items.length,1);assert.equal(input.line_items[0].price,price);assert.equal(input.line_items[0].quantity,1);
         assert.equal(input.metadata.rv_flow,"direct_customer_v1");assert.equal(options.idempotencyKey,"test-account:"+input.client_reference_id.slice(3));
-        assert.equal(input.cancel_url,origin+"/persona/test");assert.equal(new URL(input.success_url).search,"");
+        assert([origin+"/persona/test",origin+"/persona-v61"].includes(input.cancel_url));assert.equal(new URL(input.success_url).search,"");
         const id="cs_synthetic_persona_"+(++sequence),intent="pi_synthetic_persona_"+sequence;
         const session={id,livemode:true,mode:"payment",status:"open",payment_status:"unpaid",amount_total:7900,currency:"sek",
           client_reference_id:input.client_reference_id,payment_intent:intent,metadata:input.metadata,customer_details:{email:"buyer@example.invalid"},url:"https://checkout.stripe.com/c/pay/"+id};
@@ -85,14 +84,14 @@ async function createRuntime() {
     assertErasureJournalAvailable:async()=>{if(journalOffline)throw Error("journal unavailable");},
     readAnalysisErasure:async id=>{if(journalOffline)throw Error("journal unavailable");return journal.get(id)??null;},
     writeAnalysisErasure:async(id,reason)=>{if(journalOffline)throw Error("journal unavailable");journal.set(id,{reason});},
-  }});
+  },...extraOverrides});
   const handler=load(path.join(root,"app/_lib/testAccounts/directHandler.server.ts")).directCustomerHandler({health:async()=>!journalOffline});
   const store=load(path.join(root,"app/_lib/testAccounts/store.server.ts"));
   const recovery=load(path.join(root,"app/_lib/testAccounts/guestRecovery.server.ts"));
   const request=(body,authorization=null,secret=null,site=origin)=>handler(new Request("https://persona-fixture.supabase.co/functions/v1/customer-tests",{
     method:"POST",headers:{origin:site,"content-type":"application/json",...(authorization?{authorization:"Bearer "+authorization}:{}),...(secret?{"x-test-possession":secret}:{})},body:JSON.stringify(body)}));
-  async function checkout(index=0) {
-    const response=await request({action:"checkout",product:"persona_test",payload:payloadFor(load,index),consent:"test-guest-processing-v1"});
+  async function checkout(index=0, payload=payloadFor(load,index)) {
+    const response=await request({action:"checkout",product:"persona_test",payload,consent:"test-guest-processing-v1"});
     assert.equal(response.status,201);const receipt=await response.json(),row=await store.attempt(receipt.id);return {...receipt,row};
   }
   function pay(receipt) {

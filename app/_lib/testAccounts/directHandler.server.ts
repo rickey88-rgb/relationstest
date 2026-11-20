@@ -68,6 +68,7 @@ export function directCustomerHandler(overrides: Partial<typeof defaults> = {}) 
       const action = body.action;
       if (action === "capabilities") return respond({ tests: d.registeredAdapters().map(model => ({
         product: model.product, slug: model.slug, title: model.title, questionVersion: model.questionVersion, reportVersion: model.reportVersion,
+        ...(model.product === "persona_test" && process.env.TEST_ACCOUNTS_PERSONA_V61_ENABLED === "true" ? { additionalReportVersions: ["persona-report-v61-release1"] } : {}),
         checkout: d.flags(model.product).checkout && d.flags(model.product).save && d.flags(model.product).read,
       })), consentVersion, guestRecovery: guestRecoveryEnabled() });
       if (action === "recovery-request") {
@@ -89,7 +90,9 @@ export function directCustomerHandler(overrides: Partial<typeof defaults> = {}) 
         if (!enabled.checkout || !enabled.save || !enabled.read) return respond(neutral, 503);
         if (body.consent !== guestProcessingConsentVersion) return respond(neutral, 400);
         if (!await d.health()) return respond(neutral, 503); // do not sell a new account-saving flow during a known cleanup outage
-        model.parse(body.payload); // complete versioned answers; paid/email/owner fields are not purchase proof
+        const isV61 = product === "persona_test" && (body.payload as { reportVersion?: unknown } | null)?.reportVersion === "persona-report-v61-release1";
+        if (isV61) (await import("./personaV61Commerce.server")).prepareV61Checkout(body.payload);
+        else model.parse(body.payload); // complete versioned answers; paid/email/owner fields are not purchase proof
         const config = d.paymentConfig(product), stripe = d.stripeClient();
         const price = await stripe.prices.retrieve(config.price);
         if (!price.livemode || !price.active || price.type !== "one_time" || price.unit_amount !== model.amount || price.currency !== "sek") throw new Error("Price unavailable");
@@ -100,7 +103,7 @@ export function directCustomerHandler(overrides: Partial<typeof defaults> = {}) 
         const session = await stripe.checkout.sessions.create({ mode: "payment", client_reference_id: "ta:" + id,
           metadata: { rv_flow: "direct_customer_v1" }, payment_intent_data: { metadata: { rv_flow: "direct_customer_v1" } },
           line_items: [{ price: config.price, quantity: 1 }], allow_promotion_codes: false,
-          success_url: allowed + "/mina-sidor#attempt=" + id, cancel_url: allowed + (model.testPath ?? "/" + model.slug + "-test/test"),
+          success_url: allowed + "/mina-sidor#attempt=" + id, cancel_url: allowed + (isV61 ? "/persona-v61" : model.testPath ?? "/" + model.slug + "-test/test"),
           expires_at: Math.floor(Date.now() / 1000) + 1800,
         }, { idempotencyKey: "test-account:" + id });
         if (!session.livemode || !session.url || new URL(session.url).origin !== "https://checkout.stripe.com") throw new Error("Checkout unavailable");
@@ -119,7 +122,7 @@ export function directCustomerHandler(overrides: Partial<typeof defaults> = {}) 
         ? await d.service.guestForProduct(id, request.headers.get("x-test-possession") ?? "", product)
         : await d.service.openEntryForProduct(id, identity!.userId, product);
       const data = entry.data as { answers: number[] };
-      return respond({ product, title: model.title, result: entry.result, answers: d.describeAnswers(product, data.answers), expiresAt: entry.row.expires_at });
+      return respond({ product, title: model.title, result: entry.result, answers: d.describeAnswers(product, data.answers, entry.row.question_version, entry.row.report_version), expiresAt: entry.row.expires_at });
     } catch {
       // No provider messages, bodies, tokens, answers or identifiers in logs or error responses.
       return respond(neutral, 503);

@@ -2,7 +2,7 @@
 const fs=require("node:fs"),path=require("node:path");
 const root=path.resolve(__dirname,".."),out=path.join(root,".artifacts/persona-v2");fs.mkdirSync(out,{recursive:true});
 const load=require("../app/autism-test/test/test-loader.cjs")();
-const api=load(path.join(root,"app/persona/_domain/index.ts"));
+const api=load(path.join(root,"app/persona/_domain/v2/index.ts"));
 const {adaptiveRules}=load(path.join(root,"app/persona/_domain/v2/adaptive.ts"));
 const {narrativeRules}=load(path.join(root,"app/persona/_domain/v2/findings.ts"));
 const {experiments}=load(path.join(root,"app/persona/_domain/v2/experiments.ts"));
