@@ -72,6 +72,18 @@ export function paymentProductCatalog(): Catalog {
       paymentLinkIds: stringIds(entry.paymentLinkIds, "plink_"),
     };
   }
+  // An additive, non-secret PERSONA allowlist avoids replacing the shared map
+  // when its existing secret value cannot be exported. Historical IDs stay intact.
+  const personaPrices = process.env.STRIPE_PERSONA_PRICE_IDS?.trim();
+  if (personaPrices) {
+    const ids = Array.from(new Set(personaPrices.split(",").map(id => id.trim())));
+    if (ids.some(id => !/^price_[A-Za-z0-9]+$/.test(id))) throw new Error("Invalid PERSONA price allowlist");
+    for (const [product, entry] of Object.entries(catalog)) {
+      if (product !== "persona_test" && entry?.priceIds.some(id => ids.includes(id))) throw new Error("PERSONA price belongs to another product");
+    }
+    const prior = catalog.persona_test;
+    catalog.persona_test = { priceIds: Array.from(new Set([...(prior?.priceIds ?? []), ...ids])), paymentLinkIds: prior?.paymentLinkIds ?? [] };
+  }
   return catalog;
 }
 

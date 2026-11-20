@@ -29,6 +29,7 @@ export async function createAttempt(product: string, input: unknown, browserSecr
   if (process.env.TEST_ACCOUNTS_STORAGE_MODE !== "active") throw new Error("Test accounts unavailable");
   const model = adapter(product);
   const isV61 = product === "persona_test" && (input as { reportVersion?: unknown } | null)?.reportVersion === "persona-report-v61-release1";
+  if (product === "persona_test" && process.env.TEST_ACCOUNTS_PERSONA_V61_ONLY === "true" && !isV61) throw new Error("Report checkout unavailable");
   const v61 = isV61 ? await import("./personaV61Commerce.server") : null;
   const prepared = v61 ? v61.prepareV61Checkout(input) : null;
   const answers = prepared ? null : model.parse(input);

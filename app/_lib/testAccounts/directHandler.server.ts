@@ -69,6 +69,9 @@ export function directCustomerHandler(overrides: Partial<typeof defaults> = {}) 
       if (action === "capabilities") return respond({ tests: d.registeredAdapters().map(model => ({
         product: model.product, slug: model.slug, title: model.title, questionVersion: model.questionVersion, reportVersion: model.reportVersion,
         ...(model.product === "persona_test" && process.env.TEST_ACCOUNTS_PERSONA_V61_ENABLED === "true" ? { additionalReportVersions: ["persona-report-v61-release1"] } : {}),
+        ...(model.product === "persona_test" && process.env.TEST_ACCOUNTS_PERSONA_V61_ONLY === "true" ? {
+          checkoutReportVersions: process.env.TEST_ACCOUNTS_PERSONA_V61_ENABLED === "true" ? ["persona-report-v61-release1"] : [],
+        } : {}),
         checkout: d.flags(model.product).checkout && d.flags(model.product).save && d.flags(model.product).read,
       })), consentVersion, guestRecovery: guestRecoveryEnabled() });
       if (action === "recovery-request") {
@@ -91,6 +94,7 @@ export function directCustomerHandler(overrides: Partial<typeof defaults> = {}) 
         if (body.consent !== guestProcessingConsentVersion) return respond(neutral, 400);
         if (!await d.health()) return respond(neutral, 503); // do not sell a new account-saving flow during a known cleanup outage
         const isV61 = product === "persona_test" && (body.payload as { reportVersion?: unknown } | null)?.reportVersion === "persona-report-v61-release1";
+        if (product === "persona_test" && process.env.TEST_ACCOUNTS_PERSONA_V61_ONLY === "true" && !isV61) return respond(neutral, 503);
         if (isV61) (await import("./personaV61Commerce.server")).prepareV61Checkout(body.payload);
         else model.parse(body.payload); // complete versioned answers; paid/email/owner fields are not purchase proof
         const config = d.paymentConfig(product), stripe = d.stripeClient();

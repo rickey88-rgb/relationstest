@@ -1,6 +1,6 @@
 # PERSONA V6.1 inför publicering
 
-Verifierat 2026-11-20 på grenen codex/persona-stage1. Den separata ingången är /persona-v61. Ingen commit, push, publicering, produktionsmigration eller verklig debitering har gjorts.
+Publiceringsunderlag för 2026-11-20 på grenen codex/persona-stage1. Den separata ingången är /persona-v61. Publiceringen är godkänd av ägaren; verkligt provköp och PDF-prov lämnas till ägaren. Ingen datamigration ingår.
 
 ## Färdig funktion
 
@@ -116,3 +116,17 @@ Det går att genomföra alla frågor, få gratisanalysen och granska syntetiska 
 7. Vid återgång: stäng endast den nya V6.1-flaggan. Behåll läsarkoden, PERSONA READ-flaggan, prisallowlistens historik och krypteringsnyckeln så att redan köpta resultat kan öppnas.
 
 Produktionsinställningarnas faktiska värden är inte tillgängliga i denna lokala körning. Därför är befintligt Stripe-pris, publicerad funktion, kontoflaggor och den verkliga betalningskedjan inte påstått driftverifierade. Detta kräver inga nya miljöer; det är kontroll och aktivering på de befintliga tjänsterna efter publiceringsgodkännande.
+
+## Anpassningar för befintlig produktion den 20 november
+
+Produktionssajten saknade PERSONA och hade tre senare sidändringar på main. Dessa ändringar har slagits in i PERSONA-grenen; ADHD-, autism- och IQ-landningssidorna är identiska med main inför denna publicering.
+
+TEST_ACCOUNTS_PERSONA_V61_ONLY=true sätts på Vercel och Supabase. Den håller den tidigare opublicerade vanliga /persona-ingången stängd i produktion och begränsar nya PERSONA-köp till persona-report-v61-release1. V5-koden och läsning av tidigare rapportversioner finns kvar. Utan flaggan behålls tidigare beteende. Capabilities annonserar uttryckligt checkoutReportVersions, och servern avvisar andra PERSONA-versioner i detta läge.
+
+STRIPE_PERSONA_PRICE_IDS är en separat, icke-hemlig tilläggslista för PERSONA-prisidentifierare. Den sammanfogas i minnet med den befintliga produktkartan, bevarar historiska identifierare och avvisar priser som redan tillhör andra produkter. Den skyddade STRIPE_PAYMENT_PRODUCT_MAP_JSON behöver därför inte skrivas över eller exporteras. TEST_ACCOUNTS_PERSONA_PRICE_ID väljer aktuellt pris ur tillåtelselistan.
+
+Befintlig Supabase Dashboard används för uppdateringen. Kör node scripts/build-customer-dashboard.cjs för ett genererat, fristående ESM-paket från samma kanoniska 102 servermoduler. Det använder befintlig Next.js-webpack, utan nya beroenden eller tjänster. Endast index.ts behöver ersättas i den befintliga funktionen; de gamla genererade filerna lämnas kvar. Paketet verifieras lokalt, inklusive kvalitetsgrind och rapportleverans för samtliga 24 profiler.
+
+Backup av tidigare funktionspaket sparas före ändring. Återgång av funktionskod kan göras genom att återställa tidigare index.ts; inga databasposter eller krypteringsnycklar ändras. Återgång av ny försäljning görs genom att stänga V6.1-flaggan och behålla läsning av redan köpta rapporter.
+
+Vercels befintliga GitHub-main-flöde används efter godkänt produktionsbygge. Både den nya adressen och gamla /persona-ingången utesluts ur sitemap under provkörningen. Inga menyer ändras.

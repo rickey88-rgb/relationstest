@@ -25,7 +25,7 @@ export default function PersonaPaywall({ submission, eligible, description }: { 
     let active = true;
     if (directCustomerEnabled()) void directRequest({ action: "capabilities" }).then(value => {
       const model = value.tests?.find((item: { product: string }) => item.product === "persona_test");
-      if (active) setAvailable(model?.checkout === true && model.questionVersion === submission?.questionVersion && (model.reportVersion === submission?.reportVersion || model.additionalReportVersions?.includes(submission?.reportVersion)));
+      if (active) setAvailable(model?.checkout === true && (!model.checkoutReportVersions || model.checkoutReportVersions.includes(submission?.reportVersion)) && model.questionVersion === submission?.questionVersion && (model.reportVersion === submission?.reportVersion || model.additionalReportVersions?.includes(submission?.reportVersion)));
     }).catch(() => { if (active) setAvailable(false); });
     return () => { active = false; };
   }, [submission?.questionVersion, submission?.reportVersion]);

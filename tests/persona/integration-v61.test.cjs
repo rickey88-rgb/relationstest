@@ -30,6 +30,16 @@ test("V6.1 uses the existing encrypted checkout/account lifecycle without changi
       process.env.TEST_ACCOUNTS_PERSONA_V61_ENABLED="true";
       assert.equal(r.sessions.size,size);
     });
+    await t.test("V6.1-only rollout never opens ordinary PERSONA sales",async()=>{
+      process.env.TEST_ACCOUNTS_PERSONA_V61_ONLY="true";
+      const caps=await(await r.request({action:"capabilities"})).json();
+      assert.deepEqual(caps.tests.find(p=>p.product==="persona_test").checkoutReportVersions,["persona-report-v61-release1"]);
+      const count=r.sessions.size;
+      assert.equal((await r.request({action:"checkout",product:"persona_test",payload:payloadFor(r.load),consent})).status,503);
+      await assert.rejects(()=>r.store.createAttempt("persona_test",payloadFor(r.load),"synthetic",r.price,consent));
+      assert.equal(r.sessions.size,count);
+      delete process.env.TEST_ACCOUNTS_PERSONA_V61_ONLY;
+    });
     let purchase,paid;
     await t.test("unpaid and cancelled purchases never expose report content",async()=>{
       purchase=await r.checkout(0,input("F01"));
@@ -127,4 +137,11 @@ test("the unlinked entry defaults to 404 and does not load a report without its 
  delete process.env.TEST_ACCOUNTS_PERSONA_V61_ENABLED;assert.throws(()=>Page(),/404/);
  process.env.TEST_ACCOUNTS_PERSONA_V61_ENABLED="true";assert.doesNotThrow(()=>Page());
  delete process.env.TEST_ACCOUNTS_PERSONA_V61_ENABLED;
+});
+
+test("V6.1-only production publication leaves the ordinary entry closed without removing its report reader",()=>{
+ const Layout=createLoader({"next/navigation":{notFound:()=>{throw Error("404");}},"./_components/PersonaShell":{default:()=>null}})(path.join(root,"app/persona/layout.tsx")).default;
+ const node=process.env.NODE_ENV,only=process.env.TEST_ACCOUNTS_PERSONA_V61_ONLY;
+ try {process.env.NODE_ENV="production";process.env.TEST_ACCOUNTS_PERSONA_V61_ONLY="true";assert.throws(()=>Layout({children:null}),/404/);process.env.TEST_ACCOUNTS_PERSONA_V61_ONLY="false";assert.doesNotThrow(()=>Layout({children:null}));}
+ finally {if(node===undefined)delete process.env.NODE_ENV;else process.env.NODE_ENV=node;if(only===undefined)delete process.env.TEST_ACCOUNTS_PERSONA_V61_ONLY;else process.env.TEST_ACCOUNTS_PERSONA_V61_ONLY=only;}
 });

@@ -6,7 +6,7 @@ module.exports = {
   autoLastmod: false,
   changefreq: undefined,
   transform: async (_config, path) => {
-    if (path.startsWith('/persona-v61') || path.startsWith('/persona/dev-') || path === '/icon.png') return null;
+    if (path === '/persona' || path.startsWith('/persona-v61') || path.startsWith('/persona/dev-') || path === '/icon.png') return null;
     return { loc: path };
   },
   additionalPaths: async () => [
@@ -16,6 +16,7 @@ module.exports = {
   ],
   exclude: [
     "/persona-v61", "/persona-v61/*",
+    "/persona",
     "/persona/test",
     "/persona/dev-report",
     '/juridisk-information',

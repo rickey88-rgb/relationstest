@@ -18,3 +18,19 @@ test("offline configuration is not application runtime configuration and product
   const runner=fs.readFileSync(path.join(root,"scripts/test-persona-release.cjs"),"utf8");assert(!runner.includes("...process.env"));assert(!runner.includes("dotenv"+".config"));
   const sitemap=require("../../next-sitemap.config.js");assert(sitemap.exclude.includes("/persona/test"));
 });
+
+test("additive PERSONA allowlist preserves the protected shared map and rejects shared prices",()=>{
+ const load=require("../../app/autism-test/test/test-loader.cjs")();
+ const catalog=load(path.resolve(__dirname,"../../app/_lib/paymentProductCatalog.server.ts"));
+ const before=process.env.STRIPE_PAYMENT_PRODUCT_MAP_JSON,prior=process.env.STRIPE_PERSONA_PRICE_IDS;
+ const map={adhd_test:{priceIds:["price_ADHD"],paymentLinkIds:["plink_History"]},persona_test:{priceIds:["price_OldPersona"],paymentLinkIds:[]}};
+ try {
+  process.env.STRIPE_PAYMENT_PRODUCT_MAP_JSON=JSON.stringify(map);process.env.STRIPE_PERSONA_PRICE_IDS="price_NewPersona";
+  const result=catalog.paymentProductCatalog();assert.deepEqual(result.adhd_test,map.adhd_test);
+  assert.deepEqual(result.persona_test.priceIds,["price_OldPersona","price_NewPersona"]);
+  assert.equal(process.env.STRIPE_PAYMENT_PRODUCT_MAP_JSON,JSON.stringify(map));
+  assert.equal(catalog.identifyPaymentProduct({priceIds:["price_NewPersona"],paymentLinkId:null}),"persona_test");
+  process.env.STRIPE_PERSONA_PRICE_IDS="price_ADHD";assert.throws(()=>catalog.paymentProductCatalog());
+  process.env.STRIPE_PERSONA_PRICE_IDS="plink_NotCheckout";assert.throws(()=>catalog.paymentProductCatalog());
+ } finally {if(before===undefined)delete process.env.STRIPE_PAYMENT_PRODUCT_MAP_JSON;else process.env.STRIPE_PAYMENT_PRODUCT_MAP_JSON=before;if(prior===undefined)delete process.env.STRIPE_PERSONA_PRICE_IDS;else process.env.STRIPE_PERSONA_PRICE_IDS=prior;}
+});

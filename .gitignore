@@ -147,3 +147,5 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vercel
 .env*
+
+/supabase/functions/customer-tests/_generated-dashboard/
