@@ -3,7 +3,7 @@ export type Draft = { answers:(number|null)[]; cursor:number; phase:"landing"|"c
 export const emptyDraft = ():Draft=>({answers:Array(40).fill(null),cursor:0,phase:"landing",supplement:{}});
 export function restoreDraft(raw:string):Draft {
   const value=JSON.parse(raw);
-  if(value.reportVersion!==REPORT_VERSION||value.questionVersion!==QUESTION_VERSION||
+  if(![REPORT_VERSION,"persona-report-v61-release1"].includes(value.reportVersion)||value.questionVersion!==QUESTION_VERSION||
     !Array.isArray(value.answers)||value.answers.length!==40||
     !value.answers.every((a:unknown)=>a===null||typeof a==="number"&&Number.isInteger(a)&&a>=0&&a<=5)||
     !Number.isInteger(value.cursor)||value.cursor<0||value.cursor>39||

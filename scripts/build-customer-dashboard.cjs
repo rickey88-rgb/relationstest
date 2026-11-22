@@ -54,9 +54,12 @@ if (typeof Deno !== "undefined") Deno.serve(directCustomerHandler());
   if(response.status!==200)throw Error("Bundled handler did not open");
   const capabilities=await response.json();
   const persona=capabilities.tests.find(t=>t.product==="persona_test");
-  if(JSON.stringify(persona.checkoutReportVersions)!=='["persona-report-v61-release1"]')throw Error("Wrong release gate");
+  if(JSON.stringify(persona.checkoutReportVersions)!=='["persona-report-v61-release1","persona-report-v61-release2"]')throw Error("Wrong release gate");
   const profiles=require("../tests/persona/insights-v2-full-fixtures.cjs"),frozen=require("../app/persona/_domain/release-v61/snapshot.cjs");
   for(const profile of profiles){
+    const current=api.prepareV61Checkout({questionVersion:"persona-questions-v3",reportVersion:"persona-report-v61-release2",answers:profile.answers});
+    const delivered=api.openV61Purchase(current.envelope);
+    if(delivered.presentation.sections.length!==6||delivered.presentation.sections.some(s=>!s.blocks.length))throw Error("Missing corrected bundled report");
     const input={questionVersion:"persona-questions-v3",reportVersion:"persona-report-v61-release1",answers:profile.answers};
     if(frozen.completeReport(profile.answers).after.state==="ready"){
       const prepared=api.prepareV61Checkout(input),reopened=api.openV61Purchase(prepared.envelope);

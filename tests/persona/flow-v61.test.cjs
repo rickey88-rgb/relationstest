@@ -20,9 +20,9 @@ function fixture(draft){
     react:{useState:initial=>{const i=stateIndex++;if(!(i in state))state[i]=typeof initial==="function"?initial():initial;return[state[i],value=>{state[i]=typeof value==="function"?value(state[i]):value;}];},
       useRef:initial=>{const i=refIndex++;return refs[i]??(refs[i]={current:initial});},
       useEffect:(fn,next)=>effect(effects,fn,next),useLayoutEffect:(fn,next)=>effect(layouts,fn,next)},
-    "next/link":{default:"a"},"./supplements.module.css":styles,"../persona/persona.module.css":styles,
+    "next/link":{default:"a"},"./offer.module.css":styles,"../persona/persona.module.css":styles,
     "../persona/test/PersonaQuestion":{default:Question},"../persona/test/PersonaJourney":{default:Journey},"../persona/test/PersonaPaywall":{default:Paywall},
-    "./actions":{analyzePersonaV61:async()=>({state:"insufficient",title:"Kontroll",text:"Avgränsat resultat",description:"Inget köp",questions:[]})},
+    "./actions":{analyzePersonaV61:async()=>({state:"insufficient",canPurchase:true,title:"Kontroll",text:"Avgränsat resultat",description:"En ärlig rapport",questions:[]})},
   });
   const draftApi=loader(path.join(root,"app/persona-v61/draft.ts"));
   if(draft)storage.set("relationsvarning_persona_v61_draft_v1",draftApi.serializeDraft(draft));
@@ -73,4 +73,17 @@ test("V6.1 traverses the unchanged forty questions, all chapter gates, result re
 test("saved voluntary supplements restore without a purchase entitlement or changed base answers",()=>{
  const draft={answers:profiles[23].answers,cursor:39,phase:"result",supplement:{S01:"context",S02:"writing",S03:"asked",S04:"preserve"}},f=fixture(draft);
  try{f.render();f.render();assert.deepEqual(f.state[0],draft);assert.equal(f.state[0].paid,undefined);}finally{f.close();}
+});
+
+test("full profiles render the real offer regardless of quality label, without completion questions",async()=>{
+ for(const p of profiles){
+  const f=fixture({answers:p.answers,cursor:39,phase:"result",supplement:{}});
+  try {
+   f.render();f.render();await new Promise(resolve=>setImmediate(resolve));const view=f.render();
+   const paywall=f.find(view,f.Paywall);assert(paywall,p.id);assert.equal(paywall.props.eligible,true);
+   assert.equal(paywall.props.buttonLabel,"Lås upp min fullständiga analys");
+   assert.equal(paywall.props.submission.reportVersion,"persona-report-v61-release2");
+   assert.equal(f.find(view,"select"),undefined);assert.equal(f.find(view,"form"),undefined);
+  }finally{f.close();}
+ }
 });

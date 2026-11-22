@@ -28,7 +28,7 @@ const definitions: Record<string, Definition> = {
 export type AnswerDescription = { question: string; answer: string; value: number; visual?: iq.MatrixVisual };
 /** Only public question wording + the validated answer. Never expose IQ answer keys. */
 export function describeAnswers(product: string, answers: number[], questionVersion: string = PERSONA_VERSIONS.question, reportVersion: string = PERSONA_VERSIONS.report): AnswerDescription[] {
-  if (product === "persona_test" && reportVersion === "persona-report-v61-release1") {
+  if (product === "persona_test" && ["persona-report-v61-release1","persona-report-v61-release2"].includes(reportVersion)) {
     // Identical frozen Q01–Q40 wording and coding; only the report identity differs.
     if (questionVersion !== "persona-questions-v3") throw new Error("Answers unavailable");
     return [...resolvePersonaVersion(questionVersion, PERSONA_VERSIONS.report).describeAnswers({ answers, questionVersion, reportVersion: PERSONA_VERSIONS.report })];

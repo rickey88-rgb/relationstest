@@ -14,7 +14,7 @@ function subscribePurchases(callback: () => void) {
 function hasPersonaPurchase() {
   try { return pendingPurchases().some(item => item.product === "persona_test"); } catch { return false; }
 }
-export default function PersonaPaywall({ submission, eligible, description }: { submission: Submission | null; eligible: boolean; description?: string }) {
+export default function PersonaPaywall({ submission, eligible, description, buttonLabel }: { submission: Submission | null; eligible: boolean; description?: string; buttonLabel?: string }) {
   const [available, setAvailable] = useState(false);
   const [consent, setConsent] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -38,7 +38,7 @@ export default function PersonaPaywall({ submission, eligible, description }: { 
   return <form className={styles.paywall} onSubmit={event => { event.preventDefault(); void checkout(); }}>
     <p className={styles.finePrint}>{description ?? `Personligt porträtt, dimensionskarta, råd och utskrift/PDF. ${PRICE_SEK} kr totalt, som engångsbetalning.`}</p>
     <label className={styles.processingConsent}><input type="checkbox" required checked={consent} disabled={busy || !eligible} onChange={event => setConsent(event.target.checked)} /><span>Jag samtycker till att mina svar behandlas och lagras krypterat för att leverera rapporten. Gäståtkomst i högst sju dagar. Kontosparning är frivillig och väljs separat efter köpet. <Link href="/mina-sidor/tester/integritet">Så hanteras mina svar</Link>.</span></label>
-    <button type="submit" className={styles.purchaseButton} disabled={!available || !eligible || !consent || busy}>{busy ? "Öppnar säker betalning…" : `Lås upp mitt porträtt – ${PRICE_SEK} kr`} <span aria-hidden="true">→</span></button>
+    <button type="submit" className={styles.purchaseButton} disabled={!available || !eligible || !consent || busy}>{busy ? "Öppnar säker betalning…" : buttonLabel ?? `Lås upp mitt porträtt – ${PRICE_SEK} kr`} <span aria-hidden="true">→</span></button>
     <p className={styles.finePrint}>Betala säkert med Stripe Checkout. Ingen registrering krävs. Du kan avbryta och återvända med svaren kvar. <Link href="/villkor">Köpvillkor</Link>.</p>
     {!eligible && <p className={styles.finePrint}>Förhandsvisningen behöver vara klar och underlaget tillräckligt innan du kan köpa rapporten.</p>}
     {eligible && !available && <p className={styles.finePrint}>Köp är inte öppet just nu. Dina svar finns kvar i den här webbläsaren.</p>}

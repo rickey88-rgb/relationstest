@@ -8,7 +8,7 @@ import PersonaJourney from "../persona/test/PersonaJourney";
 import PersonaQuestion from "../persona/test/PersonaQuestion";
 import PersonaPaywall from "../persona/test/PersonaPaywall";
 import styles from "../persona/persona.module.css";
-import supplements from "./supplements.module.css";
+import offer from "./offer.module.css";
 import {analyzePersonaV61,type V61Preview} from "./actions";
 import {emptyDraft,restoreDraft,serializeDraft,submissionFor,type Draft} from "./draft";
 import {V61_STORAGE_KEY} from "./constants";
@@ -21,14 +21,13 @@ export default function PersonaV61Flow(){
   const [preview,setPreview]=useState<{key:string;value:V61Preview}|null>(null);
   const [error,setError]=useState(false);
   const [retry,setRetry]=useState(0);
-  const [extra,setExtra]=useState<Record<string,string>>({});
   const timer=useRef<ReturnType<typeof setTimeout>|null>(null),lock=useRef(false);
   const heading=useRef<HTMLHeadingElement>(null);
   const current=useRef(draft);
   useLayoutEffect(()=>{current.current=draft;},[draft]);
   /* eslint-disable react-hooks/set-state-in-effect -- One-time hydration and write failures synchronize the external browser-owned draft. */
   useEffect(()=>{
-    try {const raw=localStorage.getItem(V61_STORAGE_KEY);if(raw){const restored=restoreDraft(raw);setDraft(restored);setExtra(restored.supplement);}}
+    try {const raw=localStorage.getItem(V61_STORAGE_KEY);if(raw){const restored=restoreDraft(raw);setDraft(restored);}}
     catch {setNotice("Tidigare svar kunde inte återställas. Du kan börja en ny omgång här.");}
     setHydrated(true);
     return ()=>{if(timer.current)clearTimeout(timer.current);};
@@ -60,7 +59,7 @@ export default function PersonaV61Flow(){
   function select(value:number){
     if(lock.current)return;
     setDraft(d=>({...d,answers:d.answers.map((a,i)=>i===d.cursor?value:a),supplement:{}}));
-    setPreview(null);setExtra({});setError(false);
+    setPreview(null);setError(false);
   }
   function answer(value:number){
     if(lock.current)return;
@@ -71,11 +70,10 @@ export default function PersonaV61Flow(){
   function back(){
     cancel();setPreview(null);setError(false);
     setDraft(d=>({...d,cursor:d.phase==="result"?39:Math.max(0,d.cursor-1),phase:d.phase!=="result"&&d.cursor===0?"chapter":"question",supplement:{}}));
-    setExtra({});
   }
   function restart(){
     if(!window.confirm("Radera de lokala svaren för den här omgången och börja om?"))return;
-    cancel();setDraft(emptyDraft());setPreview(null);setExtra({});setError(false);
+    cancel();setDraft(emptyDraft());setPreview(null);setError(false);
   }
   if(!hydrated)return <p className={styles.flowLoading} role="status">Din resa förbereds.</p>;
   const chapter=CHAPTERS[Math.floor(draft.cursor/10)];
@@ -83,7 +81,7 @@ export default function PersonaV61Flow(){
     <Fingerprint className={styles.fingerprint}/><p className={styles.eyebrow}>40 påståenden · Fyra kapitel</p>
     <h1 className={styles.heroTitle}><span>PERSONA</span><em>Vem är du egentligen?</em></h1>
     <p className={styles.heroLead}>Lär känna dina mönster, dina styrkor och vad som hjälper dig framåt.</p>
-    <p className={styles.heroDescription}>En personlig insikt utan kostnad. När underlaget räcker kan du välja hela porträttet för 79 kr. Ingen registrering krävs.</p>
+    <p className={styles.heroDescription}>Ett personligt gratisresultat. Efter 40 besvarade frågor kan du välja hela analysen för 79 kr. Ingen registrering krävs.</p>
     <button className={styles.primary} onClick={()=>setDraft(d=>({...d,phase:"chapter"}))}>Upptäck din personlighet →</button>
     {notice&&<p role="status">{notice}</p>}
   </section>;
@@ -100,28 +98,27 @@ export default function PersonaV61Flow(){
       pending={pending} position={draft.cursor+1} total={40} last={draft.cursor===39} headingRef={heading}
       onAnswer={answer} onSelect={select} onNext={()=>{if(!lock.current)advance();}}/>}
   </PersonaJourney>;
-  return <div className={styles.flow} data-persona-flow><section className={styles.preview}>
+  return <div className={styles.flow} data-persona-flow><section className={`${styles.preview} ${offer.result}`}>
     <Fingerprint className={styles.smallFingerprint}/><p className={styles.eyebrow}>En första inblick</p>
     <h1 ref={heading} tabIndex={-1} className={styles.editorialTitle}>Ditt första mönster</h1>
     {!result&&!error&&<p role="status">Vi sammanställer din personliga insikt…</p>}
     {error&&<div role="alert"><p>Analysen kunde inte hämtas. Dina svar finns kvar.</p><button className={styles.secondary} onClick={()=>{setError(false);setRetry(n=>n+1);}}>Försök igen</button></div>}
     {result&&<>
       <div className={styles.insight} data-persona-insight><h2 className={styles.insightTitle}>{result.title}</h2><p className={styles.insightText}>{result.text}</p></div>
-      {result.state==="ready"?<section className={styles.premium}>
+      {result.canPurchase?<section className={`${styles.premium} ${offer.premium}`}>
         <div className={styles.premiumTop}><p className={styles.eyebrow}>Hela ditt porträtt</p><span className={styles.lock}>◇ LÅST</span></div>
-        <h2>Se fler sidor av dig själv</h2><p>Din första insikt är början. Rapporten ger dig sex personliga perspektiv och konkreta råd att prova i vardagen.</p>
-        <ul className={styles.reportValue}><li><strong>Din PERSONA</strong><span>Ett sammanhängande porträtt av hur dina personlighetsdrag samspelar.</span></li><li><strong>Styrkor, blinda fläckar och relationer</strong><span>Fler perspektiv som bygger på just dina svar.</span></li><li><strong>Din utvecklingskompass</strong><span>Konkreta förslag, återöppning via Mina sidor och utskrift/PDF.</span></li></ul>
-        <div className={styles.price}><span>Premiumrapport</span><strong>79 <small>kr</small></strong><span>Engångsbetalning</span></div>
-        <PersonaPaywall submission={submissionFor(draft)} eligible={!error} description="Sex individuella rapportdelar, konkreta råd och utskrift/PDF. 79 kr totalt, som engångsbetalning."/>
-      </section>:<div className={styles.insight}><h2>{result.state==="limited"?"Ett avgränsat resultat":"Ditt kostnadsfria resultat"}</h2><p className={styles.insightText}>{result.description}</p><p>Inget premiumköp erbjuds för det här underlaget. Du behöver inte ändra dina svar.</p></div>}
-      {result.questions.length>0&&<form className={styles.premium} onSubmit={event=>{
-        event.preventDefault();setPreview(null);setError(false);
-        setDraft(d=>({...d,supplement:Object.fromEntries(result.questions.map(q=>[q.id,extra[q.id]??"skip"]))}));
-        setRetry(n=>n+1);
-      }}><h2>Vill du ge lite mer sammanhang?</h2><p>Högst fyra frivilliga frågor. Du kan hoppa över dem och behålla ditt gratisresultat.</p>
-        <div className={supplements.questions}>{result.questions.map(q=><label className={styles.processingConsent} key={q.id}><span>{q.prompt}<select aria-label={q.prompt} value={extra[q.id]??"skip"} onChange={e=>setExtra(a=>({...a,[q.id]:e.target.value}))}><option value="skip">Jag hoppar över den här frågan.</option>{q.options.map(o=><option key={o.id} value={o.id}>{o.label}</option>)}</select></span></label>)}
-        </div><button className={styles.secondary} type="submit">Uppdatera mitt gratisresultat</button>
-      </form>}
+        <h2>Förstå mönstret bakom din karta</h2><p>Se vad dina svar säger tillsammans, vad som är tydligt och vad som behöver förstås i sitt sammanhang.</p>
+        <div className={styles.price}><span>Premiumrapport</span><strong>79 <small>kr</small></strong><span>Engångsköp</span></div>
+        <PersonaPaywall submission={submissionFor(draft)} eligible={!error&&result.canPurchase} buttonLabel="Lås upp min fullständiga analys" description="Hela rapporten, återöppning via Mina sidor och utskrift/PDF. 79 kr totalt. Engångsköp, ingen prenumeration."/>
+        <p>{result.description}</p>
+        <ul className={styles.reportValue} aria-label="Låsta delar i premiumrapporten">
+          <li><strong>Din PERSONA och personlighetskarta <span aria-label="Låst">▣</span></strong><span>Fem dimensioner, deras nyanser och ett samlat porträtt.</span></li>
+          <li><strong>Perspektiv bortom första intrycket <span aria-label="Låst">▣</span></strong><span>Underbyggda samband när de finns. Inga påhittade egenskaper när de saknas.</span></li>
+          <li><strong>Styrkor och möjliga fallgropar <span aria-label="Låst">▣</span></strong><span>Resurser med svarsstöd och sådant du kan undersöka vidare.</span></li>
+          <li><strong>Du och andra människor <span aria-label="Låst">▣</span></strong><span>Kontakt, hänsyn och hur olika sidor kan komma fram.</span></li>
+          <li><strong>Din utvecklingskompass <span aria-label="Låst">▣</span></strong><span>Konkreta försök och reflektionsverktyg anpassade till ditt svarsmönster.</span></li>
+        </ul>
+      </section>:<p role="status">{result.description}</p>}
     </>}
     <div className={styles.previewActions}><button className={styles.secondary} onClick={back}>Granska mina svar</button><button className={styles.back} onClick={restart}>Radera och börja om</button><Link className={styles.textLink} href="/mina-sidor">Mina sidor</Link></div>
     <p className={styles.storageNote}>En självskattning, inte en diagnos. Svaren sparas lokalt på den här enheten. Vid ett frivilligt köp lagras de krypterat för leverans. Kontosparning väljs separat efter köpet.</p>

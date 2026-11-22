@@ -1,5 +1,19 @@
 # PERSONA V6.1 inför publicering
 
+## Korrigering 2026-11-22 — godkänd för publicering
+
+Den nya ingången använder `persona-report-v61-release2`. Fyrtio heltal i intervallet 1–5, korrekt frågeversion och ett tekniskt levererbart rapportpaket räcker för köp. `ready`, `limited` och `insufficient` finns kvar som analysdiagnostik men styr inte köp för release2. Saknade, överhoppade eller ogiltiga svar öppnar inte Checkout. Inga nya priser, frågor, insiktsregler, tjänster eller databasmigrationer ingår.
+
+Normalflödet visar en serverberäknad insikt och samma betalvägg för alla fullständiga profiler. De fyra kompletteringsfrågorna visas inte. Gamla lokala utkast behåller sina svar och eventuella kompletteringar; nya köp får release2-identiteten. Redan köpta release1- och V5-resultat uppgraderas aldrig.
+
+Den frysta analysen används oförändrad. Release2:s presentationslager lägger till en femdimensionell karta och ersätter tomma delar med uttryckligt avgränsade observationer och reflektionsverktyg. Dessa får inte räknas som nya underbyggda insikter eller tillskriva neutrala profiler särskilda styrkor. Den nya leveransen har en egen version och kontrollsumma, utöver det gamla kuvertets oförändrade manifest och analyskontrollsumma. Hela paketet krypteras och provåteröppnas innan Checkout skapas. Befintliga betalnings-, ägar- och återbetalningskontroller används utan ändrade villkor.
+
+Ändringarna ligger främst i `app/persona/_domain/purchase-v61/index.ts`, `app/persona-v61/{actions.ts,PersonaV61Flow.tsx,offer.module.css,constants.ts,draft.ts}` och `app/_lib/testAccounts/personaV61Commerce.server.ts`. Versionsdispatch utökas i `directHandler.server.ts`, `store.server.ts`, `service.server.ts`, `answerDescriptions.ts` och den befintliga rapportväljaren på Mina sidor. Den delade betalväggen får en valfri knapptext, med tidigare standard bevarad. Den tidigare rapportkomponenten återanvänds.
+
+Ägaren har godkänt publicering av korrigeringen. Bygg och publicera den uppdaterade befintliga `customer-tests`-funktionen först (med `scripts/build-customer-dashboard.cjs` eller befintlig CLI-paketering), verifiera att capabilities tillåter release2, publicera sedan webbändringen via det vanliga flödet. Inga miljönycklar eller prisinställningar behöver bytas. Bekräfta därefter köpbehörighet för F21–F24, avvisning av ofullständiga paket samt återöppning av både release1 och release2. Backa inte serverns release2-läsare efter att ett release2-köp har skett; arkivläsaren behövs för fortsatt leverans.
+
+Texten nedan beskriver den tidigare release1-publiceringen och dess dåvarande kvalitetsgrind. Den gäller fortfarande arkiverade release1-resultat, men är inte köpkrav för den förberedda release2-korrigeringen.
+
 Publiceringsunderlag för 2026-11-20 på grenen codex/persona-stage1. Den separata ingången är /persona-v61. Publiceringen är godkänd av ägaren; verkligt provköp och PDF-prov lämnas till ägaren. Ingen datamigration ingår.
 
 ## Färdig funktion

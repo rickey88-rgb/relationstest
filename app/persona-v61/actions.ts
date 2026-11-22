@@ -1,22 +1,23 @@
 "use server";
 import { notFound } from "next/navigation";
-import { parseSubmission } from "../persona/_domain/release-v61/submission";
-import { frozen } from "../persona/_domain/release-v61/manifest";
+import { buildPurchaseReport, parsePurchase } from "../persona/_domain/purchase-v61/index";
 
 /** Public response is deliberately a teaser, never the full report or its internal trace. */
 export async function analyzePersonaV61(input: unknown) {
   if (process.env.TEST_ACCOUNTS_PERSONA_V61_ENABLED !== "true") notFound();
-  const submission = parseSubmission(input);
-  const result = frozen.completeReport(submission.answers, submission.supplement?.answers ?? {});
-  const insight = result.baseReport.sections.find(s => s.id === "insights")?.blocks.find(b => b.source === "insight");
-  const addition = result.additions.find(a => a.section !== "compass");
+  const submission = parsePurchase(input, true);
+  const missing = submission.answers.filter(a => a === 0).length;
+  if (missing) return { state: "insufficient" as const, canPurchase: false,
+    title: "Några svar saknas fortfarande", text: `Du har hoppat över ${missing} av 40 frågor. Granska dina svar och besvara dem innan du väljer premiumrapporten.`,
+    description: "Köp öppnas när alla 40 frågor har giltiga svar.", questions: [] };
+  const built = buildPurchaseReport(input);
   return {
-    state: result.after.state,
-    title: insight?.title ?? addition?.title ?? result.freeResult?.title ?? "En första bild av dig",
-    text: insight ? [insight.observation, insight.interpretation].filter(Boolean).join(" ") :
-      addition?.text ?? result.freeResult?.text ?? "Dina svar ger en avgränsad bild av hur du brukar vara. Den berättar inte allt om dig.",
-    description: result.offer.description,
-    questions: result.offeredQuestions.map(q => ({ id:q.id, prompt:q.prompt, options:q.options.map(o=>({id:o.id,label:o.label})) })),
+    state: built.completion.after.state,
+    canPurchase: true,
+    ...built.teaser,
+    description: built.completion.after.state === "ready" ? "Rapporten utvecklar fler perspektiv än den första insikten här ovanför." :
+      "I din rapport skiljer vi tydligt på underbyggda slutsatser och reflektionsverktyg för det som svaren lämnar öppet.",
+    questions: [],
   };
 }
 export type V61Preview = Awaited<ReturnType<typeof analyzePersonaV61>>;

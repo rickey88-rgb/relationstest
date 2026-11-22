@@ -16,7 +16,7 @@ export async function notErased(generation: string, identity: string) {
 }
 async function payload(row: { product: string; question_version: string; report_version: string; ciphertext: string }, id: string, owner?: string, purchase?: string) {
   const model = adapter(row.product);
-  if (row.product === "persona_test" && row.report_version === "persona-report-v61-release1") {
+  if (row.product === "persona_test" && ["persona-report-v61-release1","persona-report-v61-release2"].includes(row.report_version)) {
     if (row.question_version !== "persona-questions-v3") throw new Error("Unsupported report version");
     const data = unseal(row.ciphertext, context(row, id, owner, purchase));
     const stored = data as { guestConsent?: { version: string; acceptedAt: string } };

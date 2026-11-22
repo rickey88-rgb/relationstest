@@ -37,6 +37,10 @@ console.log(`PASS: ${manifest.files.length} Edge modules, ${imports} local impor
   for (const profile of profiles) {
     const result = frozen.completeReport(profile.answers);
     assert.deepEqual(emitted.completeReport(profile.answers), result);
+    const current = commerce.prepareV61Checkout({ questionVersion:"persona-questions-v3",reportVersion:"persona-report-v61-release2",answers:profile.answers });
+    const delivered = commerce.openV61Purchase(current.envelope);
+    assert.equal(delivered.presentation.sections.length,6);
+    assert(delivered.presentation.sections.every(s=>s.blocks.length));
     const input = { questionVersion:"persona-questions-v3", reportVersion:"persona-report-v61-release1", answers:profile.answers };
     if (result.after.state === "ready") {
       const prepared = commerce.prepareV61Checkout(input);

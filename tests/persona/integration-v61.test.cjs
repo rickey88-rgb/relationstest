@@ -15,7 +15,7 @@ test("V6.1 uses the existing encrypted checkout/account lifecycle without changi
     await t.test("capabilities retain V5 and advertise the gated V6.1 version",async()=>{
       const result=await(await r.request({action:"capabilities"})).json();
       const p=result.tests.find(p=>p.product==="persona_test");
-      assert.equal(p.reportVersion,"persona-report-v5");assert.deepEqual(p.additionalReportVersions,["persona-report-v61-release1"]);
+      assert.equal(p.reportVersion,"persona-report-v5");assert.deepEqual(p.additionalReportVersions,["persona-report-v61-release1","persona-report-v61-release2"]);
     });
     await t.test("limited, insufficient, forged and disabled requests never create Stripe sessions",async()=>{
       const size=r.sessions.size;
@@ -33,7 +33,7 @@ test("V6.1 uses the existing encrypted checkout/account lifecycle without changi
     await t.test("V6.1-only rollout never opens ordinary PERSONA sales",async()=>{
       process.env.TEST_ACCOUNTS_PERSONA_V61_ONLY="true";
       const caps=await(await r.request({action:"capabilities"})).json();
-      assert.deepEqual(caps.tests.find(p=>p.product==="persona_test").checkoutReportVersions,["persona-report-v61-release1"]);
+      assert.deepEqual(caps.tests.find(p=>p.product==="persona_test").checkoutReportVersions,["persona-report-v61-release1","persona-report-v61-release2"]);
       const count=r.sessions.size;
       assert.equal((await r.request({action:"checkout",product:"persona_test",payload:payloadFor(r.load),consent})).status,503);
       await assert.rejects(()=>r.store.createAttempt("persona_test",payloadFor(r.load),"synthetic",r.price,consent));
@@ -114,22 +114,21 @@ test("draft restores all 40 answers and supplements; malformed versions and IDs 
   for(const raw of [{...d,reportVersion:"old"},{...d,answers:[1]},{...d,supplement:{S05:"forged"}}])
     assert.throws(()=>draft.restoreDraft(JSON.stringify(raw)));
 });
-test("public server analysis exposes one insight only and never sells limited or insufficient profiles",async()=>{
+test("corrected public analysis offers complete profiles without exposing the report or offering supplements",async()=>{
   process.env.TEST_ACCOUNTS_PERSONA_V61_ENABLED="true";
   const action=createLoader({...overrides,"next/navigation":{notFound:()=>{throw Error("404");}}})(path.join(root,"app/persona-v61/actions.ts"));
   for(const id of ["F01","F04","F19","F21","F23","F24"]){
-    const result=await action.analyzePersonaV61(input(id));
-    assert.deepEqual(Object.keys(result).sort(),["description","questions","state","text","title"]);
+    const result=await action.analyzePersonaV61({...input(id),reportVersion:"persona-report-v61-release2"});
+    assert.deepEqual(Object.keys(result).sort(),["canPurchase","description","questions","state","text","title"]);
     assert.equal(result.state,snapshot.completeReport(input(id).answers).after.state);
-    assert(result.questions.length<=4);
+    assert.equal(result.questions.length,0);assert.equal(result.canPurchase,true);
     assert(result.text.length>30);
-    if(result.state!=="ready")assert.match(result.description,/inget|inte|begränsat/i);
   }
   const extra={questionVersion:"persona-supplement-questions-v1",answers:{S01:"context",S02:"writing",S03:"asked",S04:"preserve"}};
-  const result=await action.analyzePersonaV61({...input("F24"),supplement:extra});
+  const result=await action.analyzePersonaV61({...input("F24"),reportVersion:"persona-report-v61-release2",supplement:extra});
   assert.notEqual(result.state,"ready");
   delete process.env.TEST_ACCOUNTS_PERSONA_V61_ENABLED;
-  await assert.rejects(()=>action.analyzePersonaV61(input("F01")));
+  await assert.rejects(()=>action.analyzePersonaV61({...input("F01"),reportVersion:"persona-report-v61-release2"}));
 });
 
 test("the unlinked entry defaults to 404 and does not load a report without its release flag",()=>{
