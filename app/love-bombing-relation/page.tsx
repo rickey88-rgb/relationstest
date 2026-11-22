@@ -180,6 +180,8 @@ export default function LoveBombingRelationPage() {
             det är love bombing. Titta framför allt på om du får behålla ditt eget
             tempo och hur personen reagerar när du säger nej. Begreppet beskriver
             beteenden, inte en diagnos eller en säker slutsats om någons avsikt.
+            Om du försöker förstå kopplingen till personlighet kan du läsa om{" "}
+            <Link href="/narcissism" className="underline underline-offset-4">narcissistiska drag och vad begreppet narcissism betyder</Link>.
           </p>
 
           <div className="mt-8 grid gap-3 sm:grid-cols-2 md:grid-cols-4">

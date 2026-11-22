@@ -376,7 +376,8 @@ export default function Page() {
         </p>
 
         <p>
-          För att förstå begreppen bättre kan du också läsa{" "}
+          För en bakgrund till personlighetsbegreppet finns huvudguiden om{" "}
+          <Link href="/narcissism" className="underline">narcissism och narcissistiska drag</Link>. Du kan också läsa{" "}
           <Link href="/skillnad-psykopat-narcissist" className="underline">
             skillnaden mellan psykopat och narcissist
           </Link>{" "}

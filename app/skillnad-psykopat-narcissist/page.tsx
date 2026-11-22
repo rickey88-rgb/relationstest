@@ -48,6 +48,7 @@ export default function Page() {
         </p>
 
         <p>
+          Huvudguiden om <Link href="/narcissism" className="underline underline-offset-4">narcissism</Link> förklarar skillnaden mellan drag och personlighetssyndrom.
           För en närmare bild av hur dragen kan märkas i vardagen, läs om{" "}
           <Link href="/narcissist-i-en-relation" className="underline underline-offset-4">narcissistiska drag i en relation</Link>
           .

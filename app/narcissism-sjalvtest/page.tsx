@@ -4,13 +4,15 @@ import Link from "next/link";
 import { GuideSection, textLink } from "../_components/ContentGuide";
 
 const url = "https://www.relationsvarning.se/narcissism-sjalvtest";
+const title = "Narcissist test – självtest om dina egna narcissistiska drag";
+const description = "Är jag narcissist? Utforska dina egna narcissistiska drag med 30 frågor om självbild, bekräftelse, empati och kritik. Självtestet ställer ingen diagnos.";
 export const metadata: Metadata = {
-  title: "Narcissist test – självtest för narcissistiska drag | Relationsvarning",
-  description: "Gör ett narcissism självtest med 30 frågor. Se dina narcissistiska drag inom sex områden och få en personlig profil av dina relationsmönster.",
+  title,
+  description,
   alternates: { canonical: url },
   openGraph: {
-    title: "Narcissism självtest – hur starka narcissistiska drag har du?",
-    description: "30 frågor ger en personlig profil över bland annat självbild, bekräftelsebehov, empati, kritik och relationsmönster.",
+    title,
+    description,
     url, type: "website", locale: "sv_SE", siteName: "Relationsvarning",
   },
 };
@@ -23,9 +25,9 @@ const areas = [
   ["Strategiskt inflytande", "Hur mycket du använder exempelvis skuld, charm, information eller kommunikation för att påverka andra."],
 ];
 const faq = [
-  ["Är jag narcissist?", "Narcissistiska drag finns på ett spektrum. Självtestet hjälper dig se hur starka olika narcissistiska mönster är hos dig och vilka områden som är mest framträdande."],
+  ["Är jag narcissist?", "Ett självtest kan inte avgöra om du har narcissistiskt personlighetssyndrom. Det här testet sammanställer dina egna svar om narcissistiska drag inom sex områden. Resultatet är ett underlag för reflektion, inte en diagnos."],
   ["Vad är narcissistiska drag?", "Det kan bland annat handla om grandiositet, behov av bekräftelse, berättigande, känslighet för kritik, låg ömsesidighet eller ett starkt behov av inflytande i relationer."],
-  ["Vad är sårbar narcissism?", "Sårbara narcissistiska drag kan exempelvis visa sig genom stark känslighet för kritik, skam, avvisande och ett stort behov av andras bekräftelse."],
+  ["Vad är sårbar narcissism?", "Sårbara narcissistiska drag kan bland annat handla om känslighet för kritik, skam och ett stort behov av andras bekräftelse. Sådana upplevelser räcker inte ensamma för att beskriva någon som narcissistisk."],
   ["Vad är grandios narcissism?", "Grandiosa drag är oftare kopplade till stark självbild, känsla av särskildhet, behov av erkännande och förväntningar på särskild behandling."],
   ["Kan man ha narcissistiska drag utan att vara narcissist?", "Ja. Narcissistiska personlighetsdrag förekommer i olika grad och behöver inte innebära ett psykiatriskt tillstånd."],
   ["Hur fungerar narcissism självtestet?", "Du svarar på 30 påståenden. Svaren analyseras inom sex områden och sammanställs till en övergripande nivå och en personlig profil."],
@@ -50,11 +52,12 @@ export default function NarcissismSelfTestLanding() {
     <article>
       <header className="mt-5">
         <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">NARCISSISM – SJÄLVTEST</p>
-        <h1 className="mt-3 text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">Hur starka narcissistiska drag har du?</h1>
-        <p className="mt-5 leading-7 text-neutral-700">Narcissistiska drag finns i olika grad hos de flesta människor. Det här självtestet hjälper dig se hur dina egna mönster ser ut inom bland annat självbild, bekräftelsebehov, empati, känslighet för kritik och relationer.</p>
+        <h1 className="mt-3 text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">Narcissismtest om dina egna drag</h1>
+        <p className="mt-5 leading-7 text-neutral-700">Funderar du på frågan ”är jag narcissist?” Här svarar du på 30 frågor om hur du själv brukar tänka, känna och agera inom självbild, bekräftelsebehov, empati, kritik och relationer. Självtestet sammanfattar dina svar; det kan inte avgöra om du har en personlighetsstörning.</p>
         <ul className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-sm text-neutral-600"><li>30 frågor</li><li>ca 5 minuter</li><li>6 personliga delresultat</li></ul>
         <div className="mt-6"><Link data-rv="button" href="/narcissism-sjalvtest/test" className={cta}>Starta självtestet</Link><p className="mt-3 text-sm text-neutral-600">Ingen registrering krävs</p></div>
       </header>
+      <p className="mt-6 text-sm leading-7 text-neutral-700">Vill du först förstå begreppen? Läs huvudguiden om <Link href="/narcissism" className={textLink}>narcissism, personlighetsdrag och diagnos</Link>. Gäller frågan en partner finns i stället <Link href="/narcissist-i-en-relation" className={textLink}>guiden och testet om narcissistiska relationsmönster</Link>.</p>
       <GuideSection title={'Ett mer nyanserat test än bara “är du narcissist?”'}>
         <p>Narcissism handlar inte om en enda egenskap. Två personer kan få liknande totalresultat men ha helt olika mönster. En person kan främst söka bekräftelse och reagera starkt på kritik, medan en annan visar mer grandiositet, berättigande eller strategiskt inflytande i relationer.</p>
         <div className="grid gap-4 sm:grid-cols-2">{areas.map(([title,text]) => <div data-rv="card" key={title} className={card}><h3 className="font-semibold text-neutral-900">{title}</h3><p className="mt-2 text-sm leading-6">{text}</p></div>)}</div>
@@ -81,7 +84,7 @@ export default function NarcissismSelfTestLanding() {
       ].map(([title,text]) => <div key={title}><dt className="font-semibold text-neutral-900">{title}</dt><dd>{text}</dd></div>)}</dl><p className="text-sm">Efter testet visas din övergripande nivå och en kort profilindikation. Den fullständiga analysen kan låsas upp för 39 kr som engångsbetalning utan prenumeration.</p></GuideSection>
       <GuideSection title="Nyfiken på din egen profil?"><p>30 frågor ger dig en detaljerad bild av hur narcissistiska drag kan visa sig hos dig.</p><Link data-rv="button" href="/narcissism-sjalvtest/test" className={cta}>Starta narcissism självtest</Link><p className="text-sm">Tar cirka 5 minuter</p><p className="text-sm">Försöker du istället förstå en partners beteende? <Link href="/narcissist-i-en-relation/test" className={textLink}>Gör testet om narcissistiska beteendemönster hos en partner.</Link></p></GuideSection>
       <div id="faq"><GuideSection title="Vanliga frågor">{faq.map(([question,answer]) => <div key={question}><h3 className="text-lg font-semibold text-neutral-900">{question}</h3><p className="mt-2">{answer}</p></div>)}</GuideSection></div>
-      <p className="mt-8 text-sm leading-6 text-neutral-600">Självtestet beskriver narcissistiska drag och mönster och ställer inte psykiatriska diagnoser.</p>
+      <p className="mt-8 text-sm leading-6 text-neutral-600">Självtestet beskriver narcissistiska drag och mönster och ställer inte psykiatriska diagnoser. Procenttalen är nivåer beräknade enligt testets egna regler, inte sannolikheten för en diagnos. Läs om modellernas begränsningar på sidan om <Link href="/metodik" className={textLink}>vår metodik</Link>.</p>
     </article>
   </main></EditorialSurface>;
 }

@@ -636,6 +636,8 @@ export default function Page() {
               Orden används ofta om närliggande upplevelser i vardagligt språk. De är inte
               medicinska diagnoser och säger inte automatiskt något om en juridisk bedömning.
               Det viktiga är vilka beteenden som återkommer och vilken effekt de får.
+              Om du söker en förklaring i personlighetstermer finns en separat guide om{" "}
+              <Link href="/narcissism" className="underline underline-offset-4">narcissism, drag och diagnos</Link>.
             </p>
           </div>
 

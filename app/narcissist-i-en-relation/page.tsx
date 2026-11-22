@@ -5,15 +5,15 @@ import Image from "next/image";
 import { EditorialArticleJsonLd, getEditorialArticleSchema, getEditorialMetadata } from "../_seo/editorialSeo";
 
 const title = "Narcissist i en relation – tecken, beteenden och varningssignaler";
-const description = "Hur känns det att leva nära någon med narcissistiska drag? En djupgående guide om mönster, varningssignaler, kontroll, skuld, charm och känslomässig påverkan i relationer.";
+const description = "Lever du med en narcissist? Läs om narcissistiska mönster hos en partner och gå vidare till partnertestet med 30 frågor om din relation. Testet ställer ingen diagnos.";
 
 export const metadata: Metadata = {
   title,
   description,
-  ...getEditorialMetadata({ route: "/narcissist-i-en-relation", title, description, datePublished: "2026-03-23T15:32:34+01:00", dateModified: "2026-09-09T20:11:31+02:00" }),
+  ...getEditorialMetadata({ route: "/narcissist-i-en-relation", title, description, datePublished: "2026-03-23T15:32:34+01:00", dateModified: "2026-11-22" }),
 };
 
-const articleJsonLd = getEditorialArticleSchema({ route: "/narcissist-i-en-relation", title, description, datePublished: "2026-03-23T15:32:34+01:00", dateModified: "2026-09-09T20:11:31+02:00" });
+const articleJsonLd = getEditorialArticleSchema({ route: "/narcissist-i-en-relation", title, description, datePublished: "2026-03-23T15:32:34+01:00", dateModified: "2026-11-22" });
 
 function TestCta({
   title,
@@ -57,15 +57,15 @@ export default function NarcissistRelationPage() {
               href="/narcissist-i-en-relation/test"
               className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-neutral-900 px-5 py-3 text-center text-sm font-medium text-white transition hover:bg-neutral-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 sm:w-auto"
             >
-              Gör narcissisttestet
+              Starta partnertestet
             </Link>
           </div>
           <p className="mt-6 text-lg leading-8 text-neutral-700">
-            Vissa relationer gör inte bara ont när ni bråkar. De börjar långsamt
-            förändra hur du tänker, hur du tolkar dig själv och vad du tror att
-            du förtjänar. Det är det som gör den här typen av dynamik så svår att
-            sätta ord på. På utsidan kan allt se ganska normalt ut. På insidan
-            kan det ändå kännas som att marken under dig rör sig.
+            Funderar du på om du lever med en narcissist? Den här guiden handlar
+            om beteenden du upplever hos en partner och hur relationen påverkar
+            dig. Partnertestet med 30 frågor hjälper dig att strukturera dina
+            observationer. Det kan inte avgöra vilken personlighet eller diagnos
+            din partner har.
           </p>
           <p className="mt-4 text-lg leading-8 text-neutral-700">
             Många använder ordet <em>narcissist</em> för snabbt. Alla själviska,
@@ -83,6 +83,7 @@ export default function NarcissistRelationPage() {
             diagnos.
           </p>
           <p className="mt-4 text-sm leading-6 text-neutral-700">Undrar du istället över dina egna narcissistiska drag? <Link href="/narcissism-sjalvtest" className="underline underline-offset-4">Gör vårt narcissism självtest.</Link></p>
+          <p className="mt-4 text-sm leading-6 text-neutral-700">För begreppen bakom relationsmönstren, läs huvudguiden om <Link href="/narcissism" className="underline underline-offset-4">narcissism och skillnaden mellan drag och personlighetssyndrom</Link>.</p>
         </header>
 
         <figure className="mt-8 overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50">
@@ -596,7 +597,7 @@ export default function NarcissistRelationPage() {
               href="/narcissist-i-en-relation/test"
               className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-neutral-900 px-5 py-3 text-center text-sm font-medium text-white transition hover:bg-neutral-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 sm:w-auto"
             >
-              Gör narcissisttestet
+              Starta partnertestet
             </Link>
           </div>
         </section>

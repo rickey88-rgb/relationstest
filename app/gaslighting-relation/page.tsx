@@ -67,6 +67,8 @@ export default function GaslightingRelationPage() {
             och börja tro att du behöver “bevis” för att få ta dina känslor på allvar.
             Att bli <em>gaslightad</em> betyder i vardagligt språk att påverkas av ett sådant
             mönster; en <em>gaslighter</em> är den som utövar beteendet, inte en diagnos.
+            För skillnaden mellan beteenden, personlighetsdrag och diagnos finns en separat guide om{" "}
+            <Link href="/narcissism" className="underline underline-offset-4">narcissism</Link>.
           </p>
           <p className="leading-7">
             Om stressen följs av tankar som fortsätter kretsa även utanför situationen kan du läsa mer om <Link href="/standig-oro" className="underline underline-offset-4">ständig oro</Link>.

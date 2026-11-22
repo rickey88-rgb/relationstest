@@ -166,7 +166,8 @@ export default function Page() {
           uppstår. Du kan inte avgöra det utifrån en lista med tecken eller ett
           relationstest. Beteendet kan ha olika orsaker, men de går inte att fastställa
           utifrån några relationshändelser. Du behöver heller inte en diagnos på din partner för att
-          ta din egen rädsla eller begränsade frihet på allvar.
+          ta din egen rädsla eller begränsade frihet på allvar. Om du undrar över
+          personlighetsbegreppet förklarar huvudguiden om <Link href="/narcissism" className="underline underline-offset-4">narcissism</Link> skillnaden mellan drag och personlighetssyndrom.
         </p>
 
         <h2 className="text-2xl font-semibold">

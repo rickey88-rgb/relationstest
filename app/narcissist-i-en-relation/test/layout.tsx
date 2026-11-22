@@ -3,9 +3,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Narcissist test – lever du med en narcissist?",
+  title: "Lever jag med en narcissist? Test med 30 frågor",
   description:
-    "Gör vårt narcissisttest med 30 frågor och undersök narcissistiska relationsmönster som manipulation, empatibrist, nedvärdering och starka reaktioner på kritik.",
+    "Partnertest med 30 frågor om de beteenden du upplever i din relation. Reflektera över narcissistiska relationsmönster utan att ställa diagnos på din partner.",
   alternates: {
     canonical: "https://www.relationsvarning.se/narcissist-i-en-relation/test",
   },
@@ -43,10 +43,10 @@ export default function Layout({
             color: "#444",
           }}
         >
-          Testet hjälper dig identifiera återkommande narcissistiska
-          relationsmönster – exempelvis starkt bekräftelsebehov,
-          berättigandekänsla, bristande ömsesidighet, manipulation,
-          nedvärdering och kraftiga reaktioner på kritik.
+          Det här partnertestet handlar om de beteenden du upplever i din
+          relation. Svara på 30 frågor om bland annat bekräftelsebehov,
+          ömsesidighet, nedvärdering och reaktioner på kritik. Dina svar
+          beskriver din upplevelse, inte en klinisk bedömning av partnern.
         </p>
 
         <div data-flow="inset"
