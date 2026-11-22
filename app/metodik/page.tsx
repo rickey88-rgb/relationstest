@@ -18,7 +18,7 @@ const testMethodGroups: { title: string; description: string; tests: MethodTest[
       { href: "/autism-test/test", title: "Autismtest", description: "Sex områden räknas om till jämförbara nivåer. Fasta regler läser socialt samspel, kommunikation, flexibilitet, sensorik, intressen och vardag som en samlad profil." },
       { href: "/audhd-test/test", title: "AuDHD-test", description: "Åtta områden analyseras i två sammansatta index för ADHD- och autismrelaterade drag, med viktning för de delar som ingår i respektive index." },
       { href: "/hsp-test/test", title: "HSP-test", description: "Sex lika stora områden jämförs för att visa om känslighet, återhämtning och bearbetning är jämna, tydliga eller kontrasterande." },
-      { href: "/iq-test/test", title: "IQ-test", description: "Fem kognitiva områden och tre svårighetsnivåer ger ett orienterande estimat och en profil av relativa styrkor och svagheter." },
+      { href: "/iq-test#sa-beraknas-iq-estimatet", title: "IQ-test – beräkning och begränsningar", description: "40 uppgifter viktas efter svårighetsnivå. Summan omvandlas till ett estimat på en skala från 75 till 130 och avrundas till femtal. Inga normdata används." },
     ],
   },
   {
