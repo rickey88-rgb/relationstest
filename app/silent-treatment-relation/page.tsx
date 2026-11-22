@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 const warningSigns = [
   "Personen stänger plötsligt av kontakten efter konflikt, kritik eller när du inte gjort som personen vill.",
   "Du får ingen rimlig förklaring till varför tystnaden pågår – bara kyla, distans eller total frånvaro av respons.",
-  "Tystnaden verkar inte handla om att lugna ner sig, utan om att du ska känna skuld, oro eller börja jaga kontakt.",
+  "Kontakten återupptas först när du ber om ursäkt eller går med på ett krav, medan frågan du ville ta upp förblir olöst.",
   "När du försöker reda ut situationen möts du av ännu mer avstånd, korta svar, blickar, suckar eller total ignorering.",
   "Du märker att du snabbt börjar anpassa dig för att undvika nästa tystnadsperiod.",
   "Tystnaden kommer tillbaka som ett återkommande mönster, särskilt när du sätter gränser eller tar upp något känsligt.",
@@ -163,20 +163,17 @@ export default function SilentTreatmentRelationPage() {
           </h1>
 
           <p className="mt-6 max-w-3xl text-lg leading-8 text-neutral-700 md:text-xl">
-            Silent treatment, ofta kallat straffande tystnad på svenska, kan på ytan
-            se stillsamt ut. Det finns inga skrik, inga stora ord, ibland inte ens
-            någon tydlig konflikt. Men för den som utsätts kan just tystnaden bli det
-            som skapar mest oro. När kontakt, värme eller normal kommunikation
-            plötsligt dras bort kan hela relationens tyngdpunkt förskjutas: från det
-            som hände – till jakten på att få tillbaka lugnet.
+            Silent treatment brukar kallas straffande tystnad eller tyst behandling
+            på svenska. Det innebär att någon drar undan kontakt eller svar för att
+            bestraffa eller sätta press på den andra. I ett förhållande kan det märkas
+            som att bli ignorerad efter ett gräl eller få kontakt igen först när man ger efter.
           </p>
 
           <p className="mt-4 max-w-3xl text-lg leading-8 text-neutral-700">
-            På den här sidan går vi igenom vad silent treatment brukar innebära i en
-            relation, hur det skiljer sig från att någon bara behöver lugna ner sig,
-            vilka tidiga tecken som är vanliga och varför mönstret kan bli så starkt
-            att leva i. Tystnad ser ofta mindre allvarlig ut utifrån än den känns
-            inifrån. Just därför är den viktig att förstå.
+            Tystnad i sig visar däremot inte vad någon vill uppnå. Stress,
+            överväldigande känslor eller behov av återhämtning kan också göra det svårt
+            att prata. Här får du exempel och nästa steg, med fokus på vad som händer
+            över tid och om ni kan återuppta kontakten med respekt för bådas behov.
           </p>
 
           <div className="mt-8 grid gap-3 sm:grid-cols-2 md:grid-cols-4">
@@ -210,6 +207,25 @@ export default function SilentTreatmentRelationPage() {
 
       <section data-rv="container" className="mx-auto max-w-4xl px-6 py-14">
         <article className="space-y-14">
+          <section data-rv="card" className="rounded-3xl border border-neutral-200 bg-neutral-50 p-7 md:p-8 space-y-5">
+            <h2 className="text-2xl font-semibold tracking-tight text-neutral-950">
+              Exempel och första steg
+            </h2>
+            <ul className="list-disc pl-6 space-y-3 text-[1.02rem] leading-8 text-neutral-700">
+              <li><strong>Bestraffande tystnad:</strong> partnern säger att ni inte kommer att prata förrän du går med på ett krav. Kontakten används då som påtryckning.</li>
+              <li><strong>Behov av paus:</strong> partnern säger att samtalet blivit överväldigande och föreslår att ni försöker igen efter middagen. Sedan återkommer ni till frågan.</li>
+            </ul>
+            <p className="text-[1.02rem] leading-8 text-neutral-700">
+              Det här är exempel, inte ett test av någons avsikt. Ett uteblivet svar
+              räcker inte för att skilja mönstren åt. Läs mer om <Link href="#paus-eller-tystnad" className="underline underline-offset-4">skillnaden mellan paus och bestraffande tystnad</Link> eller gå till <Link href="#vad-gora" className="underline underline-offset-4">fler sätt att bemöta situationen</Link>.
+            </p>
+            <div className="rounded-2xl border border-neutral-200 bg-neutral-50 p-5 space-y-3">
+              <h3 className="text-xl font-semibold">Ett konkret sätt att föreslå en paus</h3>
+              <p>Om det känns tryggt kan du säga: ”Vi kan ta en paus nu. Kan vi bestämma när vi fortsätter prata?” Lägg märke till om personen återkommer och om ni båda får utrymme i samtalet. Du behöver inte ta hela ansvaret för att kontakten ska fungera.</p>
+              <p>Om du är rädd för reaktionen, sök <Link href="/psykiskt-vald/hjalp" className="underline underline-offset-4">stöd utanför relationen</Link> i stället för att pröva en konfrontation. Läs också om <Link href="/beteenden/partner-ignorerar-mig-som-straff" className="underline underline-offset-4">när partnern ignorerar dig som straff</Link>.</p>
+            </div>
+          </section>
+
           <section id="vad-ar" className="space-y-5">
             <h2 className="text-3xl font-semibold tracking-tight text-neutral-950">
               Vad betyder silent treatment på svenska?
@@ -281,18 +297,7 @@ export default function SilentTreatmentRelationPage() {
             </div>
           </section>
 
-          <section data-rv="card" className="rounded-3xl border border-neutral-200 bg-neutral-50 p-7 md:p-8">
-            <h2 className="text-2xl font-semibold tracking-tight text-neutral-950">
-              Kort sagt
-            </h2>
-            <p className="mt-4 text-[1.02rem] leading-8 text-neutral-700">
-              Silent treatment är ofta inte bara frånvaro av ord. Det kan innebära frånvaro av
-              trygghet, förklaring och kontakt på ett sätt som gör att du börjar jaga
-              lugnet. När tystnad får dig att krympa, gissa eller be om att bli
-              insläppt igen, har den redan fått större makt än den borde ha i en sund
-              relation.
-            </p>
-          </section>
+
 
           <section id="tecken" className="space-y-6">
             <h2 className="text-3xl font-semibold tracking-tight text-neutral-950">
@@ -342,7 +347,7 @@ export default function SilentTreatmentRelationPage() {
             </div>
           </section>
 
-          <section className="space-y-6">
+          <section id="paus-eller-tystnad" className="space-y-6">
             <h2 className="text-3xl font-semibold tracking-tight text-neutral-950">
               Silent treatment eller behov av paus – vad är skillnaden?
             </h2>
@@ -380,10 +385,11 @@ export default function SilentTreatmentRelationPage() {
 
             <div className="space-y-5 text-[1.05rem] leading-8 text-neutral-700">
               <p>
-                En mogen paus säger i praktiken: “Jag behöver lugna mig, men jag lämnar
-                inte dig i ovisshet.” Silent treatment säger ofta något helt annat,
-                även när det inte sägs med ord: “Du får inte tillgång till mig nu – och
-                du får själv känna efter hur obehagligt det är.”
+                Någon som är överväldigad kan ha svårt att förklara sitt behov av paus
+                i stunden. Det gör inte automatiskt tystnaden bestraffande. Se också
+                på vad som händer efteråt: går det att prata om pausen och komma
+                överens om hur ni tar upp samtalet igen? Återkommande krav på att du
+                måste ge efter för att få kontakt är en annan situation.
               </p>
 
               <p>
@@ -633,11 +639,7 @@ export default function SilentTreatmentRelationPage() {
               kvar i akutläget. När du börjar se strukturen försvagas dess grepp lite.
             </p>
 
-            <div className="rounded-2xl border border-neutral-200 bg-neutral-50 p-5 space-y-3">
-              <h3 className="text-xl font-semibold">Ett konkret sätt att föreslå en paus</h3>
-              <p>Om det känns tryggt kan du säga: ”Vi kan ta en paus nu. Kan vi bestämma när vi fortsätter prata?” Lägg märke till om personen återkommer och om ni båda får utrymme i samtalet. Du behöver inte ta hela ansvaret för att kontakten ska fungera.</p>
-              <p>Om du är rädd för reaktionen, sök <Link href="/psykiskt-vald/hjalp" className="underline underline-offset-4">stöd utanför relationen</Link> i stället för att pröva en konfrontation. Läs också om <Link href="/beteenden/partner-ignorerar-mig-som-straff" className="underline underline-offset-4">när partnern ignorerar dig som straff</Link>.</p>
-            </div>
+
 
             <div className="grid gap-4">
               {whatToDo.map((item, index) => (

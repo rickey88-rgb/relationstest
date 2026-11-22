@@ -1,0 +1,935 @@
+{
+  "capturedAt": "2026-11-22T21:00:04.678Z",
+  "base": "e674971406062181cd6de00758c8ea7cea1c85ca",
+  "collectedAt": "2026-11-22T18:35:10.625Z",
+  "periods": [
+    [
+      "new28",
+      "2026-10-24",
+      "2026-11-20"
+    ],
+    [
+      "new90",
+      "2026-08-23",
+      "2026-11-20"
+    ],
+    [
+      "old28",
+      "2026-10-09",
+      "2026-11-05"
+    ],
+    [
+      "old90",
+      "2026-08-08",
+      "2026-11-05"
+    ],
+    [
+      "post",
+      "2026-11-08",
+      "2026-11-20"
+    ],
+    [
+      "pre",
+      "2026-10-25",
+      "2026-11-06"
+    ]
+  ],
+  "property": "sc-domain:relationsvarning.se",
+  "pages": [
+    {
+      "path": "/kontrollerande-relation",
+      "status": 200,
+      "canonical": "https://www.relationsvarning.se/kontrollerande-relation",
+      "title": "Kontrollerande partner – tecken på kontrollerande beteende",
+      "description": "Tecken på en kontrollerande partner och kontrollbehov i relationer. Se skillnaden mellan omtanke och kontroll, konkreta exempel och vägar till stöd.",
+      "noindex": false,
+      "hasMain": true,
+      "headings": [
+        {
+          "level": 1,
+          "text": "Kontrollerande partner – tecken du bör vara uppmärksam på"
+        },
+        {
+          "level": 2,
+          "text": "Vad innebär kontrollerande beteende?"
+        },
+        {
+          "level": 2,
+          "text": "Tecken på att du lever med en kontrollerande partner"
+        },
+        {
+          "level": 2,
+          "text": "Kontrollbehov i en relation – när blir det ett problem?"
+        },
+        {
+          "level": 2,
+          "text": "Subtil kontroll och gradvis gränsförskjutning"
+        },
+        {
+          "level": 2,
+          "text": "När kontroll kan bli psykisk misshandel"
+        },
+        {
+          "level": 2,
+          "text": "Omtanke eller kontroll?"
+        },
+        {
+          "level": 2,
+          "text": "Är kontrollerande beteende en diagnos?"
+        },
+        {
+          "level": 2,
+          "text": "Kan både kvinnor och män vara kontrollerande?"
+        },
+        {
+          "level": 2,
+          "text": "När kontroll kombineras med manipulation"
+        },
+        {
+          "level": 2,
+          "text": "Vad kan du göra om du känner igen mönstret?"
+        },
+        {
+          "level": 2,
+          "text": "Så kan du beskriva kontrollen när du söker stöd"
+        },
+        {
+          "level": 2,
+          "text": "Finns det ett test för en kontrollerande partner?"
+        },
+        {
+          "level": 2,
+          "text": "Vill du reflektera över fler mönster i relationen?"
+        },
+        {
+          "level": 2,
+          "text": "Läs också"
+        }
+      ]
+    },
+    {
+      "path": "/silent-treatment-relation",
+      "status": 200,
+      "canonical": "https://www.relationsvarning.se/silent-treatment-relation",
+      "title": "Silent treatment på svenska – straffande tystnad i relationer",
+      "description": "Vad betyder silent treatment? Läs om straffande tystnad i en relation, skillnaden mot en sund paus och hur du kan bemöta mönstret och söka stöd.",
+      "noindex": false,
+      "hasMain": true,
+      "headings": [
+        {
+          "level": 1,
+          "text": "Silent treatment på svenska – straffande tystnad i relationer"
+        },
+        {
+          "level": 2,
+          "text": "Vad betyder silent treatment på svenska?"
+        },
+        {
+          "level": 2,
+          "text": "Kort sagt"
+        },
+        {
+          "level": 2,
+          "text": "Tidiga tecken på silent treatment"
+        },
+        {
+          "level": 2,
+          "text": "Silent treatment eller behov av paus – vad är skillnaden?"
+        },
+        {
+          "level": 3,
+          "text": "Att behöva lugna ner sig"
+        },
+        {
+          "level": 3,
+          "text": "Silent treatment"
+        },
+        {
+          "level": 3,
+          "text": "Att ta space på ett moget sätt"
+        },
+        {
+          "level": 3,
+          "text": "Silent treatment"
+        },
+        {
+          "level": 2,
+          "text": "Vilka konsekvenser kan silent treatment få?"
+        },
+        {
+          "level": 3,
+          "text": "Det som ser litet ut utifrån kan bli enormt inuti"
+        },
+        {
+          "level": 2,
+          "text": "Hur mönstret ofta utvecklas över tid"
+        },
+        {
+          "level": 2,
+          "text": "Varför det blir så svårt att lämna eller ens sätta ord på"
+        },
+        {
+          "level": 2,
+          "text": "När silent treatment blir ett sätt att styra dig"
+        },
+        {
+          "level": 2,
+          "text": "Hur kan du bemöta silent treatment?"
+        },
+        {
+          "level": 3,
+          "text": "Ett konkret sätt att föreslå en paus"
+        },
+        {
+          "level": 2,
+          "text": "När du bör ta situationen på större allvar"
+        },
+        {
+          "level": 2,
+          "text": "Vanliga frågor om silent treatment"
+        },
+        {
+          "level": 3,
+          "text": "Vad betyder silent treatment på svenska?"
+        },
+        {
+          "level": 3,
+          "text": "Är silent treatment samma sak som att någon behöver vara ifred?"
+        },
+        {
+          "level": 3,
+          "text": "Varför gör silent treatment så ont?"
+        },
+        {
+          "level": 3,
+          "text": "Är silent treatment ett tecken på manipulation?"
+        },
+        {
+          "level": 3,
+          "text": "Är silent treatment en härskarteknik?"
+        },
+        {
+          "level": 3,
+          "text": "Kan silent treatment komma efter love bombing?"
+        },
+        {
+          "level": 3,
+          "text": "Hur vet jag om jag överreagerar?"
+        },
+        {
+          "level": 2,
+          "text": "Sammanfattning"
+        },
+        {
+          "level": 2,
+          "text": "Nästa steg"
+        },
+        {
+          "level": 3,
+          "text": "Relaterat"
+        },
+        {
+          "level": 3,
+          "text": "Vill du undersöka relationen bredare?"
+        }
+      ]
+    }
+  ],
+  "metrics": {
+    "new28all": {
+      "pageRows": [
+        {
+          "keys": [
+            "https://www.relationsvarning.se/kontrollerande-relation"
+          ],
+          "clicks": 97,
+          "impressions": 2704,
+          "ctr": 0.03587278106508876,
+          "position": 5.2640532544378695
+        },
+        {
+          "keys": [
+            "https://www.relationsvarning.se/silent-treatment-relation"
+          ],
+          "clicks": 49,
+          "impressions": 3197,
+          "ctr": 0.015326868939630905,
+          "position": 6.059743509540194
+        }
+      ],
+      "queryRows": [
+        {
+          "keys": [
+            "kontrollerande beteende"
+          ],
+          "clicks": 6,
+          "impressions": 51,
+          "ctr": 0.11764705882352941,
+          "position": 7.196078431372549
+        },
+        {
+          "keys": [
+            "kontrollerande partner"
+          ],
+          "clicks": 6,
+          "impressions": 118,
+          "ctr": 0.05084745762711865,
+          "position": 4.305084745762712
+        },
+        {
+          "keys": [
+            "silent treatment i förhållande"
+          ],
+          "clicks": 5,
+          "impressions": 59,
+          "ctr": 0.0847457627118644,
+          "position": 4.847457627118644
+        },
+        {
+          "keys": [
+            "silent treatment svenska"
+          ],
+          "clicks": 4,
+          "impressions": 243,
+          "ctr": 0.01646090534979424,
+          "position": 5.728395061728395
+        },
+        {
+          "keys": [
+            "silent treatment"
+          ],
+          "clicks": 2,
+          "impressions": 122,
+          "ctr": 0.01639344262295082,
+          "position": 7.909836065573771
+        }
+      ],
+      "pairs": [
+        {
+          "keys": [
+            "kontrollerande beteende",
+            "https://www.relationsvarning.se/kontrollerande-relation"
+          ],
+          "clicks": 6,
+          "impressions": 48,
+          "ctr": 0.125,
+          "position": 3.7083333333333335
+        },
+        {
+          "keys": [
+            "kontrollerande partner",
+            "https://www.relationsvarning.se/kontrollerande-relation"
+          ],
+          "clicks": 6,
+          "impressions": 116,
+          "ctr": 0.05172413793103448,
+          "position": 4
+        },
+        {
+          "keys": [
+            "silent treatment i förhållande",
+            "https://www.relationsvarning.se/silent-treatment-relation"
+          ],
+          "clicks": 5,
+          "impressions": 59,
+          "ctr": 0.0847457627118644,
+          "position": 4.847457627118644
+        },
+        {
+          "keys": [
+            "silent treatment svenska",
+            "https://www.relationsvarning.se/silent-treatment-relation"
+          ],
+          "clicks": 4,
+          "impressions": 243,
+          "ctr": 0.01646090534979424,
+          "position": 5.728395061728395
+        },
+        {
+          "keys": [
+            "silent treatment",
+            "https://www.relationsvarning.se/silent-treatment-relation"
+          ],
+          "clicks": 2,
+          "impressions": 122,
+          "ctr": 0.01639344262295082,
+          "position": 7.909836065573771
+        },
+        {
+          "keys": [
+            "kontrollerande beteende",
+            "https://www.relationsvarning.se/beteenden"
+          ],
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 49.5
+        },
+        {
+          "keys": [
+            "kontrollerande beteende",
+            "https://www.relationsvarning.se/vald-i-nara-relation"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 90
+        },
+        {
+          "keys": [
+            "kontrollerande partner",
+            "https://www.relationsvarning.se/"
+          ],
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 29
+        },
+        {
+          "keys": [
+            "kontrollerande partner",
+            "https://www.relationsvarning.se/beteenden"
+          ],
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0,
+          "position": 18
+        },
+        {
+          "keys": [
+            "kontrollerande partner",
+            "https://www.relationsvarning.se/beteenden/partner-vill-veta-var-jag-ar"
+          ],
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0,
+          "position": 23.5
+        }
+      ]
+    },
+    "new90all": {
+      "pageRows": [
+        {
+          "keys": [
+            "https://www.relationsvarning.se/kontrollerande-relation"
+          ],
+          "clicks": 186,
+          "impressions": 5698,
+          "ctr": 0.03264303264303264,
+          "position": 6.065812565812566
+        },
+        {
+          "keys": [
+            "https://www.relationsvarning.se/silent-treatment-relation"
+          ],
+          "clicks": 84,
+          "impressions": 6168,
+          "ctr": 0.013618677042801557,
+          "position": 6.628242542153048
+        }
+      ],
+      "queryRows": [
+        {
+          "keys": [
+            "kontrollerande partner"
+          ],
+          "clicks": 12,
+          "impressions": 303,
+          "ctr": 0.039603960396039604,
+          "position": 7.006600660066007
+        },
+        {
+          "keys": [
+            "kontrollerande beteende"
+          ],
+          "clicks": 10,
+          "impressions": 143,
+          "ctr": 0.06993006993006994,
+          "position": 8.293706293706293
+        },
+        {
+          "keys": [
+            "silent treatment i förhållande"
+          ],
+          "clicks": 7,
+          "impressions": 121,
+          "ctr": 0.05785123966942149,
+          "position": 6.8264462809917354
+        },
+        {
+          "keys": [
+            "silent treatment svenska"
+          ],
+          "clicks": 5,
+          "impressions": 406,
+          "ctr": 0.012315270935960592,
+          "position": 7.943349753694581
+        },
+        {
+          "keys": [
+            "silent treatment"
+          ],
+          "clicks": 3,
+          "impressions": 143,
+          "ctr": 0.02097902097902098,
+          "position": 10.195804195804195
+        }
+      ],
+      "pairs": [
+        {
+          "keys": [
+            "kontrollerande partner",
+            "https://www.relationsvarning.se/kontrollerande-relation"
+          ],
+          "clicks": 12,
+          "impressions": 299,
+          "ctr": 0.04013377926421405,
+          "position": 6.568561872909699
+        },
+        {
+          "keys": [
+            "kontrollerande beteende",
+            "https://www.relationsvarning.se/kontrollerande-relation"
+          ],
+          "clicks": 10,
+          "impressions": 139,
+          "ctr": 0.07194244604316546,
+          "position": 6.618705035971223
+        },
+        {
+          "keys": [
+            "silent treatment i förhållande",
+            "https://www.relationsvarning.se/silent-treatment-relation"
+          ],
+          "clicks": 7,
+          "impressions": 121,
+          "ctr": 0.05785123966942149,
+          "position": 6.8264462809917354
+        },
+        {
+          "keys": [
+            "silent treatment svenska",
+            "https://www.relationsvarning.se/silent-treatment-relation"
+          ],
+          "clicks": 5,
+          "impressions": 406,
+          "ctr": 0.012315270935960592,
+          "position": 7.943349753694581
+        },
+        {
+          "keys": [
+            "silent treatment",
+            "https://www.relationsvarning.se/silent-treatment-relation"
+          ],
+          "clicks": 3,
+          "impressions": 143,
+          "ctr": 0.02097902097902098,
+          "position": 10.195804195804195
+        },
+        {
+          "keys": [
+            "kontrollerande beteende",
+            "https://www.relationsvarning.se/"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 50
+        },
+        {
+          "keys": [
+            "kontrollerande beteende",
+            "https://www.relationsvarning.se/beteenden"
+          ],
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0,
+          "position": 42.25
+        },
+        {
+          "keys": [
+            "kontrollerande beteende",
+            "https://www.relationsvarning.se/jag-ar-radd-att-min-partner-ska-sla-mig"
+          ],
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 79
+        },
+        {
+          "keys": [
+            "kontrollerande beteende",
+            "https://www.relationsvarning.se/vald-i-nara-relation"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 90
+        },
+        {
+          "keys": [
+            "kontrollerande partner",
+            "https://www.relationsvarning.se/"
+          ],
+          "clicks": 0,
+          "impressions": 5,
+          "ctr": 0,
+          "position": 39.4
+        },
+        {
+          "keys": [
+            "kontrollerande partner",
+            "https://www.relationsvarning.se/beteenden"
+          ],
+          "clicks": 0,
+          "impressions": 5,
+          "ctr": 0,
+          "position": 26.4
+        },
+        {
+          "keys": [
+            "kontrollerande partner",
+            "https://www.relationsvarning.se/beteenden/partner-vill-veta-var-jag-ar"
+          ],
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0,
+          "position": 23.5
+        },
+        {
+          "keys": [
+            "kontrollerande partner",
+            "https://www.relationsvarning.se/jag-ar-radd-att-min-partner-ska-sla-mig"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 70
+        },
+        {
+          "keys": [
+            "kontrollerande partner",
+            "https://www.relationsvarning.se/manipulativ-partner"
+          ],
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 73.5
+        }
+      ]
+    },
+    "new28sweMobile": {
+      "pageRows": [
+        {
+          "keys": [
+            "https://www.relationsvarning.se/silent-treatment-relation"
+          ],
+          "clicks": 11,
+          "impressions": 542,
+          "ctr": 0.02029520295202952,
+          "position": 6.367158671586716
+        },
+        {
+          "keys": [
+            "https://www.relationsvarning.se/kontrollerande-relation"
+          ],
+          "clicks": 9,
+          "impressions": 286,
+          "ctr": 0.03146853146853147,
+          "position": 6.601398601398602
+        }
+      ],
+      "queryRows": [
+        {
+          "keys": [
+            "silent treatment i förhållande"
+          ],
+          "clicks": 5,
+          "impressions": 55,
+          "ctr": 0.09090909090909091,
+          "position": 4.654545454545454
+        },
+        {
+          "keys": [
+            "kontrollerande beteende"
+          ],
+          "clicks": 4,
+          "impressions": 33,
+          "ctr": 0.12121212121212122,
+          "position": 4.242424242424242
+        },
+        {
+          "keys": [
+            "silent treatment svenska"
+          ],
+          "clicks": 4,
+          "impressions": 208,
+          "ctr": 0.019230769230769232,
+          "position": 5.8125
+        },
+        {
+          "keys": [
+            "kontrollerande partner"
+          ],
+          "clicks": 3,
+          "impressions": 105,
+          "ctr": 0.02857142857142857,
+          "position": 4.219047619047619
+        },
+        {
+          "keys": [
+            "silent treatment"
+          ],
+          "clicks": 2,
+          "impressions": 94,
+          "ctr": 0.02127659574468085,
+          "position": 7.5638297872340425
+        }
+      ],
+      "pairs": [
+        {
+          "keys": [
+            "silent treatment i förhållande",
+            "https://www.relationsvarning.se/silent-treatment-relation"
+          ],
+          "clicks": 5,
+          "impressions": 55,
+          "ctr": 0.09090909090909091,
+          "position": 4.654545454545454
+        },
+        {
+          "keys": [
+            "kontrollerande beteende",
+            "https://www.relationsvarning.se/kontrollerande-relation"
+          ],
+          "clicks": 4,
+          "impressions": 33,
+          "ctr": 0.12121212121212122,
+          "position": 4.242424242424242
+        },
+        {
+          "keys": [
+            "silent treatment svenska",
+            "https://www.relationsvarning.se/silent-treatment-relation"
+          ],
+          "clicks": 4,
+          "impressions": 208,
+          "ctr": 0.019230769230769232,
+          "position": 5.8125
+        },
+        {
+          "keys": [
+            "kontrollerande partner",
+            "https://www.relationsvarning.se/kontrollerande-relation"
+          ],
+          "clicks": 3,
+          "impressions": 104,
+          "ctr": 0.028846153846153848,
+          "position": 4.048076923076923
+        },
+        {
+          "keys": [
+            "silent treatment",
+            "https://www.relationsvarning.se/silent-treatment-relation"
+          ],
+          "clicks": 2,
+          "impressions": 94,
+          "ctr": 0.02127659574468085,
+          "position": 7.5638297872340425
+        },
+        {
+          "keys": [
+            "kontrollerande partner",
+            "https://www.relationsvarning.se/"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 29
+        },
+        {
+          "keys": [
+            "kontrollerande partner",
+            "https://www.relationsvarning.se/beteenden"
+          ],
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 19.5
+        },
+        {
+          "keys": [
+            "kontrollerande partner",
+            "https://www.relationsvarning.se/beteenden/partner-vill-veta-var-jag-ar"
+          ],
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 23.5
+        }
+      ]
+    },
+    "new90sweMobile": {
+      "pageRows": [
+        {
+          "keys": [
+            "https://www.relationsvarning.se/kontrollerande-relation"
+          ],
+          "clicks": 28,
+          "impressions": 717,
+          "ctr": 0.03905160390516039,
+          "position": 7.849372384937238
+        },
+        {
+          "keys": [
+            "https://www.relationsvarning.se/silent-treatment-relation"
+          ],
+          "clicks": 15,
+          "impressions": 864,
+          "ctr": 0.017361111111111112,
+          "position": 7.956018518518518
+        }
+      ],
+      "queryRows": [
+        {
+          "keys": [
+            "kontrollerande partner"
+          ],
+          "clicks": 9,
+          "impressions": 253,
+          "ctr": 0.03557312252964427,
+          "position": 6.592885375494071
+        },
+        {
+          "keys": [
+            "kontrollerande beteende"
+          ],
+          "clicks": 8,
+          "impressions": 107,
+          "ctr": 0.07476635514018691,
+          "position": 6.822429906542056
+        },
+        {
+          "keys": [
+            "silent treatment i förhållande"
+          ],
+          "clicks": 6,
+          "impressions": 103,
+          "ctr": 0.05825242718446602,
+          "position": 6.728155339805825
+        },
+        {
+          "keys": [
+            "silent treatment svenska"
+          ],
+          "clicks": 4,
+          "impressions": 338,
+          "ctr": 0.011834319526627219,
+          "position": 7.781065088757397
+        },
+        {
+          "keys": [
+            "silent treatment"
+          ],
+          "clicks": 3,
+          "impressions": 104,
+          "ctr": 0.028846153846153848,
+          "position": 8.10576923076923
+        }
+      ],
+      "pairs": [
+        {
+          "keys": [
+            "kontrollerande partner",
+            "https://www.relationsvarning.se/kontrollerande-relation"
+          ],
+          "clicks": 9,
+          "impressions": 252,
+          "ctr": 0.03571428571428571,
+          "position": 6.531746031746032
+        },
+        {
+          "keys": [
+            "kontrollerande beteende",
+            "https://www.relationsvarning.se/kontrollerande-relation"
+          ],
+          "clicks": 8,
+          "impressions": 107,
+          "ctr": 0.07476635514018691,
+          "position": 6.822429906542056
+        },
+        {
+          "keys": [
+            "silent treatment i förhållande",
+            "https://www.relationsvarning.se/silent-treatment-relation"
+          ],
+          "clicks": 6,
+          "impressions": 103,
+          "ctr": 0.05825242718446602,
+          "position": 6.728155339805825
+        },
+        {
+          "keys": [
+            "silent treatment svenska",
+            "https://www.relationsvarning.se/silent-treatment-relation"
+          ],
+          "clicks": 4,
+          "impressions": 338,
+          "ctr": 0.011834319526627219,
+          "position": 7.781065088757397
+        },
+        {
+          "keys": [
+            "silent treatment",
+            "https://www.relationsvarning.se/silent-treatment-relation"
+          ],
+          "clicks": 3,
+          "impressions": 104,
+          "ctr": 0.028846153846153848,
+          "position": 8.10576923076923
+        },
+        {
+          "keys": [
+            "kontrollerande beteende",
+            "https://www.relationsvarning.se/beteenden"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 15
+        },
+        {
+          "keys": [
+            "kontrollerande partner",
+            "https://www.relationsvarning.se/"
+          ],
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 42.5
+        },
+        {
+          "keys": [
+            "kontrollerande partner",
+            "https://www.relationsvarning.se/beteenden"
+          ],
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 19.5
+        },
+        {
+          "keys": [
+            "kontrollerande partner",
+            "https://www.relationsvarning.se/beteenden/partner-vill-veta-var-jag-ar"
+          ],
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 23.5
+        }
+      ]
+    }
+  },
+  "limitations": "GSC-genomsnittsposition, inte fasta placeringar. Query- och sidfilter kan skilja sig. Saknad rad är inte noll efterfrågan. Data t.o.m. 20 november; ingen ny API-import utförd."
+}

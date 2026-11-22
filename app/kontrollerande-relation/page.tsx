@@ -9,10 +9,10 @@ const description = "Tecken på en kontrollerande partner och kontrollbehov i re
 export const metadata = {
   title,
   description,
-  ...getEditorialMetadata({ route: "/kontrollerande-relation", title, description, datePublished: "2026-02-22T13:39:05+01:00", dateModified: "2026-11-04T12:00:00+01:00" }),
+  ...getEditorialMetadata({ route: "/kontrollerande-relation", title, description, datePublished: "2026-02-22T13:39:05+01:00", dateModified: "2026-11-22T22:00:00+01:00" }),
 };
 
-const articleJsonLd = getEditorialArticleSchema({ route: "/kontrollerande-relation", title, description, datePublished: "2026-02-22T13:39:05+01:00", dateModified: "2026-11-04T12:00:00+01:00" });
+const articleJsonLd = getEditorialArticleSchema({ route: "/kontrollerande-relation", title, description, datePublished: "2026-02-22T13:39:05+01:00", dateModified: "2026-11-22T22:00:00+01:00" });
 
 export default function Page() {
   return (
@@ -40,6 +40,30 @@ export default function Page() {
           Tidigt kan kontroll vara lätt att förväxla med omtanke. Skillnaden märks i
           om dina gränser och egna val respekteras, eller om omsorgen blir krav,
           insyn och konsekvenser när du säger nej.
+        </p>
+
+        <h2 className="text-2xl font-semibold">
+          Omtanke eller kontroll?
+        </h2>
+
+        <p>
+          Frivillig insyn bygger på att ni båda kan välja vad ni delar och ändra er.
+          Att vilja berätta om sin dag eller dela sin plats är inte i sig kontroll.
+          Skillnaden märks när ett önskemål blir ett krav och ett nej möts med press,
+          anklagelser eller hot. Att du till slut går med på något behöver inte betyda
+          att det är frivilligt, om du gör det för att undvika reaktionen.
+        </p>
+
+        <ul className="list-disc pl-6 space-y-2">
+          <li><strong>Mobil:</strong> omtanke är att fråga om du kom fram tryggt. Kontroll är att kräva tillgång till telefonen och inte acceptera ett nej.</li>
+          <li><strong>Umgänge:</strong> omtanke lämnar utrymme för egna vänner. Kontroll är att pressa dig att avstå från dem eller straffa dig när ni ses.</li>
+          <li><strong>Ekonomi:</strong> en gemensam budget bygger på insyn och överenskommelser. Kontroll är att ensidigt begränsa din tillgång till pengar.</li>
+        </ul>
+
+        <p>
+          Tänk på vad som faktiskt händer när du vill behålla något privat eller
+          göra ett eget val. Om du är rädd för reaktionen behöver du inte testa
+          partnerns gränser. Sök hellre <Link href="/psykiskt-vald/hjalp" className="underline underline-offset-4">stöd utanför relationen</Link> på ett sätt som känns tryggt.
         </p>
 
         <h2 className="text-2xl font-semibold">
@@ -138,23 +162,6 @@ export default function Page() {
           övervakning, hot eller förnedring återkommer och påverkar din frihet kan de vara del av ett
           större skadligt mönster. Läs mer om <Link href="/psykisk-misshandel" className="underline underline-offset-4">psykisk misshandel och vanliga tecken</Link> och om <Link href="/psykiskt-vald" className="underline underline-offset-4">psykiskt våld och stöd</Link>.
         </p>
-
-        <h2 className="text-2xl font-semibold">
-          Omtanke eller kontroll?
-        </h2>
-
-        <p>
-          Omsorg respekterar ditt självbestämmande. Kontroll begränsar det.
-          I en trygg relation kan man uttrycka oro utan att inskränka den andres
-          frihet. Omtanke accepterar ett nej; kontroll försöker styra dina val och
-          kan få konsekvenser när du inte gör som partnern vill.
-        </p>
-
-        <ul className="list-disc pl-6 space-y-2">
-          <li><strong>Mobil:</strong> omtanke är att fråga om du kom fram tryggt. Kontroll är att kräva tillgång till telefonen och inte acceptera ett nej.</li>
-          <li><strong>Umgänge:</strong> omtanke lämnar utrymme för egna vänner. Kontroll är att pressa dig att avstå från dem eller straffa dig när ni ses.</li>
-          <li><strong>Ekonomi:</strong> en gemensam budget bygger på insyn och överenskommelser. Kontroll är att ensidigt begränsa din tillgång till pengar.</li>
-        </ul>
 
         <h2 className="text-2xl font-semibold">
           Är kontrollerande beteende en diagnos?
