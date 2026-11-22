@@ -3,9 +3,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Anknytning i relationer – profiler, närhet och anknytningstest",
+  title: "Anknytningstest för vuxna – 30 frågor om nära relationer",
   description:
-    "Lär dig om trygg, ängslig och undvikande anknytning i romantiska relationer. Förstå anknytningsångest och anknytningsundvikande och gör vårt anknytningstest.",
+    "Gör ett anknytningstest med 30 frågor om närhet, oro och känslomässigt avstånd i vuxna relationer. Läs om metoden och vad självskattningen kan visa.",
   alternates: {
     canonical: "https://www.relationsvarning.se/anknytningstest",
   },
@@ -17,25 +17,25 @@ export default function AnknytningPage() {
       <article>
         <header>
           <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
-            Närhet, trygghet och relationsmönster
+            Självskattning om nära relationer
           </p>
           <h1 className="mt-3 text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
-            Anknytning i romantiska relationer – vilken profil känner du igen?
+            Anknytningstest för vuxna
           </h1>
           <p className="mt-5 leading-7 text-neutral-700">
-            Vad händer i dig när någon kommer nära, när ett svar dröjer eller när
-            ni blir oense? Anknytning handlar om hur du söker och upplever trygghet
-            i nära relationer. Begreppen kan hjälpa dig att sätta ord på dina
-            reaktioner, utan att låsa fast dig i en viss typ.
+            Svara på 30 frågor om hur du brukar reagera på närhet, osäkerhet
+            och känslomässigt avstånd i romantiska relationer. Testet
+            sammanfattar dina egna svar som ett underlag för självreflektion.
           </p>
           <p className="mt-4 leading-7 text-neutral-700">
             Vill du först fördjupa dig i begreppen? I vår <Link href="/anknytning" className="underline underline-offset-4">huvudguide om anknytning i relationer</Link> finns utförligare förklaringar och separata guider till de olika mönstren.
           </p>
           <div data-rv="panel" className="mt-6 rounded-2xl border border-neutral-200 bg-neutral-50 p-5 sm:p-6">
-            <h2 className="text-xl font-semibold">Utforska din anknytningsprofil</h2>
+            <h2 className="text-xl font-semibold">Så fungerar anknytningstestet</h2>
             <p className="mt-3 leading-7 text-neutral-700">
-              Våra 30 frågor handlar om dina reaktioner på närhet, osäkerhet och
-              känslomässigt avstånd i romantiska relationer.
+              Du väljer hur väl varje påstående stämmer med dina upplevelser.
+              Svaren sammanställs inom anknytningsångest och anknytningsundvikande.
+              Du behöver inte registrera ett konto för att börja.
             </p>
             <Link data-rv="button"
               href="/anknytningstest/test"
@@ -98,17 +98,20 @@ export default function AnknytningPage() {
             Relativt låg ångest och lågt undvikande. Närhet och självständighet
             kan oftast rymmas samtidigt, och det brukar kännas möjligt att söka
             stöd. Trygg anknytning innebär inte att du aldrig blir orolig.
+            Läs mer om <Link href="/anknytning/trygg-anknytning" className="underline underline-offset-4">trygg anknytning i relationer</Link>.
           </p>
           <h3 className="text-xl font-semibold text-neutral-900">Ängslig/ambivalent anknytning</h3>
           <p>
             Högre ångest och lägre undvikande. Du kan längta efter närhet samtidigt
             som osäker kontakt väcker stark oro och ett behov av bekräftelse.
+            Läs om <Link href="/anknytning/angslig-anknytning" className="underline underline-offset-4">ängslig och ambivalent anknytning</Link>.
           </p>
           <h3 className="text-xl font-semibold text-neutral-900">Undvikande anknytning</h3>
           <p>
             Högre undvikande och lägre ångest. Självständighet kan kännas lättare
             än att vara beroende av någon, och känslomässiga krav kan väcka en
             önskan att dra sig undan.
+            Guiden om <Link href="/anknytning/undvikande-anknytning" className="underline underline-offset-4">undvikande anknytning</Link> ger fler exempel.
           </p>
           <h3 className="text-xl font-semibold text-neutral-900">
             Blandad/rädd-undvikande anknytningsprofil
@@ -117,6 +120,7 @@ export default function AnknytningPage() {
             Högre nivåer av både ångest och undvikande. Närhet kan vara starkt
             efterlängtad men samtidigt svår att känna sig trygg i. Det kan finnas
             både oro för avvisande och en impuls att skapa avstånd.
+            Läs om <Link href="/anknytning/desorganiserad-anknytning" className="underline underline-offset-4">desorganiserad anknytning</Link> och hur begreppet förhåller sig till vuxnas relationsmönster.
           </p>
           <p className="text-sm leading-6 text-neutral-600">
             Fördjupning om dimensionerna och profilerna: R. Chris Fraleys{" "}

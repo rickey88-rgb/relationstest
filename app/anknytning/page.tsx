@@ -21,7 +21,7 @@ export default function Page() {
         <div data-rv="panel" className="mt-8 rounded-2xl border border-neutral-200 bg-neutral-50 p-5 sm:p-6">
           <h2 className="text-xl font-semibold">Utforska dina reaktioner i anknytningstestet</h2>
           <p className="mt-3 leading-7 text-neutral-700">Svara på 30 frågor om närhet, osäkerhet och känslomässigt avstånd. Resultatet är ett stöd för självreflektion, inte en klinisk diagnos eller en bedömning av din partner.</p>
-          <Link data-rv="button" href="/anknytningstest/test" className="mt-4 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-neutral-900 px-5 py-3 text-center text-sm font-semibold text-white hover:bg-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900 sm:w-auto">Gör anknytningstestet</Link>
+          <Link data-rv="button" href="/anknytningstest" className="mt-4 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-neutral-900 px-5 py-3 text-center text-sm font-semibold text-white hover:bg-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900 sm:w-auto">Läs om anknytningstestet</Link>
           <p className="mt-4 text-sm leading-6 text-neutral-600">
             Vill du i stället se hur relationen fungerar inom flera områden kan du{" "}
             <Link href="/ar-min-relation-sund" className="font-semibold text-neutral-900 underline underline-offset-4">
