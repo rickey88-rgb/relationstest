@@ -5,6 +5,7 @@ const createLoader = require("../autism-test/test/test-loader.cjs");
 
 const original = process.env.STRIPE_PAYMENT_PRODUCT_MAP_JSON;
 const originalCheckoutPrice = process.env.AUDHD_CHECKOUT_PRICE_ID;
+const originalBookPrice = process.env.OVERTHINKING_BOOK_PRICE_ID;
 process.env.STRIPE_PAYMENT_PRODUCT_MAP_JSON = JSON.stringify({
   adhd_test: { priceIds: ["price_adhd_39"], paymentLinkIds: ["plink_adhd"] },
   audhd_test: { priceIds: ["price_Current123", "price_Historical456"] },
@@ -23,6 +24,15 @@ assert.throws(() => catalog.configuredAudhdCheckoutPriceId(), /must be allowlist
 delete process.env.AUDHD_CHECKOUT_PRICE_ID;
 assert.throws(() => catalog.configuredAudhdCheckoutPriceId(), /not configured/);
 process.env.AUDHD_CHECKOUT_PRICE_ID = "price_Current123";
+
+process.env.OVERTHINKING_BOOK_PRICE_ID = "price_Book149";
+assert.equal(catalog.identifyPaymentProduct({ priceIds: ["price_Book149"], paymentLinkId: null }), "overthinking_book");
+process.env.OVERTHINKING_BOOK_PRICE_ID = "price_Current123";
+assert.deepEqual(catalog.configuredPriceIdsForProduct("overthinking_book"), []);
+assert.equal(catalog.configuredAudhdCheckoutPriceId(), "price_Current123");
+assert.equal(catalog.identifyPaymentProduct({ priceIds: [], paymentLinkId: "plink_adhd" }), "adhd_test");
+if (originalBookPrice === undefined) delete process.env.OVERTHINKING_BOOK_PRICE_ID;
+else process.env.OVERTHINKING_BOOK_PRICE_ID = originalBookPrice;
 
 process.env.STRIPE_PAYMENT_PRODUCT_MAP_JSON = "not-json";
 assert.throws(() => catalog.paymentProductCatalog(), /not valid JSON/);

@@ -85,6 +85,18 @@ export function paymentProductCatalog(): Catalog {
     const prior = catalog.persona_test;
     catalog.persona_test = { priceIds: Array.from(new Set([...(prior?.priceIds ?? []), ...ids])), paymentLinkIds: prior?.paymentLinkIds ?? [] };
   }
+
+  // Keep the shared map intact. A conflicting or invalid new price must not
+  // stop webhooks or change access for any existing product.
+  const bookPrice = process.env.OVERTHINKING_BOOK_PRICE_ID?.trim() ?? "";
+  if (/^price_[A-Za-z0-9]+$/.test(bookPrice) &&
+      !Object.entries(catalog).some(([product, entry]) => product !== "overthinking_book" && entry.priceIds.includes(bookPrice))) {
+    const prior = catalog.overthinking_book;
+    catalog.overthinking_book = {
+      priceIds: Array.from(new Set([...(prior?.priceIds ?? []), bookPrice])),
+      paymentLinkIds: prior?.paymentLinkIds ?? [],
+    };
+  }
   return catalog;
 }
 

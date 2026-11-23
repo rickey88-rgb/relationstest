@@ -22,7 +22,7 @@ Object.assign(process.env, {
   OVERTHINKING_BOOK_STORAGE_SECRET_KEY: "local-only",
   OVERTHINKING_BOOK_STRIPE_TEST_MODE: "true", STRIPE_SECRET_KEY: "sk_test_fixture",
   OVERTHINKING_BOOK_CHECKOUT_ENABLED: "true", OVERTHINKING_BOOK_PRICE_ID: priceId,
-  STRIPE_PAYMENT_PRODUCT_MAP_JSON: JSON.stringify({ overthinking_book: { priceIds: [priceId] }, adhd_deluxe: { priceIds: ["price_other"] } }),
+  STRIPE_PAYMENT_PRODUCT_MAP_JSON: JSON.stringify({ adhd_deluxe: { priceIds: ["price_other"] } }),
 });
 let signedIn = null, priceAmount = 14900, creation = null, calls = 0, storageReads = 0, wrongObject = false;
 const session = {
