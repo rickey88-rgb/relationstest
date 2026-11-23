@@ -10,9 +10,9 @@ const description = "Gör ett ADHD-test för vuxna på cirka fem minuter. Svara 
 export const metadata: Metadata = {
   title,
   description,
-  ...getEditorialMetadata({ route: "/adhd-test", title, description, datePublished: "2026-09-14T19:17:23+02:00", dateModified: "2026-09-14T23:13:54+02:00" }),
+  ...getEditorialMetadata({ route: "/adhd-test", title, description, datePublished: "2026-09-14T19:17:23+02:00", dateModified: "2026-11-23T10:00:00+01:00" }),
 };
-const articleJsonLd = getEditorialArticleSchema({ route: "/adhd-test", title, description, datePublished: "2026-09-14T19:17:23+02:00", dateModified: "2026-09-14T23:13:54+02:00" });
+const articleJsonLd = getEditorialArticleSchema({ route: "/adhd-test", title, description, datePublished: "2026-09-14T19:17:23+02:00", dateModified: "2026-11-23T10:00:00+01:00" });
 const cards = [
   [
     "Uppmärksamhet",
@@ -76,7 +76,12 @@ export default function ADHDLanding() {
     <GuideSection title="Så fungerar självskattningen">
       <p>Du beskriver hur ofta du känner igen olika situationer. Testet sammanfattar svaren inom sex områden och tar upp vardagspåverkan. Den första återkopplingen bygger på dina svar. Den fullständiga analysen jämför områdena med varandra.</p>
       <p><strong>Exempel på återkoppling</strong><br />Om uppmärksamhet sticker ut i dina svar kan återkopplingen handla om fokus och distraktion. Den beskriver dina svar och kan inte avgöra varför du har svårt att hålla fokus.</p>
-      <p>Testet är utvecklat av Relationsvarning. Läs om <Link href="/metodik" className={textLink}>hur vi utformar våra självtester</Link>.</p>
+      <p>Frågorna och beräkningsreglerna är Relationsvarnings egna och saknar klinisk validering. Det här är inte ASRS. <a href="https://patientenkat.se/nationellpatientenkat/nationellformularsamling/sokformularbeskrivningar/asrs6manaderadhdvuxna.87063.html" className={textLink}>ASRS är en separat symtomchecklista för vuxna</a> med egna frågor och tolkningsregler. Resultaten kan inte jämföras direkt eller använda samma gränsvärden.</p>
+      <p>Läs om <Link href="/metodik" className={textLink}>hur vi utformar våra självtester</Link>. Självtestet är till för egen reflektion, inte för att avgöra om en utredning behövs.</p>
+    </GuideSection>
+    <GuideSection title="Vad betyder poängen?">
+      <p>Varje svar ger 0–4 poäng. De fem frågorna inom varje område summeras och räknas om till en nivå mellan 0 och 100. Testets index är medelvärdet för de fem första områdena. Påverkan i vardagen redovisas separat och används i tolkningen, men höjer eller sänker inte indexet.</p>
+      <p>En nivå på exempelvis 60 av 100 betyder inte 60 procents sannolikhet för ADHD. Värdena beskriver dina svar i vår modell, inte hur du ligger till jämfört med befolkningen. Ett högt värde fastställer ingen diagnos, och ett lågt värde utesluter den inte. Ta därför fasta på konkreta situationer du känner igen och hur de påverkar dig, snarare än en enskild siffra.</p>
     </GuideSection>
     <GuideSection title="Vad frågorna handlar om"><div className="grid gap-3 sm:grid-cols-2">{cards.map(([name,description]) => <div data-rv="card" key={name} className="min-w-0 rounded-2xl border border-neutral-200 bg-neutral-50 p-5"><h3 className="font-semibold text-neutral-900">{name}</h3><p className="mt-2">{description}</p></div>)}</div><Link data-rv="button" href="/adhd-test/test" className={cta}>Gör ADHD-testet</Link></GuideSection>
     <GuideSection title="När det är svårt att komma igång"><p>Att ofta skjuta upp något eller ha svårt att starta kan ha flera förklaringar. <Link href="/prokrastinering" className={textLink}>Läs om prokrastinering</Link> och om hur undvikande, känslor och igångsättning kan hänga ihop.</p><p>Du kan också läsa om <Link href="/exekutiva-funktioner" className={textLink}>exekutiva funktioner</Link>, som är ett bredare begrepp för bland annat planering, arbetsminne och självreglering.</p></GuideSection>

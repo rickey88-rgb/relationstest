@@ -1,0 +1,1803 @@
+{
+  "capturedAt": "2026-11-23T14:18:50.754Z",
+  "base": "e75772803cf71f0183b132276d557813fc3f7146",
+  "collectedAt": "2026-11-22T18:35:10.625Z",
+  "periods": [
+    [
+      "new28",
+      "2026-10-24",
+      "2026-11-20"
+    ],
+    [
+      "new90",
+      "2026-08-23",
+      "2026-11-20"
+    ],
+    [
+      "old28",
+      "2026-10-09",
+      "2026-11-05"
+    ],
+    [
+      "old90",
+      "2026-08-08",
+      "2026-11-05"
+    ],
+    [
+      "post",
+      "2026-11-08",
+      "2026-11-20"
+    ],
+    [
+      "pre",
+      "2026-10-25",
+      "2026-11-06"
+    ]
+  ],
+  "property": "sc-domain:relationsvarning.se",
+  "queries": [
+    "adhd test",
+    "adhd test vuxen",
+    "adhd självtest",
+    "autism test",
+    "autism test vuxen",
+    "autism självtest"
+  ],
+  "pages": [
+    {
+      "path": "/adhd-test",
+      "status": 200,
+      "canonical": "https://www.relationsvarning.se/adhd-test",
+      "title": "ADHD-test för vuxna – självtest med 30 frågor | Relationsvarning",
+      "description": "Gör ett ADHD-test för vuxna på cirka fem minuter. Svara på 30 frågor och få en första återkoppling gratis. Självskattningen kan inte ställa diagnos.",
+      "noindex": false,
+      "hasMain": true
+    },
+    {
+      "path": "/autism-test",
+      "status": 200,
+      "canonical": "https://www.relationsvarning.se/autism-test",
+      "title": "Autismtest för vuxna – självtest med 30 frågor | Relationsvarning",
+      "description": "Gör ett autismtest för vuxna med 30 frågor om vardag, samspel, rutiner och sinnesintryck. Få en första återkoppling gratis. Testet kan inte ställa diagnos.",
+      "noindex": false,
+      "hasMain": true
+    },
+    {
+      "path": "/adhd-test/test",
+      "status": 200,
+      "canonical": "https://www.relationsvarning.se/adhd-test",
+      "title": "ADHD-självtest – 30 frågor om vuxnas vardag | Relationsvarning",
+      "description": "Gör ett ADHD-självtest för vuxna med 30 frågor om uppmärksamhet, organisation, impulsivitet, rastlöshet, igångsättning och vardagspåverkan.",
+      "noindex": true,
+      "hasMain": true
+    },
+    {
+      "path": "/autism-test/test",
+      "status": 200,
+      "canonical": "https://www.relationsvarning.se/autism-test",
+      "title": "Autism-självtest – 30 frågor för vuxna | Relationsvarning",
+      "description": "Besvara 30 frågor om socialt samspel, kommunikation, förutsägbarhet, sensorik, intressen och vardagspåverkan i Relationsvarnings självskattning.",
+      "noindex": true,
+      "hasMain": true
+    },
+    {
+      "path": "/add-test",
+      "status": 200,
+      "canonical": "https://www.relationsvarning.se/add-test",
+      "title": "ADD-test – förstå ouppmärksamhet och ADHD hos vuxna",
+      "description": "Söker du ett ADD-test? Läs om ADD-begreppet, koncentration, glömska och igångsättning samt hur du kan utforska ett ouppmärksamt mönster.",
+      "noindex": false,
+      "hasMain": true
+    },
+    {
+      "path": "/asperger-test",
+      "status": 200,
+      "canonical": "https://www.relationsvarning.se/asperger-test",
+      "title": "Asperger-test för vuxna – begreppet och vägen till självskattning",
+      "description": "Söker du ett Asperger-test som vuxen? Läs om den äldre benämningen, dagens autismspektrum och vad en strukturerad självskattning kan visa.",
+      "noindex": false,
+      "hasMain": true
+    },
+    {
+      "path": "/har-jag-adhd",
+      "status": 200,
+      "canonical": "https://www.relationsvarning.se/har-jag-adhd",
+      "title": "Har jag ADHD? Mönster att uppmärksamma som vuxen",
+      "description": "Funderar du på om du har ADHD? Läs om återkommande svårigheter, vardagspåverkan och andra möjliga förklaringar innan du drar slutsatser.",
+      "noindex": false,
+      "hasMain": true
+    },
+    {
+      "path": "/har-jag-autism",
+      "status": 200,
+      "canonical": "https://www.relationsvarning.se/har-jag-autism",
+      "title": "Har jag autism? Förstå återkommande mönster som vuxen",
+      "description": "Funderar du på om du har autism? Läs om skillnaden mellan enskilda drag och långvariga mönster i samspel, sensorik, flexibilitet och vardag.",
+      "noindex": false,
+      "hasMain": true
+    }
+  ],
+  "metrics": {
+    "new28all": {
+      "pageRows": [
+        {
+          "keys": [
+            "https://www.relationsvarning.se/adhd-test"
+          ],
+          "clicks": 32,
+          "impressions": 1998,
+          "ctr": 0.016016016016016016,
+          "position": 34.973973973973976
+        },
+        {
+          "keys": [
+            "https://www.relationsvarning.se/autism-test"
+          ],
+          "clicks": 13,
+          "impressions": 927,
+          "ctr": 0.014023732470334413,
+          "position": 38.09492988133765
+        }
+      ],
+      "queryRows": [
+        {
+          "keys": [
+            "adhd självtest"
+          ],
+          "clicks": 0,
+          "impressions": 38,
+          "ctr": 0,
+          "position": 56.6578947368421
+        },
+        {
+          "keys": [
+            "adhd test"
+          ],
+          "clicks": 0,
+          "impressions": 289,
+          "ctr": 0,
+          "position": 32.56055363321799
+        },
+        {
+          "keys": [
+            "adhd test vuxen"
+          ],
+          "clicks": 0,
+          "impressions": 131,
+          "ctr": 0,
+          "position": 33.32824427480916
+        },
+        {
+          "keys": [
+            "autism självtest"
+          ],
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 25
+        },
+        {
+          "keys": [
+            "autism test"
+          ],
+          "clicks": 0,
+          "impressions": 106,
+          "ctr": 0,
+          "position": 62.886792452830186
+        },
+        {
+          "keys": [
+            "autism test vuxen"
+          ],
+          "clicks": 0,
+          "impressions": 46,
+          "ctr": 0,
+          "position": 35.08695652173913
+        }
+      ],
+      "pairs": [
+        {
+          "keys": [
+            "adhd självtest",
+            "https://www.relationsvarning.se/adhd-test"
+          ],
+          "clicks": 0,
+          "impressions": 38,
+          "ctr": 0,
+          "position": 56.6578947368421
+        },
+        {
+          "keys": [
+            "adhd test",
+            "https://www.relationsvarning.se/adhd-test"
+          ],
+          "clicks": 0,
+          "impressions": 252,
+          "ctr": 0,
+          "position": 33.67460317460318
+        },
+        {
+          "keys": [
+            "adhd test",
+            "https://www.relationsvarning.se/audhd-test"
+          ],
+          "clicks": 0,
+          "impressions": 105,
+          "ctr": 0,
+          "position": 32.82857142857143
+        },
+        {
+          "keys": [
+            "adhd test vuxen",
+            "https://www.relationsvarning.se/adhd-test"
+          ],
+          "clicks": 0,
+          "impressions": 122,
+          "ctr": 0,
+          "position": 32.868852459016395
+        },
+        {
+          "keys": [
+            "adhd test vuxen",
+            "https://www.relationsvarning.se/audhd-test"
+          ],
+          "clicks": 0,
+          "impressions": 30,
+          "ctr": 0,
+          "position": 51.96666666666667
+        },
+        {
+          "keys": [
+            "autism självtest",
+            "https://www.relationsvarning.se/autism-test"
+          ],
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 25
+        },
+        {
+          "keys": [
+            "autism test",
+            "https://www.relationsvarning.se/autism-test"
+          ],
+          "clicks": 0,
+          "impressions": 106,
+          "ctr": 0,
+          "position": 62.886792452830186
+        },
+        {
+          "keys": [
+            "autism test vuxen",
+            "https://www.relationsvarning.se/asperger-test"
+          ],
+          "clicks": 0,
+          "impressions": 11,
+          "ctr": 0,
+          "position": 69.18181818181819
+        },
+        {
+          "keys": [
+            "autism test vuxen",
+            "https://www.relationsvarning.se/audhd-test"
+          ],
+          "clicks": 0,
+          "impressions": 8,
+          "ctr": 0,
+          "position": 68.25
+        },
+        {
+          "keys": [
+            "autism test vuxen",
+            "https://www.relationsvarning.se/autism-test"
+          ],
+          "clicks": 0,
+          "impressions": 42,
+          "ctr": 0,
+          "position": 32.95238095238095
+        }
+      ],
+      "relatedPairs": [
+        {
+          "keys": [
+            "autism test svenska",
+            "https://www.relationsvarning.se/asperger-test"
+          ],
+          "clicks": 0,
+          "impressions": 21,
+          "ctr": 0,
+          "position": 72.19047619047619
+        },
+        {
+          "keys": [
+            "autism test svenska",
+            "https://www.relationsvarning.se/har-jag-autism"
+          ],
+          "clicks": 0,
+          "impressions": 26,
+          "ctr": 0,
+          "position": 33.96153846153846
+        },
+        {
+          "keys": [
+            "autism test vuxen",
+            "https://www.relationsvarning.se/asperger-test"
+          ],
+          "clicks": 0,
+          "impressions": 11,
+          "ctr": 0,
+          "position": 69.18181818181819
+        },
+        {
+          "keys": [
+            "autism vuxen test",
+            "https://www.relationsvarning.se/asperger-test"
+          ],
+          "clicks": 0,
+          "impressions": 26,
+          "ctr": 0,
+          "position": 73.88461538461539
+        },
+        {
+          "keys": [
+            "autismspektrum test",
+            "https://www.relationsvarning.se/asperger-test"
+          ],
+          "clicks": 0,
+          "impressions": 10,
+          "ctr": 0,
+          "position": 60.7
+        },
+        {
+          "keys": [
+            "autismspektrumtillstånd test",
+            "https://www.relationsvarning.se/asperger-test"
+          ],
+          "clicks": 0,
+          "impressions": 6,
+          "ctr": 0,
+          "position": 71
+        },
+        {
+          "keys": [
+            "relationsvarning autism test",
+            "https://www.relationsvarning.se/asperger-test"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 6
+        },
+        {
+          "keys": [
+            "relationsvarning autism test",
+            "https://www.relationsvarning.se/har-jag-autism"
+          ],
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 3.5
+        },
+        {
+          "keys": [
+            "relationsvarning.se/autism-test",
+            "https://www.relationsvarning.se/asperger-test"
+          ],
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 7
+        },
+        {
+          "keys": [
+            "relationsvarning.se/autism-test",
+            "https://www.relationsvarning.se/har-jag-autism"
+          ],
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 3
+        },
+        {
+          "keys": [
+            "test autism",
+            "https://www.relationsvarning.se/har-jag-autism"
+          ],
+          "clicks": 0,
+          "impressions": 16,
+          "ctr": 0,
+          "position": 60.875
+        }
+      ]
+    },
+    "new90all": {
+      "pageRows": [
+        {
+          "keys": [
+            "https://www.relationsvarning.se/autism-test"
+          ],
+          "clicks": 230,
+          "impressions": 1859,
+          "ctr": 0.12372243141473911,
+          "position": 34.93491124260355
+        },
+        {
+          "keys": [
+            "https://www.relationsvarning.se/adhd-test"
+          ],
+          "clicks": 106,
+          "impressions": 3071,
+          "ctr": 0.03451644415499837,
+          "position": 39.276131553239985
+        }
+      ],
+      "queryRows": [
+        {
+          "keys": [
+            "adhd självtest"
+          ],
+          "clicks": 0,
+          "impressions": 80,
+          "ctr": 0,
+          "position": 43.425
+        },
+        {
+          "keys": [
+            "adhd test"
+          ],
+          "clicks": 0,
+          "impressions": 487,
+          "ctr": 0,
+          "position": 35.351129363449694
+        },
+        {
+          "keys": [
+            "adhd test vuxen"
+          ],
+          "clicks": 0,
+          "impressions": 202,
+          "ctr": 0,
+          "position": 34.475247524752476
+        },
+        {
+          "keys": [
+            "autism självtest"
+          ],
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0,
+          "position": 29
+        },
+        {
+          "keys": [
+            "autism test"
+          ],
+          "clicks": 0,
+          "impressions": 155,
+          "ctr": 0,
+          "position": 65.02580645161291
+        },
+        {
+          "keys": [
+            "autism test vuxen"
+          ],
+          "clicks": 0,
+          "impressions": 68,
+          "ctr": 0,
+          "position": 40.9264705882353
+        }
+      ],
+      "pairs": [
+        {
+          "keys": [
+            "adhd självtest",
+            "https://www.relationsvarning.se/adhd-test"
+          ],
+          "clicks": 0,
+          "impressions": 50,
+          "ctr": 0,
+          "position": 59.06
+        },
+        {
+          "keys": [
+            "adhd självtest",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 26,
+          "ctr": 0,
+          "position": 48.34615384615385
+        },
+        {
+          "keys": [
+            "adhd självtest",
+            "https://www.relationsvarning.se/adhd-vuxna"
+          ],
+          "clicks": 0,
+          "impressions": 16,
+          "ctr": 0,
+          "position": 4
+        },
+        {
+          "keys": [
+            "adhd test",
+            "https://www.relationsvarning.se/adhd-test"
+          ],
+          "clicks": 0,
+          "impressions": 394,
+          "ctr": 0,
+          "position": 35.50761421319797
+        },
+        {
+          "keys": [
+            "adhd test",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 114,
+          "ctr": 0,
+          "position": 57.5
+        },
+        {
+          "keys": [
+            "adhd test",
+            "https://www.relationsvarning.se/audhd-test"
+          ],
+          "clicks": 0,
+          "impressions": 107,
+          "ctr": 0,
+          "position": 32.85046728971963
+        },
+        {
+          "keys": [
+            "adhd test vuxen",
+            "https://www.relationsvarning.se/adhd-test"
+          ],
+          "clicks": 0,
+          "impressions": 174,
+          "ctr": 0,
+          "position": 33.5919540229885
+        },
+        {
+          "keys": [
+            "adhd test vuxen",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 41,
+          "ctr": 0,
+          "position": 58.73170731707317
+        },
+        {
+          "keys": [
+            "adhd test vuxen",
+            "https://www.relationsvarning.se/audhd-test"
+          ],
+          "clicks": 0,
+          "impressions": 31,
+          "ctr": 0,
+          "position": 52.54838709677419
+        },
+        {
+          "keys": [
+            "autism självtest",
+            "https://www.relationsvarning.se/asperger-test"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 120
+        },
+        {
+          "keys": [
+            "autism självtest",
+            "https://www.relationsvarning.se/autism-test"
+          ],
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0,
+          "position": 29
+        },
+        {
+          "keys": [
+            "autism test",
+            "https://www.relationsvarning.se/autism-test"
+          ],
+          "clicks": 0,
+          "impressions": 155,
+          "ctr": 0,
+          "position": 65.02580645161291
+        },
+        {
+          "keys": [
+            "autism test vuxen",
+            "https://www.relationsvarning.se/asperger-test"
+          ],
+          "clicks": 0,
+          "impressions": 21,
+          "ctr": 0,
+          "position": 79.14285714285714
+        },
+        {
+          "keys": [
+            "autism test vuxen",
+            "https://www.relationsvarning.se/audhd-test"
+          ],
+          "clicks": 0,
+          "impressions": 8,
+          "ctr": 0,
+          "position": 68.25
+        },
+        {
+          "keys": [
+            "autism test vuxen",
+            "https://www.relationsvarning.se/autism-test"
+          ],
+          "clicks": 0,
+          "impressions": 64,
+          "ctr": 0,
+          "position": 39.890625
+        }
+      ],
+      "relatedPairs": [
+        {
+          "keys": [
+            "add adhd test",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 73
+        },
+        {
+          "keys": [
+            "adhd add test",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 66
+        },
+        {
+          "keys": [
+            "adhd kvinner test",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 95
+        },
+        {
+          "keys": [
+            "adhd kvinnor test",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 16,
+          "ctr": 0,
+          "position": 51.9375
+        },
+        {
+          "keys": [
+            "adhd självtest",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 26,
+          "ctr": 0,
+          "position": 48.34615384615385
+        },
+        {
+          "keys": [
+            "adhd symptom test",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 14,
+          "ctr": 0,
+          "position": 59.57142857142857
+        },
+        {
+          "keys": [
+            "adhd test",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 114,
+          "ctr": 0,
+          "position": 57.5
+        },
+        {
+          "keys": [
+            "adhd test 1177",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 34
+        },
+        {
+          "keys": [
+            "adhd test barn",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 65
+        },
+        {
+          "keys": [
+            "adhd test för tjejer",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 13,
+          "ctr": 0,
+          "position": 50.30769230769231
+        },
+        {
+          "keys": [
+            "adhd test för ungdom",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 12,
+          "ctr": 0,
+          "position": 60.666666666666664
+        },
+        {
+          "keys": [
+            "adhd test för vuxna",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 26,
+          "ctr": 0,
+          "position": 35.80769230769231
+        },
+        {
+          "keys": [
+            "adhd test för vuxna online",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 14,
+          "ctr": 0,
+          "position": 56.57142857142857
+        },
+        {
+          "keys": [
+            "adhd test gratis",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 59
+        },
+        {
+          "keys": [
+            "adhd test kvinna",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 13,
+          "ctr": 0,
+          "position": 50.69230769230769
+        },
+        {
+          "keys": [
+            "adhd test online",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 30,
+          "ctr": 0,
+          "position": 69.8
+        },
+        {
+          "keys": [
+            "adhd test online svenska",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 54
+        },
+        {
+          "keys": [
+            "adhd test på nätet",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 12,
+          "ctr": 0,
+          "position": 56.333333333333336
+        },
+        {
+          "keys": [
+            "adhd test ungdom",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 32
+        },
+        {
+          "keys": [
+            "adhd test ungdom online",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0,
+          "position": 53
+        },
+        {
+          "keys": [
+            "adhd test vuxen",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 41,
+          "ctr": 0,
+          "position": 58.73170731707317
+        },
+        {
+          "keys": [
+            "adhd test vuxen kvinna",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 14,
+          "ctr": 0,
+          "position": 50.714285714285715
+        },
+        {
+          "keys": [
+            "adhd test vuxen online",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 12,
+          "ctr": 0,
+          "position": 57.25
+        },
+        {
+          "keys": [
+            "adhd test vuxna",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 22,
+          "ctr": 0,
+          "position": 38.63636363636363
+        },
+        {
+          "keys": [
+            "adhd tjejer test",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 18,
+          "ctr": 0,
+          "position": 45.888888888888886
+        },
+        {
+          "keys": [
+            "adhd utredning vuxen test",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 13,
+          "ctr": 0,
+          "position": 61.23076923076923
+        },
+        {
+          "keys": [
+            "adhd vuxen kvinna test",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 15,
+          "ctr": 0,
+          "position": 54
+        },
+        {
+          "keys": [
+            "adhd vuxen test",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 12,
+          "ctr": 0,
+          "position": 56.166666666666664
+        },
+        {
+          "keys": [
+            "adhd-test",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 59
+        },
+        {
+          "keys": [
+            "autism självtest",
+            "https://www.relationsvarning.se/asperger-test"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 120
+        },
+        {
+          "keys": [
+            "autism test svenska",
+            "https://www.relationsvarning.se/asperger-test"
+          ],
+          "clicks": 0,
+          "impressions": 38,
+          "ctr": 0,
+          "position": 74.42105263157895
+        },
+        {
+          "keys": [
+            "autism test svenska",
+            "https://www.relationsvarning.se/har-jag-autism"
+          ],
+          "clicks": 0,
+          "impressions": 26,
+          "ctr": 0,
+          "position": 33.96153846153846
+        },
+        {
+          "keys": [
+            "autism test vuxen",
+            "https://www.relationsvarning.se/asperger-test"
+          ],
+          "clicks": 0,
+          "impressions": 21,
+          "ctr": 0,
+          "position": 79.14285714285714
+        },
+        {
+          "keys": [
+            "autism vuxen test",
+            "https://www.relationsvarning.se/asperger-test"
+          ],
+          "clicks": 0,
+          "impressions": 43,
+          "ctr": 0,
+          "position": 76.11627906976744
+        },
+        {
+          "keys": [
+            "autismspektrum test",
+            "https://www.relationsvarning.se/asperger-test"
+          ],
+          "clicks": 0,
+          "impressions": 10,
+          "ctr": 0,
+          "position": 60.7
+        },
+        {
+          "keys": [
+            "autismspektrumtillstånd test",
+            "https://www.relationsvarning.se/asperger-test"
+          ],
+          "clicks": 0,
+          "impressions": 6,
+          "ctr": 0,
+          "position": 71
+        },
+        {
+          "keys": [
+            "gratis adhd test",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 12,
+          "ctr": 0,
+          "position": 56.5
+        },
+        {
+          "keys": [
+            "har du adhd test",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 15,
+          "ctr": 0,
+          "position": 56.666666666666664
+        },
+        {
+          "keys": [
+            "har jag adhd test",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 32,
+          "ctr": 0,
+          "position": 56.3125
+        },
+        {
+          "keys": [
+            "har jag adhd test ungdom",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 15,
+          "ctr": 0,
+          "position": 50.6
+        },
+        {
+          "keys": [
+            "hur vet man om man har adhd test",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 14,
+          "ctr": 0,
+          "position": 55.5
+        },
+        {
+          "keys": [
+            "högfungerande autism test",
+            "https://www.relationsvarning.se/asperger-test"
+          ],
+          "clicks": 0,
+          "impressions": 5,
+          "ctr": 0,
+          "position": 53.4
+        },
+        {
+          "keys": [
+            "psykologiska test adhd",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 14,
+          "ctr": 0,
+          "position": 62
+        },
+        {
+          "keys": [
+            "relationsvarning autism test",
+            "https://www.relationsvarning.se/asperger-test"
+          ],
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 6.333333333333333
+        },
+        {
+          "keys": [
+            "relationsvarning autism test",
+            "https://www.relationsvarning.se/har-jag-autism"
+          ],
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0,
+          "position": 4.25
+        },
+        {
+          "keys": [
+            "relationsvarning.se/autism-test",
+            "https://www.relationsvarning.se/asperger-test"
+          ],
+          "clicks": 0,
+          "impressions": 5,
+          "ctr": 0,
+          "position": 5.8
+        },
+        {
+          "keys": [
+            "relationsvarning.se/autism-test",
+            "https://www.relationsvarning.se/har-jag-autism"
+          ],
+          "clicks": 0,
+          "impressions": 5,
+          "ctr": 0,
+          "position": 2.8
+        },
+        {
+          "keys": [
+            "självtest adhd",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 46
+        },
+        {
+          "keys": [
+            "test adhd",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 21,
+          "ctr": 0,
+          "position": 51.61904761904762
+        },
+        {
+          "keys": [
+            "test adhd add",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 11,
+          "ctr": 0,
+          "position": 61.27272727272727
+        },
+        {
+          "keys": [
+            "test adhd barn",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 72
+        },
+        {
+          "keys": [
+            "test adhd vuxen",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 13,
+          "ctr": 0,
+          "position": 59.69230769230769
+        },
+        {
+          "keys": [
+            "test autism",
+            "https://www.relationsvarning.se/har-jag-autism"
+          ],
+          "clicks": 0,
+          "impressions": 16,
+          "ctr": 0,
+          "position": 60.875
+        },
+        {
+          "keys": [
+            "test för adhd",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 26,
+          "ctr": 0,
+          "position": 56.76923076923077
+        },
+        {
+          "keys": [
+            "test har du adhd",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 15,
+          "ctr": 0,
+          "position": 55
+        },
+        {
+          "keys": [
+            "test har jag adhd",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 30,
+          "ctr": 0,
+          "position": 53.96666666666667
+        },
+        {
+          "keys": [
+            "test om man har adhd",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 12,
+          "ctr": 0,
+          "position": 58.916666666666664
+        },
+        {
+          "keys": [
+            "test på adhd",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 28,
+          "ctr": 0,
+          "position": 57.142857142857146
+        },
+        {
+          "keys": [
+            "testa adhd",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 10,
+          "ctr": 0,
+          "position": 62.5
+        },
+        {
+          "keys": [
+            "vuxen adhd test",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 12,
+          "ctr": 0,
+          "position": 63.25
+        }
+      ]
+    },
+    "new28sweMobile": {
+      "pageRows": [
+        {
+          "keys": [
+            "https://www.relationsvarning.se/adhd-test"
+          ],
+          "clicks": 17,
+          "impressions": 230,
+          "ctr": 0.07391304347826087,
+          "position": 14.734782608695653
+        },
+        {
+          "keys": [
+            "https://www.relationsvarning.se/autism-test"
+          ],
+          "clicks": 3,
+          "impressions": 131,
+          "ctr": 0.022900763358778626,
+          "position": 20.389312977099237
+        }
+      ],
+      "queryRows": [
+        {
+          "keys": [
+            "adhd test"
+          ],
+          "clicks": 0,
+          "impressions": 25,
+          "ctr": 0,
+          "position": 29.16
+        },
+        {
+          "keys": [
+            "adhd test vuxen"
+          ],
+          "clicks": 0,
+          "impressions": 8,
+          "ctr": 0,
+          "position": 25.125
+        },
+        {
+          "keys": [
+            "autism självtest"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 23
+        },
+        {
+          "keys": [
+            "autism test"
+          ],
+          "clicks": 0,
+          "impressions": 5,
+          "ctr": 0,
+          "position": 40.2
+        },
+        {
+          "keys": [
+            "autism test vuxen"
+          ],
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0,
+          "position": 22.75
+        }
+      ],
+      "pairs": [
+        {
+          "keys": [
+            "adhd test",
+            "https://www.relationsvarning.se/adhd-test"
+          ],
+          "clicks": 0,
+          "impressions": 16,
+          "ctr": 0,
+          "position": 31.9375
+        },
+        {
+          "keys": [
+            "adhd test",
+            "https://www.relationsvarning.se/audhd-test"
+          ],
+          "clicks": 0,
+          "impressions": 9,
+          "ctr": 0,
+          "position": 24.22222222222222
+        },
+        {
+          "keys": [
+            "adhd test vuxen",
+            "https://www.relationsvarning.se/adhd-test"
+          ],
+          "clicks": 0,
+          "impressions": 8,
+          "ctr": 0,
+          "position": 25.125
+        },
+        {
+          "keys": [
+            "autism självtest",
+            "https://www.relationsvarning.se/autism-test"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 23
+        },
+        {
+          "keys": [
+            "autism test",
+            "https://www.relationsvarning.se/autism-test"
+          ],
+          "clicks": 0,
+          "impressions": 5,
+          "ctr": 0,
+          "position": 40.2
+        },
+        {
+          "keys": [
+            "autism test vuxen",
+            "https://www.relationsvarning.se/autism-test"
+          ],
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0,
+          "position": 22.75
+        }
+      ],
+      "relatedPairs": [
+        {
+          "keys": [
+            "autism test svenska",
+            "https://www.relationsvarning.se/har-jag-autism"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 17
+        },
+        {
+          "keys": [
+            "relationsvarning autism test",
+            "https://www.relationsvarning.se/asperger-test"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 6
+        },
+        {
+          "keys": [
+            "relationsvarning autism test",
+            "https://www.relationsvarning.se/har-jag-autism"
+          ],
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 3.5
+        },
+        {
+          "keys": [
+            "relationsvarning.se/autism-test",
+            "https://www.relationsvarning.se/asperger-test"
+          ],
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 7
+        },
+        {
+          "keys": [
+            "relationsvarning.se/autism-test",
+            "https://www.relationsvarning.se/har-jag-autism"
+          ],
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 3
+        },
+        {
+          "keys": [
+            "test autism",
+            "https://www.relationsvarning.se/har-jag-autism"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 74
+        }
+      ]
+    },
+    "new90sweMobile": {
+      "pageRows": [
+        {
+          "keys": [
+            "https://www.relationsvarning.se/autism-test"
+          ],
+          "clicks": 43,
+          "impressions": 313,
+          "ctr": 0.13738019169329074,
+          "position": 12.939297124600639
+        },
+        {
+          "keys": [
+            "https://www.relationsvarning.se/adhd-test"
+          ],
+          "clicks": 18,
+          "impressions": 303,
+          "ctr": 0.0594059405940594,
+          "position": 16.013201320132012
+        }
+      ],
+      "queryRows": [
+        {
+          "keys": [
+            "adhd test"
+          ],
+          "clicks": 0,
+          "impressions": 42,
+          "ctr": 0,
+          "position": 23.666666666666668
+        },
+        {
+          "keys": [
+            "adhd test vuxen"
+          ],
+          "clicks": 0,
+          "impressions": 8,
+          "ctr": 0,
+          "position": 25.125
+        },
+        {
+          "keys": [
+            "autism självtest"
+          ],
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 27.5
+        },
+        {
+          "keys": [
+            "autism test"
+          ],
+          "clicks": 0,
+          "impressions": 9,
+          "ctr": 0,
+          "position": 47.44444444444444
+        },
+        {
+          "keys": [
+            "autism test vuxen"
+          ],
+          "clicks": 0,
+          "impressions": 7,
+          "ctr": 0,
+          "position": 13.428571428571429
+        }
+      ],
+      "pairs": [
+        {
+          "keys": [
+            "adhd test",
+            "https://www.relationsvarning.se/adhd-test"
+          ],
+          "clicks": 0,
+          "impressions": 30,
+          "ctr": 0,
+          "position": 22.266666666666666
+        },
+        {
+          "keys": [
+            "adhd test",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 50.333333333333336
+        },
+        {
+          "keys": [
+            "adhd test",
+            "https://www.relationsvarning.se/audhd-test"
+          ],
+          "clicks": 0,
+          "impressions": 10,
+          "ctr": 0,
+          "position": 24.5
+        },
+        {
+          "keys": [
+            "adhd test vuxen",
+            "https://www.relationsvarning.se/adhd-test"
+          ],
+          "clicks": 0,
+          "impressions": 8,
+          "ctr": 0,
+          "position": 25.125
+        },
+        {
+          "keys": [
+            "autism självtest",
+            "https://www.relationsvarning.se/autism-test"
+          ],
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 27.5
+        },
+        {
+          "keys": [
+            "autism test",
+            "https://www.relationsvarning.se/autism-test"
+          ],
+          "clicks": 0,
+          "impressions": 9,
+          "ctr": 0,
+          "position": 47.44444444444444
+        },
+        {
+          "keys": [
+            "autism test vuxen",
+            "https://www.relationsvarning.se/autism-test"
+          ],
+          "clicks": 0,
+          "impressions": 7,
+          "ctr": 0,
+          "position": 13.428571428571429
+        }
+      ],
+      "relatedPairs": [
+        {
+          "keys": [
+            "add adhd test",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 73
+        },
+        {
+          "keys": [
+            "adhd add test",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 66
+        },
+        {
+          "keys": [
+            "adhd test",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 50.333333333333336
+        },
+        {
+          "keys": [
+            "adhd test barn",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 61
+        },
+        {
+          "keys": [
+            "adhd test för vuxna",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 5,
+          "ctr": 0,
+          "position": 39
+        },
+        {
+          "keys": [
+            "adhd test kvinna",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 33
+        },
+        {
+          "keys": [
+            "adhd test online",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 70.5
+        },
+        {
+          "keys": [
+            "adhd test online svenska",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 54
+        },
+        {
+          "keys": [
+            "adhd test ungdom",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 32
+        },
+        {
+          "keys": [
+            "adhd vuxen test",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 51
+        },
+        {
+          "keys": [
+            "autism test svenska",
+            "https://www.relationsvarning.se/har-jag-autism"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 17
+        },
+        {
+          "keys": [
+            "har jag adhd test",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 55.5
+        },
+        {
+          "keys": [
+            "relationsvarning autism test",
+            "https://www.relationsvarning.se/asperger-test"
+          ],
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 6
+        },
+        {
+          "keys": [
+            "relationsvarning autism test",
+            "https://www.relationsvarning.se/har-jag-autism"
+          ],
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 4
+        },
+        {
+          "keys": [
+            "relationsvarning.se/autism-test",
+            "https://www.relationsvarning.se/asperger-test"
+          ],
+          "clicks": 0,
+          "impressions": 5,
+          "ctr": 0,
+          "position": 5.8
+        },
+        {
+          "keys": [
+            "relationsvarning.se/autism-test",
+            "https://www.relationsvarning.se/har-jag-autism"
+          ],
+          "clicks": 0,
+          "impressions": 5,
+          "ctr": 0,
+          "position": 2.8
+        },
+        {
+          "keys": [
+            "självtest adhd",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 40
+        },
+        {
+          "keys": [
+            "test adhd",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 50
+        },
+        {
+          "keys": [
+            "test adhd barn",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 72
+        },
+        {
+          "keys": [
+            "test autism",
+            "https://www.relationsvarning.se/har-jag-autism"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 74
+        },
+        {
+          "keys": [
+            "test för adhd",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 51
+        },
+        {
+          "keys": [
+            "vuxen adhd test",
+            "https://www.relationsvarning.se/adhd-test/test"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 64
+        }
+      ]
+    }
+  },
+  "limitations": "Befintlig GSC från 22 november, t.o.m. 20 november. Genomsnittsposition är inte fixerad placering. Saknad rad är inte noll efterfrågan. Query- och sidaggregering får inte blandas."
+}

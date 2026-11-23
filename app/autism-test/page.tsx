@@ -13,9 +13,9 @@ const description = "Gör ett autismtest för vuxna med 30 frågor om vardag, sa
 export const metadata: Metadata = {
   title,
   description,
-  ...getEditorialMetadata({ route: "/autism-test", title, description, datePublished: "2026-09-15T19:27:30+02:00", dateModified: "2026-10-08T00:00:00+02:00" }),
+  ...getEditorialMetadata({ route: "/autism-test", title, description, datePublished: "2026-09-15T19:27:30+02:00", dateModified: "2026-11-23T10:00:00+01:00" }),
 };
-const articleJsonLd = getEditorialArticleSchema({ route: "/autism-test", title, description, datePublished: "2026-09-15T19:27:30+02:00", dateModified: "2026-10-08T00:00:00+02:00" });
+const articleJsonLd = getEditorialArticleSchema({ route: "/autism-test", title, description, datePublished: "2026-09-15T19:27:30+02:00", dateModified: "2026-11-23T10:00:00+01:00" });
 const cta = "inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-neutral-900 px-5 py-3 text-center font-semibold text-white hover:bg-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900 sm:w-auto";
 const descriptions = [
   "Aktiv analys av sociala situationer, förväntningar och samspelet i samtal.",
@@ -47,9 +47,14 @@ export default function AutismLanding() {
     <GuideSection title="Så fungerar självskattningen">
       <p>Du svarar på fem frågor inom vart och ett av sex områden. Återkopplingen utgår från hur du beskriver din vardag. Den fullständiga analysen visar vad som framträder i dina svar inom de olika områdena.</p>
       <p><strong>Exempel på återkoppling</strong><br />Om sinnesintryck sticker ut i dina svar kan återkopplingen handla om hur du upplever ljud, ljus eller andra intryck. Den beskriver dina svar och kan inte avgöra vad upplevelsen beror på.</p>
-      <p>Testet är utvecklat av Relationsvarning. Läs om <Link href="/metodik" className={textLink}>hur vi utformar våra självtester</Link>.</p>
+      <p>Frågorna och beräkningsreglerna är Relationsvarnings egna och saknar klinisk validering. Det här är inte <a href="https://www.autismresearchcentre.com/tests/autism-spectrum-quotient-aq-adult/" className={textLink}>Autism Spectrum Quotient (AQ)</a> eller <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3907126/" className={textLink}>RAADS-14 Screen</a>. Det är andra formulär med egna frågor och tolkningsregler. Deras forskningsstöd eller gränsvärden kan inte överföras till vårt självtest.</p>
+      <p>Läs om <Link href="/metodik" className={textLink}>hur vi utformar våra självtester</Link>. Självtestet är till för egen reflektion, inte för att avgöra om en utredning behövs.</p>
     </GuideSection>
-    <GuideSection title="Vad frågorna handlar om"><div className="grid gap-3 sm:grid-cols-2">{areas.map((area, i) => <div data-rv="card" key={area} className="min-w-0 rounded-2xl border border-neutral-200 bg-neutral-50 p-5"><h3 className="font-semibold text-neutral-900">{areaNames[area]}</h3><p className="mt-2">{descriptions[i]}</p></div>)}</div><p>Olika personer kan ha mycket olika profiler även när totalsumman liknar varandra. Testets index bygger på fem områden. Vardagspåverkan och erfarenheter över tid visas separat.</p></GuideSection>
+    <GuideSection title="Vad betyder poängen?">
+      <p>Varje svar ger 0–4 poäng. De fem frågorna inom varje område summeras och räknas om till en nivå mellan 0 och 100. Testets index är medelvärdet för de fem första områdena. Vardagspåverkan och långvarighet redovisas separat och används i tolkningen, men räknas inte in i indexet.</p>
+      <p>En nivå på exempelvis 60 av 100 betyder inte 60 procents sannolikhet för autism. Värdena beskriver dina svar i vår modell, inte hur du ligger till jämfört med befolkningen. Ett högt värde fastställer ingen diagnos, och ett lågt värde utesluter den inte. Ta därför fasta på konkreta situationer du känner igen och hur de påverkar dig, snarare än en enskild siffra.</p>
+    </GuideSection>
+    <GuideSection title="Vad frågorna handlar om"><div className="grid gap-3 sm:grid-cols-2">{areas.map((area, i) => <div data-rv="card" key={area} className="min-w-0 rounded-2xl border border-neutral-200 bg-neutral-50 p-5"><h3 className="font-semibold text-neutral-900">{areaNames[area]}</h3><p className="mt-2">{descriptions[i]}</p></div>)}</div><p>Olika personer kan ha mycket olika profiler även när totalsumman liknar varandra.</p></GuideSection>
 
     <GuideSection title="Hur kan autism märkas i vuxenlivet?"><p>Sociala situationer kan kräva mycket aktiv analys, särskilt när förväntningar eller signaler inte sägs rakt ut. Behov av förutsägbarhet, obehag vid plötsliga förändringar och sensorisk överbelastning kan också vara delar av bilden.</p><p>Vissa beskriver starkt fokus på intressen, behov av återhämtning efter social belastning eller mycket arbete med att kompensera för sådant som andra verkar göra automatiskt. Varje punkt kan även ha andra förklaringar. Det är ett långvarigt mönster och dess betydelse för vardagen som behöver undersökas.</p><p>Läs mer om <Link href="/autism-vuxna" className={textLink}>autism i vuxenlivet</Link> eller frågan <Link href="/har-jag-autism" className={textLink}>hur man kan känna igen ett sammanhängande mönster</Link>.</p></GuideSection>
     <GuideSection title="Autism upptäcks inte alltid på samma sätt hos alla"><p>I en <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5509825/" className={textLink}>studie om maskering</a> beskrev vuxna med autism strategier som att öva på samtal eller dölja vissa beteenden. Upplevelserna varierade mellan deltagarna.</p><p>Läs om <Link href="/autism-kvinnor" className={textLink}>autism hos kvinnor</Link> och <Link href="/maskering-autism" className={textLink}>maskering och social anpassning</Link>.</p></GuideSection>
