@@ -13,10 +13,11 @@ type Test = { product: string; title: string };
 const card = "rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm sm:p-7";
 const button = "min-h-12 rounded-xl bg-[#27666A] px-5 py-3 font-semibold text-white disabled:opacity-50";
 /** Test data and Auth requests go directly to Supabase. The book library uses its own purchase API. */
-export default function DirectAccountPortal({ bookLibrary = false, buyBook = false, bookReturn = false }: {
+export default function DirectAccountPortal({ bookLibrary = false, buyBook = false, bookReturn = false, bookIntent = false }: {
   bookLibrary?: boolean;
   buyBook?: boolean;
   bookReturn?: boolean;
+  bookIntent?: boolean;
 }) {
   const [email, setEmail] = useState(""), [userEmail, setUserEmail] = useState<string | null>(null);
   const [codeEmail, setCodeEmail] = useState<string | null>(null), [loginCode, setLoginCode] = useState("");
@@ -168,7 +169,8 @@ export default function DirectAccountPortal({ bookLibrary = false, buyBook = fal
       if (!data.session || !data.user) throw new Error("Session unavailable");
       loginReturn.current = null;
       setCodeEmail(null); setLoginCode("");
-      setLoginToken(null); setNotice("Du är inloggad. Välj en analys och bekräfta om du vill spara den på kontot.");
+      setLoginToken(null);
+      setNotice(bookIntent ? "Du är inloggad. Fortsätt med bokköpet i Mitt bibliotek." : "Du är inloggad. Välj en analys och bekräfta om du vill spara den på kontot.");
     } catch { fail(); } finally { loginInFlight.current = false; setBusy(false); }
   }
   async function logout() {
@@ -224,7 +226,7 @@ export default function DirectAccountPortal({ bookLibrary = false, buyBook = fal
     {loginToken && <section className={card}><h2 className="text-xl font-semibold">Bekräfta din inloggning</h2><p className="my-4">Tryck här för att använda din personliga inloggningslänk.</p><button className={button} disabled={busy} onClick={() => void confirmLogin()}>Logga in</button></section>}
     {userEmail ? <section className={card}><p>Inloggad som {userEmail}</p><button className="mt-3 underline" disabled={busy} onClick={() => void logout()}>Logga ut</button></section>
       : !loginToken && (codeEmail ? <form className={card} onSubmit={event => { event.preventDefault(); void confirmLogin("code"); }}><h2 className="text-xl font-semibold">Skriv in koden från mejlet</h2><p className="mt-3">Stanna i den här fliken för att behålla åtkomsten till ditt köp.</p><label className="my-4 block">Engångskod<input type="text" inputMode="numeric" autoComplete="one-time-code" required pattern="[0-9]{6,10}" maxLength={14} value={loginCode} onChange={event => setLoginCode(event.target.value.replace(/\D/g, "").slice(0, 10))} className="mt-2 block min-h-12 w-full rounded-xl border p-3 text-xl tracking-widest" /></label><button className={button} disabled={busy || !/^[0-9]{6,10}$/.test(loginCode)}>Logga in med koden</button><button type="button" className="mt-4 block min-h-11 underline" disabled={busy} onClick={() => { setCodeEmail(null); setLoginCode(""); setNotice(""); }}>Ändra mejladress eller begär ny kod</button></form>
-        : <form className={card} onSubmit={event => { event.preventDefault(); void login(); }}><h2 className="text-xl font-semibold">Logga in med mejl</h2><p className="mt-3">Få en engångskod och skriv in den här. Du behöver inget lösenord.</p><label className="my-4 block">Mejladress<input type="email" required autoComplete="email" value={email} onChange={event => setEmail(event.target.value)} className="mt-2 block min-h-12 w-full rounded-xl border p-3" /></label><button className={button} disabled={busy}>Skicka inloggningskod</button></form>)}
+        : <form className={card} onSubmit={event => { event.preventDefault(); void login(); }}><h2 className="text-xl font-semibold">Logga in med mejl</h2><p className="mt-3">{bookIntent ? "Ange din mejladress och bekräfta den med engångskoden. Sedan kan du öppna kassan för boken i Mitt bibliotek." : "Få en engångskod och skriv in den här. Du behöver inget lösenord."}</p><label className="my-4 block">Mejladress<input type="email" required autoComplete="email" value={email} onChange={event => setEmail(event.target.value)} className="mt-2 block min-h-12 w-full rounded-xl border p-3" /></label><button className={button} disabled={busy}>Skicka inloggningskod</button></form>)}
     {pending.length > 0 && <section className={card}><h2 className="text-xl font-semibold">Köp i den här webbläsaren</h2><p className="my-3">Öppna ditt betalda resultat. Välj sedan om du vill spara det på kontot. Gäståtkomsten gäller i högst sju dagar.</p><ul className="space-y-3">{pending.map(item => <li key={item.id}><button className="min-h-11 underline" disabled={busy} onClick={() => void guest(item)}>Öppna {title(item.product)}</button></li>)}</ul></section>}
     {bookLibrary && userId && <section id="bibliotek" aria-label="Mitt bibliotek" className={card}>
       <h2 className="mb-4 text-xl font-semibold">Mitt bibliotek</h2>

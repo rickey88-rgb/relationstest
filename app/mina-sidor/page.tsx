@@ -42,7 +42,7 @@ export default async function MyPages({ searchParams }: { searchParams: Promise<
   const libraryEnabled = bookLibraryEnabled();
   const buyBook = bookCheckoutEnabled();
   const returning = bok === "betalning";
-  if (directPortalEnabled()) return <DirectAccountPortal bookLibrary={libraryEnabled} buyBook={buyBook} bookReturn={returning} />;
+  if (directPortalEnabled()) return <DirectAccountPortal bookLibrary={libraryEnabled} buyBook={buyBook} bookReturn={returning} bookIntent={buyBook && bok === "kop"} />;
   let user = null;
   try {
     user = await authenticatedUser();

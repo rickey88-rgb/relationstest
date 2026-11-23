@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { trackEvent } from "../_analytics/analytics";
+import { CONSENT_EVENT, trackEvent } from "../_analytics/analytics";
 
 type BookPurchaseAnalyticsProps = {
   productId: string;
@@ -13,20 +13,28 @@ type BookPurchaseAnalyticsProps = {
   children: string;
 };
 
-export function BookLandingAnalytics({ productId, productName, price, offerType }: Omit<BookPurchaseAnalyticsProps, "paymentLink" | "className" | "children">) {
+export function BookLandingAnalytics({ productId, productName, price, offerType, waitForConsent = false }:
+  Omit<BookPurchaseAnalyticsProps, "paymentLink" | "className" | "children"> & { waitForConsent?: boolean }) {
   const tracked = useRef(false);
 
   useEffect(() => {
-    if (tracked.current) return;
-    tracked.current = true;
-    trackEvent("book_landing_view", {
-      product_id: productId,
-      product_name: productName,
-      price,
-      currency: "SEK",
-      offer_type: offerType,
-    });
-  }, [offerType, price, productId, productName]);
+    function trackView() {
+      if (tracked.current) return;
+      const sent = trackEvent("book_landing_view", {
+        product_id: productId,
+        product_name: productName,
+        price,
+        currency: "SEK",
+        offer_type: offerType,
+      });
+      if (sent || !waitForConsent) tracked.current = true;
+    }
+    trackView();
+    if (waitForConsent && !tracked.current) {
+      window.addEventListener(CONSENT_EVENT, trackView);
+      return () => window.removeEventListener(CONSENT_EVENT, trackView);
+    }
+  }, [offerType, price, productId, productName, waitForConsent]);
 
   return null;
 }

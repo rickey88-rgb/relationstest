@@ -3,6 +3,7 @@ const assert = require("node:assert/strict");
 const { readFileSync } = require("node:fs");
 const path = require("node:path");
 const { PGlite } = require("@electric-sql/pglite");
+const Stripe = require("stripe");
 const createLoader = require("../../../autism-test/test/test-loader.cjs");
 
 const origin = "https://book-launch.example.test";
@@ -94,6 +95,10 @@ const stripe = {
     signedIn = { id: buyer, email_confirmed_at: null };
     assert.equal((await route.POST(req("POST"))).status, 401);
     signedIn.email_confirmed_at = "2026-11-23";
+    process.env.STRIPE_SECRET_KEY = "sk_live_fixture";
+    assert.equal((await route.POST(req("POST"))).status, 503, "test mode rejects a live key");
+    assert.equal(calls, 0);
+    process.env.STRIPE_SECRET_KEY = "sk_test_fixture";
     priceAmount = 9900;
     assert.equal((await route.POST(req("POST"))).status, 503);
     assert.equal(calls, 0);
@@ -115,9 +120,20 @@ const stripe = {
     session.status = "complete"; session.payment_status = "paid"; session.payment_intent = intentId;
     const event = { type: "checkout.session.completed", id: "evt_book_fixture", created: 1795453123, data: { object: { id: sessionId } } };
     const deps = { retrieveSession: stripe.checkout.sessions.retrieve, listLineItems: stripe.checkout.sessions.listLineItems, recordPayment: ledger.recordVerifiedStripePayment };
-    assert.equal((await webhook.processStripeWebhookEvent(event, deps)).productKey, "overthinking_book");
-    assert.equal((await webhook.processStripeWebhookEvent(event, deps)).duplicate, true);
-    assert.equal((await pg.query("select amount_total_ore, currency, livemode from stripe_payments")).rows.length, 1);
+    const sdk = new Stripe("sk_test_fixture");
+    const payload = JSON.stringify(event);
+    const secret = "whsec_local_fixture";
+    const signature = sdk.webhooks.generateTestHeaderString({ payload, secret });
+    assert.throws(() => sdk.webhooks.constructEvent(payload + " ", signature, secret));
+    const signedEvent = sdk.webhooks.constructEvent(payload, signature, secret);
+    assert.equal((await webhook.processStripeWebhookEvent(signedEvent, deps)).productKey, "overthinking_book");
+    assert.equal((await webhook.processStripeWebhookEvent(signedEvent, deps)).duplicate, true);
+    await webhook.processStripeWebhookEvent({ ...signedEvent, id: "evt_book_async_fixture", type: "checkout.session.async_payment_succeeded" }, deps);
+    assert.deepEqual((await pg.query("select product_key, amount_total_ore, currency, livemode from stripe_payments")).rows,
+      [{ product_key: "overthinking_book", amount_total_ore: 14900, currency: "sek", livemode: false }]);
+    session.payment_status = "unpaid";
+    assert.equal((await download.GET(req())).status, 403, "a paid ledger entry does not grant access");
+    session.payment_status = "paid";
     assert.deepEqual(await (await route.GET(req())).json(), { state: "ready" });
     assert.deepEqual(await (await route.POST(req("POST"))).json(), { kind: "owned" });
     items.data[0].quantity = 2;
@@ -134,7 +150,15 @@ const stripe = {
     signedIn.id = other;
     assert.equal((await download.GET(req())).status, 403);
     assert.equal(storageReads, 0);
-    signedIn.id = buyer;
+    signedIn = null;
+    assert.equal((await download.GET(req())).status, 401);
+    signedIn = { id: buyer, email_confirmed_at: "2026-11-23" };
+    assert.deepEqual(await (await route.GET(req())).json(), { state: "ready" });
+    if (pdf) {
+      const reopened = await download.GET(req());
+      assert.equal(reopened.status, 200);
+      assert.deepEqual(Buffer.from(await reopened.arrayBuffer()), pdf);
+    }
     process.env.OVERTHINKING_BOOK_CHECKOUT_ENABLED = "false";
     assert.equal((await route.POST(req("POST"))).status, 503);
     assert.deepEqual(await (await route.GET(req())).json(), { state: "ready" });

@@ -20,8 +20,9 @@ function stripeMode() {
   const live = /^(sk|rk)_live_/.test(key);
   const origin = applicationOrigin();
   const host = new URL(origin).hostname;
-  if (!live && !(process.env.OVERTHINKING_BOOK_STRIPE_TEST_MODE === "true" &&
-    /^(sk|rk)_test_/.test(key) && host !== "www.relationsvarning.se" && host !== "relationsvarning.se")) {
+  const testMode = process.env.OVERTHINKING_BOOK_STRIPE_TEST_MODE === "true";
+  if (testMode ? !(
+    /^(sk|rk)_test_/.test(key) && host !== "www.relationsvarning.se" && host !== "relationsvarning.se") : !live) {
     throw new Error("Book payment mode unavailable");
   }
   return { key, live, origin };

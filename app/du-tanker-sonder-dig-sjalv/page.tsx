@@ -52,7 +52,7 @@ export default function OverthinkingBookPage() {
   };
 
   return <main className={styles.page} data-overthinking-book>
-    {enabled && <BookLandingAnalytics productId={book.product} productName={book.title} price={book.price} offerType="standard" />}
+    {enabled && <BookLandingAnalytics productId={book.product} productName={book.title} price={book.price} offerType="standard" waitForConsent />}
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData).replace(/</g, "\u005cu003c") }} />
     <section className={styles.hero} aria-labelledby="book-title">
       <div className={styles.heroInner}>

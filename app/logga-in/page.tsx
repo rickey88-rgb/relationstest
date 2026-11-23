@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-type LoginPageProps = { searchParams: Promise<{ status?: string }> };
+type LoginPageProps = { searchParams: Promise<{ status?: string; bok?: string }> };
 
 function statusMessage(status: string | undefined) {
   if (status === "sent") return "Om adressen kan ta emot inloggningslänkar har vi skickat ett mejl. Kontrollera inkorgen och skräpposten. Länken gäller i en timme och fungerar även om du öppnar mejlet på en annan enhet.";
@@ -20,13 +20,13 @@ function statusMessage(status: string | undefined) {
 
 export default async function LoginPage({ searchParams }: LoginPageProps) {
   if (!accountPortalEnabled()) notFound();
-  const { status } = await searchParams;
+  const { status, bok } = await searchParams;
   const message = statusMessage(status);
   return (
     <main className="mx-auto min-h-screen max-w-xl px-5 py-16">
       <p className="text-sm font-semibold uppercase tracking-[.16em] text-[#27666A]">Relationsvarning.se</p>
       <h1 className="mt-3 text-3xl font-semibold">Logga in till Mina sidor</h1>
-      <p className="mt-4 leading-7 text-neutral-700">Inloggning är frivillig. Du behöver inte skapa konto för att göra ett test eller genomföra ett köp.</p>
+      <p className="mt-4 leading-7 text-neutral-700">{bok === "kop" ? "Ange din mejladress för att fortsätta med bokköpet. Du får en inloggningslänk och kan sedan öppna kassan från Mitt bibliotek." : "Inloggning är frivillig. Du behöver inte skapa konto för att göra ett test eller genomföra ett köp."}</p>
       {status === "sent" && message ? (
         <section role="status" aria-labelledby="link-sent-title" className="mt-6 rounded-2xl border border-[#cbd9d1] bg-[#edf3ef] p-5 sm:p-6">
           <div className="flex items-start gap-3">

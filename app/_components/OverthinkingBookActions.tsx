@@ -5,6 +5,8 @@ import { trackEvent } from "../_analytics/analytics";
 import { directAuthClient } from "../_lib/testAccounts/directClient";
 import { OVERTHINKING_BOOK as book } from "../_lib/overthinkingBook";
 
+const pendingBookKey = "rv-pending-book-v1";
+
 async function bookRequest(path: string, direct: boolean, method = "GET", signal?: AbortSignal) {
   const headers = new Headers();
   if (direct) {
@@ -34,7 +36,10 @@ export function OverthinkingBuyButton({ enabled, direct, className, library = fa
       const response = await bookRequest(book.api, direct, "POST");
       if (response.status === 401) {
         if (library) setMessage("Logga in igen för att fortsätta.");
-        else window.location.assign("/mina-sidor?bok=kop#bibliotek");
+        else {
+          try { localStorage.setItem(pendingBookKey, String(Date.now())); } catch { /* The library is still available manually. */ }
+          window.location.assign(direct ? "/mina-sidor?bok=kop#bibliotek" : "/logga-in?bok=kop");
+        }
         return;
       }
       if (!response.ok) throw new Error("Checkout unavailable");
@@ -87,6 +92,16 @@ export function OverthinkingLibrary({ direct, buyEnabled, returning = false }: {
     void refresh();
     return () => controller.abort();
   }, [direct, revision]);
+
+  useEffect(() => {
+    let resume = returning || new URLSearchParams(window.location.search).get("bok") === "kop";
+    try {
+      const timestamp = Number(localStorage.getItem(pendingBookKey));
+      localStorage.removeItem(pendingBookKey);
+      resume ||= timestamp > Date.now() - 60 * 60 * 1000 && timestamp <= Date.now();
+    } catch { /* The library link works when browser storage is blocked. */ }
+    if (resume) document.getElementById("bibliotek")?.scrollIntoView({ block: "start" });
+  }, [returning]);
 
   async function download() {
     setBusy(true);
