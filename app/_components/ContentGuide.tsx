@@ -5,15 +5,16 @@ import { sources, type ContentLink } from "../../content/behaviors";
 
 export const textLink = "underline underline-offset-4 decoration-neutral-300 hover:decoration-neutral-700";
 
-export function ContentGuide({ title, intro, breadcrumbs = [], children }: {
+export function ContentGuide({ title, intro, breadcrumbs = [], newsletter = true, children }: {
   title: string;
   intro: string;
   breadcrumbs?: ContentLink[];
+  newsletter?: boolean;
   children: ReactNode;
 }) {
   const nodes = Children.toArray(children);
   const sections = nodes.filter(node => isValidElement(node) && node.type === GuideSection);
-  const midpoint = sections.length >= 4 ? sections[Math.floor(sections.length / 2) - 1] : null;
+  const midpoint = newsletter && sections.length >= 4 ? sections[Math.floor(sections.length / 2) - 1] : null;
   return (
     <main data-rv="container" className="mx-auto max-w-3xl px-4 py-10 text-neutral-900 [overflow-wrap:anywhere] sm:px-6 sm:py-14">
       <nav aria-label="Brödsmulor" className="text-sm text-neutral-600">

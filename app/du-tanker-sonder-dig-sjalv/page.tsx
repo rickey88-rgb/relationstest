@@ -135,7 +135,10 @@ export default function OverthinkingBookPage() {
 
     <section className={`${styles.section} ${styles.faq}`} aria-labelledby="faq">
       <h2 id="faq">Vanliga frågor</h2>
-      <div>{questions.map(([question, answer]) => <details key={question}><summary>{question}</summary><p>{answer}</p></details>)}</div>
+      <div>
+        {questions.map(([question, answer]) => <details key={question}><summary>{question}</summary><p>{answer}</p></details>)}
+        <p className="mt-5">Vill du börja med en övning du kan prova i dag? Läs den <Link className="underline underline-offset-4" href="/overtankande">kostnadsfria guiden om övertänkande</Link>.</p>
+      </div>
     </section>
   </main>;
 }

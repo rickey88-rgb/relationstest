@@ -35,6 +35,7 @@ export default function Page() {
           <h2 className="text-2xl font-semibold tracking-tight text-neutral-900">När partnerns signaler blir svåra att släppa</h2>
           <p>Hypervaksamhet kan i vardagsspråk beskriva att uppmärksamheten fastnar vid små förändringar. Ett meddelande är kortare än vanligt. Partnern låter trött. Nästa träff är inte bestämd. Du försöker förstå om det betyder något, men varje ny detalj öppnar fler frågor. Exempel som dessa illustrerar möjlig oro; de fungerar inte som en checklista för att identifiera en anknytningsstil.</p>
           <p>Tänk dig att ni brukar höras under lunchen men att det är tyst en dag. Händelsen är att kontakten uteblir. Tolkningen kan vara att du blivit mindre viktig. Impulsen kan vara att fråga flera gånger, läsa gamla meddelanden eller själv bli kylig för att se om partnern reagerar. Genom att skilja dessa led åt blir det lättare att undersöka vad som faktiskt är känt.</p>
+          <p>Det går att göra samma skillnad i ett sms du är på väg att skicka. Prova övningen <Link href="/overtankande-i-relationer" className="underline underline-offset-4">när du fastnar i att tolka sms och signaler</Link>.</p>
           <p>Det betyder inte att alla tolkningar är fel. Om partnern tidigare brutit överenskommelser kan det finnas konkreta skäl till misstro. Det viktiga är att varken göra känslan till ett säkert bevis eller avfärda den enbart för att du känner igen ett ängsligt mönster.</p>
         </section>
         <section className="mt-10 space-y-4 leading-7 text-neutral-700">

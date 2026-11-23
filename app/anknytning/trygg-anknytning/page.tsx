@@ -58,6 +58,7 @@ export default function Page() {
           <p>Återhämtning efter konflikt handlar inte bara om att stämningen blir bättre. Det kan också behövas ett erkännande av vad som hände. ”Jag avbröt dig flera gånger och vill lyssna färdigt nu” går att agera på. En ursäkt som följs av samma beteende utan försök till förändring lämnar däremot den andra med samma problem.</p>
           <p>Ett exempel är att komma tillbaka till en praktisk överenskommelse dagen efter. Fungerar den verkligen för båda? Finns det något som blev osagt? Då kan reparation betyda både att känslorna får plats och att vardagen ändras. Ingen behöver låtsas vara helt återställd bara för att den andra vill släppa ämnet.</p>
           <p>Att kunna återknyta kontakt betyder inte heller att varje relation bör fortsätta. Det går att avsluta en relation som inte fungerar, även om det finns omsorg kvar. Trygghet ska inte bli ett ideal där den mogna personen förväntas stå ut med allt eller alltid kunna reparera det som hänt.</p>
+          <p>Om ni redan har pratat och du ändå fortsätter spela upp samtalet kan <Link href="/sluta-alta" className="underline underline-offset-4">övningen för att hantera ältande</Link> hjälpa dig att se om något återstår att ta upp.</p>
         </section>
         <section className="mt-10 space-y-4 leading-7 text-neutral-700">
           <h2 className="text-2xl font-semibold tracking-tight text-neutral-900">Trygghet kan skilja sig mellan relationer och situationer</h2>
