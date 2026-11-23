@@ -11,11 +11,11 @@ const description = "Vad är traumabindning i en relation? Läs om vanliga tecke
 export const metadata: Metadata = {
   title,
   description,
-  ...getEditorialMetadata({ route: "/traumabindning-i-relation", title, description, datePublished: "2026-03-15T23:41:45+01:00", dateModified: "2026-09-21T22:29:14+02:00" }),
+  ...getEditorialMetadata({ route: "/traumabindning-i-relation", title, description, datePublished: "2026-03-15T23:41:45+01:00", dateModified: "2026-11-23T15:54:00+01:00" }),
 };
 
 const articleImage = getPublishedArticleImage("/traumabindning-i-relation");
-const articleJsonLd = getEditorialArticleSchema({ route: "/traumabindning-i-relation", title, description, datePublished: "2026-03-15T23:41:45+01:00", dateModified: "2026-09-21T22:29:14+02:00" });
+const articleJsonLd = getEditorialArticleSchema({ route: "/traumabindning-i-relation", title, description, datePublished: "2026-03-15T23:41:45+01:00", dateModified: "2026-11-23T15:54:00+01:00" });
 
 export default function TraumabindningIRelationPage() {
   return (
@@ -31,14 +31,11 @@ export default function TraumabindningIRelationPage() {
             det är så svårt att lämna
           </h1>
           <p className="mt-6 text-lg leading-8 text-neutral-700">
-            I vissa relationer finns det en märklig motsägelse som är svår att
-            förklara för andra. Man mår dåligt, känner sig mindre fri, blir
-            sårad gång på gång och tvivlar mer och mer på sig själv – men
-            samtidigt känns bandet till den andra personen starkare än någonsin.
-            Man tänker på personen hela tiden, hoppas på förändring, försöker
-            förstå, försöker reparera och känner nästan panik inför tanken på att
-            lämna. Det är här många börjar undra om det de upplever kan vara
-            traumabindning.
+            Traumabindning används om starka känslomässiga band till någon som
+            samtidigt utsätter en för kränkningar, kontroll eller våld. Värme och
+            närhet kan växla med rädsla och otrygghet. Begreppet försöker beskriva
+            varför bandet kan finnas kvar trots att relationen skadar; stark saknad
+            efter ett uppbrott räcker inte i sig för att avgöra att det är traumabindning.
           </p>
           <p className="mt-4 text-lg leading-8 text-neutral-700">
             Traumabindning i en relation handlar inte om svaghet, dumhet eller
@@ -93,13 +90,12 @@ export default function TraumabindningIRelationPage() {
             sig ännu mer fast.
           </p>
           <p>
-            En viktig del av det här är växlingen mellan obehag och lättnad. När
-            någon först sårar, avvisar, skrämmer eller förvirrar dig och sedan
-            plötsligt blir varm, ångerfull, kärleksfull eller omtänksam, kan
-            nervsystemet börja knyta stark lättnad till den personen. Det skapar
-            en slags känslomässig krok. Man slappnar av när personen blir snäll
-            igen och tolkar ofta den lättnaden som kärlek, hopp eller bevis på
-            att relationen ändå går att rädda.
+            En del av det som beskrivs är växlingen mellan obehag och lättnad.
+            Efter kränkningar kan en varm eller omtänksam stund väcka hopp om
+            förändring. Ett exempel är att du känner lättnad efter en ursäkt och
+            skjuter undan frågan om samma beteende återkommer. Det är en
+            illustration av ett möjligt mönster, inte en förklaring som gäller
+            alla eller ett bevis på hur ditt nervsystem fungerar.
           </p>
           <p>
             Det gör att man lätt börjar leva mer på undantag än på trygghet. Man
@@ -122,6 +118,10 @@ export default function TraumabindningIRelationPage() {
             automatiskt leder till ett uppbrott.
           </p>
         </section>
+
+        <p className="mt-5 text-sm leading-7 text-neutral-600">
+          Forskningsbakgrund: <a href="https://pubmed.ncbi.nlm.nih.gov/8193053/" className="underline underline-offset-4">Dutton och Painters studie av känslomässiga band efter en våldsam relation</a> undersökte samband mellan bland annat maktobalans, återkommande utsatthet och kvarstående band. Studien fastställer inte orsaken till en enskild persons situation. Rädsla, ekonomi, barn och praktiska hinder behöver också tas på allvar; svårigheten att lämna är inte bara en fråga om känslor.
+        </p>
 
         {articleImage ? <ArticleImage image={articleImage} /> : null}
 
@@ -210,9 +210,9 @@ export default function TraumabindningIRelationPage() {
           <p>
             När du försöker bryta kontakten eller skapa distans kan det kännas som
             panik, tomhet, skuldkänslor eller nästan fysisk stress. Då är det
-            lätt att tolka återgången till relationen som bevis på kärlek, när
-            det i själva verket också kan handla om att nervsystemet söker
-            lättnad från stress.
+            lätt att tolka återgången till relationen som bevis på kärlek. Men
+            längtan, rädsla, hopp och praktiska hinder kan finnas samtidigt.
+            En stark stressreaktion visar inte ensam vad bandet beror på.
           </p>
           <p>
             Kroppslig stress kan ha flera förklaringar. Om du vill förstå hur oro kan märkas i kroppen kan du läsa om <Link href="/fysisk-angest" className="text-neutral-900 underline underline-offset-4">fysisk ångest</Link>.
@@ -447,12 +447,13 @@ export default function TraumabindningIRelationPage() {
           <p>
             Först och främst: försök att inte använda igenkänningen som ett nytt
             sätt att attackera dig själv. Om du känner igen dig i det här betyder
-            det inte att du är svag. Det betyder att du sannolikt levt länge i en
-            dynamik som påverkat dig mer än du först förstått.
+            det inte att du är svag. Igenkänning kan vara en anledning att söka stöd,
+            men fastställer inte vad som orsakat din situation.
           </p>
           <p>
             Ett hjälpsamt första steg kan vara att börja återanknyta till din egen
-            verklighet. Skriv ner konkreta händelser. Inte bara känslan efteråt,
+            verklighet. Om du kan förvara anteckningarna tryggt, skriv ner konkreta
+            händelser. Inte bara känslan efteråt,
             utan vad som faktiskt sades och gjordes. När började du känna dig
             mindre fri? Vad händer när du sätter gränser? Vad händer när du säger
             emot? Hur mår du efter ett vanligt samtal med personen jämfört med

@@ -30,16 +30,17 @@ export default function Page() {
         </h1>
 
         <p>
-          Ibland är det inte stora bråk som skaver mest – utan en återkommande känsla
-          av att du måste förklara dig, be om ursäkt eller tänka om kring sådant som
-          egentligen kändes rimligt från början. Med tiden kan det bli svårt att
-          avgöra vad som faktiskt hände och varför det alltid verkar sluta med att
-          du bär ansvaret.
+          Manipulativt beteende i en relation kan handla om att påverka dina val
+          genom skuld, förskjutet ansvar eller press på dina gränser. Det skiljer
+          sig från att öppet säga vad man önskar och lämna utrymme för ett nej.
+          En enstaka dålig reaktion visar däremot inte hur en person fungerar i stort.
         </p>
 
         <p>
-          Den här sidan beskriver vanliga manipulativa beteendemönster i relationer.
-          Fokus ligger på mönster – inte diagnoser.
+          Ett exempel är att du tar upp ett brutet löfte men gång på gång får
+          försvara din ton, medan löftet aldrig diskuteras. Lägg märke till om
+          sakfrågan går att reda ut och om båda kan ta ansvar efteråt. Exemplen på
+          den här sidan beskriver beteenden, inte diagnoser eller säkra besked om avsikt.
         </p>
 
         <p>
@@ -154,9 +155,10 @@ export default function Page() {
           <li>
             <strong>Tystnad som straff.</strong> Avstånd eller kyla används när du
             uttrycker behov. Samtal avbryts, meddelanden ignoreras, stämningen blir
-            iskall eller så försvinner personen in i ett avstånd som tydligt markerar
-            att du nu ska känna obehag. Det sägs kanske inte rakt ut – men effekten är
-            ändå att du lär dig vad som kostar att ta upp fel sak.
+            iskall och du börjar undvika vissa ämnen för att slippa reaktionen.
+            Det är mönstret och vad som händer när kontakten återupptas som behöver
+            undersökas. Att någon behöver paus eller återhämtning är inte i sig
+            bestraffning eller ett besked om avsikt.
           </li>
           <li>
             <strong>Gränser testas.</strong> Ett nej möts av övertalning, suckar eller
@@ -402,14 +404,15 @@ export default function Page() {
             händelser.
           </li>
           <li>
-            Skriv gärna ner situationer när du börjar tvivla på vad som hände eller
-            hur du kände.
+            Om du kan förvara anteckningar tryggt, skriv gärna ner situationer när du
+            börjar tvivla på vad som hände eller hur du kände.
           </li>
           <li>
             Prata med någon du litar på som kan hjälpa dig att få perspektiv.
           </li>
           <li>
-            Testa att sätta en liten, tydlig gräns och observera vad som händer.
+            Om det känns tryggt kan du uttrycka en liten, tydlig gräns. Är du rädd
+            för reaktionen, sök stöd i stället för att pröva partnerns gränser.
           </li>
           <li>
             Sök stöd om du känner stark rädsla, press eller otrygghet.

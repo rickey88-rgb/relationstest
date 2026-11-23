@@ -1,0 +1,2183 @@
+{
+  "capturedAt": "2026-11-23T14:52:51.974Z",
+  "base": "9f68db845d45db5e26853a0945bc7f0bf1c82e32",
+  "collectedAt": "2026-11-22T18:35:10.625Z",
+  "property": "sc-domain:relationsvarning.se",
+  "periods": [
+    [
+      "new28",
+      "2026-10-24",
+      "2026-11-20"
+    ],
+    [
+      "new90",
+      "2026-08-23",
+      "2026-11-20"
+    ],
+    [
+      "old28",
+      "2026-10-09",
+      "2026-11-05"
+    ],
+    [
+      "old90",
+      "2026-08-08",
+      "2026-11-05"
+    ],
+    [
+      "post",
+      "2026-11-08",
+      "2026-11-20"
+    ],
+    [
+      "pre",
+      "2026-10-25",
+      "2026-11-06"
+    ]
+  ],
+  "paths": [
+    "/love-bombing-relation",
+    "/manipulativ-partner",
+    "/gaslighting-relation",
+    "/traumabindning-i-relation",
+    "/medberoende"
+  ],
+  "queries": [
+    "love bombing",
+    "lovebombing",
+    "vad är love bombing",
+    "love bombing svenska",
+    "love bombing betyder",
+    "love bombing tecken",
+    "manipulativ",
+    "manipulativ partner",
+    "manipulativ pojkvän",
+    "manipulativ flickvän",
+    "manipulativt beteende",
+    "manipulativ partner test",
+    "gaslighting",
+    "gaslighting exempel",
+    "gaslighting svenska",
+    "gaslighting test",
+    "traumabindning",
+    "trauma bindning",
+    "traumabindning test",
+    "medberoende destruktiv relation",
+    "medberoende betyder",
+    "medberoende"
+  ],
+  "pages": [
+    {
+      "path": "/love-bombing-relation",
+      "status": 200,
+      "canonical": "https://www.relationsvarning.se/love-bombing-relation",
+      "title": "Love bombing – 10 tecken och skillnaden mot förälskelse",
+      "description": "Vad betyder love bombing på svenska? Läs om 10 tecken, skillnaden mot stark förälskelse och när uppmärksamhet blir press eller kontroll.",
+      "noindex": false,
+      "hasMain": true
+    },
+    {
+      "path": "/manipulativ-partner",
+      "status": 200,
+      "canonical": "https://www.relationsvarning.se/manipulativ-partner",
+      "title": "Manipulativ partner – tecken, mönster och varningssignaler",
+      "description": "Vad betyder manipulativ? Läs om 10 tecken hos en partner, konkreta exempel och skillnaden mot vanlig konflikt. Se hur du kan få stöd och reflektera med ett test.",
+      "noindex": false,
+      "hasMain": true
+    },
+    {
+      "path": "/gaslighting-relation",
+      "status": 200,
+      "canonical": "https://www.relationsvarning.se/gaslighting-relation",
+      "title": "Gaslighting i relation: tecken, exempel och skillnaden mot konflikt",
+      "description": "Vad betyder gaslighting? Se exempel på förnekande och skuldvändning i en relation, skillnaden mot vanlig konflikt och hur du kan bemöta mönstret och söka stöd.",
+      "noindex": false,
+      "hasMain": true
+    },
+    {
+      "path": "/traumabindning-i-relation",
+      "status": 200,
+      "canonical": "https://www.relationsvarning.se/traumabindning-i-relation",
+      "title": "Traumabindning i en relation – tecken, varför det händer och varför det är så svårt att lämna",
+      "description": "Vad är traumabindning i en relation? Läs om vanliga tecken, varför starka band kan uppstå i destruktiva relationer och varför det kan kännas så svårt att lämna.",
+      "noindex": false,
+      "hasMain": true
+    },
+    {
+      "path": "/medberoende",
+      "status": 200,
+      "canonical": "https://www.relationsvarning.se/medberoende",
+      "title": "Medberoende – tecken, orsaker och mönster i relationer",
+      "description": "Läs vad medberoende innebär, vanliga tecken och hur överansvar, självuppoffring och svaga gränser kan påverka en relation.",
+      "noindex": false,
+      "hasMain": true
+    },
+    {
+      "path": "/test",
+      "status": 200,
+      "canonical": "https://www.relationsvarning.se/test",
+      "title": "Relationstest – upptäck varningssignaler i din relation | Relationsvarning",
+      "description": "Gör ett anonymt relationstest och identifiera återkommande mönster som kontroll, manipulation, gaslighting och psykisk misshandel.",
+      "noindex": false,
+      "hasMain": true
+    },
+    {
+      "path": "/gaslightingtest/test",
+      "status": 200,
+      "canonical": "https://www.relationsvarning.se/gaslightingtest/test",
+      "title": "Gaslighting test – utsätts du för gaslighting i relationen?",
+      "description": "Gör vårt gaslightingtest med 30 frågor om förnekande, skuldvändning, minne, känslor och tvivel på det egna omdömet i en relation.",
+      "noindex": false,
+      "hasMain": true
+    },
+    {
+      "path": "/traumabindningtest/test",
+      "status": 200,
+      "canonical": "https://www.relationsvarning.se/traumabindningtest/test",
+      "title": "Traumabindningstest – är du fast i en traumabindning?",
+      "description": "Gör vårt traumabindningstest med 30 frågor om stark bindning, smärta och närhet, hopp om förändring, återdragning och egna gränser.",
+      "noindex": false,
+      "hasMain": true
+    },
+    {
+      "path": "/medberoendetest/test",
+      "status": 200,
+      "canonical": "https://www.relationsvarning.se/medberoendetest",
+      "title": "Medberoendetest – känner du igen medberoende mönster?",
+      "description": "Gör vårt medberoendetest med 30 frågor om självuppoffring, överansvar, gränser och känslomässigt fokus i relationen.",
+      "noindex": true,
+      "hasMain": true
+    }
+  ],
+  "metrics": {
+    "new28all": {
+      "pageRows": [
+        {
+          "keys": [
+            "https://www.relationsvarning.se/manipulativ-partner"
+          ],
+          "clicks": 70,
+          "impressions": 3616,
+          "ctr": 0.019358407079646017,
+          "position": 6.789269911504425
+        },
+        {
+          "keys": [
+            "https://www.relationsvarning.se/love-bombing-relation"
+          ],
+          "clicks": 46,
+          "impressions": 1482,
+          "ctr": 0.0310391363022942,
+          "position": 6.318488529014845
+        },
+        {
+          "keys": [
+            "https://www.relationsvarning.se/gaslighting-relation"
+          ],
+          "clicks": 43,
+          "impressions": 2636,
+          "ctr": 0.016312594840667678,
+          "position": 7.002276176024279
+        },
+        {
+          "keys": [
+            "https://www.relationsvarning.se/traumabindning-i-relation"
+          ],
+          "clicks": 13,
+          "impressions": 1323,
+          "ctr": 0.009826152683295541,
+          "position": 7.931216931216931
+        },
+        {
+          "keys": [
+            "https://www.relationsvarning.se/medberoende"
+          ],
+          "clicks": 3,
+          "impressions": 549,
+          "ctr": 0.00546448087431694,
+          "position": 12.444444444444445
+        }
+      ],
+      "queryRows": [
+        {
+          "keys": [
+            "gaslighting test"
+          ],
+          "clicks": 4,
+          "impressions": 32,
+          "ctr": 0.125,
+          "position": 6.09375
+        },
+        {
+          "keys": [
+            "love bombing betyder"
+          ],
+          "clicks": 2,
+          "impressions": 37,
+          "ctr": 0.05405405405405406,
+          "position": 5.972972972972973
+        },
+        {
+          "keys": [
+            "love bombing tecken"
+          ],
+          "clicks": 2,
+          "impressions": 10,
+          "ctr": 0.2,
+          "position": 3.2
+        },
+        {
+          "keys": [
+            "manipulativ"
+          ],
+          "clicks": 2,
+          "impressions": 306,
+          "ctr": 0.006535947712418301,
+          "position": 8.33986928104575
+        },
+        {
+          "keys": [
+            "traumabindning test"
+          ],
+          "clicks": 2,
+          "impressions": 33,
+          "ctr": 0.06060606060606061,
+          "position": 4.424242424242424
+        },
+        {
+          "keys": [
+            "vad är love bombing"
+          ],
+          "clicks": 2,
+          "impressions": 77,
+          "ctr": 0.025974025974025976,
+          "position": 5.987012987012987
+        },
+        {
+          "keys": [
+            "gaslighting exempel"
+          ],
+          "clicks": 1,
+          "impressions": 49,
+          "ctr": 0.02040816326530612,
+          "position": 12.448979591836734
+        },
+        {
+          "keys": [
+            "love bombing svenska"
+          ],
+          "clicks": 1,
+          "impressions": 75,
+          "ctr": 0.013333333333333334,
+          "position": 6.226666666666667
+        },
+        {
+          "keys": [
+            "lovebombing"
+          ],
+          "clicks": 1,
+          "impressions": 167,
+          "ctr": 0.005988023952095809,
+          "position": 10.25748502994012
+        },
+        {
+          "keys": [
+            "manipulativ partner test"
+          ],
+          "clicks": 1,
+          "impressions": 18,
+          "ctr": 0.05555555555555555,
+          "position": 4.444444444444445
+        },
+        {
+          "keys": [
+            "traumabindning"
+          ],
+          "clicks": 1,
+          "impressions": 168,
+          "ctr": 0.005952380952380952,
+          "position": 8.476190476190476
+        },
+        {
+          "keys": [
+            "gaslighting"
+          ],
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0,
+          "position": 40.25
+        },
+        {
+          "keys": [
+            "gaslighting svenska"
+          ],
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 24
+        },
+        {
+          "keys": [
+            "love bombing"
+          ],
+          "clicks": 0,
+          "impressions": 69,
+          "ctr": 0,
+          "position": 10.478260869565217
+        },
+        {
+          "keys": [
+            "manipulativ flickvän"
+          ],
+          "clicks": 0,
+          "impressions": 10,
+          "ctr": 0,
+          "position": 5
+        },
+        {
+          "keys": [
+            "manipulativ pojkvän"
+          ],
+          "clicks": 0,
+          "impressions": 21,
+          "ctr": 0,
+          "position": 4.285714285714286
+        },
+        {
+          "keys": [
+            "manipulativt beteende"
+          ],
+          "clicks": 0,
+          "impressions": 21,
+          "ctr": 0,
+          "position": 9.285714285714286
+        },
+        {
+          "keys": [
+            "medberoende"
+          ],
+          "clicks": 0,
+          "impressions": 20,
+          "ctr": 0,
+          "position": 59.8
+        },
+        {
+          "keys": [
+            "medberoende betyder"
+          ],
+          "clicks": 0,
+          "impressions": 8,
+          "ctr": 0,
+          "position": 17.25
+        },
+        {
+          "keys": [
+            "medberoende destruktiv relation"
+          ],
+          "clicks": 0,
+          "impressions": 50,
+          "ctr": 0,
+          "position": 8.4
+        },
+        {
+          "keys": [
+            "trauma bindning"
+          ],
+          "clicks": 0,
+          "impressions": 10,
+          "ctr": 0,
+          "position": 9.3
+        }
+      ],
+      "pairs": [
+        {
+          "keys": [
+            "gaslighting test",
+            "https://www.relationsvarning.se/gaslightingtest/test"
+          ],
+          "clicks": 4,
+          "impressions": 32,
+          "ctr": 0.125,
+          "position": 6.09375
+        },
+        {
+          "keys": [
+            "love bombing betyder",
+            "https://www.relationsvarning.se/love-bombing-relation"
+          ],
+          "clicks": 2,
+          "impressions": 37,
+          "ctr": 0.05405405405405406,
+          "position": 5.972972972972973
+        },
+        {
+          "keys": [
+            "love bombing tecken",
+            "https://www.relationsvarning.se/love-bombing-relation"
+          ],
+          "clicks": 2,
+          "impressions": 10,
+          "ctr": 0.2,
+          "position": 3.2
+        },
+        {
+          "keys": [
+            "manipulativ",
+            "https://www.relationsvarning.se/manipulativ-partner"
+          ],
+          "clicks": 2,
+          "impressions": 306,
+          "ctr": 0.006535947712418301,
+          "position": 8.33986928104575
+        },
+        {
+          "keys": [
+            "traumabindning test",
+            "https://www.relationsvarning.se/traumabindningtest/test"
+          ],
+          "clicks": 2,
+          "impressions": 33,
+          "ctr": 0.06060606060606061,
+          "position": 4.424242424242424
+        },
+        {
+          "keys": [
+            "vad är love bombing",
+            "https://www.relationsvarning.se/love-bombing-relation"
+          ],
+          "clicks": 2,
+          "impressions": 77,
+          "ctr": 0.025974025974025976,
+          "position": 5.987012987012987
+        },
+        {
+          "keys": [
+            "gaslighting exempel",
+            "https://www.relationsvarning.se/gaslighting-relation"
+          ],
+          "clicks": 1,
+          "impressions": 49,
+          "ctr": 0.02040816326530612,
+          "position": 12.448979591836734
+        },
+        {
+          "keys": [
+            "love bombing svenska",
+            "https://www.relationsvarning.se/love-bombing-relation"
+          ],
+          "clicks": 1,
+          "impressions": 75,
+          "ctr": 0.013333333333333334,
+          "position": 6.226666666666667
+        },
+        {
+          "keys": [
+            "lovebombing",
+            "https://www.relationsvarning.se/love-bombing-relation"
+          ],
+          "clicks": 1,
+          "impressions": 166,
+          "ctr": 0.006024096385542169,
+          "position": 10.301204819277109
+        },
+        {
+          "keys": [
+            "manipulativ partner test",
+            "https://www.relationsvarning.se/manipulativ-partner"
+          ],
+          "clicks": 1,
+          "impressions": 18,
+          "ctr": 0.05555555555555555,
+          "position": 4.444444444444445
+        },
+        {
+          "keys": [
+            "traumabindning",
+            "https://www.relationsvarning.se/traumabindning-i-relation"
+          ],
+          "clicks": 1,
+          "impressions": 168,
+          "ctr": 0.005952380952380952,
+          "position": 8.476190476190476
+        },
+        {
+          "keys": [
+            "gaslighting",
+            "https://www.relationsvarning.se/gaslighting-relation"
+          ],
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0,
+          "position": 40.25
+        },
+        {
+          "keys": [
+            "gaslighting svenska",
+            "https://www.relationsvarning.se/gaslighting-relation"
+          ],
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0,
+          "position": 24
+        },
+        {
+          "keys": [
+            "gaslighting svenska",
+            "https://www.relationsvarning.se/manipulativ-partner"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 3
+        },
+        {
+          "keys": [
+            "love bombing",
+            "https://www.relationsvarning.se/love-bombing-relation"
+          ],
+          "clicks": 0,
+          "impressions": 69,
+          "ctr": 0,
+          "position": 10.478260869565217
+        },
+        {
+          "keys": [
+            "lovebombing",
+            "https://www.relationsvarning.se/manipulativ-partner"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 3
+        },
+        {
+          "keys": [
+            "manipulativ flickvän",
+            "https://www.relationsvarning.se/manipulativ-partner"
+          ],
+          "clicks": 0,
+          "impressions": 10,
+          "ctr": 0,
+          "position": 5
+        },
+        {
+          "keys": [
+            "manipulativ pojkvän",
+            "https://www.relationsvarning.se/manipulativ-partner"
+          ],
+          "clicks": 0,
+          "impressions": 21,
+          "ctr": 0,
+          "position": 4.285714285714286
+        },
+        {
+          "keys": [
+            "manipulativt beteende",
+            "https://www.relationsvarning.se/manipulativ-partner"
+          ],
+          "clicks": 0,
+          "impressions": 21,
+          "ctr": 0,
+          "position": 9.285714285714286
+        },
+        {
+          "keys": [
+            "medberoende",
+            "https://www.relationsvarning.se/medberoende"
+          ],
+          "clicks": 0,
+          "impressions": 20,
+          "ctr": 0,
+          "position": 59.8
+        },
+        {
+          "keys": [
+            "medberoende betyder",
+            "https://www.relationsvarning.se/medberoende"
+          ],
+          "clicks": 0,
+          "impressions": 8,
+          "ctr": 0,
+          "position": 17.25
+        },
+        {
+          "keys": [
+            "medberoende destruktiv relation",
+            "https://www.relationsvarning.se/medberoende"
+          ],
+          "clicks": 0,
+          "impressions": 50,
+          "ctr": 0,
+          "position": 8.4
+        },
+        {
+          "keys": [
+            "trauma bindning",
+            "https://www.relationsvarning.se/traumabindning-i-relation"
+          ],
+          "clicks": 0,
+          "impressions": 10,
+          "ctr": 0,
+          "position": 9.3
+        },
+        {
+          "keys": [
+            "traumabindning",
+            "https://www.relationsvarning.se/traumabindningtest/test"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 19
+        }
+      ]
+    },
+    "new90all": {
+      "pageRows": [
+        {
+          "keys": [
+            "https://www.relationsvarning.se/manipulativ-partner"
+          ],
+          "clicks": 113,
+          "impressions": 5368,
+          "ctr": 0.021050670640834577,
+          "position": 6.990685543964233
+        },
+        {
+          "keys": [
+            "https://www.relationsvarning.se/love-bombing-relation"
+          ],
+          "clicks": 64,
+          "impressions": 2630,
+          "ctr": 0.024334600760456272,
+          "position": 7.070722433460076
+        },
+        {
+          "keys": [
+            "https://www.relationsvarning.se/gaslighting-relation"
+          ],
+          "clicks": 55,
+          "impressions": 4197,
+          "ctr": 0.013104598522754349,
+          "position": 8.159161305694543
+        },
+        {
+          "keys": [
+            "https://www.relationsvarning.se/traumabindning-i-relation"
+          ],
+          "clicks": 19,
+          "impressions": 1742,
+          "ctr": 0.010907003444316877,
+          "position": 8.343857634902411
+        },
+        {
+          "keys": [
+            "https://www.relationsvarning.se/medberoende"
+          ],
+          "clicks": 6,
+          "impressions": 718,
+          "ctr": 0.008356545961002786,
+          "position": 15.479108635097493
+        }
+      ],
+      "queryRows": [
+        {
+          "keys": [
+            "gaslighting test"
+          ],
+          "clicks": 5,
+          "impressions": 63,
+          "ctr": 0.07936507936507936,
+          "position": 8.587301587301587
+        },
+        {
+          "keys": [
+            "vad är love bombing"
+          ],
+          "clicks": 5,
+          "impressions": 148,
+          "ctr": 0.033783783783783786,
+          "position": 7
+        },
+        {
+          "keys": [
+            "traumabindning"
+          ],
+          "clicks": 4,
+          "impressions": 288,
+          "ctr": 0.013888888888888888,
+          "position": 9.166666666666666
+        },
+        {
+          "keys": [
+            "manipulativ"
+          ],
+          "clicks": 3,
+          "impressions": 418,
+          "ctr": 0.007177033492822967,
+          "position": 7.107655502392345
+        },
+        {
+          "keys": [
+            "manipulativ partner test"
+          ],
+          "clicks": 3,
+          "impressions": 63,
+          "ctr": 0.047619047619047616,
+          "position": 8.015873015873016
+        },
+        {
+          "keys": [
+            "traumabindning test"
+          ],
+          "clicks": 3,
+          "impressions": 100,
+          "ctr": 0.03,
+          "position": 5.54
+        },
+        {
+          "keys": [
+            "love bombing betyder"
+          ],
+          "clicks": 2,
+          "impressions": 65,
+          "ctr": 0.03076923076923077,
+          "position": 7.476923076923077
+        },
+        {
+          "keys": [
+            "love bombing tecken"
+          ],
+          "clicks": 2,
+          "impressions": 17,
+          "ctr": 0.11764705882352941,
+          "position": 6.411764705882353
+        },
+        {
+          "keys": [
+            "medberoende destruktiv relation"
+          ],
+          "clicks": 2,
+          "impressions": 64,
+          "ctr": 0.03125,
+          "position": 11.296875
+        },
+        {
+          "keys": [
+            "gaslighting exempel"
+          ],
+          "clicks": 1,
+          "impressions": 63,
+          "ctr": 0.015873015873015872,
+          "position": 14.507936507936508
+        },
+        {
+          "keys": [
+            "love bombing svenska"
+          ],
+          "clicks": 1,
+          "impressions": 137,
+          "ctr": 0.0072992700729927005,
+          "position": 7.532846715328467
+        },
+        {
+          "keys": [
+            "lovebombing"
+          ],
+          "clicks": 1,
+          "impressions": 170,
+          "ctr": 0.0058823529411764705,
+          "position": 10.276470588235295
+        },
+        {
+          "keys": [
+            "manipulativ pojkvän"
+          ],
+          "clicks": 1,
+          "impressions": 55,
+          "ctr": 0.01818181818181818,
+          "position": 6.236363636363636
+        },
+        {
+          "keys": [
+            "gaslighting"
+          ],
+          "clicks": 0,
+          "impressions": 28,
+          "ctr": 0,
+          "position": 51.57142857142857
+        },
+        {
+          "keys": [
+            "gaslighting svenska"
+          ],
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 40
+        },
+        {
+          "keys": [
+            "love bombing"
+          ],
+          "clicks": 0,
+          "impressions": 70,
+          "ctr": 0,
+          "position": 10.342857142857143
+        },
+        {
+          "keys": [
+            "manipulativ flickvän"
+          ],
+          "clicks": 0,
+          "impressions": 39,
+          "ctr": 0,
+          "position": 6.717948717948718
+        },
+        {
+          "keys": [
+            "manipulativt beteende"
+          ],
+          "clicks": 0,
+          "impressions": 25,
+          "ctr": 0,
+          "position": 11.32
+        },
+        {
+          "keys": [
+            "medberoende"
+          ],
+          "clicks": 0,
+          "impressions": 33,
+          "ctr": 0,
+          "position": 65.93939393939394
+        },
+        {
+          "keys": [
+            "medberoende betyder"
+          ],
+          "clicks": 0,
+          "impressions": 9,
+          "ctr": 0,
+          "position": 19.555555555555557
+        },
+        {
+          "keys": [
+            "trauma bindning"
+          ],
+          "clicks": 0,
+          "impressions": 14,
+          "ctr": 0,
+          "position": 16.214285714285715
+        }
+      ],
+      "pairs": [
+        {
+          "keys": [
+            "gaslighting test",
+            "https://www.relationsvarning.se/gaslightingtest/test"
+          ],
+          "clicks": 5,
+          "impressions": 63,
+          "ctr": 0.07936507936507936,
+          "position": 8.587301587301587
+        },
+        {
+          "keys": [
+            "vad är love bombing",
+            "https://www.relationsvarning.se/love-bombing-relation"
+          ],
+          "clicks": 5,
+          "impressions": 148,
+          "ctr": 0.033783783783783786,
+          "position": 7
+        },
+        {
+          "keys": [
+            "traumabindning",
+            "https://www.relationsvarning.se/traumabindning-i-relation"
+          ],
+          "clicks": 4,
+          "impressions": 288,
+          "ctr": 0.013888888888888888,
+          "position": 9.166666666666666
+        },
+        {
+          "keys": [
+            "manipulativ",
+            "https://www.relationsvarning.se/manipulativ-partner"
+          ],
+          "clicks": 3,
+          "impressions": 418,
+          "ctr": 0.007177033492822967,
+          "position": 7.107655502392345
+        },
+        {
+          "keys": [
+            "traumabindning test",
+            "https://www.relationsvarning.se/traumabindningtest/test"
+          ],
+          "clicks": 3,
+          "impressions": 99,
+          "ctr": 0.030303030303030304,
+          "position": 5.484848484848484
+        },
+        {
+          "keys": [
+            "love bombing betyder",
+            "https://www.relationsvarning.se/love-bombing-relation"
+          ],
+          "clicks": 2,
+          "impressions": 65,
+          "ctr": 0.03076923076923077,
+          "position": 7.476923076923077
+        },
+        {
+          "keys": [
+            "love bombing tecken",
+            "https://www.relationsvarning.se/love-bombing-relation"
+          ],
+          "clicks": 2,
+          "impressions": 17,
+          "ctr": 0.11764705882352941,
+          "position": 6.411764705882353
+        },
+        {
+          "keys": [
+            "manipulativ partner test",
+            "https://www.relationsvarning.se/manipulativ-partner"
+          ],
+          "clicks": 2,
+          "impressions": 32,
+          "ctr": 0.0625,
+          "position": 7.40625
+        },
+        {
+          "keys": [
+            "medberoende destruktiv relation",
+            "https://www.relationsvarning.se/medberoende"
+          ],
+          "clicks": 2,
+          "impressions": 64,
+          "ctr": 0.03125,
+          "position": 11.296875
+        },
+        {
+          "keys": [
+            "gaslighting exempel",
+            "https://www.relationsvarning.se/gaslighting-relation"
+          ],
+          "clicks": 1,
+          "impressions": 63,
+          "ctr": 0.015873015873015872,
+          "position": 14.507936507936508
+        },
+        {
+          "keys": [
+            "love bombing svenska",
+            "https://www.relationsvarning.se/love-bombing-relation"
+          ],
+          "clicks": 1,
+          "impressions": 137,
+          "ctr": 0.0072992700729927005,
+          "position": 7.532846715328467
+        },
+        {
+          "keys": [
+            "lovebombing",
+            "https://www.relationsvarning.se/love-bombing-relation"
+          ],
+          "clicks": 1,
+          "impressions": 169,
+          "ctr": 0.005917159763313609,
+          "position": 10.319526627218934
+        },
+        {
+          "keys": [
+            "manipulativ partner test",
+            "https://www.relationsvarning.se/"
+          ],
+          "clicks": 1,
+          "impressions": 33,
+          "ctr": 0.030303030303030304,
+          "position": 9.333333333333334
+        },
+        {
+          "keys": [
+            "manipulativ pojkvän",
+            "https://www.relationsvarning.se/manipulativ-partner"
+          ],
+          "clicks": 1,
+          "impressions": 55,
+          "ctr": 0.01818181818181818,
+          "position": 6.290909090909091
+        },
+        {
+          "keys": [
+            "gaslighting",
+            "https://www.relationsvarning.se/gaslighting-relation"
+          ],
+          "clicks": 0,
+          "impressions": 26,
+          "ctr": 0,
+          "position": 55.30769230769231
+        },
+        {
+          "keys": [
+            "gaslighting",
+            "https://www.relationsvarning.se/kontrollerande-relation"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 3
+        },
+        {
+          "keys": [
+            "gaslighting",
+            "https://www.relationsvarning.se/manipulativ-partner"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 3
+        },
+        {
+          "keys": [
+            "gaslighting svenska",
+            "https://www.relationsvarning.se/gaslighting-relation"
+          ],
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 40
+        },
+        {
+          "keys": [
+            "gaslighting svenska",
+            "https://www.relationsvarning.se/manipulativ-partner"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 3
+        },
+        {
+          "keys": [
+            "love bombing",
+            "https://www.relationsvarning.se/love-bombing-relation"
+          ],
+          "clicks": 0,
+          "impressions": 70,
+          "ctr": 0,
+          "position": 10.342857142857143
+        },
+        {
+          "keys": [
+            "lovebombing",
+            "https://www.relationsvarning.se/manipulativ-partner"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 3
+        },
+        {
+          "keys": [
+            "manipulativ flickvän",
+            "https://www.relationsvarning.se/manipulativ-partner"
+          ],
+          "clicks": 0,
+          "impressions": 39,
+          "ctr": 0,
+          "position": 6.717948717948718
+        },
+        {
+          "keys": [
+            "manipulativ pojkvän",
+            "https://www.relationsvarning.se/kontrollerande-relation"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 3
+        },
+        {
+          "keys": [
+            "manipulativt beteende",
+            "https://www.relationsvarning.se/manipulativ-partner"
+          ],
+          "clicks": 0,
+          "impressions": 25,
+          "ctr": 0,
+          "position": 11.32
+        },
+        {
+          "keys": [
+            "medberoende",
+            "https://www.relationsvarning.se/medberoende"
+          ],
+          "clicks": 0,
+          "impressions": 33,
+          "ctr": 0,
+          "position": 65.93939393939394
+        },
+        {
+          "keys": [
+            "medberoende betyder",
+            "https://www.relationsvarning.se/medberoende"
+          ],
+          "clicks": 0,
+          "impressions": 9,
+          "ctr": 0,
+          "position": 19.555555555555557
+        },
+        {
+          "keys": [
+            "trauma bindning",
+            "https://www.relationsvarning.se/traumabindning-i-relation"
+          ],
+          "clicks": 0,
+          "impressions": 14,
+          "ctr": 0,
+          "position": 16.214285714285715
+        },
+        {
+          "keys": [
+            "traumabindning",
+            "https://www.relationsvarning.se/traumabindningtest/test"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 19
+        },
+        {
+          "keys": [
+            "traumabindning test",
+            "https://www.relationsvarning.se/"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 11
+        }
+      ]
+    },
+    "new28sweMobile": {
+      "pageRows": [
+        {
+          "keys": [
+            "https://www.relationsvarning.se/love-bombing-relation"
+          ],
+          "clicks": 8,
+          "impressions": 461,
+          "ctr": 0.01735357917570499,
+          "position": 7.917570498915401
+        },
+        {
+          "keys": [
+            "https://www.relationsvarning.se/manipulativ-partner"
+          ],
+          "clicks": 5,
+          "impressions": 381,
+          "ctr": 0.013123359580052493,
+          "position": 7.994750656167979
+        },
+        {
+          "keys": [
+            "https://www.relationsvarning.se/gaslighting-relation"
+          ],
+          "clicks": 1,
+          "impressions": 78,
+          "ctr": 0.01282051282051282,
+          "position": 11.14102564102564
+        },
+        {
+          "keys": [
+            "https://www.relationsvarning.se/traumabindning-i-relation"
+          ],
+          "clicks": 1,
+          "impressions": 167,
+          "ctr": 0.005988023952095809,
+          "position": 9.934131736526947
+        },
+        {
+          "keys": [
+            "https://www.relationsvarning.se/medberoende"
+          ],
+          "clicks": 0,
+          "impressions": 64,
+          "ctr": 0,
+          "position": 18.25
+        }
+      ],
+      "queryRows": [
+        {
+          "keys": [
+            "gaslighting test"
+          ],
+          "clicks": 3,
+          "impressions": 22,
+          "ctr": 0.13636363636363635,
+          "position": 4.045454545454545
+        },
+        {
+          "keys": [
+            "love bombing betyder"
+          ],
+          "clicks": 2,
+          "impressions": 32,
+          "ctr": 0.0625,
+          "position": 6.3125
+        },
+        {
+          "keys": [
+            "love bombing tecken"
+          ],
+          "clicks": 2,
+          "impressions": 10,
+          "ctr": 0.2,
+          "position": 3.2
+        },
+        {
+          "keys": [
+            "manipulativ"
+          ],
+          "clicks": 2,
+          "impressions": 254,
+          "ctr": 0.007874015748031496,
+          "position": 8.28740157480315
+        },
+        {
+          "keys": [
+            "traumabindning test"
+          ],
+          "clicks": 2,
+          "impressions": 29,
+          "ctr": 0.06896551724137931,
+          "position": 4.413793103448276
+        },
+        {
+          "keys": [
+            "gaslighting exempel"
+          ],
+          "clicks": 1,
+          "impressions": 47,
+          "ctr": 0.02127659574468085,
+          "position": 11.148936170212766
+        },
+        {
+          "keys": [
+            "love bombing svenska"
+          ],
+          "clicks": 1,
+          "impressions": 68,
+          "ctr": 0.014705882352941176,
+          "position": 6.25
+        },
+        {
+          "keys": [
+            "lovebombing"
+          ],
+          "clicks": 1,
+          "impressions": 153,
+          "ctr": 0.006535947712418301,
+          "position": 10.209150326797385
+        },
+        {
+          "keys": [
+            "manipulativ partner test"
+          ],
+          "clicks": 1,
+          "impressions": 16,
+          "ctr": 0.0625,
+          "position": 4.875
+        },
+        {
+          "keys": [
+            "traumabindning"
+          ],
+          "clicks": 1,
+          "impressions": 134,
+          "ctr": 0.007462686567164179,
+          "position": 8.53731343283582
+        },
+        {
+          "keys": [
+            "vad är love bombing"
+          ],
+          "clicks": 1,
+          "impressions": 68,
+          "ctr": 0.014705882352941176,
+          "position": 6.073529411764706
+        },
+        {
+          "keys": [
+            "gaslighting"
+          ],
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 35
+        },
+        {
+          "keys": [
+            "gaslighting svenska"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 3
+        },
+        {
+          "keys": [
+            "love bombing"
+          ],
+          "clicks": 0,
+          "impressions": 40,
+          "ctr": 0,
+          "position": 10.4
+        },
+        {
+          "keys": [
+            "manipulativ flickvän"
+          ],
+          "clicks": 0,
+          "impressions": 10,
+          "ctr": 0,
+          "position": 5
+        },
+        {
+          "keys": [
+            "manipulativ pojkvän"
+          ],
+          "clicks": 0,
+          "impressions": 16,
+          "ctr": 0,
+          "position": 4.1875
+        },
+        {
+          "keys": [
+            "manipulativt beteende"
+          ],
+          "clicks": 0,
+          "impressions": 18,
+          "ctr": 0,
+          "position": 9.11111111111111
+        },
+        {
+          "keys": [
+            "medberoende"
+          ],
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 49.333333333333336
+        },
+        {
+          "keys": [
+            "medberoende betyder"
+          ],
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0,
+          "position": 20
+        },
+        {
+          "keys": [
+            "medberoende destruktiv relation"
+          ],
+          "clicks": 0,
+          "impressions": 32,
+          "ctr": 0,
+          "position": 8.5625
+        },
+        {
+          "keys": [
+            "trauma bindning"
+          ],
+          "clicks": 0,
+          "impressions": 10,
+          "ctr": 0,
+          "position": 9.3
+        }
+      ],
+      "pairs": [
+        {
+          "keys": [
+            "gaslighting test",
+            "https://www.relationsvarning.se/gaslightingtest/test"
+          ],
+          "clicks": 3,
+          "impressions": 22,
+          "ctr": 0.13636363636363635,
+          "position": 4.045454545454545
+        },
+        {
+          "keys": [
+            "love bombing betyder",
+            "https://www.relationsvarning.se/love-bombing-relation"
+          ],
+          "clicks": 2,
+          "impressions": 32,
+          "ctr": 0.0625,
+          "position": 6.3125
+        },
+        {
+          "keys": [
+            "love bombing tecken",
+            "https://www.relationsvarning.se/love-bombing-relation"
+          ],
+          "clicks": 2,
+          "impressions": 10,
+          "ctr": 0.2,
+          "position": 3.2
+        },
+        {
+          "keys": [
+            "manipulativ",
+            "https://www.relationsvarning.se/manipulativ-partner"
+          ],
+          "clicks": 2,
+          "impressions": 254,
+          "ctr": 0.007874015748031496,
+          "position": 8.28740157480315
+        },
+        {
+          "keys": [
+            "traumabindning test",
+            "https://www.relationsvarning.se/traumabindningtest/test"
+          ],
+          "clicks": 2,
+          "impressions": 29,
+          "ctr": 0.06896551724137931,
+          "position": 4.413793103448276
+        },
+        {
+          "keys": [
+            "gaslighting exempel",
+            "https://www.relationsvarning.se/gaslighting-relation"
+          ],
+          "clicks": 1,
+          "impressions": 47,
+          "ctr": 0.02127659574468085,
+          "position": 11.148936170212766
+        },
+        {
+          "keys": [
+            "love bombing svenska",
+            "https://www.relationsvarning.se/love-bombing-relation"
+          ],
+          "clicks": 1,
+          "impressions": 68,
+          "ctr": 0.014705882352941176,
+          "position": 6.25
+        },
+        {
+          "keys": [
+            "lovebombing",
+            "https://www.relationsvarning.se/love-bombing-relation"
+          ],
+          "clicks": 1,
+          "impressions": 152,
+          "ctr": 0.006578947368421052,
+          "position": 10.256578947368421
+        },
+        {
+          "keys": [
+            "manipulativ partner test",
+            "https://www.relationsvarning.se/manipulativ-partner"
+          ],
+          "clicks": 1,
+          "impressions": 16,
+          "ctr": 0.0625,
+          "position": 4.875
+        },
+        {
+          "keys": [
+            "traumabindning",
+            "https://www.relationsvarning.se/traumabindning-i-relation"
+          ],
+          "clicks": 1,
+          "impressions": 134,
+          "ctr": 0.007462686567164179,
+          "position": 8.53731343283582
+        },
+        {
+          "keys": [
+            "vad är love bombing",
+            "https://www.relationsvarning.se/love-bombing-relation"
+          ],
+          "clicks": 1,
+          "impressions": 68,
+          "ctr": 0.014705882352941176,
+          "position": 6.073529411764706
+        },
+        {
+          "keys": [
+            "gaslighting",
+            "https://www.relationsvarning.se/gaslighting-relation"
+          ],
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 35
+        },
+        {
+          "keys": [
+            "gaslighting svenska",
+            "https://www.relationsvarning.se/gaslighting-relation"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 3
+        },
+        {
+          "keys": [
+            "gaslighting svenska",
+            "https://www.relationsvarning.se/manipulativ-partner"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 3
+        },
+        {
+          "keys": [
+            "love bombing",
+            "https://www.relationsvarning.se/love-bombing-relation"
+          ],
+          "clicks": 0,
+          "impressions": 40,
+          "ctr": 0,
+          "position": 10.4
+        },
+        {
+          "keys": [
+            "lovebombing",
+            "https://www.relationsvarning.se/manipulativ-partner"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 3
+        },
+        {
+          "keys": [
+            "manipulativ flickvän",
+            "https://www.relationsvarning.se/manipulativ-partner"
+          ],
+          "clicks": 0,
+          "impressions": 10,
+          "ctr": 0,
+          "position": 5
+        },
+        {
+          "keys": [
+            "manipulativ pojkvän",
+            "https://www.relationsvarning.se/manipulativ-partner"
+          ],
+          "clicks": 0,
+          "impressions": 16,
+          "ctr": 0,
+          "position": 4.1875
+        },
+        {
+          "keys": [
+            "manipulativt beteende",
+            "https://www.relationsvarning.se/manipulativ-partner"
+          ],
+          "clicks": 0,
+          "impressions": 18,
+          "ctr": 0,
+          "position": 9.11111111111111
+        },
+        {
+          "keys": [
+            "medberoende",
+            "https://www.relationsvarning.se/medberoende"
+          ],
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0,
+          "position": 49.333333333333336
+        },
+        {
+          "keys": [
+            "medberoende betyder",
+            "https://www.relationsvarning.se/medberoende"
+          ],
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0,
+          "position": 20
+        },
+        {
+          "keys": [
+            "medberoende destruktiv relation",
+            "https://www.relationsvarning.se/medberoende"
+          ],
+          "clicks": 0,
+          "impressions": 32,
+          "ctr": 0,
+          "position": 8.5625
+        },
+        {
+          "keys": [
+            "trauma bindning",
+            "https://www.relationsvarning.se/traumabindning-i-relation"
+          ],
+          "clicks": 0,
+          "impressions": 10,
+          "ctr": 0,
+          "position": 9.3
+        },
+        {
+          "keys": [
+            "traumabindning",
+            "https://www.relationsvarning.se/traumabindningtest/test"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 19
+        }
+      ]
+    },
+    "new90sweMobile": {
+      "pageRows": [
+        {
+          "keys": [
+            "https://www.relationsvarning.se/love-bombing-relation"
+          ],
+          "clicks": 12,
+          "impressions": 667,
+          "ctr": 0.017991004497751123,
+          "position": 8.187406296851574
+        },
+        {
+          "keys": [
+            "https://www.relationsvarning.se/manipulativ-partner"
+          ],
+          "clicks": 8,
+          "impressions": 574,
+          "ctr": 0.013937282229965157,
+          "position": 7.2282229965156795
+        },
+        {
+          "keys": [
+            "https://www.relationsvarning.se/traumabindning-i-relation"
+          ],
+          "clicks": 4,
+          "impressions": 272,
+          "ctr": 0.014705882352941176,
+          "position": 10.242647058823529
+        },
+        {
+          "keys": [
+            "https://www.relationsvarning.se/gaslighting-relation"
+          ],
+          "clicks": 2,
+          "impressions": 103,
+          "ctr": 0.019417475728155338,
+          "position": 14.077669902912621
+        },
+        {
+          "keys": [
+            "https://www.relationsvarning.se/medberoende"
+          ],
+          "clicks": 1,
+          "impressions": 83,
+          "ctr": 0.012048192771084338,
+          "position": 24.72289156626506
+        }
+      ],
+      "queryRows": [
+        {
+          "keys": [
+            "gaslighting test"
+          ],
+          "clicks": 4,
+          "impressions": 43,
+          "ctr": 0.09302325581395349,
+          "position": 5.069767441860465
+        },
+        {
+          "keys": [
+            "traumabindning"
+          ],
+          "clicks": 4,
+          "impressions": 232,
+          "ctr": 0.017241379310344827,
+          "position": 9.314655172413794
+        },
+        {
+          "keys": [
+            "manipulativ"
+          ],
+          "clicks": 3,
+          "impressions": 360,
+          "ctr": 0.008333333333333333,
+          "position": 6.836111111111111
+        },
+        {
+          "keys": [
+            "manipulativ partner test"
+          ],
+          "clicks": 3,
+          "impressions": 56,
+          "ctr": 0.05357142857142857,
+          "position": 8.125
+        },
+        {
+          "keys": [
+            "traumabindning test"
+          ],
+          "clicks": 3,
+          "impressions": 93,
+          "ctr": 0.03225806451612903,
+          "position": 5.591397849462366
+        },
+        {
+          "keys": [
+            "vad är love bombing"
+          ],
+          "clicks": 3,
+          "impressions": 132,
+          "ctr": 0.022727272727272728,
+          "position": 7
+        },
+        {
+          "keys": [
+            "love bombing betyder"
+          ],
+          "clicks": 2,
+          "impressions": 58,
+          "ctr": 0.034482758620689655,
+          "position": 7.672413793103448
+        },
+        {
+          "keys": [
+            "love bombing tecken"
+          ],
+          "clicks": 2,
+          "impressions": 17,
+          "ctr": 0.11764705882352941,
+          "position": 6.411764705882353
+        },
+        {
+          "keys": [
+            "gaslighting exempel"
+          ],
+          "clicks": 1,
+          "impressions": 55,
+          "ctr": 0.01818181818181818,
+          "position": 12.527272727272727
+        },
+        {
+          "keys": [
+            "love bombing svenska"
+          ],
+          "clicks": 1,
+          "impressions": 117,
+          "ctr": 0.008547008547008548,
+          "position": 7.2905982905982905
+        },
+        {
+          "keys": [
+            "lovebombing"
+          ],
+          "clicks": 1,
+          "impressions": 156,
+          "ctr": 0.00641025641025641,
+          "position": 10.23076923076923
+        },
+        {
+          "keys": [
+            "medberoende destruktiv relation"
+          ],
+          "clicks": 1,
+          "impressions": 35,
+          "ctr": 0.02857142857142857,
+          "position": 9.685714285714285
+        },
+        {
+          "keys": [
+            "gaslighting"
+          ],
+          "clicks": 0,
+          "impressions": 10,
+          "ctr": 0,
+          "position": 31.5
+        },
+        {
+          "keys": [
+            "gaslighting svenska"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 3
+        },
+        {
+          "keys": [
+            "love bombing"
+          ],
+          "clicks": 0,
+          "impressions": 41,
+          "ctr": 0,
+          "position": 10.170731707317072
+        },
+        {
+          "keys": [
+            "manipulativ flickvän"
+          ],
+          "clicks": 0,
+          "impressions": 35,
+          "ctr": 0,
+          "position": 6.771428571428571
+        },
+        {
+          "keys": [
+            "manipulativ pojkvän"
+          ],
+          "clicks": 0,
+          "impressions": 46,
+          "ctr": 0,
+          "position": 6.195652173913044
+        },
+        {
+          "keys": [
+            "manipulativt beteende"
+          ],
+          "clicks": 0,
+          "impressions": 19,
+          "ctr": 0,
+          "position": 8.789473684210527
+        },
+        {
+          "keys": [
+            "medberoende"
+          ],
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0,
+          "position": 56.25
+        },
+        {
+          "keys": [
+            "medberoende betyder"
+          ],
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0,
+          "position": 20
+        },
+        {
+          "keys": [
+            "trauma bindning"
+          ],
+          "clicks": 0,
+          "impressions": 13,
+          "ctr": 0,
+          "position": 12.076923076923077
+        }
+      ],
+      "pairs": [
+        {
+          "keys": [
+            "gaslighting test",
+            "https://www.relationsvarning.se/gaslightingtest/test"
+          ],
+          "clicks": 4,
+          "impressions": 43,
+          "ctr": 0.09302325581395349,
+          "position": 5.069767441860465
+        },
+        {
+          "keys": [
+            "traumabindning",
+            "https://www.relationsvarning.se/traumabindning-i-relation"
+          ],
+          "clicks": 4,
+          "impressions": 232,
+          "ctr": 0.017241379310344827,
+          "position": 9.314655172413794
+        },
+        {
+          "keys": [
+            "manipulativ",
+            "https://www.relationsvarning.se/manipulativ-partner"
+          ],
+          "clicks": 3,
+          "impressions": 360,
+          "ctr": 0.008333333333333333,
+          "position": 6.836111111111111
+        },
+        {
+          "keys": [
+            "traumabindning test",
+            "https://www.relationsvarning.se/traumabindningtest/test"
+          ],
+          "clicks": 3,
+          "impressions": 92,
+          "ctr": 0.03260869565217391,
+          "position": 5.532608695652174
+        },
+        {
+          "keys": [
+            "vad är love bombing",
+            "https://www.relationsvarning.se/love-bombing-relation"
+          ],
+          "clicks": 3,
+          "impressions": 132,
+          "ctr": 0.022727272727272728,
+          "position": 7
+        },
+        {
+          "keys": [
+            "love bombing betyder",
+            "https://www.relationsvarning.se/love-bombing-relation"
+          ],
+          "clicks": 2,
+          "impressions": 58,
+          "ctr": 0.034482758620689655,
+          "position": 7.672413793103448
+        },
+        {
+          "keys": [
+            "love bombing tecken",
+            "https://www.relationsvarning.se/love-bombing-relation"
+          ],
+          "clicks": 2,
+          "impressions": 17,
+          "ctr": 0.11764705882352941,
+          "position": 6.411764705882353
+        },
+        {
+          "keys": [
+            "manipulativ partner test",
+            "https://www.relationsvarning.se/manipulativ-partner"
+          ],
+          "clicks": 2,
+          "impressions": 28,
+          "ctr": 0.07142857142857142,
+          "position": 7.75
+        },
+        {
+          "keys": [
+            "gaslighting exempel",
+            "https://www.relationsvarning.se/gaslighting-relation"
+          ],
+          "clicks": 1,
+          "impressions": 55,
+          "ctr": 0.01818181818181818,
+          "position": 12.527272727272727
+        },
+        {
+          "keys": [
+            "love bombing svenska",
+            "https://www.relationsvarning.se/love-bombing-relation"
+          ],
+          "clicks": 1,
+          "impressions": 117,
+          "ctr": 0.008547008547008548,
+          "position": 7.2905982905982905
+        },
+        {
+          "keys": [
+            "lovebombing",
+            "https://www.relationsvarning.se/love-bombing-relation"
+          ],
+          "clicks": 1,
+          "impressions": 155,
+          "ctr": 0.0064516129032258064,
+          "position": 10.27741935483871
+        },
+        {
+          "keys": [
+            "manipulativ partner test",
+            "https://www.relationsvarning.se/"
+          ],
+          "clicks": 1,
+          "impressions": 30,
+          "ctr": 0.03333333333333333,
+          "position": 9.266666666666667
+        },
+        {
+          "keys": [
+            "medberoende destruktiv relation",
+            "https://www.relationsvarning.se/medberoende"
+          ],
+          "clicks": 1,
+          "impressions": 35,
+          "ctr": 0.02857142857142857,
+          "position": 9.685714285714285
+        },
+        {
+          "keys": [
+            "gaslighting",
+            "https://www.relationsvarning.se/gaslighting-relation"
+          ],
+          "clicks": 0,
+          "impressions": 8,
+          "ctr": 0,
+          "position": 38.625
+        },
+        {
+          "keys": [
+            "gaslighting",
+            "https://www.relationsvarning.se/kontrollerande-relation"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 3
+        },
+        {
+          "keys": [
+            "gaslighting",
+            "https://www.relationsvarning.se/manipulativ-partner"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 3
+        },
+        {
+          "keys": [
+            "gaslighting svenska",
+            "https://www.relationsvarning.se/gaslighting-relation"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 3
+        },
+        {
+          "keys": [
+            "gaslighting svenska",
+            "https://www.relationsvarning.se/manipulativ-partner"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 3
+        },
+        {
+          "keys": [
+            "love bombing",
+            "https://www.relationsvarning.se/love-bombing-relation"
+          ],
+          "clicks": 0,
+          "impressions": 41,
+          "ctr": 0,
+          "position": 10.170731707317072
+        },
+        {
+          "keys": [
+            "lovebombing",
+            "https://www.relationsvarning.se/manipulativ-partner"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 3
+        },
+        {
+          "keys": [
+            "manipulativ flickvän",
+            "https://www.relationsvarning.se/manipulativ-partner"
+          ],
+          "clicks": 0,
+          "impressions": 35,
+          "ctr": 0,
+          "position": 6.771428571428571
+        },
+        {
+          "keys": [
+            "manipulativ pojkvän",
+            "https://www.relationsvarning.se/kontrollerande-relation"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 3
+        },
+        {
+          "keys": [
+            "manipulativ pojkvän",
+            "https://www.relationsvarning.se/manipulativ-partner"
+          ],
+          "clicks": 0,
+          "impressions": 46,
+          "ctr": 0,
+          "position": 6.260869565217392
+        },
+        {
+          "keys": [
+            "manipulativt beteende",
+            "https://www.relationsvarning.se/manipulativ-partner"
+          ],
+          "clicks": 0,
+          "impressions": 19,
+          "ctr": 0,
+          "position": 8.789473684210527
+        },
+        {
+          "keys": [
+            "medberoende",
+            "https://www.relationsvarning.se/medberoende"
+          ],
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0,
+          "position": 56.25
+        },
+        {
+          "keys": [
+            "medberoende betyder",
+            "https://www.relationsvarning.se/medberoende"
+          ],
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0,
+          "position": 20
+        },
+        {
+          "keys": [
+            "trauma bindning",
+            "https://www.relationsvarning.se/traumabindning-i-relation"
+          ],
+          "clicks": 0,
+          "impressions": 13,
+          "ctr": 0,
+          "position": 12.076923076923077
+        },
+        {
+          "keys": [
+            "traumabindning",
+            "https://www.relationsvarning.se/traumabindningtest/test"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 19
+        },
+        {
+          "keys": [
+            "traumabindning test",
+            "https://www.relationsvarning.se/"
+          ],
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0,
+          "position": 11
+        }
+      ]
+    }
+  },
+  "limitations": "Fryst analys från 22 november t.o.m. 20 november. GSC-genomsnittsposition är inte organisk realtidsplacering. Saknad rad är inte noll efterfrågan. Personliga långfrågor ingår inte i denna avgränsade baslinje."
+}

@@ -12,7 +12,7 @@ const description = "Vad betyder gaslighting? Se exempel på förnekande och sku
 export const metadata: Metadata = {
   title,
   description,
-  ...getEditorialMetadata({ route: "/gaslighting-relation", title, description, datePublished: "2026-03-13T21:44:14+01:00", dateModified: "2026-11-04T12:00:00+01:00" }),
+  ...getEditorialMetadata({ route: "/gaslighting-relation", title, description, datePublished: "2026-03-13T21:44:14+01:00", dateModified: "2026-11-23T15:54:00+01:00" }),
 };
 
 const faqs = [
@@ -23,7 +23,7 @@ const faqs = [
 const faqJsonLd = { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faqs.map(({question,answer}) => ({ "@type": "Question", name: question, acceptedAnswer: { "@type": "Answer", text: answer } })) };
 
 const gaslightingImage = getPublishedArticleImage("/gaslighting-relation");
-const articleJsonLd = getEditorialArticleSchema({ route: "/gaslighting-relation", title, description, datePublished: "2026-03-13T21:44:14+01:00", dateModified: "2026-11-04T12:00:00+01:00" });
+const articleJsonLd = getEditorialArticleSchema({ route: "/gaslighting-relation", title, description, datePublished: "2026-03-13T21:44:14+01:00", dateModified: "2026-11-23T15:54:00+01:00" });
 
 export default function GaslightingRelationPage() {
   return (
@@ -59,6 +59,15 @@ export default function GaslightingRelationPage() {
             någon förnekar eller förvränger det som hänt och undergräver den andres upplevelse.
             Den som utsätts kan börja tvivla på sitt eget minne eller omdöme och lägga större
             vikt vid partnerns version än sin egen.
+          </p>
+          <p className="leading-7">
+            <strong>Ett kort exempel:</strong> du tar upp ett brutet löfte och får höra
+            ”Det har aldrig hänt, du hittar på”. En sådan replik räcker inte för att
+            avgöra vad som pågår. Det som behöver undersökas är om förnekandet
+            återkommer och gör att du börjar misstro din egen upplevelse. Se fler <Link href="#exempel" className="underline underline-offset-4">exempel på gaslighting i en relation</Link> längre ned.
+          </p>
+          <p className="text-sm leading-6 text-neutral-600">
+            Läs också <a href="https://rokstjejjourer.se/om-vald/vad-ar-vald/psykiskt-vald/gaslighting" className="underline underline-offset-4">Rokstjejjourers förklaring av gaslighting och vägar till stöd</a>.
           </p>
           <p className="leading-7">
             Ett minnesfel, en lögn eller två olika minnen av ett bråk är inte automatiskt
@@ -147,7 +156,7 @@ export default function GaslightingRelationPage() {
           </p>
         </section>
 
-        <section className="space-y-4">
+        <section id="exempel" className="space-y-4">
           <h2 className="text-2xl font-semibold tracking-tight">Exempel på gaslighting i en relation</h2>
           <p className="leading-7">
             Gaslighting kan se olika ut beroende på personlighet, relationstyp och situation.
@@ -354,8 +363,8 @@ export default function GaslightingRelationPage() {
             <div data-rv="card" className="rounded-2xl border border-neutral-200 p-6">
               <h3 className="text-lg font-semibold">Dokumentera för din egen skull</h3>
               <p className="mt-2 leading-7">
-                Om du märker att du blir osäker på vad som händer kan du skriva ner händelser och hur
-                du kände. Inte som bevis mot någon, utan som en karta för att se mönster. Det kan vara
+                Om du kan förvara anteckningar tryggt kan du skriva ner händelser och hur
+                du kände. Det kan hjälpa dig se mönster, men är inget krav för att söka stöd. Det kan vara
                 så enkelt som datum + en mening.
               </p>
             </div>
