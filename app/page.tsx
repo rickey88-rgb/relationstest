@@ -148,7 +148,7 @@ export default function Landing() {
               </div>
             </nav>
             <HomeScrollLink targetId="relationship-tests" className={styles.allTestsLink}>Utforska fler tester <span aria-hidden="true">→</span></HomeScrollLink>
-            <a href="#bocker" className={styles.booksShortcut}>
+            <Link href="/bocker" className={styles.booksShortcut}>
               <span className={styles.booksShortcutIcon} aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" focusable="false">
                   <path d="M4.5 5.75A2.75 2.75 0 0 1 7.25 3H19.5v15.5H7.25a2.75 2.75 0 0 0-2.75 2.75V5.75Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
@@ -157,10 +157,10 @@ export default function Landing() {
               </span>
               <span className={styles.booksShortcutText}>
                 <strong>Upptäck våra böcker</strong>
-                <small>Praktiska guider om ADHD, autism och AuDHD</small>
+                <small>Fyra e-böcker om ADHD, autism, AuDHD och övertänkande</small>
               </span>
-              <span className={styles.booksShortcutArrow} aria-hidden="true">↓</span>
-            </a>
+              <span className={styles.booksShortcutArrow} aria-hidden="true">→</span>
+            </Link>
           </div>
 
           <div className={styles.heroArt} aria-hidden="true">

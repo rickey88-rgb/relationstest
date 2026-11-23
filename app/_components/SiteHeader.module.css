@@ -19,6 +19,9 @@
 .brand { align-items: center; display: flex; font-size: 1.1rem; font-weight: 600; gap: 12px; letter-spacing: -.035em; }
 .brandMark { color: #17263D; flex-shrink: 0; height: 39px; width: 35px; }
 .actions { align-items: center; display: flex; gap: 28px; flex-shrink: 0; }
+.nav { display: flex; align-items: center; gap: clamp(.5rem, 2vw, 1rem); }
+.booksLink { display: inline-flex; align-items: center; min-height: 44px; color: #243F61; font-size: .875rem; font-weight: 600; }
+.booksLink:hover { text-decoration: underline; text-underline-offset: 3px; }
 .assurance { align-items: center; color: #526075; display: flex; font-size: .75rem; gap: 12px; }
 .accountLink {
   align-items: center;
@@ -40,7 +43,7 @@
 }
 .accountLink:hover { background: #EEF2F6; border-color: #243F61; }
 .accountLink svg { flex-shrink: 0; }
-.homeLink:focus-visible, .accountLink:focus-visible { outline: 3px solid #243F61; outline-offset: 4px; }
+.homeLink:focus-visible, .accountLink:focus-visible, .booksLink:focus-visible { outline: 3px solid #243F61; outline-offset: 4px; }
 @media (max-width: 1023px) { .assurance { display: none; } }
 @media (max-width: 600px) {
   .inner { min-height: 76px; padding: 12px 16px; }

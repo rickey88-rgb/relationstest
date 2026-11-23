@@ -1,28 +1,7 @@
 import Stripe from "stripe";
+import type { LegacyBookId } from "./bookCatalog";
 
-export const AUDHD_BOOK = {
-  id: "audhd-bok",
-  name: "Världens bästa bok om AuDHD",
-  author: "Elias Voss",
-  downloadFilename: "Varldens-basta-bok-om-AuDHD_Elias-Voss.pdf",
-} as const;
-
-export const AUTISM_BOOK = {
-  id: "autism-bok",
-  name: "AUTISM ALL INCLUSIVE",
-  author: "Elias Voss",
-  downloadFilename: "AUTISM_ALL_INCLUSIVE_Elias_Voss.pdf",
-  worksheetsFilename: "AUTISM_ALL_INCLUSIVE_arbetsblad_A4.pdf",
-} as const;
-
-export const ADHD_DELUXE_BOOK = {
-  id: "adhd-deluxe",
-  name: "ADHD DELUXE",
-  author: "Elias Voss",
-  downloadFilename: "ADHD-DELUXE_Elias-Voss_v1.1.pdf",
-  worksheetsFilename: "ADHD-DELUXE_Arbetsblad_Ifyllbara_v1.1.pdf",
-  printWorksheetsFilename: "ADHD-DELUXE_Arbetsblad_Utskrift_v1.1.pdf",
-} as const;
+export { AUDHD_BOOK, AUTISM_BOOK, ADHD_DELUXE_BOOK } from "./legacyBookDetails";
 
 // Price IDs are non-secret Stripe product identifiers. ADHD Deluxe verifies
 // line items rather than trusting a client value or Payment Link reference.
@@ -156,6 +135,24 @@ export async function verifyAutismBookCheckoutSession(sessionId: string) {
 
 function lineItemPriceId(price: string | { id: string } | null | undefined) {
   return typeof price === "string" ? price : price?.id ?? null;
+}
+
+/** The former guest flows keep their original checks. Library recovery adds
+ * the buyer-email and capture checks before handing out a fresh download. */
+export function legacyBookForLineItem(reference: PaymentLinkReference, item: Stripe.LineItem): LegacyBookId | null {
+  const price = lineItemPriceId(item.price);
+  if (!price || item.quantity !== 1 || item.currency !== "sek") return null;
+  const link = paymentLinkId(reference);
+  const hasPrice = (key: string) => required(key).split(",").some(value => value.trim() === price);
+  if (link && adhdDeluxePaymentLinks.has(link)) {
+    return adhdDeluxeAmounts[price] === item.amount_total ? "adhd-deluxe" : null;
+  }
+  if (isAllowedAutismBookPaymentLink(reference)) {
+    return (item.amount_total === 9900 || item.amount_total === 14900) &&
+      hasPrice("AUTISM_BOOK_ALLOWED_PRICE_IDS") ? "autism-bok" : null;
+  }
+  return (item.amount_total === 7900 || item.amount_total === 14900) &&
+    hasPrice("AUDHD_BOOK_ALLOWED_PRICE_IDS") ? "audhd-bok" : null;
 }
 
 export type AdhdDeluxeCheckoutVerification =

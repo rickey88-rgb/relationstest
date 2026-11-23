@@ -11,6 +11,7 @@ import TestAccountEntry from "./TestAccountEntry";
 import DirectAccountPortal from "./DirectAccountPortal";
 import { BookLibrary } from "../_components/OverthinkingBookActions";
 import { bookLibraryEnabled } from "../_lib/overthinkingBook.server";
+import { legacyBookLibraryEnabled } from "../_lib/legacyBookLibrary.server";
 import { directPortalEnabled } from "../_lib/testAccounts/directPublic";
 
 export const metadata: Metadata = {
@@ -39,7 +40,7 @@ const date = (value: Date) => value.toLocaleDateString("sv-SE", { timeZone: "Eur
 
 export default async function MyPages({ searchParams }: { searchParams: Promise<{ status?: string; bok?: string }> }) {
   const { status, bok } = await searchParams;
-  const libraryEnabled = bookLibraryEnabled();
+  const libraryEnabled = bookLibraryEnabled() || legacyBookLibraryEnabled();
   const returning = bok === "betalning";
   if (directPortalEnabled()) return <DirectAccountPortal bookLibrary={libraryEnabled} bookReturn={returning} bookIntent={libraryEnabled && (bok === "bibliotek" || bok === "kop")} />;
   let user = null;

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { trackEvent } from "../_analytics/analytics";
 import { directAuthClient } from "../_lib/testAccounts/directClient";
 import { OVERTHINKING_BOOK as book } from "../_lib/overthinkingBook";
+import { BOOK_CATALOG, LEGACY_BOOK_LIBRARY_API, THINKING_CATALOG_BOOK, type CatalogBook } from "../_lib/bookCatalog";
 
 const pendingBookKey = "rv-pending-book-v1";
 
@@ -18,10 +19,11 @@ async function bookRequest(path: string, direct: boolean, method = "GET", signal
   return fetch(path, { method, headers, signal, cache: "no-store", referrerPolicy: "no-referrer" });
 }
 
-export function OverthinkingBuyButton({ enabled, direct, className }: {
+export function OverthinkingBuyButton({ enabled, direct, className, label = "Köp e-boken · 149 kr" }: {
   enabled: boolean;
   direct: boolean;
   className: string;
+  label?: string;
 }) {
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
@@ -56,23 +58,13 @@ export function OverthinkingBuyButton({ enabled, direct, className }: {
   }
   return <>
     <button type="button" className={className} disabled={!enabled || busy} onClick={() => void buy()}>
-      {busy ? "Öppnar kassan…" : "Köp e-boken · 149 kr"}
+      {busy ? "Öppnar kassan…" : label}
     </button>
     {message && <p role="status" className="mt-2 text-sm">{message}</p>}
   </>;
 }
 
-type LibraryBook = {
-  api: string;
-  cover: string;
-  title: string;
-  author: string;
-  filename: string;
-};
-
-const libraryBooks: readonly LibraryBook[] = [book];
-
-function LibraryBookCard({ entry, direct }: { entry: LibraryBook; direct: boolean }) {
+function LibraryBookCard({ entry, direct }: { entry: CatalogBook; direct: boolean }) {
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -83,13 +75,25 @@ function LibraryBookCard({ entry, direct }: { entry: LibraryBook; direct: boolea
     try {
       tab = window.open("", "_blank");
       if (tab) tab.opener = null;
-      const response = await bookRequest(entry.api + "/download", direct);
+      const downloadPath = entry.id === THINKING_CATALOG_BOOK.id
+        ? book.api + "/download"
+        : LEGACY_BOOK_LIBRARY_API + "?book=" + encodeURIComponent(entry.id);
+      const response = await bookRequest(downloadPath, direct);
       if (response.status === 401 || response.status === 403) {
         setMessage("Åtkomsten kunde inte verifieras. Logga in med samma mejladress som du använde vid köpet.");
         tab?.close();
         return;
       }
-      if (!response.ok || response.headers.get("Content-Type") !== "application/pdf") throw new Error("PDF unavailable");
+      if (!response.ok) throw new Error("PDF unavailable");
+      if (entry.id !== THINKING_CATALOG_BOOK.id) {
+        const { url } = await response.json();
+        const signed = new URL(url);
+        if (signed.protocol !== "https:" || signed.username || signed.password) throw new Error("Invalid download");
+        if (tab && !tab.closed) tab.location.replace(signed.href);
+        else window.location.assign(signed.href);
+        return;
+      }
+      if (response.headers.get("Content-Type") !== "application/pdf") throw new Error("PDF unavailable");
       const url = URL.createObjectURL(await response.blob());
       window.setTimeout(() => URL.revokeObjectURL(url), 60000);
       if (tab && !tab.closed) {
@@ -119,8 +123,11 @@ function LibraryBookCard({ entry, direct }: { entry: LibraryBook; direct: boolea
         aria-label={`Öppna boken ${entry.title}`}
         className="group block w-full text-left focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-[#27666A] disabled:cursor-wait"
       >
-        <Image src={entry.cover} width={640} height={960} alt=""
-          sizes="(max-width: 480px) 85vw, 220px" className="h-auto w-full" />
+        <span className="relative block aspect-[4/5] bg-[#f2eee6]">
+          <span className="absolute inset-3">
+            <Image src={entry.cover} fill alt="" sizes="220px" className="object-contain" />
+          </span>
+        </span>
         <span className="block p-4">
           <span className="block text-base font-semibold leading-tight">{entry.title}</span>
           <span className="mt-1 block text-sm text-neutral-600">{entry.author}</span>
@@ -135,7 +142,7 @@ function LibraryBookCard({ entry, direct }: { entry: LibraryBook; direct: boolea
 }
 
 type LibraryResult = {
-  owned: LibraryBook[];
+  owned: CatalogBook[];
   pending: boolean;
   unavailable: boolean;
 };
@@ -146,21 +153,22 @@ export function BookLibrary({ direct, returning = false }: { direct: boolean; re
 
   useEffect(() => {
     const controller = new AbortController();
+    async function read(path: string) {
+      try {
+        const response = await bookRequest(path, direct, "GET", controller.signal);
+        return response.ok ? await response.json() : null;
+      } catch {
+        return null;
+      }
+    }
     async function refresh() {
-      const books = await Promise.all(libraryBooks.map(async entry => {
-        try {
-          const response = await bookRequest(entry.api, direct, "GET", controller.signal);
-          if (!response.ok) return { entry, state: "unavailable" };
-          const { state } = await response.json();
-          return { entry, state: state === "ready" || state === "pending" || state === "none" ? state : "unavailable" };
-        } catch {
-          return { entry, state: "unavailable" };
-        }
-      }));
+      const [legacy, thinking] = await Promise.all([read(LEGACY_BOOK_LIBRARY_API), read(book.api)]);
+      const legacyIds: readonly unknown[] = Array.isArray(legacy?.owned) ? legacy.owned : [];
+      const state = thinking?.state;
       if (!controller.signal.aborted) setResult({
-        owned: books.filter(item => item.state === "ready").map(item => item.entry),
-        pending: books.some(item => item.state === "pending"),
-        unavailable: books.some(item => item.state === "unavailable"),
+        owned: BOOK_CATALOG.filter(entry => entry.id === THINKING_CATALOG_BOOK.id ? state === "ready" : legacyIds.includes(entry.id)),
+        pending: state === "pending",
+        unavailable: !Array.isArray(legacy?.owned) || !["none", "pending", "ready"].includes(state),
       });
     }
     void refresh();
@@ -183,7 +191,7 @@ export function BookLibrary({ direct, returning = false }: { direct: boolean; re
   return (
     <div>
       {owned.length > 0 && <div className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,10rem),13rem))] gap-4 sm:gap-6">
-        {owned.map(entry => <LibraryBookCard key={entry.api} entry={entry} direct={direct} />)}
+        {owned.map(entry => <LibraryBookCard key={entry.id} entry={entry} direct={direct} />)}
       </div>}
       {!owned.length && !pending && !unavailable &&
         <p className="text-sm text-neutral-600">Här visas dina köpta böcker. Har du redan köpt en bok? Logga in med samma mejladress som vid betalningen.</p>}

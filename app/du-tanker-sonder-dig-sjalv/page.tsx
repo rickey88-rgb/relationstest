@@ -62,7 +62,7 @@ export default function OverthinkingBookPage() {
           <h1 id="book-title">Du tänker <em>sönder</em> dig själv</h1>
           <p className={styles.subtitle}>{book.subtitle}</p>
           <p className={styles.heroLead}>Du har läst om meddelandet fyra gånger. Det står fortfarande samma sak. Nu återstår frågan om vad du vill lägga resten av kvällen på.</p>
-          <a className={styles.primary} href="#kop">Se erbjudandet · 149 kr</a>
+          <OverthinkingBuyButton enabled={enabled} direct={direct} className={styles.primary} label="Köp boken – 149 kr" />
           <p className={styles.spec}>PDF · 120 sidor · 8 ifyllningsbara skrivblad</p>
         </div>
         <div className={styles.heroArt}>

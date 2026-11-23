@@ -14,7 +14,10 @@ export default function SiteHeader() {
           <span>Anonymt</span><span aria-hidden="true">·</span>
           <span>Ingen registrering</span><span aria-hidden="true">·</span><span>Direkt resultat</span>
         </div>
-        <nav aria-label="Konto"><HeaderAccountLink /></nav>
+        <nav aria-label="Huvudnavigation" className={styles.nav}>
+          <Link className={styles.booksLink} href="/bocker">Böcker</Link>
+          <HeaderAccountLink />
+        </nav>
       </div>
     </div>
   </header>;
