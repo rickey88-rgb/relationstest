@@ -10,7 +10,7 @@ export default function SiteHeader() {
         <Brand className={styles.brand} markClassName={styles.brandMark} />
       </Link>
       <div className={styles.actions}>
-        <div className={styles.assurance}>
+        <div className={styles.assurance} data-site-test-assurance>
           <span>Anonymt</span><span aria-hidden="true">·</span>
           <span>Ingen registrering</span><span aria-hidden="true">·</span><span>Direkt resultat</span>
         </div>

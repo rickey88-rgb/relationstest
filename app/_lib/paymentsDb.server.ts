@@ -35,7 +35,7 @@ function connectionString() {
   return value;
 }
 
-function database() {
+export function paymentDatabase() {
   if (!globalForPayments.paymentsSql) {
     globalForPayments.paymentsSql = postgres(connectionString(), {
       max: 1,
@@ -54,7 +54,7 @@ function database() {
  * fully completed, so it is safe to treat it as a no-op.
  */
 export async function recordVerifiedStripePayment(input: VerifiedStripePayment) {
-  const sql = database();
+  const sql = paymentDatabase();
   return sql.begin(async (transaction) => {
     const inserted = await transaction<{ stripe_event_id: string }[]>`
       insert into stripe_webhook_events (

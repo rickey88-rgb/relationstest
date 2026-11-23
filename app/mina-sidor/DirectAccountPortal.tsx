@@ -1,6 +1,7 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
 import ReportView from "./tester/ReportView";
+import { OverthinkingLibrary } from "../_components/OverthinkingBookActions";
 import AudhdReport from "../audhd-test/test/ReportView";
 import type { Report as AudhdResult } from "../audhd-test/test/model";
 import type { AnswerDescription } from "../_lib/testAccounts/answerDescriptions";
@@ -11,8 +12,12 @@ type Entry = { product: string; title: string; result: unknown; answers: AnswerD
 type Test = { product: string; title: string };
 const card = "rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm sm:p-7";
 const button = "min-h-12 rounded-xl bg-[#27666A] px-5 py-3 font-semibold text-white disabled:opacity-50";
-/** Vercel renders only this public shell. All personal requests and Auth go directly to Supabase. */
-export default function DirectAccountPortal() {
+/** Test data and Auth requests go directly to Supabase. The book library uses its own purchase API. */
+export default function DirectAccountPortal({ bookLibrary = false, buyBook = false, bookReturn = false }: {
+  bookLibrary?: boolean;
+  buyBook?: boolean;
+  bookReturn?: boolean;
+}) {
   const [email, setEmail] = useState(""), [userEmail, setUserEmail] = useState<string | null>(null);
   const [codeEmail, setCodeEmail] = useState<string | null>(null), [loginCode, setLoginCode] = useState("");
   const [userId, setUserId] = useState<string | null>(null), authUser = useRef<string | null>(null);
@@ -221,6 +226,10 @@ export default function DirectAccountPortal() {
       : !loginToken && (codeEmail ? <form className={card} onSubmit={event => { event.preventDefault(); void confirmLogin("code"); }}><h2 className="text-xl font-semibold">Skriv in koden från mejlet</h2><p className="mt-3">Stanna i den här fliken för att behålla åtkomsten till ditt köp.</p><label className="my-4 block">Engångskod<input type="text" inputMode="numeric" autoComplete="one-time-code" required pattern="[0-9]{6,10}" maxLength={14} value={loginCode} onChange={event => setLoginCode(event.target.value.replace(/\D/g, "").slice(0, 10))} className="mt-2 block min-h-12 w-full rounded-xl border p-3 text-xl tracking-widest" /></label><button className={button} disabled={busy || !/^[0-9]{6,10}$/.test(loginCode)}>Logga in med koden</button><button type="button" className="mt-4 block min-h-11 underline" disabled={busy} onClick={() => { setCodeEmail(null); setLoginCode(""); setNotice(""); }}>Ändra mejladress eller begär ny kod</button></form>
         : <form className={card} onSubmit={event => { event.preventDefault(); void login(); }}><h2 className="text-xl font-semibold">Logga in med mejl</h2><p className="mt-3">Få en engångskod och skriv in den här. Du behöver inget lösenord.</p><label className="my-4 block">Mejladress<input type="email" required autoComplete="email" value={email} onChange={event => setEmail(event.target.value)} className="mt-2 block min-h-12 w-full rounded-xl border p-3" /></label><button className={button} disabled={busy}>Skicka inloggningskod</button></form>)}
     {pending.length > 0 && <section className={card}><h2 className="text-xl font-semibold">Köp i den här webbläsaren</h2><p className="my-3">Öppna ditt betalda resultat. Välj sedan om du vill spara det på kontot. Gäståtkomsten gäller i högst sju dagar.</p><ul className="space-y-3">{pending.map(item => <li key={item.id}><button className="min-h-11 underline" disabled={busy} onClick={() => void guest(item)}>Öppna {title(item.product)}</button></li>)}</ul></section>}
+    {bookLibrary && userId && <section id="bibliotek" aria-label="Mitt bibliotek" className={card}>
+      <h2 className="mb-4 text-xl font-semibold">Mitt bibliotek</h2>
+      <OverthinkingLibrary key={userId} direct buyEnabled={buyBook} returning={bookReturn} />
+    </section>}
     {userEmail && <section className={card}><h2 className="text-xl font-semibold">Sparat på ditt konto</h2>{purchases.length === 0 ? <p className="mt-3">Du har inga kontosparade tester ännu.</p> : <ul className="mt-4 space-y-4">{purchases.map(item => <li key={item.id} className="flex flex-wrap items-center justify-between gap-3"><span>{title(item.product)} · {new Date(item.purchased_at).toLocaleDateString("sv-SE")}</span>{item.expires_at ? <button className="min-h-11 underline" disabled={busy} onClick={() => void open(item)}>Öppna svar och analys</button> : <span>Analysen är raderad eller har löpt ut</span>}</li>)}</ul>}</section>}
   </main>;
 }

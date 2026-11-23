@@ -18,6 +18,7 @@ export const PAYMENT_PRODUCT_KEYS = [
   "audhd_bok",
   "autism_bok",
   "adhd_deluxe",
+  "overthinking_book",
 ] as const;
 
 export type PaymentProductKey = (typeof PAYMENT_PRODUCT_KEYS)[number];

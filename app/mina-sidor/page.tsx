@@ -9,6 +9,8 @@ import styles from "./page.module.css";
 import { redirect } from "next/navigation";
 import TestAccountEntry from "./TestAccountEntry";
 import DirectAccountPortal from "./DirectAccountPortal";
+import { OverthinkingLibrary } from "../_components/OverthinkingBookActions";
+import { bookCheckoutEnabled, bookLibraryEnabled } from "../_lib/overthinkingBook.server";
 import { directPortalEnabled } from "../_lib/testAccounts/directPublic";
 
 export const metadata: Metadata = {
@@ -35,8 +37,12 @@ const purchaseStatus: Record<AccountPurchaseSummary["status"], string> = {
 };
 const date = (value: Date) => value.toLocaleDateString("sv-SE", { timeZone: "Europe/Stockholm" });
 
-export default async function MyPages({ searchParams }: { searchParams: Promise<{ status?: string }> }) {
-  if (directPortalEnabled()) return <DirectAccountPortal />;
+export default async function MyPages({ searchParams }: { searchParams: Promise<{ status?: string; bok?: string }> }) {
+  const { status, bok } = await searchParams;
+  const libraryEnabled = bookLibraryEnabled();
+  const buyBook = bookCheckoutEnabled();
+  const returning = bok === "betalning";
+  if (directPortalEnabled()) return <DirectAccountPortal bookLibrary={libraryEnabled} buyBook={buyBook} bookReturn={returning} />;
   let user = null;
   try {
     user = await authenticatedUser();
@@ -52,7 +58,6 @@ export default async function MyPages({ searchParams }: { searchParams: Promise<
     if (!user.email_confirmed_at || user.is_anonymous || !await accountStorageReady()) purchasesUnavailable = true;
     else purchases = await listAccountPurchases(user.id);
   } catch { purchasesUnavailable = true; }
-  const { status } = await searchParams;
   const analyses = purchases.filter(purchase => purchase.status === "available");
 
   return (
@@ -129,14 +134,16 @@ export default async function MyPages({ searchParams }: { searchParams: Promise<
           <div className={styles.sectionHeading}>
             <div><SectionLabel>ATT ÅTERVÄNDA TILL</SectionLabel><h2 id="library-title">Mitt bibliotek</h2></div>
           </div>
-          <div className={styles.emptyCard}>
+          {libraryEnabled && user.email_confirmed_at && !user.is_anonymous ? (
+            <OverthinkingLibrary direct={false} buyEnabled={buyBook} returning={returning} />
+          ) : <div className={styles.emptyCard}>
             <div className={`${styles.emptyIcon} ${styles.iconSage}`} aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4.75 5.25h5.5A2.75 2.75 0 0 1 13 8v11a2.75 2.75 0 0 0-2.75-2.75h-5.5v-11ZM19.25 5.25h-3.5A2.75 2.75 0 0 0 13 8v11a2.75 2.75 0 0 1 2.75-2.75h3.5v-11Z"/></svg></div>
             <div className={styles.emptyCopy}>
               <h3>Säker kontokoppling för e-böcker kommer härnäst</h3>
               <p>Använd dina befintliga bok- och nedladdningslänkar tills dina bokköp kan kopplas säkert till biblioteket. Inga böcker läggs till enbart utifrån din mejladress.</p>
             </div>
             <span className={styles.comingBadge}>Kopplas snart</span>
-          </div>
+          </div>}
         </section>
 
         <section id="utforska" className={styles.section} aria-labelledby="explore-title">

@@ -8,6 +8,8 @@ import autismGuides from "../content/autism-guides.json";
 import HomeGuideDirectory, { type HomeGuide } from "./_components/HomeGuideDirectory";
 import HomeScrollLink from "./_components/HomeScrollLink";
 import AudhdBookCard from "./_components/AudhdBookCard";
+import { OVERTHINKING_BOOK as overthinkingBook } from "./_lib/overthinkingBook";
+import { bookCheckoutEnabled } from "./_lib/overthinkingBook.server";
 
 const pageUrl = "https://www.relationsvarning.se/";
 const title = "Relationsvarning – ADHD, autism, AuDHD och relationer";
@@ -214,6 +216,13 @@ export default function Landing() {
             <p className={styles.eyebrow}>Digital bok och ifyllbara arbetsblad</p><h3>AUTISM ALL INCLUSIVE</h3><p>En färgstark guide till en lättare vardag. 52 sidor och ett separat A4-häfte med arbetsblad.</p>
             <Link href="/autism-bok" className={styles.bookLink}>Läs mer om boken <span aria-hidden="true">→</span></Link>
           </article>
+          {bookCheckoutEnabled() && <article className={styles.bookCard}>
+            <Image src={overthinkingBook.cover} alt={`Omslag till ${overthinkingBook.title}`} width={640} height={960}
+              sizes="(max-width: 700px) min(100vw - 5rem, 250px), 280px" className={styles.bookMockup} />
+            <p className={styles.eyebrow}>Digital bok · 149 kr</p><h3>{overthinkingBook.title}</h3>
+            <p>Adrian Falk om oro, ältande och övertänkande. Sju verktyg och en fjortondagarsplan.</p>
+            <Link href={overthinkingBook.path} className={styles.bookLink}>Läs mer om boken</Link>
+          </article>}
         </div>
       </section>
 
