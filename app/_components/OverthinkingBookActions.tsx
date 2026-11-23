@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { trackEvent } from "../_analytics/analytics";
 import { directAuthClient } from "../_lib/testAccounts/directClient";
 import { OVERTHINKING_BOOK as book } from "../_lib/overthinkingBook";
@@ -17,29 +18,25 @@ async function bookRequest(path: string, direct: boolean, method = "GET", signal
   return fetch(path, { method, headers, signal, cache: "no-store", referrerPolicy: "no-referrer" });
 }
 
-export function OverthinkingBuyButton({ enabled, direct, className, library = false }: {
+export function OverthinkingBuyButton({ enabled, direct, className }: {
   enabled: boolean;
   direct: boolean;
   className: string;
-  library?: boolean;
 }) {
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
   async function buy() {
     setBusy(true);
     setMessage("");
-    if (!library) trackEvent("book_checkout_click", {
+    trackEvent("book_checkout_click", {
       product_id: book.product, product_name: book.title, price: book.price, currency: "SEK", offer_type: "standard",
     });
 
     try {
-      const response = await bookRequest(library ? book.api : book.api + "?guest=1", direct, "POST", undefined, !library);
+      const response = await bookRequest(book.api + "?guest=1", direct, "POST", undefined, true);
       if (response.status === 401) {
-        if (library) setMessage("Logga in igen för att fortsätta.");
-        else {
-          try { localStorage.setItem(pendingBookKey, String(Date.now())); } catch { /* The library is still available manually. */ }
-          window.location.assign(direct ? "/mina-sidor?bok=kop#bibliotek" : "/logga-in?bok=kop");
-        }
+        try { localStorage.setItem(pendingBookKey, String(Date.now())); } catch { /* The library is still available manually. */ }
+        window.location.assign(direct ? "/mina-sidor?bok=kop#bibliotek" : "/logga-in?bok=kop");
         return;
       }
       if (!response.ok) throw new Error("Checkout unavailable");
@@ -49,8 +46,7 @@ export function OverthinkingBuyButton({ enabled, direct, className, library = fa
       } else if (result.kind === "guest_return") {
         window.location.assign(book.path + "/tack");
       } else if (result.kind === "owned" || result.kind === "pending") {
-        if (library) setMessage(result.kind === "owned" ? "Boken finns redan i ditt bibliotek. Uppdatera sidan för att hämta den." : "Du har redan en betalning som behandlas.");
-        else window.location.assign("/mina-sidor?bok=betalning#bibliotek");
+        window.location.assign("/mina-sidor?bok=betalning#bibliotek");
       } else throw new Error("Unexpected checkout response");
     } catch {
       setMessage("Kassan kunde inte öppnas. Försök igen om en stund.");
@@ -66,37 +62,114 @@ export function OverthinkingBuyButton({ enabled, direct, className, library = fa
   </>;
 }
 
-type LibraryState = "loading" | "ready" | "none" | "pending" | "unavailable";
+type LibraryBook = {
+  api: string;
+  cover: string;
+  title: string;
+  author: string;
+  filename: string;
+};
 
-export function OverthinkingLibrary({ direct, buyEnabled, returning = false }: {
-  direct: boolean;
-  buyEnabled: boolean;
-  returning?: boolean;
-}) {
-  const [state, setState] = useState<LibraryState>("loading");
-  const [revision, setRevision] = useState(0);
+const libraryBooks: readonly LibraryBook[] = [book];
+
+function LibraryBookCard({ entry, direct }: { entry: LibraryBook; direct: boolean }) {
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
+
+  async function open() {
+    setBusy(true);
+    setMessage("");
+    let tab: Window | null = null;
+    try {
+      tab = window.open("", "_blank");
+      if (tab) tab.opener = null;
+      const response = await bookRequest(entry.api + "/download", direct);
+      if (response.status === 401 || response.status === 403) {
+        setMessage("Åtkomsten kunde inte verifieras. Logga in med samma mejladress som du använde vid köpet.");
+        tab?.close();
+        return;
+      }
+      if (!response.ok || response.headers.get("Content-Type") !== "application/pdf") throw new Error("PDF unavailable");
+      const url = URL.createObjectURL(await response.blob());
+      window.setTimeout(() => URL.revokeObjectURL(url), 60000);
+      if (tab && !tab.closed) {
+        tab.location.replace(url);
+      } else {
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = entry.filename;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      }
+    } catch {
+      tab?.close();
+      setMessage("Boken kunde inte öppnas just nu. Försök igen om en stund.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <article className="overflow-hidden rounded-2xl border border-neutral-200 bg-white text-neutral-900 shadow-sm">
+      <button
+        type="button"
+        onClick={() => void open()}
+        disabled={busy}
+        aria-label={`Öppna boken ${entry.title}`}
+        className="group block w-full text-left focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-[#27666A] disabled:cursor-wait"
+      >
+        <Image src={entry.cover} width={640} height={960} alt=""
+          sizes="(max-width: 480px) 85vw, 220px" className="h-auto w-full" />
+        <span className="block p-4">
+          <span className="block text-base font-semibold leading-tight">{entry.title}</span>
+          <span className="mt-1 block text-sm text-neutral-600">{entry.author}</span>
+          <span className="mt-3 inline-block text-sm font-semibold text-[#27666A] group-hover:underline">
+            {busy ? "Öppnar PDF…" : "Öppna boken"}
+          </span>
+        </span>
+      </button>
+      {message && <p role="status" className="px-4 pb-4 text-sm">{message}</p>}
+    </article>
+  );
+}
+
+type LibraryResult = {
+  owned: LibraryBook[];
+  pending: boolean;
+  unavailable: boolean;
+};
+
+export function BookLibrary({ direct, returning = false }: { direct: boolean; returning?: boolean }) {
+  const [result, setResult] = useState<LibraryResult | null>(null);
+  const [revision, setRevision] = useState(0);
 
   useEffect(() => {
     const controller = new AbortController();
     async function refresh() {
-      try {
-        const response = await bookRequest(book.api, direct, "GET", controller.signal);
-        if (!response.ok) throw new Error("Library unavailable");
-        const { state } = await response.json();
-        if (state !== "ready" && state !== "none" && state !== "pending") throw new Error("Invalid library response");
-        if (!controller.signal.aborted) setState(state);
-      } catch {
-        if (!controller.signal.aborted) setState("unavailable");
-      }
+      const books = await Promise.all(libraryBooks.map(async entry => {
+        try {
+          const response = await bookRequest(entry.api, direct, "GET", controller.signal);
+          if (!response.ok) return { entry, state: "unavailable" };
+          const { state } = await response.json();
+          return { entry, state: state === "ready" || state === "pending" || state === "none" ? state : "unavailable" };
+        } catch {
+          return { entry, state: "unavailable" };
+        }
+      }));
+      if (!controller.signal.aborted) setResult({
+        owned: books.filter(item => item.state === "ready").map(item => item.entry),
+        pending: books.some(item => item.state === "pending"),
+        unavailable: books.some(item => item.state === "unavailable"),
+      });
     }
     void refresh();
     return () => controller.abort();
   }, [direct, revision]);
 
   useEffect(() => {
-    let resume = returning || new URLSearchParams(window.location.search).get("bok") === "kop";
+    const intent = new URLSearchParams(window.location.search).get("bok");
+    let resume = returning || intent === "kop" || intent === "bibliotek";
     try {
       const timestamp = Number(localStorage.getItem(pendingBookKey));
       localStorage.removeItem(pendingBookKey);
@@ -105,50 +178,20 @@ export function OverthinkingLibrary({ direct, buyEnabled, returning = false }: {
     if (resume) document.getElementById("bibliotek")?.scrollIntoView({ block: "start" });
   }, [returning]);
 
-  async function download() {
-    setBusy(true);
-    setMessage("");
-    try {
-      const response = await bookRequest(book.api + "/download", direct);
-      if (response.status === 401 || response.status === 403) {
-        setMessage("Åtkomsten kunde inte verifieras. Kontrollera att du är inloggad på kontot som köpte boken.");
-        return;
-      }
-      if (!response.ok || response.headers.get("Content-Type") !== "application/pdf") throw new Error("PDF unavailable");
-      const url = URL.createObjectURL(await response.blob());
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = book.filename;
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      window.setTimeout(() => URL.revokeObjectURL(url), 30000);
-    } catch {
-      setMessage("Boken kunde inte hämtas just nu. Försök igen om en stund.");
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  const button = "inline-flex min-h-11 items-center rounded-xl bg-[#27666A] px-4 py-2 text-sm font-semibold text-white disabled:opacity-60";
-  return <article className="rounded-2xl border border-neutral-200 bg-white p-5 text-neutral-900 sm:p-6">
-    <h3 className="text-xl font-semibold">{book.title}</h3>
-    <p className="mb-4 mt-1 text-sm text-neutral-600">{book.author} · PDF · 120 sidor</p>
-    {state === "ready" && <button type="button" onClick={() => void download()} className={button} disabled={busy}>
-      {busy ? "Hämtar PDF…" : "Hämta din e-bok"}
-    </button>}
-    {state === "loading" && <p role="status">Kontrollerar bokköp…</p>}
-    {state === "pending" && <>
-      <p role="status">Betalningen är ännu inte bekräftad. Uppdatera när du är klar i kassan.</p>
-      {buyEnabled && !returning && <div className="mt-3"><OverthinkingBuyButton enabled direct={direct} className={button} library /></div>}
-    </>}
-    {state === "none" && <>
-      {returning && <p role="status" className="mb-3">Vi hittar ännu inget verifierat köp på det här kontot. Kontrollera betalningen och kontot du använde.</p>}
-      {buyEnabled && !returning && <OverthinkingBuyButton enabled direct={direct} className={button} library />}
-    </>}
-    {state === "unavailable" && <p role="status">Biblioteket kan inte hämtas just nu.</p>}
-    {(state === "pending" || state === "unavailable" || (state === "none" && returning)) &&
-      <button type="button" onClick={() => { setState("loading"); setRevision(current => current + 1); }} className="mt-3 block min-h-11 underline underline-offset-4">Kontrollera igen</button>}
-    {message && <p role="status" className="mt-3 text-sm">{message}</p>}
-  </article>;
+  if (!result) return <p role="status" className="text-sm text-neutral-600">Hämtar dina böcker…</p>;
+  const { owned, pending, unavailable } = result;
+  return (
+    <div>
+      {owned.length > 0 && <div className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,10rem),13rem))] gap-4 sm:gap-6">
+        {owned.map(entry => <LibraryBookCard key={entry.api} entry={entry} direct={direct} />)}
+      </div>}
+      {!owned.length && !pending && !unavailable &&
+        <p className="text-sm text-neutral-600">Här visas dina köpta böcker. Har du redan köpt en bok? Logga in med samma mejladress som vid betalningen.</p>}
+      {pending && <p role="status" className="mt-3 text-sm">Betalningen är ännu inte bekräftad.</p>}
+      {unavailable && <p role="status" className="mt-3 text-sm">Alla bokköp kunde inte kontrolleras just nu.</p>}
+      {(pending || unavailable || (returning && !owned.length)) &&
+        <button type="button" onClick={() => { setResult(null); setRevision(current => current + 1); }}
+          className="mt-2 min-h-11 text-sm font-semibold underline underline-offset-4">Kontrollera igen</button>}
+    </div>
+  );
 }

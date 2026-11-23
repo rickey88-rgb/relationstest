@@ -2,7 +2,7 @@ import { createHash, randomBytes } from "node:crypto";
 import { createClient } from "@supabase/supabase-js";
 import Stripe from "stripe";
 import { accountPortalEnabled } from "./accountGate.server";
-import { applicationOrigin } from "./authConfig.server";
+import { applicationOrigin, validLoginEmail } from "./authConfig.server";
 import { authenticatedUser } from "./authSession.server";
 import { configuredPriceIdsForProduct, identifyPaymentProduct } from "./paymentProductCatalog.server";
 import { directIdentity } from "./testAccounts/directAuth.server";
@@ -76,10 +76,12 @@ export function bookCheckoutEnabled() {
 }
 
 export async function bookAccount(request: Request) {
-  if (directPortalEnabled()) return (await directIdentity(request.headers.get("authorization")))?.userId ?? null;
+  if (directPortalEnabled()) return directIdentity(request.headers.get("authorization"));
   if (!accountPortalEnabled()) return null;
   const user = await authenticatedUser();
-  return user?.email_confirmed_at && !user.is_anonymous ? user.id : null;
+  return user?.email_confirmed_at && !user.is_anonymous
+    ? { userId: user.id, verifiedEmail: user.email ?? null }
+    : null;
 }
 
 function stripeClient(key: string) {
@@ -144,17 +146,38 @@ async function inspectBookAccount(stripe: Stripe, userId: string, live: boolean,
   return { state: pending ? "pending" as const : "none" as const, openUrl };
 }
 
-export async function bookLibraryState(userId: string) {
-  const { key, live } = stripeMode();
-  return (await inspectBookAccount(stripeClient(key), userId, live)).state;
+type BookAccount = { userId: string; verifiedEmail: string | null };
+
+async function hasGuestPurchase(stripe: Stripe, live: boolean, verifiedEmail: string | null) {
+  const email = validLoginEmail(verifiedEmail);
+  if (!email) return false;
+
+  // Existing guest Checkout Sessions already carry the book metadata and the
+  // email collected by Stripe. Only Supabase's verified address scopes this lookup.
+  const sessions = stripe.checkout.sessions.list({ customer_details: { email }, status: "complete", limit: 100 });
+  for await (const session of sessions) {
+    const priceId = session.metadata?.rv_book_price;
+    if (!priceId || !session.metadata?.rv_guest_hash ||
+        session.customer_details?.email?.trim().toLowerCase() !== email.toLowerCase()) continue;
+    const checkout = { sessionId: session.id, priceId, live, expiresAt: new Date(session.expires_at * 1000) };
+    if (await verifiedBookPurchase(stripe, session, checkout)) return true;
+  }
+  return false;
 }
 
-export async function startBookCheckout(userId: string) {
+export async function bookLibraryState(account: BookAccount) {
+  const { key, live } = stripeMode();
+  const stripe = stripeClient(key);
+  const { state } = await inspectBookAccount(stripe, account.userId, live);
+  return state === "ready" || await hasGuestPurchase(stripe, live, account.verifiedEmail) ? "ready" : state;
+}
+
+export async function startBookCheckout({ userId, verifiedEmail }: BookAccount) {
   const { key, live, origin } = stripeMode();
   const price = priceForCheckout();
   const stripe = stripeClient(key);
   const prior = await inspectBookAccount(stripe, userId, live, price);
-  if (prior.state === "ready") return { kind: "owned" as const };
+  if (prior.state === "ready" || await hasGuestPurchase(stripe, live, verifiedEmail)) return { kind: "owned" as const };
   if (prior.openUrl) return { kind: "checkout" as const, url: prior.openUrl };
   if (prior.state === "pending") return { kind: "pending" as const };
 
@@ -231,8 +254,8 @@ export async function guestBookPurchaseReady(cookie: string | null) {
   return Boolean(guest && await verifiedBookPurchase(stripe, guest.session, guest.checkout));
 }
 
-export async function readOwnedBookPdf(userId: string) {
-  if (await bookLibraryState(userId) !== "ready") return null;
+export async function readOwnedBookPdf(account: BookAccount) {
+  if (await bookLibraryState(account) !== "ready") return null;
   return readBookPdf();
 }
 

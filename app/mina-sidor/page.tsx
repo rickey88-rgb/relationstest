@@ -9,8 +9,8 @@ import styles from "./page.module.css";
 import { redirect } from "next/navigation";
 import TestAccountEntry from "./TestAccountEntry";
 import DirectAccountPortal from "./DirectAccountPortal";
-import { OverthinkingLibrary } from "../_components/OverthinkingBookActions";
-import { bookCheckoutEnabled, bookLibraryEnabled } from "../_lib/overthinkingBook.server";
+import { BookLibrary } from "../_components/OverthinkingBookActions";
+import { bookLibraryEnabled } from "../_lib/overthinkingBook.server";
 import { directPortalEnabled } from "../_lib/testAccounts/directPublic";
 
 export const metadata: Metadata = {
@@ -40,9 +40,8 @@ const date = (value: Date) => value.toLocaleDateString("sv-SE", { timeZone: "Eur
 export default async function MyPages({ searchParams }: { searchParams: Promise<{ status?: string; bok?: string }> }) {
   const { status, bok } = await searchParams;
   const libraryEnabled = bookLibraryEnabled();
-  const buyBook = bookCheckoutEnabled();
   const returning = bok === "betalning";
-  if (directPortalEnabled()) return <DirectAccountPortal bookLibrary={libraryEnabled} buyBook={buyBook} bookReturn={returning} bookIntent={buyBook && bok === "kop"} />;
+  if (directPortalEnabled()) return <DirectAccountPortal bookLibrary={libraryEnabled} bookReturn={returning} bookIntent={libraryEnabled && (bok === "bibliotek" || bok === "kop")} />;
   let user = null;
   try {
     user = await authenticatedUser();
@@ -135,7 +134,7 @@ export default async function MyPages({ searchParams }: { searchParams: Promise<
             <div><SectionLabel>ATT ÅTERVÄNDA TILL</SectionLabel><h2 id="library-title">Mitt bibliotek</h2></div>
           </div>
           {libraryEnabled && user.email_confirmed_at && !user.is_anonymous ? (
-            <OverthinkingLibrary direct={false} buyEnabled={buyBook} returning={returning} />
+            <BookLibrary direct={false} returning={returning} />
           ) : <div className={styles.emptyCard}>
             <div className={`${styles.emptyIcon} ${styles.iconSage}`} aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4.75 5.25h5.5A2.75 2.75 0 0 1 13 8v11a2.75 2.75 0 0 0-2.75-2.75h-5.5v-11ZM19.25 5.25h-3.5A2.75 2.75 0 0 0 13 8v11a2.75 2.75 0 0 1 2.75-2.75h3.5v-11Z"/></svg></div>
             <div className={styles.emptyCopy}>

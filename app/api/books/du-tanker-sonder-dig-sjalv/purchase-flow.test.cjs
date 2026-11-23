@@ -9,6 +9,8 @@ const createLoader = require("../../../autism-test/test/test-loader.cjs");
 const origin = "https://book-launch.example.test";
 const buyer = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa";
 const other = "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb";
+const guestEmail = "guest@example.test";
+const otherEmail = "other@example.test";
 const priceId = "price_local149";
 const sessionId = "cs_test_localbook123";
 const intentId = "pi_localbook123";
@@ -25,6 +27,7 @@ Object.assign(process.env, {
   STRIPE_PAYMENT_PRODUCT_MAP_JSON: JSON.stringify({ adhd_deluxe: { priceIds: ["price_other"] } }),
 });
 let signedIn = null, priceAmount = 14900, creation = null, calls = 0, storageReads = 0, wrongObject = false;
+let emailLookups = [];
 const session = {
   id: sessionId, amount_total: 14900, currency: "sek", livemode: false, mode: "payment",
   status: "open", payment_status: "unpaid", payment_intent: null, payment_link: null,
@@ -39,6 +42,11 @@ const charge = {
 const stripe = {
   prices: { retrieve: async id => ({ id, type: "one_time", currency: "sek", unit_amount: priceAmount, livemode: false, active: true }) },
   checkout: { sessions: {
+    list: async function* (params) {
+      assert.equal(params.status, "complete");
+      emailLookups.push(params.customer_details.email);
+      if (session.status === "complete" && session.customer_details) yield session;
+    },
     create: async (payload, options) => { creation = payload; session.metadata = payload.metadata; calls++; assert.match(options.idempotencyKey, /^overthinking-book-[a-f0-9]{64}$/); return session; },
     retrieve: async id => { assert.equal(id, sessionId); return session; },
     listLineItems: async id => { assert.equal(id, sessionId); return items; },
@@ -64,7 +72,11 @@ const stripe = {
       stripe: { default: class StripeMock { constructor() { return stripe; } } },
       postgres: { default: () => db(pg) },
       "./authSession.server": { authenticatedUser: async () => signedIn },
-      "./testAccounts/directAuth.server": { directIdentity: async header => header === "Bearer fixture" ? { userId: buyer } : null },
+      "./testAccounts/directAuth.server": { directIdentity: async header => ({
+        "Bearer fixture": { userId: buyer, verifiedEmail: null },
+        "Bearer guest-account": { userId: other, verifiedEmail: guestEmail },
+        "Bearer other-account": { userId: other, verifiedEmail: otherEmail },
+      })[header] ?? null },
       "@supabase/supabase-js": { createClient: (url, key) => {
         assert.equal(url, "https://fixture.supabase.co");
         assert.equal(key, "local-only");
@@ -197,6 +209,7 @@ const stripe = {
     assert.equal((await route.POST(guestReq("?guest=1", "POST", guestCookie))).status, 200);
     assert.equal(calls, created);
     session.status = "complete"; session.payment_status = "paid"; session.payment_intent = intentId;
+    session.customer_details = { email: guestEmail };
     const copiedId = "rv_overthinking_book_guest=" + "B".repeat(43) + "." + sessionId;
     assert.equal((await download.GET(guestReq(guestUrl, "GET", copiedId))).status, 403);
     assert.deepEqual(await (await route.POST(guestReq("?guest=1", "POST", guestCookie))).json(), { kind: "guest_return" });
@@ -206,7 +219,29 @@ const stripe = {
       assert.equal(guestPdf.status, 200);
       assert.deepEqual(Buffer.from(await guestPdf.arrayBuffer()), pdf);
     }
+    const guestAccount = { authorization: "Bearer guest-account" };
+    const differentAccount = { authorization: "Bearer other-account" };
+    assert.equal((await store.ownedBookCheckouts(other, false)).length, 0, "the historical guest order has no account binding");
+    assert.deepEqual(await (await route.GET(req("GET", guestAccount))).json(), { state: "ready" });
+    assert.deepEqual(await (await route.GET(req("GET", differentAccount))).json(), { state: "none" });
+    assert.equal((await route.GET(req("GET", { "x-email": guestEmail }))).status, 401);
+    assert.deepEqual(emailLookups.slice(-2), [guestEmail, otherEmail]);
+    assert.equal((await download.GET(req("GET", differentAccount))).status, 403);
+    if (pdf) {
+      const saved = await download.GET(req("GET", guestAccount));
+      assert.equal(saved.status, 200);
+      assert.deepEqual(Buffer.from(await saved.arrayBuffer()), pdf);
+    }
+    process.env.OVERTHINKING_BOOK_CHECKOUT_ENABLED = "true";
+    assert.deepEqual(await (await route.POST(req("POST", guestAccount))).json(), { kind: "owned" });
+    session.payment_status = "unpaid";
+    assert.equal((await download.GET(req("GET", guestAccount))).status, 403);
+    session.payment_status = "paid";
+    charge.disputed = true;
+    assert.equal((await download.GET(req("GET", guestAccount))).status, 403);
+    charge.disputed = false;
     charge.refunded = true;
+    assert.equal((await download.GET(req("GET", guestAccount))).status, 403);
     assert.equal((await download.GET(guestReq(guestUrl, "GET", guestCookie))).status, 403);
     console.log(`PASS: account and guest 149 SEK checkout, signed webhook, buyer-only reopening, refund/dispute denial and private storage${pdf ? " with the exact release PDF" : ""}.`);
   } finally { await pg.close(); }

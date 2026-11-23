@@ -21,7 +21,13 @@ export default async function BookThanksPage() {
       <h1 className="text-3xl font-semibold">{ready ? "Tack för ditt köp" : "Kontrollera ditt bokköp"}</h1>
       <p className="mt-4 text-lg">{book.title} av {book.author}</p>
       {ready ? (
-        <a className={button} href={book.api + "/download?guest=1"}>Hämta din e-bok (PDF)</a>
+        <>
+          <p className="mt-5 text-sm text-neutral-600">
+            Du kan också komma åt din bok när som helst via <Link href="/mina-sidor?bok=bibliotek#bibliotek" className="underline">Mina sidor</Link> → Mitt bibliotek.
+            Logga in med samma mejladress som vid köpet.
+          </p>
+          <a className={button} href={book.api + "/download?guest=1"}>Hämta din e-bok (PDF)</a>
+        </>
       ) : cookie ? (
         <>
           <p className="mt-4">Vi kunde ännu inte bekräfta betalningen. Om du redan har betalat, vänta ett ögonblick och kontrollera igen.</p>

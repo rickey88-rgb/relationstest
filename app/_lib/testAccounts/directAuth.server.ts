@@ -11,5 +11,5 @@ export async function directIdentity(authorization: string | null) {
   const { data, error } = await client.auth.getUser(authorization.slice(7));
   const user = data.user;
   if (error || !user || !uuid.test(user.id) || !user.email_confirmed_at || user.is_anonymous || !accountPilotUserAllowed(user)) return null;
-  return { userId: user.id };
+  return { userId: user.id, verifiedEmail: user.email ?? null };
 }

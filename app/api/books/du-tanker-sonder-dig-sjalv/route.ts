@@ -20,9 +20,9 @@ function json(body: object, status = 200) {
 export async function GET(request: Request) {
   if (!bookLibraryEnabled()) return json({ error: "unavailable" }, 503);
   try {
-    const userId = await bookAccount(request);
-    if (!userId) return json({ error: "sign_in" }, 401);
-    return json({ state: await bookLibraryState(userId) });
+    const account = await bookAccount(request);
+    if (!account) return json({ error: "sign_in" }, 401);
+    return json({ state: await bookLibraryState(account) });
   } catch {
     return json({ error: "unavailable" }, 503);
   }
@@ -32,8 +32,8 @@ export async function POST(request: Request) {
   if (!bookCheckoutEnabled()) return json({ error: "unavailable" }, 503);
   try {
     if (request.headers.get("origin") !== applicationOrigin()) return json({ error: "origin" }, 403);
-    const userId = await bookAccount(request);
-    if (userId) return json(await startBookCheckout(userId));
+    const account = await bookAccount(request);
+    if (account) return json(await startBookCheckout(account));
     if (new URL(request.url).searchParams.get("guest") !== "1") return json({ error: "sign_in" }, 401);
     const { result, cookie } = await startGuestBookCheckout(guestBookCookieFrom(request));
     const response = json(result);

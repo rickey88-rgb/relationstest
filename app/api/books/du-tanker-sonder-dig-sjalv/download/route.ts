@@ -20,9 +20,9 @@ export async function GET(request: Request) {
       if (!guest) return new Response(null, { status: 401, headers });
       bytes = await readGuestBookPdf(guest);
     } else {
-      const userId = await bookAccount(request);
-      if (!userId) return new Response(null, { status: 401, headers });
-      bytes = await readOwnedBookPdf(userId);
+      const account = await bookAccount(request);
+      if (!account) return new Response(null, { status: 401, headers });
+      bytes = await readOwnedBookPdf(account);
     }
     if (!bytes) return new Response(null, { status: 403, headers });
     return new Response(bytes, { headers: {

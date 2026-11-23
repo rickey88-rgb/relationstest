@@ -33,7 +33,7 @@ const tools = [
 
 const questions = [
   ["Vad ingår?", "En digital bok i PDF-format med 120 sidor, fjorton kapitel och åtta ifyllningsbara skrivblad. Innehållsförteckningen är klickbar."],
-  ["Hur får jag boken efter köpet?", "När betalningen har bekräftats kan du ladda ner PDF-filen direkt. Du kan köpa som gäst. Vill du kunna hämta boken från Mitt bibliotek på andra enheter, logga in före köpet."],
+  ["Hur får jag boken efter köpet?", "Du kan ladda ner PDF-filen direkt när betalningen har bekräftats. Vill du också öppna boken i Mitt bibliotek senare, logga in med samma mejladress som du använde vid köpet."],
   ["Kan jag fylla i skrivbladen på mobilen?", "Ja, med en PDF-läsare som stöder ifyllningsbara fält. Spara en kopia för varje försök, skriv ut sidorna eller använd frågorna i en egen anteckning."],
   ["Vad betyder fjorton dagar?", "Du får en stegvis plan för att observera en vana, prova små förändringar och se vad som går att använda i din vardag. Du kan upprepa en dag, pausa eller flytta ett försök."],
   ["Behöver jag ha en diagnos?", "Boken vänder sig till vuxna som känner igen oro, ältande eller övertänkande. Den ger allmän kunskap och vardagsövningar och beskriver när professionell bedömning kan behövas."],
@@ -128,7 +128,7 @@ export default function OverthinkingBookPage() {
             <OverthinkingBuyButton enabled={enabled} direct={direct} className={styles.primary} />
           </div>
           <p className={styles.spec}>{enabled ? "Du kan köpa utan konto. Betalningen sker via Stripe." : "Kassan öppnar när boken lanseras."}</p>
-          {enabled && <p className={styles.spec}><Link href="/mina-sidor?bok=kop#bibliotek">Logga in före köpet</Link> om du vill spara boken i Mitt bibliotek.</p>}
+          {enabled && <p className={styles.spec}>Redan köpt boken? Öppna den i <Link href="/mina-sidor?bok=bibliotek#bibliotek">Mitt bibliotek</Link>.</p>}
         </div>
       </div>
     </section>
