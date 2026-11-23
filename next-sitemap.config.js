@@ -23,6 +23,7 @@ module.exports = {
     '/juridisk-information',
     '/autism-bok/tack',
     '/autism-bok/tack/*',
+    '/du-tanker-sonder-dig-sjalv/tack',
     '/nyhetsbrev/bekrafta',
     '/nyhetsbrev/avsluta',
     '/angest-test/test',

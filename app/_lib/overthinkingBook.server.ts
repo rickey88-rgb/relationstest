@@ -1,4 +1,4 @@
-import { createHash } from "node:crypto";
+import { createHash, randomBytes } from "node:crypto";
 import { createClient } from "@supabase/supabase-js";
 import Stripe from "stripe";
 import { accountPortalEnabled } from "./accountGate.server";
@@ -14,6 +14,21 @@ const bucket = "overthinking-book-private";
 const objectPath = `v1/${book.filename}`;
 const pdfSize = 2924829;
 const pdfSha256 = "30e800dc56139fd2485354010cef2db79e01c598cde086ffaadea08ac1509738";
+export const guestBookCookie = "rv_overthinking_book_guest";
+
+function guestProof(value: string | null) {
+  const match = value?.match(/^([A-Za-z0-9_-]{43})\.(cs_(?:live|test)_[A-Za-z0-9]+)$/);
+  return match ? { secret: match[1], sessionId: match[2] } : null;
+}
+
+export function guestBookCookieFrom(request: Request) {
+  return request.headers.get("cookie")?.split(";").map(value => value.trim())
+    .find(value => value.startsWith(guestBookCookie + "="))?.slice(guestBookCookie.length + 1) ?? null;
+}
+
+function proofHash(secret: string) {
+  return createHash("sha256").update(secret).digest("hex");
+}
 
 function stripeMode() {
   const key = process.env.STRIPE_SECRET_KEY?.trim() ?? "";
@@ -143,29 +158,90 @@ export async function startBookCheckout(userId: string) {
   if (prior.openUrl) return { kind: "checkout" as const, url: prior.openUrl };
   if (prior.state === "pending") return { kind: "pending" as const };
 
-  const configuredPrice = await stripe.prices.retrieve(price);
-  if (configuredPrice.id !== price || configuredPrice.livemode !== live || !configuredPrice.active
-    || configuredPrice.type !== "one_time" || configuredPrice.currency !== "sek" || configuredPrice.unit_amount !== book.amountOre) {
-    throw new Error("Book price mismatch");
-  }
-  const keyHash = createHash("sha256").update(`${userId}:${price}:${origin}:${Math.floor(Date.now()/60000)}`).digest("hex");
-  const session = await stripe.checkout.sessions.create({
-    mode: "payment",
-    line_items: [{ price, quantity: 1 }],
-    metadata: { rv_product: book.product },
-    success_url: `${origin}/mina-sidor?bok=betalning#bibliotek`,
-    cancel_url: `${origin}${book.path}#kop`,
-  }, { idempotencyKey: `overthinking-book-${keyHash}` });
+  const session = await createBookSession(stripe, price, live, origin, {
+    key: `${userId}:${price}:${origin}:${Math.floor(Date.now()/60000)}`,
+    successPath: "/mina-sidor?bok=betalning#bibliotek",
+  });
   const binding = { sessionId: session.id, priceId: price, live, expiresAt: new Date(session.expires_at * 1000) };
-  if (!matchesBookSession(session, binding) || session.status !== "open"
-    || !Number.isFinite(binding.expiresAt.valueOf())) throw new Error("Invalid book checkout session");
   const url = stripeCheckoutUrl(session.url);
   await recordBookCheckout(userId, binding);
   return { kind: "checkout" as const, url };
 }
 
+async function createBookSession(stripe: Stripe, price: string, live: boolean, origin: string,
+  context: { key: string; successPath: string; guestHash?: string }) {
+  const configuredPrice = await stripe.prices.retrieve(price);
+  if (configuredPrice.id !== price || configuredPrice.livemode !== live || !configuredPrice.active
+    || configuredPrice.type !== "one_time" || configuredPrice.currency !== "sek" || configuredPrice.unit_amount !== book.amountOre) {
+    throw new Error("Book price mismatch");
+  }
+  const keyHash = proofHash(context.key);
+  const session = await stripe.checkout.sessions.create({
+    mode: "payment",
+    line_items: [{ price, quantity: 1 }],
+    metadata: { rv_product: book.product, ...(context.guestHash ? { rv_guest_hash: context.guestHash, rv_book_price: price } : {}) },
+    success_url: origin + context.successPath,
+    cancel_url: `${origin}${book.path}#kop`,
+  }, { idempotencyKey: `overthinking-book-${keyHash}` });
+  const binding = { sessionId: session.id, priceId: price, live, expiresAt: new Date(session.expires_at * 1000) };
+  if (!matchesBookSession(session, binding) || session.status !== "open"
+    || !Number.isFinite(binding.expiresAt.valueOf())) throw new Error("Invalid book checkout session");
+  return session;
+}
+
+async function inspectGuestPurchase(stripe: Stripe, live: boolean, cookie: string | null) {
+  const proof = guestProof(cookie);
+  if (!proof || !proof.sessionId.startsWith(live ? "cs_live_" : "cs_test_")) return null;
+  const session = await stripe.checkout.sessions.retrieve(proof.sessionId);
+  const priceId = session.metadata?.rv_book_price;
+  if (!priceId || session.metadata?.rv_guest_hash !== proofHash(proof.secret)) return null;
+  const checkout = { sessionId: proof.sessionId, priceId, live, expiresAt: new Date(session.expires_at * 1000) };
+  if (!matchesBookSession(session, checkout) || identifyPaymentProduct({ priceIds: [priceId], paymentLinkId: null }) !== book.product) return null;
+  return { session, checkout };
+}
+
+export async function startGuestBookCheckout(cookie: string | null) {
+  const { key, live, origin } = stripeMode();
+  const price = priceForCheckout();
+  const stripe = stripeClient(key);
+  const previous = await inspectGuestPurchase(stripe, live, cookie);
+  if (previous) {
+    if (previous.session.status === "open" && previous.checkout.expiresAt > new Date()) {
+      return { result: { kind: "checkout" as const, url: stripeCheckoutUrl(previous.session.url) } };
+    }
+    if (await verifiedBookPurchase(stripe, previous.session, previous.checkout) ||
+        (previous.session.status === "complete" && previous.session.payment_status === "unpaid" &&
+          previous.checkout.expiresAt > new Date())) {
+      return { result: { kind: "guest_return" as const } };
+    }
+  }
+  const secret = randomBytes(32).toString("base64url");
+  const guestHash = proofHash(secret);
+  const session = await createBookSession(stripe, price, live, origin, {
+    key: guestHash, guestHash, successPath: book.path + "/tack",
+  });
+  return { result: { kind: "checkout" as const, url: stripeCheckoutUrl(session.url) }, cookie: `${secret}.${session.id}` };
+}
+
+export async function guestBookPurchaseReady(cookie: string | null) {
+  if (!guestProof(cookie)) return false;
+  const { key, live } = stripeMode();
+  const stripe = stripeClient(key);
+  const guest = await inspectGuestPurchase(stripe, live, cookie);
+  return Boolean(guest && await verifiedBookPurchase(stripe, guest.session, guest.checkout));
+}
+
 export async function readOwnedBookPdf(userId: string) {
   if (await bookLibraryState(userId) !== "ready") return null;
+  return readBookPdf();
+}
+
+export async function readGuestBookPdf(cookie: string) {
+  if (!await guestBookPurchaseReady(cookie)) return null;
+  return readBookPdf();
+}
+
+async function readBookPdf() {
   const { url, key } = storageConfig();
   const supabase = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false } });
   const { data, error } = await supabase.storage.from(bucket).download(objectPath);

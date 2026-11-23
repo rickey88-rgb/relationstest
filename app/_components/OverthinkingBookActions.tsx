@@ -7,12 +7,12 @@ import { OVERTHINKING_BOOK as book } from "../_lib/overthinkingBook";
 
 const pendingBookKey = "rv-pending-book-v1";
 
-async function bookRequest(path: string, direct: boolean, method = "GET", signal?: AbortSignal) {
+async function bookRequest(path: string, direct: boolean, method = "GET", signal?: AbortSignal, guestFallback = false) {
   const headers = new Headers();
   if (direct) {
     const { data } = await directAuthClient().auth.getSession();
-    if (!data.session) return new Response(null, { status: 401 });
-    headers.set("Authorization", "Bearer " + data.session.access_token);
+    if (!data.session && !guestFallback) return new Response(null, { status: 401 });
+    if (data.session) headers.set("Authorization", "Bearer " + data.session.access_token);
   }
   return fetch(path, { method, headers, signal, cache: "no-store", referrerPolicy: "no-referrer" });
 }
@@ -33,7 +33,7 @@ export function OverthinkingBuyButton({ enabled, direct, className, library = fa
     });
 
     try {
-      const response = await bookRequest(book.api, direct, "POST");
+      const response = await bookRequest(library ? book.api : book.api + "?guest=1", direct, "POST", undefined, !library);
       if (response.status === 401) {
         if (library) setMessage("Logga in igen för att fortsätta.");
         else {
@@ -46,6 +46,8 @@ export function OverthinkingBuyButton({ enabled, direct, className, library = fa
       const result = await response.json();
       if (result.kind === "checkout" && new URL(result.url).origin === "https://checkout.stripe.com") {
         window.location.assign(result.url);
+      } else if (result.kind === "guest_return") {
+        window.location.assign(book.path + "/tack");
       } else if (result.kind === "owned" || result.kind === "pending") {
         if (library) setMessage(result.kind === "owned" ? "Boken finns redan i ditt bibliotek. Uppdatera sidan för att hämta den." : "Du har redan en betalning som behandlas.");
         else window.location.assign("/mina-sidor?bok=betalning#bibliotek");

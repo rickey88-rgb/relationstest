@@ -39,7 +39,7 @@ const charge = {
 const stripe = {
   prices: { retrieve: async id => ({ id, type: "one_time", currency: "sek", unit_amount: priceAmount, livemode: false, active: true }) },
   checkout: { sessions: {
-    create: async (payload, options) => { creation = payload; calls++; assert.match(options.idempotencyKey, /^overthinking-book-[a-f0-9]{64}$/); return session; },
+    create: async (payload, options) => { creation = payload; session.metadata = payload.metadata; calls++; assert.match(options.idempotencyKey, /^overthinking-book-[a-f0-9]{64}$/); return session; },
     retrieve: async id => { assert.equal(id, sessionId); return session; },
     listLineItems: async id => { assert.equal(id, sessionId); return items; },
   } },
@@ -177,6 +177,37 @@ const stripe = {
       assert.equal(delivered.headers.get("content-disposition"), `attachment; filename="${filename}"`);
       assert.deepEqual(Buffer.from(await delivered.arrayBuffer()), pdf);
     }
-    console.log(`PASS: local 149 SEK checkout, signed-webhook processing boundary, owner-only reopening, refund/dispute denial and private storage${pdf ? " with the exact release PDF" : " (supply OVERTHINKING_BOOK_TEST_PDF for byte-identical delivery)"}.`);
+
+    process.env.OVERTHINKING_BOOK_CHECKOUT_ENABLED = "true";
+    session.status = "open"; session.payment_status = "unpaid"; session.payment_intent = null;
+    const guestReq = (url, method = "GET", cookie = "") =>
+      new Request(origin + "/api/books/du-tanker-sonder-dig-sjalv" + url, { method, headers: { origin, cookie } });
+    const startsAsGuest = await route.POST(guestReq("?guest=1", "POST"));
+    assert.equal(startsAsGuest.status, 200);
+    assert.deepEqual(await startsAsGuest.json(), { kind: "checkout", url: session.url });
+    assert.equal(creation.success_url, origin + "/du-tanker-sonder-dig-sjalv/tack");
+    const cookieHeader = startsAsGuest.headers.get("set-cookie");
+    assert.match(cookieHeader, /HttpOnly/i);
+    assert.match(cookieHeader, /SameSite=lax/i);
+    const guestCookie = cookieHeader.split(";")[0];
+    const guestUrl = "/download?guest=1";
+    assert.equal((await download.GET(guestReq(guestUrl))).status, 401);
+    assert.equal((await download.GET(guestReq(guestUrl, "GET", guestCookie))).status, 403);
+    const created = calls;
+    assert.equal((await route.POST(guestReq("?guest=1", "POST", guestCookie))).status, 200);
+    assert.equal(calls, created);
+    session.status = "complete"; session.payment_status = "paid"; session.payment_intent = intentId;
+    const copiedId = "rv_overthinking_book_guest=" + "B".repeat(43) + "." + sessionId;
+    assert.equal((await download.GET(guestReq(guestUrl, "GET", copiedId))).status, 403);
+    assert.deepEqual(await (await route.POST(guestReq("?guest=1", "POST", guestCookie))).json(), { kind: "guest_return" });
+    process.env.OVERTHINKING_BOOK_CHECKOUT_ENABLED = "false";
+    if (pdf) {
+      const guestPdf = await download.GET(guestReq(guestUrl, "GET", guestCookie));
+      assert.equal(guestPdf.status, 200);
+      assert.deepEqual(Buffer.from(await guestPdf.arrayBuffer()), pdf);
+    }
+    charge.refunded = true;
+    assert.equal((await download.GET(guestReq(guestUrl, "GET", guestCookie))).status, 403);
+    console.log(`PASS: account and guest 149 SEK checkout, signed webhook, buyer-only reopening, refund/dispute denial and private storage${pdf ? " with the exact release PDF" : ""}.`);
   } finally { await pg.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });
