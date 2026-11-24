@@ -1,3 +1,4 @@
+import SteinlerGuideLink from "../_components/SteinlerGuideLink";
 import EditorialSurface from "../_components/EditorialSurface";
 import Link from "next/link";
 import type { Metadata } from "next";
@@ -97,6 +98,7 @@ export default function TraumabindningIRelationPage() {
             illustration av ett möjligt mönster, inte en förklaring som gäller
             alla eller ett bevis på hur ditt nervsystem fungerar.
           </p>
+          <p className="leading-7">I <SteinlerGuideLink source="/traumabindning-i-relation" label="När du börjar tvivla på dig själv av My Steinler" /> erbjuder sig en person att möta den andra vid tåget efter en konflikt. Boken visar hur en varm gest kan vara uppriktig samtidigt som en svår boendefråga förblir olöst.</p>
           <p>
             Det gör att man lätt börjar leva mer på undantag än på trygghet. Man
             väntar på nästa bra stund. Man fokuserar på glimtarna av värme. Man

@@ -1,3 +1,4 @@
+import SteinlerGuideLink from "../_components/SteinlerGuideLink";
 import EditorialSurface from "../_components/EditorialSurface";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -79,6 +80,7 @@ export default function Page() {
             ”bråkar mycket”. Lägg märke till riktningen: blir relationen tryggare
             när problem tas upp, eller lär du dig bara att undvika nästa reaktion?
           </p>
+          <p className="leading-7">Vill du se hur skillnaden låter i vardagen? I <SteinlerGuideLink source="/destruktivt-forhallande" label="My Steinlers bok med kommenterade relationssamtal" /> finns exempel på både gräl som går att reda ut och samtal där utrymmet att säga emot krymper.</p>
         </section>
 
         <section className="space-y-5">

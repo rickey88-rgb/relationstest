@@ -1,3 +1,4 @@
+import SteinlerGuideLink from "../../_components/SteinlerGuideLink";
 import EditorialSurface from "../../_components/EditorialSurface";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -24,6 +25,12 @@ export default async function BehaviorPage({ params }: Props) {
     {page.urgent && <aside data-rv="callout" aria-labelledby="urgent-heading" className="mt-6 space-y-3 rounded-2xl border border-rose-200 bg-rose-50 p-5 leading-7"><h2 id="urgent-heading" className="text-xl font-semibold">{page.urgent.heading}</h2><p>{page.urgent.text}</p></aside>}
     <p data-rv="callout" className="mt-6 rounded-2xl border border-neutral-200 bg-neutral-50 p-5 leading-7">{page.directAnswer}</p>
     {page.sections?.map((section) => <GuideSection key={section.heading} title={section.heading}>{section.paragraphs.map((text) => <p key={text}>{text}</p>)}</GuideSection>)}
+    {page.slug === "partner-skyller-allt-pa-mig" && <p className="leading-7">
+      I <SteinlerGuideLink source="/beteenden/partner-skyller-allt-pa-mig" label="My Steinlers bok om hur skulden byter plats" /> börjar en dialog med en fråga om hyran och slutar med att den som tog upp den ber om ursäkt.
+    </p>}
+    {page.slug === "partner-fornekar-saker-som-hant" && <p className="leading-7">
+      My Steinler jämför två samtal om olika minnen i <SteinlerGuideLink source="/beteenden/partner-fornekar-saker-som-hant" label="e-boken När du börjar tvivla på dig själv" />. I det ena går det att undersöka vad som hände. I det andra börjar frågan gälla vem som går att lita på.
+    </p>}
     {page.examples?.length ? <GuideSection title="Så kan det se ut i vardagen"><ul className="list-disc space-y-3 pl-5">{page.examples.map((text) => <li key={text}>{text}</li>)}</ul></GuideSection> : null}
     {page.warningSigns?.length ? <GuideSection title="Mönster att vara uppmärksam på"><ul className="list-disc space-y-3 pl-5">{page.warningSigns.map((text) => <li key={text}>{text}</li>)}</ul></GuideSection> : null}
     {page.normalVsProblematic && <GuideSection title="Överenskommelse eller begränsning?"><div className="grid gap-4 sm:grid-cols-2"><div data-rv="card" className="rounded-2xl border border-neutral-200 p-5"><h3 className="font-semibold text-neutral-900">När det finns respekt och utrymme</h3><p className="mt-2">{page.normalVsProblematic.normal}</p></div><div data-rv="card" className="rounded-2xl border border-neutral-200 p-5"><h3 className="font-semibold text-neutral-900">När det blir problematiskt</h3><p className="mt-2">{page.normalVsProblematic.problematic}</p></div></div></GuideSection>}

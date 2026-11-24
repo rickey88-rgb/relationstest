@@ -1,3 +1,4 @@
+import SteinlerGuideLink from "../_components/SteinlerGuideLink";
 import EditorialSurface from "../_components/EditorialSurface";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -341,6 +342,7 @@ export default function NarcissistRelationPage() {
             att lita på din egen tolkning. Det är ett allvarligt tecken, särskilt
             om det kombineras med skuld, kontroll eller återkommande förakt.
           </p>
+          <p className="leading-7">Om du vill undersöka vad som faktiskt händer i samtalen finns <SteinlerGuideLink source="/narcissist-i-en-relation" label="My Steinlers bok om manipulation och tvivel på det egna omdömet" />. Dialogerna följer konkreta beteenden och deras följder utan att tillskriva någon en diagnos.</p>
           <p className="leading-8 text-neutral-700">
             När människor säger att de “känner sig galna” i en relation handlar det
             ofta inte om att de faktiskt tappat greppet. Det handlar om att de levt
