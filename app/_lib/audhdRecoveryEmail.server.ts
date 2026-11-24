@@ -19,7 +19,7 @@ export function isAudhdRecoveryEmailConfigured() {
 }
 
 /** Server-only transactional mail boundary. It stays inactive until configured. */
-export async function sendTransactionalRecoveryEmail(input: { to: string; subject: string; text: string; idempotencyKey?: string }) {
+export async function sendTransactionalRecoveryEmail(input: { to: string; subject: string; text: string; html?: string; idempotencyKey?: string }) {
   const apiKey = configured("RESEND_API_KEY");
   const from = configured("AUDHD_RECOVERY_EMAIL_FROM");
   if (!apiKey || !from) throw new Error("AudhdRecoveryEmailNotConfigured");
@@ -35,6 +35,7 @@ export async function sendTransactionalRecoveryEmail(input: { to: string; subjec
         to: [input.to],
         subject: input.subject,
         text: input.text,
+        html: input.html,
       }),
       signal: controller.signal,
     });

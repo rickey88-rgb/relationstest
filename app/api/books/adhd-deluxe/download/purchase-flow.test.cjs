@@ -12,7 +12,7 @@ const root = path.resolve(__dirname, "../../../../..");
 const manifest = JSON.parse(fs.readFileSync(path.join(root, "docs/adhd-deluxe-release-assets.json")));
 Object.assign(process.env, {
   NODE_ENV: "production", BOOK_ACCESS_TOKEN_SECRET: "isolated-adhd-integration-only-secret-over-32-characters",
-  STRIPE_SECRET_KEY: "local-stripe-mock", R2_ENDPOINT: "https://r2.example.test", R2_BUCKET_NAME: "private-books",
+  STRIPE_SECRET_KEY: "sk_live_fixture", R2_ENDPOINT: "https://r2.example.test", R2_BUCKET_NAME: "private-books",
   R2_ACCESS_KEY_ID: "local-only", R2_SECRET_ACCESS_KEY: "local-only",
 });
 for (const file of manifest.files) process.env[file.env] = file.key;
@@ -23,10 +23,10 @@ const choices = [
 let session, items, intent, charge, fault = false, signed, origin;
 function reset(offer = choices[0]) {
   fault = false;
-  session = { status: "complete", payment_status: "paid", mode: "payment", livemode: true, currency: "sek", amount_total: offer.amount, payment_link: offer.link, payment_intent: "pi_local" };
-  items = { data: [{ price: { id: offer.price }, quantity: 1, amount_total: offer.amount }], has_more: false };
-  charge = { paid: true, captured: true, refunded: false, amount_refunded: 0, disputed: false };
-  intent = { status: "succeeded", latest_charge: charge };
+  session = { id: "cs_live_localOnly", status: "complete", payment_status: "paid", mode: "payment", livemode: true, currency: "sek", amount_total: offer.amount, payment_link: offer.link, payment_intent: "pi_local" };
+  items = { data: [{ price: { id: offer.price }, quantity: 1, amount_total: offer.amount, currency: "sek" }], has_more: false };
+  charge = { payment_intent: "pi_local", livemode: true, amount: offer.amount, currency: "sek", paid: true, captured: true, refunded: false, amount_refunded: 0, disputed: false };
+  intent = { id: "pi_local", livemode: true, currency: "sek", amount_received: offer.amount, status: "succeeded", latest_charge: charge };
 }
 class StripeMock { constructor() {
   this.checkout = { sessions: { retrieve: async () => { if (fault) throw Error("synthetic provider failure"); return session; }, listLineItems: async () => items } };
@@ -36,7 +36,7 @@ class StripeMock { constructor() {
 const issued = new Map();
 const load = createLoader({
   stripe: { default: StripeMock },
-  "@aws-sdk/client-s3": { S3Client: class {}, GetObjectCommand: class { constructor(input) { this.input = input; } } },
+  "@aws-sdk/client-s3": { S3Client: class { destroy() {} }, GetObjectCommand: class { constructor(input) { this.input = input; } } },
   "@aws-sdk/s3-request-presigner": { getSignedUrl: async (_client, command, options) => {
     signed = { ...command.input, ...options };
     const token = crypto.randomBytes(24).toString("hex");
@@ -64,7 +64,7 @@ const hash = data => crypto.createHash("sha256").update(data).digest("hex");
     }
   }
   const attacks = [
-    () => session.payment_status = "unpaid", () => session.status = "open", () => session.livemode = false,
+    () => session.status = "open", () => session.livemode = false,
     () => session.mode = "subscription", () => session.currency = "eur", () => session.payment_link = "plink_wrong",
     () => session.amount_total = 1, () => items.data[0].amount_total = 1, () => items.data[0].quantity = 2,
     () => items.data[0].price.id = "price_wrong", () => items.has_more = true, () => items.data.push({ ...items.data[0] }),

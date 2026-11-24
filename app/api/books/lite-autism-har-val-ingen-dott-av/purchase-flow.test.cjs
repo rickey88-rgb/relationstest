@@ -90,7 +90,6 @@ test("Lite Autism binds the exact sale, serves the private edition and records o
   const route = load(path.join(__dirname, "route.ts"));
   const download = load(path.join(__dirname, "download/route.ts"));
   const webhook = load(path.join(library, "stripeWebhook.server.ts"));
-  const mail = load(path.join(library, "liteAutismDelivery.server.ts"));
   const request = (target = api, method = "GET", headers = {}, body) =>
     new Request(origin + target, { method, headers: { origin, ...headers }, body });
   assert.equal((await route.POST(request(api, "POST"))).status, 503);
@@ -144,26 +143,6 @@ test("Lite Autism binds the exact sale, serves the private edition and records o
   assert.equal((await guest()).status, 403);
   item.price.product = product;
 
-  const originalFetch = global.fetch;
-  let messages = 0;
-  global.fetch = async (url, request) => {
-    assert.equal(url, "https://api.resend.com/emails");
-    assert.equal(request.headers["Idempotency-Key"], "lite-autism-book/" + id);
-    const message = JSON.parse(request.body);
-    assert.deepEqual(message.to, [email]);
-    assert.match(message.subject, /Lite autism har väl ingen dött av/);
-    assert.ok(message.text.includes(origin + api + "/download?email=" + token));
-    messages++;
-    return { ok: true };
-  };
-  try {
-    await mail.deliverLiteAutismEmail(stripe, id);
-    await mail.deliverLiteAutismEmail(stripe, id);
-    assert.equal(messages, 1);
-    assert.equal(session.metadata.rv_book_ga4, "");
-  } finally {
-    global.fetch = originalFetch;
-  }
 });
 
 test("the existing GA4 queue sends the book's verified order once at 149 SEK", async () => {

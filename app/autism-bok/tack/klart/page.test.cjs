@@ -1,30 +1,43 @@
-/* eslint-disable @typescript-eslint/no-require-imports -- render the actual two-download confirmation. */
+/* eslint-disable @typescript-eslint/no-require-imports -- render the actual shared confirmation from this route. */
 const assert = require("node:assert/strict");
 const path = require("node:path");
-const React = require("react");
+const { createElement } = require("react");
 const { renderToStaticMarkup } = require("react-dom/server");
 const createLoader = require("../../../autism-test/test/test-loader.cjs");
-process.env.BOOK_ACCESS_TOKEN_SECRET = "local-thank-you-page-test-only-32-character-secret";
-let token = null;
+
+let proof = null;
 const load = createLoader({
-  "next/headers": { cookies: async () => ({ get: () => ({ value: token }) }) },
-  "next/link": { default: ({ href, children }) => React.createElement("a", { href }, children) },
-  "../../../_components/EditorialSurface": { default: ({ children }) => React.createElement("div", null, children) },
-  "../../../_components/PostPurchaseRecommendation": { default: () => null },
+  "next/headers": { cookies: async () => ({ get: () => ({ value: proof }) }) },
+  "next/image": { default: props => createElement("img", props) },
+  "next/link": { default: props => createElement("a", props) },
+  "./BookThanks.module.css": { default: {} },
+  "./PostPurchaseRecommendation": { default: () => null },
+  "../_lib/bookDelivery.server": {
+    findDeliveryBook: id => load(path.resolve(__dirname, "../../../_lib/bookCatalog.ts")).BOOK_CATALOG.find(book => book.id === id),
+    bookThanksCookie: () => "fixture",
+    bookThankState: async (_, proof) => proof === "paid" ? "ready" : proof === "pending" ? "pending" : "none",
+  },
 });
-const access = load(path.resolve(__dirname, "../../../_lib/bookAccess.server.ts"));
 const page = load(path.join(__dirname, "page.tsx")).default;
+const render = async () => {
+  const element = page();
+  return renderToStaticMarkup(await element.type(element.props));
+};
+
 (async () => {
-  token = access.issueBookAccessToken("autism-bok");
-  const html = renderToStaticMarkup(await page());
-  assert(html.includes('href="/api/books/autism-bok/download"'));
-  assert(html.includes('href="/api/books/autism-bok/worksheets"'));
-  assert(html.includes("52 sidor")); assert(html.includes("12 A4-sidor")); assert(html.includes("AUTISM ALL INCLUSIVE"));
-  for (const invalid of [null, "forged", access.issueBookAccessToken("audhd-bok")]) {
-    token = invalid;
-    const denied = renderToStaticMarkup(await page());
-    assert(!denied.includes('href="/api/books/'));
-    assert(denied.includes("Vi kunde inte bekräfta bokåtkomsten"));
+  proof = "paid";
+  const confirmed = await render();
+  assert(confirmed.includes("<img"));
+  assert(confirmed.includes("AUTISM ALL INCLUSIVE"));
+  assert(confirmed.includes("Tack för ditt köp!"));
+  for (const file of ["book","worksheets"]) assert(confirmed.includes("/api/books/delivery/autism-bok?file=" + file + "&amp;guest=1"));
+  for (const invalid of [null, "forged", "pending"]) {
+    proof = invalid;
+    const denied = await render();
+    assert(!denied.includes('href="/api/books/delivery/'));
+    assert(!denied.includes("Tack för ditt köp!"));
+    assert.equal(denied.includes("Kontrollera igen"), invalid === "pending");
+    assert(denied.includes("Mitt bibliotek"));
   }
-  console.log("PASS: actual confirmation renders both correct files only for a valid autism-book cookie.");
+  console.log("PASS: AUTISM ALL INCLUSIVE renders the full package only after verification.");
 })().catch(error => { console.error(error); process.exitCode = 1; });

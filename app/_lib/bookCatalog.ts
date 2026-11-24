@@ -34,3 +34,38 @@ export const THINKING_CATALOG_BOOK = {
 } as const;
 export const BOOK_CATALOG = [LITE_AUTISM_BOOK, ...LEGACY_BOOKS, THINKING_CATALOG_BOOK, STEINLER_BOOK] as const;
 export type CatalogBook = (typeof BOOK_CATALOG)[number];
+export type BookId = CatalogBook["id"];
+export const BOOK_LIBRARY_PATH = "/mina-sidor?bok=bibliotek#bibliotek";
+
+export type BookFile = {
+  id: "book" | "worksheets" | "print";
+  label: string;
+  filename: string;
+};
+
+const bonusFiles: Partial<Record<BookId, readonly BookFile[]>> = {
+  "autism-bok": [
+    { id: "worksheets", label: "Ifyllbara arbetsblad", filename: AUTISM_BOOK.worksheetsFilename },
+  ],
+  "adhd-deluxe": [
+    { id: "worksheets", label: "Ifyllbara arbetsblad", filename: ADHD_DELUXE_BOOK.worksheetsFilename },
+    { id: "print", label: "Arbetsblad för utskrift", filename: ADHD_DELUXE_BOOK.printWorksheetsFilename },
+  ],
+};
+
+export function bookFiles(book: CatalogBook): BookFile[] {
+  return [{ id: "book", label: "E-bok (PDF)", filename: book.filename }, ...(bonusFiles[book.id] ?? [])];
+}
+
+export function bookDeliveryCover(book: CatalogBook) {
+  return book.id === LITE_AUTISM_BOOK.id
+    ? { src: LITE_AUTISM_BOOK.front, width: 1055, height: 1491 }
+    : { src: book.cover, width: book.width, height: book.height };
+}
+
+export function bookFilePath(book: CatalogBook, file: BookFile, access?: { email: string } | "guest") {
+  const params = new URLSearchParams({ file: file.id });
+  if (access === "guest") params.set("guest", "1");
+  else if (access) params.set("email", access.email);
+  return `/api/books/delivery/${book.id}?${params}`;
+}

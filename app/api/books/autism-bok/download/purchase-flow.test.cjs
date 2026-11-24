@@ -7,17 +7,18 @@ const crypto = require("node:crypto");
 const { NextRequest } = require("next/server");
 const createLoader = require("../../../../autism-test/test/test-loader.cjs");
 process.env.BOOK_ACCESS_TOKEN_SECRET = "local-integration-only-secret-with-more-than-32-chars";
-process.env.STRIPE_SECRET_KEY = "local-stripe-mock";
+process.env.STRIPE_SECRET_KEY = "sk_live_fixture";
 process.env.AUTISM_BOOK_PAYMENT_LINK_ID_149 = "plink_standard";
 process.env.AUTISM_BOOK_PAYMENT_LINK_ID_99 = "plink_analysis";
 process.env.AUTISM_BOOK_ALLOWED_PRICE_IDS = "price_standard,price_analysis";
 Object.assign(process.env, { R2_ENDPOINT: "https://r2.example.test", R2_BUCKET_NAME: "private-books", R2_ACCESS_KEY_ID: "mock", R2_SECRET_ACCESS_KEY: "mock", AUTISM_BOOK_R2_KEY: "books/main.pdf", AUTISM_BOOK_WORKSHEETS_R2_KEY: "books/worksheets.pdf" });
-let selectedPrice = "price_standard", paid = true, origin, signed;
+let selectedPrice = "price_standard", paid = true, refunded = false, origin, signed;
 class StripeMock { constructor() {
-  this.checkout = { sessions: { retrieve: async () => ({ status: "complete", payment_status: paid ? "paid" : "unpaid", mode: "payment", livemode: true, currency: "sek", payment_link: selectedPrice === "price_standard" ? "plink_standard" : "plink_analysis", payment_intent: "pi_mock" }), listLineItems: async () => ({ data: [{ price: { id: selectedPrice }, quantity: 1 }], has_more: false }) } };
-  this.paymentIntents = { retrieve: async () => ({ status: "succeeded", latest_charge: { paid: true, captured: true, refunded: false, amount_refunded: 0, disputed: false } }) };
+  const amount = () => selectedPrice === "price_standard" ? 14900 : 9900;
+  this.checkout = { sessions: { retrieve: async id => ({ id, status: "complete", payment_status: paid ? "paid" : "unpaid", mode: "payment", livemode: true, currency: "sek", amount_total: amount(), payment_link: selectedPrice === "price_standard" ? "plink_standard" : "plink_analysis", payment_intent: "pi_mock" }), listLineItems: async () => ({ data: [{ price: { id: selectedPrice }, quantity: 1, currency: "sek", amount_total: amount() }], has_more: false }) } };
+  this.paymentIntents = { retrieve: async id => ({ id, status: "succeeded", currency: "sek", amount_received: amount(), livemode: true, latest_charge: { payment_intent: id, amount: amount(), currency: "sek", livemode: true, paid: true, captured: true, refunded, amount_refunded: 0, disputed: false } }) };
 } }
-const load = createLoader({ stripe: { default: StripeMock }, "@aws-sdk/client-s3": { S3Client: class {}, GetObjectCommand: class { constructor(input) { this.input = input; } } }, "@aws-sdk/s3-request-presigner": { getSignedUrl: async (_client, command, options) => { signed = { ...command.input, ...options }; return `${origin}/${command.input.Key}`; } } });
+const load = createLoader({ stripe: { default: StripeMock }, "@aws-sdk/client-s3": { S3Client: class { destroy() {} }, GetObjectCommand: class { constructor(input) { this.input = input; } } }, "@aws-sdk/s3-request-presigner": { getSignedUrl: async (_client, command, options) => { signed = { ...command.input, ...options }; return `${origin}/${command.input.Key}`; } } });
 const access = load(path.resolve(__dirname, "../../../../_lib/bookAccess.server.ts"));
 const thanks = load(path.resolve(__dirname, "../../../../autism-bok/tack/route.ts"));
 const book = load(path.join(__dirname, "route.ts"));
@@ -51,8 +52,17 @@ const request = (cookie) => new NextRequest("https://www.relationsvarning.se/api
         checks += 10;
       }
     }
-    paid = false; const rejected = await thanks.GET(new NextRequest("https://www.relationsvarning.se/autism-bok/tack?session_id=cs_live_mock")); assert(rejected.headers.get("location").endsWith("/tack/fel")); assert.equal(rejected.headers.get("set-cookie"), null); checks += 2;
-    const cookie = `${access.AUTISM_BOOK_ACCESS_COOKIE}=${access.issueBookAccessToken("autism-bok")}`;
+    paid = false;
+    const pending = await thanks.GET(new NextRequest("https://www.relationsvarning.se/autism-bok/tack?session_id=cs_live_mock"));
+    assert(pending.headers.get("location").endsWith("/tack/klart"));
+    const cookie = pending.headers.get("set-cookie").split(";")[0];
+    assert.equal((await book.GET(request(cookie))).status, 403); checks += 2;
+    paid = true; refunded = true;
+    assert.equal((await worksheets.GET(request(cookie))).status, 403); checks++;
+    refunded = false;
+    const historical = `${access.AUTISM_BOOK_ACCESS_COOKIE}=${access.issueBookAccessToken("autism-bok")}`;
+    const recovered = await book.GET(request(historical));
+    assert.equal(recovered.status, 303); assert.match(recovered.headers.get("location"), /mina-sidor/); checks += 2;
     delete process.env.AUTISM_BOOK_WORKSHEETS_R2_KEY;
     assert.equal((await worksheets.GET(request(cookie))).status, 503); assert.equal((await book.GET(request(cookie))).status, 302); checks += 2;
     delete process.env.AUTISM_BOOK_R2_KEY; assert.equal((await book.GET(request(cookie))).status, 503); checks++;

@@ -12,11 +12,12 @@ import { STEINLER_BOOK } from "./steinlerBook";
 import { LITE_AUTISM_BOOK } from "./liteAutismBook";
 import { sealBookAttribution, type BookAttribution } from "./liteAutismProof.server";
 import { ownedBookCheckouts, recordBookCheckout, type BookCheckout } from "./overthinkingBookStore.server";
+import { capturedBookPayment, stripeObjectId as idOf } from "./bookPayment.server";
 
 const bucket = "overthinking-book-private";
 export const guestBookCookie = "rv_overthinking_book_guest";
 
-const overthinkingEdition = {
+export const overthinkingEdition = {
   book: OVERTHINKING_BOOK,
   priceEnv: "OVERTHINKING_BOOK_PRICE_ID",
   enabledEnv: "OVERTHINKING_BOOK_CHECKOUT_ENABLED",
@@ -46,7 +47,7 @@ export const liteAutismEdition = {
   pdfSha256: "2657448a984eb48f7d1ccb6001232de748b25b704ebc85cffeb1e8282935af3c",
 };
 
-type Edition = typeof overthinkingEdition | typeof steinlerEdition | typeof liteAutismEdition;
+export type Edition = typeof overthinkingEdition | typeof steinlerEdition | typeof liteAutismEdition;
 const book = OVERTHINKING_BOOK;
 
 function guestProof(value: string | null) {
@@ -144,38 +145,31 @@ function stripeCheckoutUrl(url: string | null) {
   return url;
 }
 
-function idOf(value: string | { id: string } | null) {
-  return typeof value === "string" ? value : value?.id;
-}
+type ExpectedBookPurchase = Pick<BookCheckout, "sessionId" | "live"> & { priceId?: string };
 
-function matchesBookSession(session: Stripe.Checkout.Session, checkout: BookCheckout, { book }: Edition = overthinkingEdition) {
+function matchesBookSession(session: Stripe.Checkout.Session, checkout: ExpectedBookPurchase, { book }: Edition = overthinkingEdition) {
   return session.id === checkout.sessionId && session.livemode === checkout.live &&
     session.mode === "payment" && session.metadata?.rv_product === book.product &&
     session.payment_link === null && session.amount_total === book.amountOre && session.currency === "sek";
 }
 
 /** The verified account's DB binding is required before this Stripe check. */
-export async function verifiedBookPurchase(stripe: Stripe, session: Stripe.Checkout.Session, checkout: BookCheckout, edition: Edition = overthinkingEdition) {
+export async function verifiedBookPurchase(stripe: Stripe, session: Stripe.Checkout.Session, checkout: ExpectedBookPurchase, edition: Edition = overthinkingEdition) {
   const { book } = edition;
-  if (!matchesBookSession(session, checkout, edition) || session.status !== "complete" || session.payment_status !== "paid"
-    || identifyPaymentProduct({ priceIds: [checkout.priceId], paymentLinkId: null }) !== book.product) return false;
+  if (!matchesBookSession(session, checkout, edition) || session.status !== "complete" || session.payment_status !== "paid") return false;
 
   const intentId = idOf(session.payment_intent);
   if (!intentId) return false;
   const items = await stripe.checkout.sessions.listLineItems(session.id, { limit: 2 });
   const item = items.data[0];
   if (items.has_more || items.data.length !== 1 || item.quantity !== 1 ||
-    item.price?.id !== checkout.priceId || item.amount_total !== book.amountOre || item.currency !== "sek") return false;
+    !item.price?.id || (checkout.priceId !== undefined && item.price.id !== checkout.priceId) ||
+    item.amount_total !== book.amountOre || item.currency !== "sek" ||
+    identifyPaymentProduct({ priceIds: [item.price.id], paymentLinkId: null }) !== book.product) return false;
   if (edition === liteAutismEdition && (!item.price || !idOf(item.price.product) ||
       idOf(item.price.product) !== process.env.LITE_AUTISM_BOOK_PRODUCT_ID?.trim())) return false;
 
-  const intent = await stripe.paymentIntents.retrieve(intentId, { expand: ["latest_charge"] });
-  const charge = typeof intent.latest_charge === "string" ? await stripe.charges.retrieve(intent.latest_charge) : intent.latest_charge;
-  return Boolean(intent.id === intentId && intent.livemode === checkout.live && intent.status === "succeeded"
-    && intent.currency === "sek" && intent.amount_received === book.amountOre && charge
-    && charge.livemode === checkout.live && idOf(charge.payment_intent) === intentId
-    && charge.paid && charge.captured && charge.amount === book.amountOre && charge.currency === "sek"
-    && !charge.refunded && charge.amount_refunded === 0 && !charge.disputed);
+  return capturedBookPayment(stripe, intentId, checkout.live, book.amountOre);
 }
 
 async function inspectBookAccount(stripe: Stripe, userId: string, live: boolean, currentPrice?: string) {
@@ -374,7 +368,7 @@ export async function signLiteAutismDownload() {
   return target.href;
 }
 
-async function readBookPdf({ book, pdfSize, pdfSha256 }: Edition = overthinkingEdition) {
+export async function readBookPdf({ book, pdfSize, pdfSha256 }: Edition = overthinkingEdition) {
   const { url, key } = storageConfig();
   const supabase = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false } });
   const { data, error } = await supabase.storage.from(bucket).download(`v1/${book.filename}`);

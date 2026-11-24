@@ -7,7 +7,7 @@ import { directAuthClient } from "../_lib/testAccounts/directClient";
 import { OVERTHINKING_BOOK as book } from "../_lib/overthinkingBook";
 import { STEINLER_BOOK } from "../_lib/steinlerBook";
 import { LITE_AUTISM_BOOK } from "../_lib/liteAutismBook";
-import { BOOK_CATALOG, LEGACY_BOOK_LIBRARY_API, THINKING_CATALOG_BOOK, type CatalogBook } from "../_lib/bookCatalog";
+import { BOOK_CATALOG, LEGACY_BOOK_LIBRARY_API, THINKING_CATALOG_BOOK, bookFilePath, bookFiles, type BookFile, type CatalogBook } from "../_lib/bookCatalog";
 
 const pendingBookKey = "rv-pending-book-v1";
 
@@ -78,25 +78,24 @@ export function OverthinkingBuyButton({ enabled, direct, className, label = "Kö
 function LibraryBookCard({ entry, direct }: { entry: CatalogBook; direct: boolean }) {
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
+  const [book, ...extras] = bookFiles(entry);
 
-  async function open() {
+  async function open(file: BookFile) {
     setBusy(true);
     setMessage("");
     let tab: Window | null = null;
     try {
       tab = window.open("", "_blank");
       if (tab) tab.opener = null;
-      const downloadPath = "api" in entry
-        ? entry.api + "/download"
-        : LEGACY_BOOK_LIBRARY_API + "?book=" + encodeURIComponent(entry.id);
-      const response = await bookRequest(downloadPath, direct);
+      const response = await bookRequest(bookFilePath(entry, file), direct);
       if (response.status === 401 || response.status === 403) {
         setMessage("Åtkomsten kunde inte verifieras. Logga in med samma mejladress som du använde vid köpet.");
         tab?.close();
         return;
       }
       if (!response.ok) throw new Error("PDF unavailable");
-      if (!("api" in entry) || entry.id === LITE_AUTISM_BOOK.id) {
+      const contentType = response.headers.get("Content-Type");
+      if (contentType?.startsWith("application/json")) {
         const { url } = await response.json();
         const signed = new URL(url);
         if (signed.protocol !== "https:" || signed.username || signed.password) throw new Error("Invalid download");
@@ -104,7 +103,7 @@ function LibraryBookCard({ entry, direct }: { entry: CatalogBook; direct: boolea
         else window.location.assign(signed.href);
         return;
       }
-      if (response.headers.get("Content-Type") !== "application/pdf") throw new Error("PDF unavailable");
+      if (contentType !== "application/pdf") throw new Error("PDF unavailable");
       const url = URL.createObjectURL(await response.blob());
       window.setTimeout(() => URL.revokeObjectURL(url), 60000);
       if (tab && !tab.closed) {
@@ -112,14 +111,14 @@ function LibraryBookCard({ entry, direct }: { entry: CatalogBook; direct: boolea
       } else {
         const link = document.createElement("a");
         link.href = url;
-        link.download = entry.filename;
+        link.download = file.filename;
         document.body.appendChild(link);
         link.click();
         link.remove();
       }
     } catch {
       tab?.close();
-      setMessage("Boken kunde inte öppnas just nu. Försök igen om en stund.");
+      setMessage("Filen kunde inte öppnas just nu. Försök igen om en stund.");
     } finally {
       setBusy(false);
     }
@@ -129,7 +128,7 @@ function LibraryBookCard({ entry, direct }: { entry: CatalogBook; direct: boolea
     <article className="overflow-hidden rounded-2xl border border-neutral-200 bg-white text-neutral-900 shadow-sm">
       <button
         type="button"
-        onClick={() => void open()}
+        onClick={() => void open(book)}
         disabled={busy}
         aria-label={`Öppna boken ${entry.title}`}
         className="group block w-full text-left focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-[#27666A] disabled:cursor-wait"
@@ -147,6 +146,19 @@ function LibraryBookCard({ entry, direct }: { entry: CatalogBook; direct: boolea
           </span>
         </span>
       </button>
+      {extras.length > 0 && (
+        <ul className="space-y-1 border-t border-slate-200 px-4 py-2">
+          {extras.map(file => (
+            <li key={file.id}>
+              <button type="button" onClick={() => void open(file)} disabled={busy}
+                aria-label={`${file.label} till ${entry.title}`}
+                className="min-h-11 text-left text-sm font-semibold underline underline-offset-4 disabled:opacity-60">
+                {file.label}
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
       {message && <p role="status" className="px-4 pb-4 text-sm">{message}</p>}
     </article>
   );
