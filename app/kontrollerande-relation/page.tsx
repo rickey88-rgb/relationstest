@@ -1,3 +1,4 @@
+import SteinlerGuideLink from "../_components/SteinlerGuideLink";
 import EditorialSurface from "../_components/EditorialSurface";
 import Link from "next/link";
 import Image from "next/image";
@@ -185,6 +186,8 @@ export default function Page() {
           vem som har rollen i relationen, utan om en person återkommande begränsar den andres
           handlingsutrymme, privatliv eller möjlighet att säga nej.
         </p>
+
+        <p className="leading-7">I e-boken <SteinlerGuideLink source="/kontrollerande-relation" /> finns en kommenterad dialog om gemensamma pengar, tillgång till egna resurser och vad som kan hända när en frivillig ordning blir svår att ändra.</p>
 
         <h2 className="text-2xl font-semibold">
           När kontroll kombineras med manipulation

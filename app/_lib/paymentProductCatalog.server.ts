@@ -19,6 +19,7 @@ export const PAYMENT_PRODUCT_KEYS = [
   "autism_bok",
   "adhd_deluxe",
   "overthinking_book",
+  "steinler_book",
 ] as const;
 
 export type PaymentProductKey = (typeof PAYMENT_PRODUCT_KEYS)[number];
@@ -88,11 +89,16 @@ export function paymentProductCatalog(): Catalog {
 
   // Keep the shared map intact. A conflicting or invalid new price must not
   // stop webhooks or change access for any existing product.
-  const bookPrice = process.env.OVERTHINKING_BOOK_PRICE_ID?.trim() ?? "";
-  if (/^price_[A-Za-z0-9]+$/.test(bookPrice) &&
-      !Object.entries(catalog).some(([product, entry]) => product !== "overthinking_book" && entry.priceIds.includes(bookPrice))) {
-    const prior = catalog.overthinking_book;
-    catalog.overthinking_book = {
+  const bookPrices = {
+    overthinking_book: process.env.OVERTHINKING_BOOK_PRICE_ID?.trim() ?? "",
+    steinler_book: process.env.STEINLER_BOOK_PRICE_ID?.trim() ?? "",
+  } as const;
+  for (const key of ["overthinking_book", "steinler_book"] as const) {
+    const bookPrice = bookPrices[key];
+    if (!/^price_[A-Za-z0-9]+$/.test(bookPrice) ||
+        Object.entries(catalog).some(([product, entry]) => product !== key && entry.priceIds.includes(bookPrice))) continue;
+    const prior = catalog[key];
+    catalog[key] = {
       priceIds: Array.from(new Set([...(prior?.priceIds ?? []), bookPrice])),
       paymentLinkIds: prior?.paymentLinkIds ?? [],
     };

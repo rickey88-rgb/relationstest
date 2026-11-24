@@ -1,0 +1,43 @@
+.page { background: #f9f4ed; color: #24212a; }
+.hero { color: #f5ebe1; background: radial-gradient(ellipse at 82% 65%, #3a2937 0, #201924 46%, #15131c 78%); }
+.heroInner { display: grid; grid-template-columns: 1.13fr .87fr; gap: 2rem; max-width: 72rem; margin: auto; padding: clamp(3rem, 7vw, 6.25rem) clamp(1.25rem, 5vw, 4.5rem); align-items: center; }
+.heroText, .twoColumn > *, .cards > * { min-width: 0; }
+.byline { margin: 0 0 1.1rem; color: #e4ad8e; font-size: .83rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+.byline span { margin: 0 .22rem; }
+.page h1, .page h2 { font-family: Georgia, serif; letter-spacing: -.035em; }
+.page h1 { max-width: 12ch; font-size: clamp(2.9rem, 6.3vw, 5.75rem); line-height: 1; margin: 0; }
+.page h1 em { color: #e9b197; font-weight: inherit; }
+.subtitle { font-family: Georgia, serif; font-size: clamp(1.07rem, 2.2vw, 1.4rem); max-width: 33ch; margin: 1.2rem 0 0; line-height: 1.45; }
+.lead { max-width: 39ch; line-height: 1.6; color: #dfd4da; margin: .85rem 0 1.4rem; }
+.heroBook { width: min(100%, 25rem); height: auto; justify-self: center; object-fit: contain; filter: drop-shadow(0 1rem 2rem #100d16a0); }
+.buyBlock { margin-top: 1.5rem; }
+.buyBlock p { margin: .65rem 0 0; font-size: .86rem; opacity: .89; }
+.cta { min-height: 3.2rem; border: 0; border-radius: .35rem; background: #edb396; color: #221923; padding: .88rem 1.38rem; font-size: 1.04rem; font-weight: 750; cursor: pointer; }
+.cta:hover:not(:disabled) { background: #ffd1b9; }
+.cta:disabled { opacity: .64; cursor: default; }
+.cta:focus-visible, .page a:focus-visible, .faq summary:focus-visible { outline: 3px solid #976b98; outline-offset: 4px; }
+.twoColumn { max-width: 72rem; margin: auto; padding: clamp(3rem, 8vw, 6rem) clamp(1.25rem, 5vw, 4.5rem); display: grid; grid-template-columns: 1fr 1fr; align-items: start; gap: clamp(2rem, 5vw, 5rem); }
+.page h2 { font-size: clamp(2rem, 4.3vw, 3.45rem); margin: 0 0 1rem; line-height: 1.04; }
+.twoColumn p, .cards p, .guideLinks p { line-height: 1.65; margin: .8rem 0; }
+.dialogue { background: #eee2d9; padding: clamp(1.1rem, 3vw, 2rem); border-left: 3px solid #99594d; margin: 0; }
+.dialogue figcaption { color: #753e33; font-size: .9rem; font-weight: 700; margin-bottom: .85rem; }
+.dialogue dl, .dialogue dd { margin: 0; }
+.dialogue dl div { display: grid; grid-template-columns: 3.1rem 1fr; gap: .45rem; padding: .4rem 0; font-family: Georgia, serif; font-size: 1.06rem; line-height: 1.5; }
+.dialogue dt { font-weight: 700; }
+.tools { background: #ede4e2; }
+.toolsInner { max-width: 72rem; margin: auto; padding: clamp(3rem, 7vw, 5rem) clamp(1.25rem, 5vw, 4.5rem); }
+.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1.35rem, 3vw, 3rem); margin: 1.6rem 0 1.4rem; }
+.cards div { border-top: 1px solid #af887c; padding-top: .9rem; }
+.page h3 { font-size: 1.08rem; font-weight: 700; }
+.previewLink, .guideLinks a { color: #743d33; font-weight: 700; text-decoration: underline; text-underline-offset: .24em; }
+.faq details { border-bottom: 1px solid #d9c9c1; }
+.faq summary { padding: .8rem 0; cursor: pointer; font-weight: 650; }
+.faq details p { margin: 0 0 .95rem; }
+.guideLinks { max-width: 72rem; margin: auto; padding: 0 clamp(1.25rem, 5vw, 4.5rem) 3rem; font-size: .94rem; }
+@media(max-width: 720px) {
+  .heroInner, .twoColumn, .cards { grid-template-columns: 1fr; }
+  .heroBook { width: min(65vw, 18rem); }
+  .heroInner { gap: 1.75rem; }
+  .hero h1 { max-width: 14ch; }
+  .twoColumn { gap: 1.6rem; }
+}

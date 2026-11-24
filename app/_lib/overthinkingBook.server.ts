@@ -7,23 +7,44 @@ import { authenticatedUser } from "./authSession.server";
 import { configuredPriceIdsForProduct, identifyPaymentProduct } from "./paymentProductCatalog.server";
 import { directIdentity } from "./testAccounts/directAuth.server";
 import { directPortalEnabled } from "./testAccounts/directPublic";
-import { OVERTHINKING_BOOK as book } from "./overthinkingBook";
+import { OVERTHINKING_BOOK } from "./overthinkingBook";
+import { STEINLER_BOOK } from "./steinlerBook";
 import { ownedBookCheckouts, recordBookCheckout, type BookCheckout } from "./overthinkingBookStore.server";
 
 const bucket = "overthinking-book-private";
-const objectPath = `v1/${book.filename}`;
-const pdfSize = 2924829;
-const pdfSha256 = "30e800dc56139fd2485354010cef2db79e01c598cde086ffaadea08ac1509738";
 export const guestBookCookie = "rv_overthinking_book_guest";
+
+const overthinkingEdition = {
+  book: OVERTHINKING_BOOK,
+  priceEnv: "OVERTHINKING_BOOK_PRICE_ID",
+  enabledEnv: "OVERTHINKING_BOOK_CHECKOUT_ENABLED",
+  cookie: guestBookCookie,
+  checkoutKey: "overthinking-book",
+  pdfSize: 2924829,
+  pdfSha256: "30e800dc56139fd2485354010cef2db79e01c598cde086ffaadea08ac1509738",
+};
+
+export const steinlerEdition = {
+  book: STEINLER_BOOK,
+  priceEnv: "STEINLER_BOOK_PRICE_ID",
+  enabledEnv: "STEINLER_BOOK_CHECKOUT_ENABLED",
+  cookie: "rv_steinler_book_guest",
+  checkoutKey: "steinler-book",
+  pdfSize: 2665227,
+  pdfSha256: "fc23bfd59287773f441bb25a7b992f337228d42863cfefae1fd656910ede0c0f",
+};
+
+type Edition = typeof overthinkingEdition | typeof steinlerEdition;
+const book = OVERTHINKING_BOOK;
 
 function guestProof(value: string | null) {
   const match = value?.match(/^([A-Za-z0-9_-]{43})\.(cs_(?:live|test)_[A-Za-z0-9]+)$/);
   return match ? { secret: match[1], sessionId: match[2] } : null;
 }
 
-export function guestBookCookieFrom(request: Request) {
+export function guestBookCookieFrom(request: Request, edition: Edition = overthinkingEdition) {
   return request.headers.get("cookie")?.split(";").map(value => value.trim())
-    .find(value => value.startsWith(guestBookCookie + "="))?.slice(guestBookCookie.length + 1) ?? null;
+    .find(value => value.startsWith(edition.cookie + "="))?.slice(edition.cookie.length + 1) ?? null;
 }
 
 function proofHash(secret: string) {
@@ -50,8 +71,8 @@ function storageConfig() {
   return { url: url.origin, key };
 }
 
-function priceForCheckout() {
-  const price = process.env.OVERTHINKING_BOOK_PRICE_ID?.trim() ?? "";
+function priceForCheckout({ book, priceEnv }: Edition = overthinkingEdition) {
+  const price = process.env[priceEnv]?.trim() ?? "";
   if (!/^price_[A-Za-z0-9]+$/.test(price) ||
     identifyPaymentProduct({ priceIds: [price], paymentLinkId: null }) !== book.product) {
     throw new Error("Book price unavailable");
@@ -70,9 +91,20 @@ export function bookLibraryEnabled() {
   }
 }
 
-export function bookCheckoutEnabled() {
-  if (process.env.OVERTHINKING_BOOK_CHECKOUT_ENABLED !== "true" || !bookLibraryEnabled()) return false;
-  try { return Boolean(priceForCheckout()); } catch { return false; }
+export function guestEditionAvailable(edition: Edition) {
+  try {
+    stripeMode();
+    storageConfig();
+    return configuredPriceIdsForProduct(edition.book.product).length > 0;
+  } catch {
+    return false;
+  }
+}
+
+export function bookCheckoutEnabled(edition: Edition = overthinkingEdition) {
+  const available = edition === overthinkingEdition ? bookLibraryEnabled() : guestEditionAvailable(edition);
+  if (process.env[edition.enabledEnv] !== "true" || !available) return false;
+  try { return Boolean(priceForCheckout(edition)); } catch { return false; }
 }
 
 export async function bookAccount(request: Request) {
@@ -97,15 +129,16 @@ function idOf(value: string | { id: string } | null) {
   return typeof value === "string" ? value : value?.id;
 }
 
-function matchesBookSession(session: Stripe.Checkout.Session, checkout: BookCheckout) {
+function matchesBookSession(session: Stripe.Checkout.Session, checkout: BookCheckout, { book }: Edition = overthinkingEdition) {
   return session.id === checkout.sessionId && session.livemode === checkout.live &&
     session.mode === "payment" && session.metadata?.rv_product === book.product &&
     session.payment_link === null && session.amount_total === book.amountOre && session.currency === "sek";
 }
 
 /** The verified account's DB binding is required before this Stripe check. */
-export async function verifiedBookPurchase(stripe: Stripe, session: Stripe.Checkout.Session, checkout: BookCheckout) {
-  if (!matchesBookSession(session, checkout) || session.status !== "complete" || session.payment_status !== "paid"
+export async function verifiedBookPurchase(stripe: Stripe, session: Stripe.Checkout.Session, checkout: BookCheckout, edition: Edition = overthinkingEdition) {
+  const { book } = edition;
+  if (!matchesBookSession(session, checkout, edition) || session.status !== "complete" || session.payment_status !== "paid"
     || identifyPaymentProduct({ priceIds: [checkout.priceId], paymentLinkId: null }) !== book.product) return false;
 
   const intentId = idOf(session.payment_intent);
@@ -148,7 +181,7 @@ async function inspectBookAccount(stripe: Stripe, userId: string, live: boolean,
 
 type BookAccount = { userId: string; verifiedEmail: string | null };
 
-async function hasGuestPurchase(stripe: Stripe, live: boolean, verifiedEmail: string | null) {
+async function hasGuestPurchase(stripe: Stripe, live: boolean, verifiedEmail: string | null, edition: Edition = overthinkingEdition) {
   const email = validLoginEmail(verifiedEmail);
   if (!email) return false;
 
@@ -157,12 +190,17 @@ async function hasGuestPurchase(stripe: Stripe, live: boolean, verifiedEmail: st
   const sessions = stripe.checkout.sessions.list({ customer_details: { email }, status: "complete", limit: 100 });
   for await (const session of sessions) {
     const priceId = session.metadata?.rv_book_price;
-    if (!priceId || !session.metadata?.rv_guest_hash ||
+    if (session.metadata?.rv_product !== edition.book.product || !priceId || !session.metadata.rv_guest_hash ||
         session.customer_details?.email?.trim().toLowerCase() !== email.toLowerCase()) continue;
     const checkout = { sessionId: session.id, priceId, live, expiresAt: new Date(session.expires_at * 1000) };
-    if (await verifiedBookPurchase(stripe, session, checkout)) return true;
+    if (await verifiedBookPurchase(stripe, session, checkout, edition)) return true;
   }
   return false;
+}
+
+export async function guestEditionOwned(account: BookAccount, edition: Edition) {
+  const { key, live } = stripeMode();
+  return hasGuestPurchase(stripeClient(key), live, account.verifiedEmail, edition);
 }
 
 export async function bookLibraryState(account: BookAccount) {
@@ -192,7 +230,8 @@ export async function startBookCheckout({ userId, verifiedEmail }: BookAccount) 
 }
 
 async function createBookSession(stripe: Stripe, price: string, live: boolean, origin: string,
-  context: { key: string; successPath: string; guestHash?: string }) {
+  context: { key: string; successPath: string; guestHash?: string }, edition: Edition = overthinkingEdition) {
+  const { book } = edition;
   const configuredPrice = await stripe.prices.retrieve(price);
   if (configuredPrice.id !== price || configuredPrice.livemode !== live || !configuredPrice.active
     || configuredPrice.type !== "one_time" || configuredPrice.currency !== "sek" || configuredPrice.unit_amount !== book.amountOre) {
@@ -205,34 +244,35 @@ async function createBookSession(stripe: Stripe, price: string, live: boolean, o
     metadata: { rv_product: book.product, ...(context.guestHash ? { rv_guest_hash: context.guestHash, rv_book_price: price } : {}) },
     success_url: origin + context.successPath,
     cancel_url: `${origin}${book.path}#kop`,
-  }, { idempotencyKey: `overthinking-book-${keyHash}` });
+  }, { idempotencyKey: `${edition.checkoutKey}-${keyHash}` });
   const binding = { sessionId: session.id, priceId: price, live, expiresAt: new Date(session.expires_at * 1000) };
-  if (!matchesBookSession(session, binding) || session.status !== "open"
+  if (!matchesBookSession(session, binding, edition) || session.status !== "open"
     || !Number.isFinite(binding.expiresAt.valueOf())) throw new Error("Invalid book checkout session");
   return session;
 }
 
-async function inspectGuestPurchase(stripe: Stripe, live: boolean, cookie: string | null) {
+async function inspectGuestPurchase(stripe: Stripe, live: boolean, cookie: string | null, edition: Edition) {
   const proof = guestProof(cookie);
   if (!proof || !proof.sessionId.startsWith(live ? "cs_live_" : "cs_test_")) return null;
   const session = await stripe.checkout.sessions.retrieve(proof.sessionId);
   const priceId = session.metadata?.rv_book_price;
   if (!priceId || session.metadata?.rv_guest_hash !== proofHash(proof.secret)) return null;
   const checkout = { sessionId: proof.sessionId, priceId, live, expiresAt: new Date(session.expires_at * 1000) };
-  if (!matchesBookSession(session, checkout) || identifyPaymentProduct({ priceIds: [priceId], paymentLinkId: null }) !== book.product) return null;
+  if (!matchesBookSession(session, checkout, edition) || identifyPaymentProduct({ priceIds: [priceId], paymentLinkId: null }) !== edition.book.product) return null;
   return { session, checkout };
 }
 
-export async function startGuestBookCheckout(cookie: string | null) {
+export async function startGuestBookCheckout(cookie: string | null, edition: Edition = overthinkingEdition) {
+  const { book } = edition;
   const { key, live, origin } = stripeMode();
-  const price = priceForCheckout();
+  const price = priceForCheckout(edition);
   const stripe = stripeClient(key);
-  const previous = await inspectGuestPurchase(stripe, live, cookie);
+  const previous = await inspectGuestPurchase(stripe, live, cookie, edition);
   if (previous) {
     if (previous.session.status === "open" && previous.checkout.expiresAt > new Date()) {
       return { result: { kind: "checkout" as const, url: stripeCheckoutUrl(previous.session.url) } };
     }
-    if (await verifiedBookPurchase(stripe, previous.session, previous.checkout) ||
+    if (await verifiedBookPurchase(stripe, previous.session, previous.checkout, edition) ||
         (previous.session.status === "complete" && previous.session.payment_status === "unpaid" &&
           previous.checkout.expiresAt > new Date())) {
       return { result: { kind: "guest_return" as const } };
@@ -242,16 +282,16 @@ export async function startGuestBookCheckout(cookie: string | null) {
   const guestHash = proofHash(secret);
   const session = await createBookSession(stripe, price, live, origin, {
     key: guestHash, guestHash, successPath: book.path + "/tack",
-  });
+  }, edition);
   return { result: { kind: "checkout" as const, url: stripeCheckoutUrl(session.url) }, cookie: `${secret}.${session.id}` };
 }
 
-export async function guestBookPurchaseReady(cookie: string | null) {
+export async function guestBookPurchaseReady(cookie: string | null, edition: Edition = overthinkingEdition) {
   if (!guestProof(cookie)) return false;
   const { key, live } = stripeMode();
   const stripe = stripeClient(key);
-  const guest = await inspectGuestPurchase(stripe, live, cookie);
-  return Boolean(guest && await verifiedBookPurchase(stripe, guest.session, guest.checkout));
+  const guest = await inspectGuestPurchase(stripe, live, cookie, edition);
+  return Boolean(guest && await verifiedBookPurchase(stripe, guest.session, guest.checkout, edition));
 }
 
 export async function readOwnedBookPdf(account: BookAccount) {
@@ -259,15 +299,20 @@ export async function readOwnedBookPdf(account: BookAccount) {
   return readBookPdf();
 }
 
-export async function readGuestBookPdf(cookie: string) {
-  if (!await guestBookPurchaseReady(cookie)) return null;
-  return readBookPdf();
+export async function readGuestBookPdf(cookie: string, edition: Edition = overthinkingEdition) {
+  if (!await guestBookPurchaseReady(cookie, edition)) return null;
+  return readBookPdf(edition);
 }
 
-async function readBookPdf() {
+export async function readOwnedGuestEditionPdf(account: BookAccount, edition: Edition) {
+  if (!await guestEditionOwned(account, edition)) return null;
+  return readBookPdf(edition);
+}
+
+async function readBookPdf({ book, pdfSize, pdfSha256 }: Edition = overthinkingEdition) {
   const { url, key } = storageConfig();
   const supabase = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false } });
-  const { data, error } = await supabase.storage.from(bucket).download(objectPath);
+  const { data, error } = await supabase.storage.from(bucket).download(`v1/${book.filename}`);
   if (error || !data || data.size !== pdfSize) throw new Error("Book PDF unavailable");
   const bytes = await data.arrayBuffer();
   if (createHash("sha256").update(new Uint8Array(bytes)).digest("hex") !== pdfSha256) {

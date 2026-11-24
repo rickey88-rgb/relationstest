@@ -5,6 +5,7 @@ import Image from "next/image";
 import { trackEvent } from "../_analytics/analytics";
 import { directAuthClient } from "../_lib/testAccounts/directClient";
 import { OVERTHINKING_BOOK as book } from "../_lib/overthinkingBook";
+import { STEINLER_BOOK } from "../_lib/steinlerBook";
 import { BOOK_CATALOG, LEGACY_BOOK_LIBRARY_API, THINKING_CATALOG_BOOK, type CatalogBook } from "../_lib/bookCatalog";
 
 const pendingBookKey = "rv-pending-book-v1";
@@ -19,11 +20,12 @@ async function bookRequest(path: string, direct: boolean, method = "GET", signal
   return fetch(path, { method, headers, signal, cache: "no-store", referrerPolicy: "no-referrer" });
 }
 
-export function OverthinkingBuyButton({ enabled, direct, className, label = "Köp e-boken · 149 kr" }: {
+export function OverthinkingBuyButton({ enabled, direct, className, label = "Köp e-boken · 149 kr", offer = book }: {
   enabled: boolean;
   direct: boolean;
   className: string;
   label?: string;
+  offer?: typeof book | typeof STEINLER_BOOK;
 }) {
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
@@ -31,11 +33,11 @@ export function OverthinkingBuyButton({ enabled, direct, className, label = "Kö
     setBusy(true);
     setMessage("");
     trackEvent("book_checkout_click", {
-      product_id: book.product, product_name: book.title, price: book.price, currency: "SEK", offer_type: "standard",
+      product_id: offer.product, product_name: offer.title, price: offer.price, currency: "SEK", offer_type: "standard",
     });
 
     try {
-      const response = await bookRequest(book.api + "?guest=1", direct, "POST", undefined, true);
+      const response = await bookRequest(offer.api + "?guest=1", direct, "POST", undefined, true);
       if (response.status === 401) {
         try { localStorage.setItem(pendingBookKey, String(Date.now())); } catch { /* The library is still available manually. */ }
         window.location.assign(direct ? "/mina-sidor?bok=kop#bibliotek" : "/logga-in?bok=kop");
@@ -46,7 +48,7 @@ export function OverthinkingBuyButton({ enabled, direct, className, label = "Kö
       if (result.kind === "checkout" && new URL(result.url).origin === "https://checkout.stripe.com") {
         window.location.assign(result.url);
       } else if (result.kind === "guest_return") {
-        window.location.assign(book.path + "/tack");
+        window.location.assign(offer.path + "/tack");
       } else if (result.kind === "owned" || result.kind === "pending") {
         window.location.assign("/mina-sidor?bok=betalning#bibliotek");
       } else throw new Error("Unexpected checkout response");
@@ -75,8 +77,8 @@ function LibraryBookCard({ entry, direct }: { entry: CatalogBook; direct: boolea
     try {
       tab = window.open("", "_blank");
       if (tab) tab.opener = null;
-      const downloadPath = entry.id === THINKING_CATALOG_BOOK.id
-        ? book.api + "/download"
+      const downloadPath = "api" in entry
+        ? entry.api + "/download"
         : LEGACY_BOOK_LIBRARY_API + "?book=" + encodeURIComponent(entry.id);
       const response = await bookRequest(downloadPath, direct);
       if (response.status === 401 || response.status === 403) {
@@ -85,7 +87,7 @@ function LibraryBookCard({ entry, direct }: { entry: CatalogBook; direct: boolea
         return;
       }
       if (!response.ok) throw new Error("PDF unavailable");
-      if (entry.id !== THINKING_CATALOG_BOOK.id) {
+      if (!("api" in entry)) {
         const { url } = await response.json();
         const signed = new URL(url);
         if (signed.protocol !== "https:" || signed.username || signed.password) throw new Error("Invalid download");
@@ -162,13 +164,17 @@ export function BookLibrary({ direct, returning = false }: { direct: boolean; re
       }
     }
     async function refresh() {
-      const [legacy, thinking] = await Promise.all([read(LEGACY_BOOK_LIBRARY_API), read(book.api)]);
+      const [legacy, thinking, steinler] = await Promise.all([read(LEGACY_BOOK_LIBRARY_API), read(book.api), read(STEINLER_BOOK.api)]);
       const legacyIds: readonly unknown[] = Array.isArray(legacy?.owned) ? legacy.owned : [];
       const state = thinking?.state;
       if (!controller.signal.aborted) setResult({
-        owned: BOOK_CATALOG.filter(entry => entry.id === THINKING_CATALOG_BOOK.id ? state === "ready" : legacyIds.includes(entry.id)),
+        owned: BOOK_CATALOG.filter(entry => {
+          if (entry.id === STEINLER_BOOK.id) return steinler?.state === "ready";
+          if (entry.id === THINKING_CATALOG_BOOK.id) return state === "ready";
+          return legacyIds.includes(entry.id);
+        }),
         pending: state === "pending",
-        unavailable: !Array.isArray(legacy?.owned) || !["none", "pending", "ready"].includes(state),
+        unavailable: !Array.isArray(legacy?.owned) || !["none", "pending", "ready"].includes(state) || !["none", "ready"].includes(steinler?.state),
       });
     }
     void refresh();

@@ -1,3 +1,4 @@
+import SteinlerGuideLink from "../_components/SteinlerGuideLink";
 import EditorialSurface from "../_components/EditorialSurface";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -298,6 +299,8 @@ export default function SilentTreatmentRelationPage() {
           </section>
 
 
+
+          <p className="leading-7">I e-boken <SteinlerGuideLink source="/silent-treatment-relation" /> kan du följa två samtal som visar skillnaden mellan att be om en paus med en väg tillbaka och att hålla inne ett praktiskt besked tills någon ger efter.</p>
 
           <section id="tecken" className="space-y-6">
             <h2 className="text-3xl font-semibold tracking-tight text-neutral-950">

@@ -1,3 +1,4 @@
+import SteinlerGuideLink from "../_components/SteinlerGuideLink";
 import EditorialSurface from "../_components/EditorialSurface";
 // app/gaslighting-relation/page.tsx
 import type { Metadata } from "next";
@@ -236,6 +237,8 @@ export default function GaslightingRelationPage() {
             </p>
           </div>
         </section>
+
+        <p className="leading-7">Vill du se ett helt samtal i stället för enstaka repliker? I <SteinlerGuideLink source="/gaslighting-relation" /> kan du läsa ett bokutdrag och se hur en konkret fråga försvinner när samtalet börjar handla om den som ställde den.</p>
 
         <section className="space-y-4">
           <h2 className="text-2xl font-semibold tracking-tight">

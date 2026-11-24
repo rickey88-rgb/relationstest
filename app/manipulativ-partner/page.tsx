@@ -1,3 +1,4 @@
+import SteinlerGuideLink from "../_components/SteinlerGuideLink";
 import EditorialSurface from "../_components/EditorialSurface";
 import Link from "next/link";
 import type { Metadata } from "next";
@@ -257,6 +258,8 @@ export default function Page() {
           säger det högt. Men känslan av att ständigt behöva justera dig själv tar
           ändå plats – i tankarna, i kroppen och i vardagen.
         </p>
+
+        <p className="leading-7">I e-boken <SteinlerGuideLink source="/manipulativ-partner" /> visar My Steinler hur en sakfråga om hyran blir ett samtal om tonfall. Du kan läsa scenen och se hur boken skiljer det som sades från möjliga tolkningar.</p>
 
         <h2 className="text-2xl font-semibold">
           Manipulation som återkommande cykel

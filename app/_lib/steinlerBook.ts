@@ -1,0 +1,17 @@
+export const STEINLER_BOOK = {
+  id: "nar-du-borjar-tvivla-pa-dig-sjalv",
+  path: "/nar-du-borjar-tvivla-pa-dig-sjalv",
+  api: "/api/books/nar-du-borjar-tvivla-pa-dig-sjalv",
+  product: "steinler_book",
+  title: "När du börjar tvivla på dig själv",
+  subtitle: "Om manipulation, förvirring och att hitta tillbaka till din egen verklighet",
+  author: "My Steinler",
+  price: 149,
+  amountOre: 14900,
+  filename: "Nar-du-borjar-tvivla-pa-dig-sjalv-My-Steinler.pdf",
+  cover: "/nar-du-borjar-tvivla-pa-dig-sjalv/framsida.webp",
+  mockup: "/nar-du-borjar-tvivla-pa-dig-sjalv/bokmockup.webp",
+  width: 900,
+  height: 1386,
+  description: "Femton kommenterade samtal och tio ifyllningsbara skrivblad om manipulation, gränser och hur du får tillbaka ditt perspektiv.",
+} as const;

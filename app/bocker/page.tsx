@@ -6,8 +6,8 @@ import { BOOK_CATALOG } from "../_lib/bookCatalog";
 import styles from "./page.module.css";
 
 const url = "https://www.relationsvarning.se/bocker";
-const title = "Böcker om ADHD, autism, AuDHD och övertänkande";
-const description = "Bläddra bland Relationsvarnings fyra svenska e-böcker. Se innehåll, förhandsvisningar och praktiska arbetsblad. Alla böcker kostar 149 kr styck.";
+const title = "Böcker om relationer, övertänkande, ADHD och autism";
+const description = "Bläddra bland Relationsvarnings fem svenska e-böcker. Se innehåll, förhandsvisningar och praktiska arbetsblad. Alla böcker kostar 149 kr styck.";
 
 export const metadata: Metadata = {
   title, description, alternates: { canonical: url },
