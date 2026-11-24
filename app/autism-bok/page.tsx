@@ -12,8 +12,8 @@ import styles from "./page.module.css";
 
 const pageUrl = "https://www.relationsvarning.se/autism-bok";
 const mockupUrl = "https://www.relationsvarning.se/autism-all-inclusive-mockup.png";
-const title = "AUTISM ALL INCLUSIVE – bok och ifyllbara arbetsblad | Relationsvarning";
-const description = "En färgstark guide till en lättare vardag med autism. 52 sidor, 10 kapitel och 12 A4-sidor med digitalt ifyllbara arbetsblad. Av Elias Voss.";
+const title = "AUTISM ALL INCLUSIVE – e-bok om autism med arbetsblad";
+const description = "En praktisk bok om autism hos vuxna och ungdomar. Elias Voss ger verktyg för energi, sinnesintryck och rutiner. 12 sidor ifyllbara arbetsblad ingår.";
 export const metadata: Metadata = {
   title, description, alternates: { canonical: pageUrl },
   openGraph: { title, description, url: pageUrl, type: "website", images: [{ url: mockupUrl, width: 1205, height: 1305, alt: AUTISM_BOOK.name }] },
@@ -55,7 +55,7 @@ export default async function AutismBookPage({ searchParams }: { searchParams: P
   // Local development preview only: neither a query string nor a production env can enable this bypass.
   const enabled = AUTISM_BOOK_SALE_ENABLED || (process.env.NODE_ENV === "development" && process.env.AUTISM_BOOK_LOCAL_PREVIEW === "1");
   const structuredData = [
-    { "@context": "https://schema.org", "@type": "Book", "@id": `${pageUrl}#book`, name: AUTISM_BOOK.name, author: { "@type": "Person", name: AUTISM_BOOK.author }, bookFormat: "EBook", inLanguage: "sv", numberOfPages: 52, image: mockupUrl, url: pageUrl },
+    { "@context": "https://schema.org", "@type": "Book", "@id": `${pageUrl}#book`, name: AUTISM_BOOK.name, author: { "@type": "Person", name: AUTISM_BOOK.author }, bookFormat: "https://schema.org/EBook", inLanguage: "sv", numberOfPages: 52, image: mockupUrl, url: pageUrl, description, publisher: { "@type": "Organization", name: "Relationsvarning" } },
     { "@context": "https://schema.org", "@type": "Product", name: `${AUTISM_BOOK.name} – bok och arbetsblad`, description, image: mockupUrl, url: pageUrl, brand: { "@type": "Brand", name: "Relationsvarning" }, ...(AUTISM_BOOK_SALE_ENABLED ? { offers: { "@type": "Offer", url: pageUrl, price: "149", priceCurrency: "SEK", availability: "https://schema.org/InStock" } } : {}) },
   ];
   return <main className={styles.page}>
@@ -64,7 +64,7 @@ export default async function AutismBookPage({ searchParams }: { searchParams: P
     <header className={styles.header}><Link href="/" className={styles.brand}>Relationsvarning<span>Kunskap för din vardag</span></Link><a href="#titta-i-boken" className={styles.headerLink}>Titta i boken <span aria-hidden="true">↗</span></a></header>
     <section id="autism-book-hero" className={styles.hero}><div className={styles.heroCopy}>
       <p className={styles.eyebrow}>En digital guide av Elias Voss</p>{offer.isAnalysisOffer && <p className={styles.offerBadge}>Ditt erbjudande efter autismtestet · 99 kr</p>}
-      <h1>AUTISM<br /><span>ALL</span><br />INCLUSIVE</h1><p className={styles.subtitle}>En färgstark guide till en lättare vardag.</p><p className={styles.heroDescription}>För dig som lägger mycket kraft på sådant som andra knappt märker. Förstå dina behov, prova något konkret och ge vardagen lite mer utrymme.</p>
+      <h1>AUTISM<br /><span>ALL</span><br />INCLUSIVE</h1><p className={styles.subtitle}>En praktisk e-bok om autism med ifyllbara arbetsblad.</p><p className={styles.heroDescription}>För dig som lägger mycket kraft på sådant som andra knappt märker. Förstå dina behov, prova något konkret och ge vardagen lite mer utrymme.</p>
       <Purchase offer={offer} enabled={enabled} /><a href="#titta-i-boken" className={styles.heroLink}>Bläddra bland riktiga sidor ↓</a>
     </div><div className={styles.heroVisual}><span className={styles.visualLabel}>BOKEN + ARBETSBLADEN</span><Image src="/autism-all-inclusive-mockup.png" alt="Omslaget till AUTISM ALL INCLUSIVE av Elias Voss, illustrerat som en bok. Produkten levereras digitalt." width={1205} height={1305} priority sizes="(max-width: 760px) 92vw, 48vw" className={styles.mockup} /><p>Digital utgåva. Ingen fysisk bok skickas.</p></div></section>
     <div className={styles.facts}><span><strong>52</strong> sidor i boken</span><span><strong>10</strong> kapitel att använda</span><span><strong>12</strong> A4-sidor med arbetsblad</span><span><strong>Din takt.</strong> Du väljer starten.</span></div>
@@ -76,6 +76,10 @@ export default async function AutismBookPage({ searchParams }: { searchParams: P
     <section className={`${styles.section} ${styles.finalOffer}`}><p className={styles.eyebrow}>En färgstark guide. Ett litet nästa steg.</p><h2>Du får bygga en vardag<br />med mer plats för dig.</h2><p>Hela boken på 52 sidor + 12 A4-sidor med ifyllbara arbetsblad.<br />Läs på mobil, surfplatta eller dator. Spara filerna och återvänd när du vill.</p><Purchase offer={offer} enabled={enabled} /></section>
     <section className={`${styles.section} ${styles.faq}`}><div><p className={styles.eyebrow}>Bra att veta</p><h2>Innan du köper.</h2><p>Undrar du något mer?<br /><a href="mailto:support@relationsvarning.se">Kontakta oss</a>, så hjälper vi dig.</p></div><div>{faqs.map(([question, answer]) => <details key={question}><summary>{question}<span aria-hidden="true">+</span></summary><p>{answer}</p></details>)}</div></section>
     {enabled && <AutismBookStickyCta price={offer.price} paymentLink={offer.paymentLink} offerType={offer.isAnalysisOffer ? "analysis" : "standard"} />}
-    <LiteAutismRecommendation className="mx-auto mb-9 w-[calc(100%-2.5rem)] max-w-4xl" />
+    <section aria-labelledby="autism-book-further-reading" className="mx-auto w-[calc(100%-2.5rem)] max-w-4xl space-y-3">
+      <h2 id="autism-book-further-reading" className="text-xl font-semibold">Läs mer om autism i vardagen</h2>
+      <p>Utforska <Link href="/autism-och-rutiner" className="underline underline-offset-4">rutiner och ändrade planer</Link>, <Link href="/autism-och-sensorisk-kanslighet" className="underline underline-offset-4">sensorisk känslighet</Link> eller guiden om <Link href="/autism-vuxna" className="underline underline-offset-4">autism hos vuxna</Link>.</p>
+    </section>
+    <LiteAutismRecommendation sourcePage="/autism-bok" className="mx-auto mb-9 w-[calc(100%-2.5rem)] max-w-4xl" />
   </main>;
 }

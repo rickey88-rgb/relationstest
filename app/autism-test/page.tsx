@@ -14,9 +14,9 @@ const description = "Gör ett autismtest för vuxna med 30 frågor om vardag, sa
 export const metadata: Metadata = {
   title,
   description,
-  ...getEditorialMetadata({ route: "/autism-test", title, description, datePublished: "2026-09-15T19:27:30+02:00", dateModified: "2026-11-23T10:00:00+01:00" }),
+  ...getEditorialMetadata({ route: "/autism-test", title, description, datePublished: "2026-09-15T19:27:30+02:00", dateModified: "2026-11-25" }),
 };
-const articleJsonLd = getEditorialArticleSchema({ route: "/autism-test", title, description, datePublished: "2026-09-15T19:27:30+02:00", dateModified: "2026-11-23T10:00:00+01:00" });
+const articleJsonLd = getEditorialArticleSchema({ route: "/autism-test", title, description, datePublished: "2026-09-15T19:27:30+02:00", dateModified: "2026-11-25" });
 const cta = "inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-neutral-900 px-5 py-3 text-center font-semibold text-white hover:bg-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900 sm:w-auto";
 const descriptions = [
   "Aktiv analys av sociala situationer, förväntningar och samspelet i samtal.",
@@ -63,7 +63,13 @@ export default function AutismLanding() {
     <GuideSection title="Vanliga frågor om autismtestet">{faq.map(([question, answer]) => <div key={question} className="space-y-2 border-t border-neutral-200 pt-4"><h3 className="text-lg font-semibold text-neutral-900">{question}</h3><p>{answer}</p></div>)}<div className="space-y-2 border-t border-neutral-200 pt-4"><h3 className="text-lg font-semibold text-neutral-900">Vad kostar testet?</h3><p>Testet är gratis att genomföra och du får ett första fynd från dina svar utan kostnad. Den fullständiga personliga analysen kostar 39 kr.</p></div><p>Om du känner igen både ADHD- och autismdrag kan du läsa om <Link href="/audhd-test" className={textLink}>självtestet för kombinerade drag</Link>.</p><p>Du kan också <Link href="/hsp-test" className={textLink}>reflektera separat över känslighet och återhämtning</Link>. Det självtestet är inte en bedömning av autism.</p><p>Fördjupning: <Link href="/asperger-test" className={textLink}>Asperger-begreppet och självskattning</Link> samt <Link href="/adhd-autism" className={textLink}>skillnader och överlapp mellan ADHD och autism</Link>.</p></GuideSection>
     <GuideSection title="Nyfiken på vad dina egna svar visar?"><p>30 frågor. Flera områden. En samlad analys av ditt svarsmönster.</p><Link data-rv="button" href="/autism-test/test" className={cta}>Starta autismtestet</Link></GuideSection>
     <GuideSection title="Läs mer om autism"><GuideLinks links={guides.map(guide => ({ href: `/${guide.slug}`, label: guide.label }))} /></GuideSection>
-    <LiteAutismRecommendation />
+    <GuideSection title="Fördjupningar om vardagen"><GuideLinks links={[
+      { href: "/sen-autismdiagnos-hos-kvinnor", label: "Sen autismdiagnos hos kvinnor" },
+      { href: "/autism-och-social-trotthet", label: "Social trötthet och återhämtning" },
+      { href: "/autism-och-sensorisk-kanslighet", label: "Autism och sensorisk känslighet" },
+      { href: "/autism-bok", label: "AUTISM ALL INCLUSIVE – e-bok med arbetsblad" },
+    ]} /></GuideSection>
+    <LiteAutismRecommendation sourcePage="/autism-test" />
     </article>
   </main></EditorialSurface>;
 }

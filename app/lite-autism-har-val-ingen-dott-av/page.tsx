@@ -11,8 +11,8 @@ import styles from "./page.module.css";
 
 const origin = "https://www.relationsvarning.se";
 const url = origin + book.path;
-const title = `${book.title} – En illustrerad bok om autism`;
-const seoDescription = "En rolig, varm och alldeles för ärlig bok om livet med autism. Följ Ellie genom maskering, relationer och vardagskaos. Illustrerad e-bok av Ellie Lind.";
+const title = `${book.title} – illustrerad e-bok`;
+const seoDescription = "En illustrerad e-bok om att leva med autism. Följ fiktiva Ellie genom maskering, vänskap och vardagskaos. Av Ellie Lind. Läs ett gratis utdrag.";
 
 const chapters = [
   ["Att passa in", "Det inövade småpratet, de lånade ansiktsuttrycken och tystnaden på bussen hem."],
@@ -94,7 +94,7 @@ export default function LiteAutismBookPage() {
           <h2 id="story-title">Möt Ellie</h2>
           <p>Hon är tjugofem, jobbar på bibliotek och kan mer om gamla busslinjer än om hur man avslutar ett telefonsamtal. När hon erbjuder sig att ordna en födelsedagsmiddag åt sin vän Maja låter det nästan enkelt.</p>
           <p>Sedan ska det svaras på ett sms om efterrätt. Någon ändrar en plan. Och mitt i allt försöker Ellie hålla reda på vilka människor hon faktiskt vill ha nära.</p>
-          <p>En varm, självironisk berättelse om vad det kan kosta att verka som vem som helst. Och om vad som händer när man börjar säga hur man egentligen har det.</p>
+          <p>En varm, självironisk och fiktiv vardagsskildring om livet med autism som vuxen kvinna. Den kretsar kring vad det kan kosta att verka som vem som helst och vad som händer när man börjar säga hur man egentligen har det.</p>
         </div>
         <figure className={styles.quote}>
           <blockquote>”Det enda telefonsamtal jag har inlett utan förberedelse i vuxen ålder var ett feltryck.”</blockquote>
@@ -124,7 +124,8 @@ export default function LiteAutismBookPage() {
         <div className={styles.endInner}>
           <figure><blockquote>”Jag är väldigt väluppfostrad i de lägen där det hjälper mig minst.”</blockquote><figcaption>Ur kapitel 3</figcaption></figure>
           <div><h2 id="purchase-title">Läs vidare i din egen takt</h2>
-            <p>{book.title} av {book.author}. Utgiven av {book.publisher}. En engångsbetalning på {book.price} kr inklusive moms.</p>
+            <p><strong>{book.title}</strong><br />{book.author} · {book.publisher}</p>
+            <p>En engångsbetalning på {book.price} kr inklusive moms.</p>
             <Buy enabled={enabled} />
           </div>
         </div>
@@ -132,6 +133,8 @@ export default function LiteAutismBookPage() {
       <section className={styles.faq} aria-labelledby="faq-title">
         <h2 id="faq-title">Frågor om boken och köpet</h2>
         {faq.map(([heading, copy]) => <details key={heading}><summary>{heading}</summary><p>{copy}</p></details>)}
+        <p>Vill du läsa om vad maskering kan innebära i vardagen? Se guiden om <Link href="/maskering-autism" className="underline underline-offset-4">maskering vid autism</Link> eller läs om <Link href="/autism-kvinnor" className="underline underline-offset-4">autism hos kvinnor</Link>.</p>
+        <p>För vardagsövningar och ifyllbara arbetsblad finns kunskapsboken <Link href="/autism-bok" className="underline underline-offset-4">AUTISM ALL INCLUSIVE</Link> av Elias Voss.</p>
         <p className={styles.back}><Link href="/bocker">Se alla böcker från Relationsvarning</Link></p>
       </section>
     </main>
