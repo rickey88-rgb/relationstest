@@ -3,7 +3,7 @@ import type { InformationGuideData } from "../app/_components/InformationGuide";
 const autism = { href: "https://www.1177.se/sjukdomar--besvar/hjarna-och-nerver/neuropsykiatriska-funktionsnedsattningar/autism/", label: "1177 om autism, vård och stöd" };
 const assessment = { href: "https://www.vardochinsats.se/autism/kartlaeggning-och-utredning/diagnostisk-utredning-vuxna/", label: "Nationella vård- och insatsprogrammet om utredning av vuxna" };
 const masking = { href: "https://link.springer.com/article/10.1007/s10803-017-3166-5", label: "Hull med flera, kvalitativ studie om social maskering (2017)" };
-const burnout = { href: "https://doi.org/10.1089/aut.2019.0079", label: "Raymaker med flera, kvalitativ studie om autistisk utmattning (2020)" };
+const burnout = { href: "https://pdxscholar.library.pdx.edu/socwork_fac/378/", label: "Raymaker med flera, kvalitativ studie om autistisk utmattning (2020)" };
 const balance = { href: "https://www.vardochinsats.se/autism/behandling-och-stoed/aktivitetsbalans/", label: "Nationella vård- och insatsprogrammet om aktivitetsbalans" };
 const senses = { href: "https://www.habilitering.se/kunskap-och-stod/temasidor/smarta-och-sinnesintryck/viktigt-att-utreda-sensorisk-kanslighet-vid-autism/", label: "Habilitering & Hälsa om sensorisk känslighet" };
 const adult = { href: "/autism-vuxna", label: "Autism hos vuxna" };
@@ -258,7 +258,7 @@ export const meltdownShutdown = guide({
   related: [sensory, routine, fatigue, practicalBook],
   sources: [
     { href: "https://autismspectrumresearch.com/wp-content/uploads/2023/01/accepted-version-the-lived-experience-of-meltdowns-for-autistics-adults.pdf", label: "Lewis och Stevens, intervjustudie om vuxnas erfarenheter av meltdowns" },
-    { href: "https://journals.sagepub.com/doi/10.1089/aut.2024.0193", label: "Kvalitativ studie om hur autistiska personer beskriver shutdowns" },
+    { href: "https://pmc.ncbi.nlm.nih.gov/articles/PMC13315293/", label: "Kvalitativ studie om hur autistiska personer beskriver shutdowns" },
     senses,
     autism,
   ],
