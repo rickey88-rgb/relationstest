@@ -6,6 +6,7 @@ import { GuideLinks, GuideSection, textLink } from "../_components/ContentGuide"
 import { EditorialArticleJsonLd, getEditorialArticleSchema, getEditorialMetadata } from "../_seo/editorialSeo";
 import guides from "../../content/autism-guides.json";
 import { areaNames, areas } from "./test/model";
+import LiteAutismRecommendation from "../_components/LiteAutismRecommendation";
 
 const title = "Autismtest för vuxna – självtest med 30 frågor | Relationsvarning";
 const description = "Gör ett autismtest för vuxna med 30 frågor om vardag, samspel, rutiner och sinnesintryck. Få en första återkoppling gratis. Testet kan inte ställa diagnos.";
@@ -62,6 +63,7 @@ export default function AutismLanding() {
     <GuideSection title="Vanliga frågor om autismtestet">{faq.map(([question, answer]) => <div key={question} className="space-y-2 border-t border-neutral-200 pt-4"><h3 className="text-lg font-semibold text-neutral-900">{question}</h3><p>{answer}</p></div>)}<div className="space-y-2 border-t border-neutral-200 pt-4"><h3 className="text-lg font-semibold text-neutral-900">Vad kostar testet?</h3><p>Testet är gratis att genomföra och du får ett första fynd från dina svar utan kostnad. Den fullständiga personliga analysen kostar 39 kr.</p></div><p>Om du känner igen både ADHD- och autismdrag kan du läsa om <Link href="/audhd-test" className={textLink}>självtestet för kombinerade drag</Link>.</p><p>Du kan också <Link href="/hsp-test" className={textLink}>reflektera separat över känslighet och återhämtning</Link>. Det självtestet är inte en bedömning av autism.</p><p>Fördjupning: <Link href="/asperger-test" className={textLink}>Asperger-begreppet och självskattning</Link> samt <Link href="/adhd-autism" className={textLink}>skillnader och överlapp mellan ADHD och autism</Link>.</p></GuideSection>
     <GuideSection title="Nyfiken på vad dina egna svar visar?"><p>30 frågor. Flera områden. En samlad analys av ditt svarsmönster.</p><Link data-rv="button" href="/autism-test/test" className={cta}>Starta autismtestet</Link></GuideSection>
     <GuideSection title="Läs mer om autism"><GuideLinks links={guides.map(guide => ({ href: `/${guide.slug}`, label: guide.label }))} /></GuideSection>
+    <LiteAutismRecommendation />
     </article>
   </main></EditorialSurface>;
 }

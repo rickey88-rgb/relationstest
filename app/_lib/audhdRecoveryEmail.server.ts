@@ -19,7 +19,7 @@ export function isAudhdRecoveryEmailConfigured() {
 }
 
 /** Server-only transactional mail boundary. It stays inactive until configured. */
-export async function sendAudhdRecoveryEmail(input: { to: string; recoveryUrl: string; idempotencyKey?: string }) {
+export async function sendTransactionalRecoveryEmail(input: { to: string; subject: string; text: string; idempotencyKey?: string }) {
   const apiKey = configured("RESEND_API_KEY");
   const from = configured("AUDHD_RECOVERY_EMAIL_FROM");
   if (!apiKey || !from) throw new Error("AudhdRecoveryEmailNotConfigured");
@@ -33,8 +33,23 @@ export async function sendAudhdRecoveryEmail(input: { to: string; recoveryUrl: s
       body: JSON.stringify({
         from,
         to: [input.to],
-        subject: "Din personliga AuDHD-analys",
-        text: `Hej!
+        subject: input.subject,
+        text: input.text,
+      }),
+      signal: controller.signal,
+    });
+  } finally {
+    clearTimeout(timeout);
+  }
+  if (!response.ok) throw new AudhdRecoveryEmailRejected();
+}
+
+export async function sendAudhdRecoveryEmail(input: { to: string; recoveryUrl: string; idempotencyKey?: string }) {
+  return sendTransactionalRecoveryEmail({
+    to: input.to,
+    idempotencyKey: input.idempotencyKey,
+    subject: "Din personliga AuDHD-analys",
+    text: `Hej!
 
 Tack för att du genomförde vårt AuDHD-test!
 
@@ -51,11 +66,5 @@ Tack för att du valde Relationsvarning.se! 💙
 
 Vänliga hälsningar
 Relationsvarning.se`,
-      }),
-      signal: controller.signal,
-    });
-  } finally {
-    clearTimeout(timeout);
-  }
-  if (!response.ok) throw new AudhdRecoveryEmailRejected();
+  });
 }

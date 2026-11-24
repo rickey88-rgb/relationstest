@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import postgres from "postgres";
 import { GA_MEASUREMENT_ID } from "../_analytics/config";
+import { LITE_AUTISM_BOOK } from "./liteAutismBook";
 
 type Sql = ReturnType<typeof postgres>;
 const globalForGa4PurchaseDelivery = globalThis as typeof globalThis & { ga4PurchaseDeliverySql?: Sql };
@@ -11,6 +12,7 @@ type PendingDelivery = {
   ga4_client_id: string;
   ga4_session_id: string;
   paid_at: Date | null;
+  product_key: string;
 };
 
 // GA4 accepts Measurement Protocol events backdated by at most 72 hours.
@@ -60,7 +62,7 @@ async function claimDelivery(checkoutSessionId: string, leaseToken: string) {
       and delivered_at is null
       and (delivery_lease_expires_at is null or delivery_lease_expires_at < now())
     returning delivery.stripe_checkout_session_id, delivery.transaction_id,
-      delivery.ga4_client_id, delivery.ga4_session_id, payment.paid_at
+      delivery.ga4_client_id, delivery.ga4_session_id, payment.paid_at, payment.product_key
   `;
   return rows[0] ?? null;
 }
@@ -91,7 +93,7 @@ async function markDelivered(checkoutSessionId: string, leaseToken: string) {
 }
 
 /**
- * Delivers the one outbox record for a verified AuDHD Checkout session.
+ * Delivers the one outbox record for a verified Checkout session.
  * A non-2xx response deliberately bubbles up to the signed Stripe webhook so
  * Stripe retries; GA4's transaction_id is stable if a response is lost.
  */
@@ -103,6 +105,10 @@ export async function deliverPendingGa4Purchase(checkoutSessionId: string) {
   try {
     const secret = apiSecret();
     const timestampMicros = paidAtTimestampMicros(delivery.paid_at);
+    const isBook = delivery.product_key === LITE_AUTISM_BOOK.product;
+    const item = isBook
+      ? { item_id: LITE_AUTISM_BOOK.product, item_name: LITE_AUTISM_BOOK.title, price: LITE_AUTISM_BOOK.price, quantity: 1 }
+      : { item_id: "audhd_test", item_name: "AuDHD-test för vuxna", price: 79, quantity: 1 };
     const query = new URLSearchParams({ measurement_id: GA_MEASUREMENT_ID, api_secret: secret });
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 8_000);
@@ -120,16 +126,16 @@ export async function deliverPendingGa4Purchase(checkoutSessionId: string) {
               name: "purchase",
               params: {
                 transaction_id: delivery.transaction_id,
-                value: 79,
+                value: item.price,
                 currency: "SEK",
                 session_id: Number(delivery.ga4_session_id),
                 engagement_time_msec: 1,
-                items: [{ item_id: "audhd_test", item_name: "AuDHD-test för vuxna", price: 79, quantity: 1 }],
+                items: [item],
               },
             },
             // Ads imports this dedicated key event, not the legacy client-side
             // `purchase` population from the older test products.
-            {
+            ...(isBook ? [] : [{
               name: "audhd_verified_purchase",
               params: {
                 transaction_id: delivery.transaction_id,
@@ -138,7 +144,7 @@ export async function deliverPendingGa4Purchase(checkoutSessionId: string) {
                 session_id: Number(delivery.ga4_session_id),
                 engagement_time_msec: 1,
               },
-            },
+            }]),
           ],
         }),
       });

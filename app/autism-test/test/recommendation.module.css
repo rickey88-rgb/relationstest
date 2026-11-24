@@ -1,0 +1,2 @@
+.afterResult { display: none; }
+main:has([data-rv-autism-unlocked]) .afterResult { display: block; }

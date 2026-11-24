@@ -9,6 +9,8 @@ import { directIdentity } from "./testAccounts/directAuth.server";
 import { directPortalEnabled } from "./testAccounts/directPublic";
 import { OVERTHINKING_BOOK } from "./overthinkingBook";
 import { STEINLER_BOOK } from "./steinlerBook";
+import { LITE_AUTISM_BOOK } from "./liteAutismBook";
+import { sealBookAttribution, type BookAttribution } from "./liteAutismProof.server";
 import { ownedBookCheckouts, recordBookCheckout, type BookCheckout } from "./overthinkingBookStore.server";
 
 const bucket = "overthinking-book-private";
@@ -34,7 +36,17 @@ export const steinlerEdition = {
   pdfSha256: "fc23bfd59287773f441bb25a7b992f337228d42863cfefae1fd656910ede0c0f",
 };
 
-type Edition = typeof overthinkingEdition | typeof steinlerEdition;
+export const liteAutismEdition = {
+  book: LITE_AUTISM_BOOK,
+  priceEnv: "LITE_AUTISM_BOOK_PRICE_ID",
+  enabledEnv: "LITE_AUTISM_BOOK_CHECKOUT_ENABLED",
+  cookie: "rv_lite_autism_book_guest",
+  checkoutKey: "lite-autism-book",
+  pdfSize: 12165871,
+  pdfSha256: "2657448a984eb48f7d1ccb6001232de748b25b704ebc85cffeb1e8282935af3c",
+};
+
+type Edition = typeof overthinkingEdition | typeof steinlerEdition | typeof liteAutismEdition;
 const book = OVERTHINKING_BOOK;
 
 function guestProof(value: string | null) {
@@ -104,7 +116,14 @@ export function guestEditionAvailable(edition: Edition) {
 export function bookCheckoutEnabled(edition: Edition = overthinkingEdition) {
   const available = edition === overthinkingEdition ? bookLibraryEnabled() : guestEditionAvailable(edition);
   if (process.env[edition.enabledEnv] !== "true" || !available) return false;
-  try { return Boolean(priceForCheckout(edition)); } catch { return false; }
+  try {
+    if (edition === liteAutismEdition && (
+      !/^prod_[A-Za-z0-9]+$/.test(process.env.LITE_AUTISM_BOOK_PRODUCT_ID?.trim() ?? "") ||
+      !process.env.RESEND_API_KEY?.trim() || !process.env.AUDHD_RECOVERY_EMAIL_FROM?.trim() ||
+      (process.env.BOOK_ACCESS_TOKEN_SECRET?.trim().length ?? 0) < 32
+    )) return false;
+    return Boolean(priceForCheckout(edition));
+  } catch { return false; }
 }
 
 export async function bookAccount(request: Request) {
@@ -147,6 +166,8 @@ export async function verifiedBookPurchase(stripe: Stripe, session: Stripe.Check
   const item = items.data[0];
   if (items.has_more || items.data.length !== 1 || item.quantity !== 1 ||
     item.price?.id !== checkout.priceId || item.amount_total !== book.amountOre || item.currency !== "sek") return false;
+  if (edition === liteAutismEdition && (!item.price || !idOf(item.price.product) ||
+      idOf(item.price.product) !== process.env.LITE_AUTISM_BOOK_PRODUCT_ID?.trim())) return false;
 
   const intent = await stripe.paymentIntents.retrieve(intentId, { expand: ["latest_charge"] });
   const charge = typeof intent.latest_charge === "string" ? await stripe.charges.retrieve(intent.latest_charge) : intent.latest_charge;
@@ -230,18 +251,29 @@ export async function startBookCheckout({ userId, verifiedEmail }: BookAccount) 
 }
 
 async function createBookSession(stripe: Stripe, price: string, live: boolean, origin: string,
-  context: { key: string; successPath: string; guestHash?: string }, edition: Edition = overthinkingEdition) {
+  context: { key: string; successPath: string; guestHash?: string; attribution?: BookAttribution | null }, edition: Edition = overthinkingEdition) {
   const { book } = edition;
   const configuredPrice = await stripe.prices.retrieve(price);
   if (configuredPrice.id !== price || configuredPrice.livemode !== live || !configuredPrice.active
     || configuredPrice.type !== "one_time" || configuredPrice.currency !== "sek" || configuredPrice.unit_amount !== book.amountOre) {
     throw new Error("Book price mismatch");
   }
+  const liteAutism = edition === liteAutismEdition;
+  const manualTaxRate = process.env.LITE_AUTISM_BOOK_TAX_RATE_ID?.trim();
+  if (liteAutism && (idOf(configuredPrice.product) !== process.env.LITE_AUTISM_BOOK_PRODUCT_ID?.trim() ||
+      configuredPrice.tax_behavior !== "inclusive" || (manualTaxRate && !/^txr_[A-Za-z0-9]+$/.test(manualTaxRate)))) {
+    throw new Error("Book product or tax mismatch");
+  }
   const keyHash = proofHash(context.key);
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
-    line_items: [{ price, quantity: 1 }],
-    metadata: { rv_product: book.product, ...(context.guestHash ? { rv_guest_hash: context.guestHash, rv_book_price: price } : {}) },
+    line_items: [{ price, quantity: 1, ...(liteAutism && manualTaxRate ? { tax_rates: [manualTaxRate] } : {}) }],
+    ...(liteAutism && !manualTaxRate ? { automatic_tax: { enabled: true } } : {}),
+    metadata: {
+      rv_product: book.product,
+      ...(context.guestHash ? { rv_guest_hash: context.guestHash, rv_book_price: price } : {}),
+      ...(liteAutism && context.attribution ? { rv_book_ga4: sealBookAttribution(context.attribution) } : {}),
+    },
     success_url: origin + context.successPath,
     cancel_url: `${origin}${book.path}#kop`,
   }, { idempotencyKey: `${edition.checkoutKey}-${keyHash}` });
@@ -262,7 +294,7 @@ async function inspectGuestPurchase(stripe: Stripe, live: boolean, cookie: strin
   return { session, checkout };
 }
 
-export async function startGuestBookCheckout(cookie: string | null, edition: Edition = overthinkingEdition) {
+export async function startGuestBookCheckout(cookie: string | null, edition: Edition = overthinkingEdition, attribution?: BookAttribution | null) {
   const { book } = edition;
   const { key, live, origin } = stripeMode();
   const price = priceForCheckout(edition);
@@ -281,7 +313,7 @@ export async function startGuestBookCheckout(cookie: string | null, edition: Edi
   const secret = randomBytes(32).toString("base64url");
   const guestHash = proofHash(secret);
   const session = await createBookSession(stripe, price, live, origin, {
-    key: guestHash, guestHash, successPath: book.path + "/tack",
+    key: guestHash, guestHash, successPath: book.path + "/tack", attribution,
   }, edition);
   return { result: { kind: "checkout" as const, url: stripeCheckoutUrl(session.url) }, cookie: `${secret}.${session.id}` };
 }
@@ -307,6 +339,39 @@ export async function readGuestBookPdf(cookie: string, edition: Edition = overth
 export async function readOwnedGuestEditionPdf(account: BookAccount, edition: Edition) {
   if (!await guestEditionOwned(account, edition)) return null;
   return readBookPdf(edition);
+}
+
+export const liteAutismStorage = { bucket, path: `v1/${LITE_AUTISM_BOOK.filename}` };
+
+export async function verifiedLiteAutismSession(stripe: Stripe, session: Stripe.Checkout.Session, live: boolean) {
+  const priceId = session.metadata?.rv_book_price;
+  if (!priceId || !/^[a-f0-9]{64}$/.test(session.metadata?.rv_guest_hash ?? "")) return false;
+  const checkout = { sessionId: session.id, priceId, live, expiresAt: new Date(session.expires_at * 1000) };
+  return verifiedBookPurchase(stripe, session, checkout, liteAutismEdition);
+}
+
+export async function liteAutismEmailPurchaseReady(sessionId: string) {
+  const { key, live } = stripeMode();
+  const stripe = stripeClient(key);
+  return verifiedLiteAutismSession(stripe, await stripe.checkout.sessions.retrieve(sessionId), live);
+}
+
+// Return a short Storage URL because the approved PDF exceeds Vercel's response-size limit.
+export async function signLiteAutismDownload() {
+  const { url, key } = storageConfig();
+  const supabase = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false } });
+  const storage = supabase.storage.from(liteAutismStorage.bucket);
+  const { data: file, error: fileError } = await storage.info(liteAutismStorage.path);
+  if (fileError || !file || file.size !== liteAutismEdition.pdfSize || file.contentType !== "application/pdf") {
+    throw new Error("Book PDF unavailable");
+  }
+  const { data, error } = await storage.createSignedUrl(liteAutismStorage.path, 180, { download: LITE_AUTISM_BOOK.filename });
+  if (error || !data?.signedUrl) throw new Error("Book download unavailable");
+  const target = new URL(data.signedUrl);
+  if (target.origin !== url || !target.pathname.startsWith("/storage/v1/object/sign/") || !target.searchParams.get("token")) {
+    throw new Error("Invalid book download URL");
+  }
+  return target.href;
 }
 
 async function readBookPdf({ book, pdfSize, pdfSha256 }: Edition = overthinkingEdition) {

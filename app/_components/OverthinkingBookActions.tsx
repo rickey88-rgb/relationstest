@@ -2,22 +2,24 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { trackEvent } from "../_analytics/analytics";
+import { captureGa4CheckoutAttribution, trackEvent, trackEventBeforeNavigation } from "../_analytics/analytics";
 import { directAuthClient } from "../_lib/testAccounts/directClient";
 import { OVERTHINKING_BOOK as book } from "../_lib/overthinkingBook";
 import { STEINLER_BOOK } from "../_lib/steinlerBook";
+import { LITE_AUTISM_BOOK } from "../_lib/liteAutismBook";
 import { BOOK_CATALOG, LEGACY_BOOK_LIBRARY_API, THINKING_CATALOG_BOOK, type CatalogBook } from "../_lib/bookCatalog";
 
 const pendingBookKey = "rv-pending-book-v1";
 
-async function bookRequest(path: string, direct: boolean, method = "GET", signal?: AbortSignal, guestFallback = false) {
+async function bookRequest(path: string, direct: boolean, method = "GET", signal?: AbortSignal, guestFallback = false, body?: string) {
   const headers = new Headers();
   if (direct) {
     const { data } = await directAuthClient().auth.getSession();
     if (!data.session && !guestFallback) return new Response(null, { status: 401 });
     if (data.session) headers.set("Authorization", "Bearer " + data.session.access_token);
   }
-  return fetch(path, { method, headers, signal, cache: "no-store", referrerPolicy: "no-referrer" });
+  if (body) headers.set("Content-Type", "application/json");
+  return fetch(path, { method, headers, signal, body, cache: "no-store", referrerPolicy: "no-referrer" });
 }
 
 export function OverthinkingBuyButton({ enabled, direct, className, label = "Köp e-boken · 149 kr", offer = book }: {
@@ -25,7 +27,7 @@ export function OverthinkingBuyButton({ enabled, direct, className, label = "Kö
   direct: boolean;
   className: string;
   label?: string;
-  offer?: typeof book | typeof STEINLER_BOOK;
+  offer?: typeof book | typeof STEINLER_BOOK | typeof LITE_AUTISM_BOOK;
 }) {
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
@@ -37,7 +39,9 @@ export function OverthinkingBuyButton({ enabled, direct, className, label = "Kö
     });
 
     try {
-      const response = await bookRequest(offer.api + "?guest=1", direct, "POST", undefined, true);
+      const isLiteAutism = offer.product === LITE_AUTISM_BOOK.product;
+      const attribution = isLiteAutism ? await captureGa4CheckoutAttribution() : null;
+      const response = await bookRequest(offer.api + "?guest=1", direct, "POST", undefined, true, attribution ? JSON.stringify(attribution) : undefined);
       if (response.status === 401) {
         try { localStorage.setItem(pendingBookKey, String(Date.now())); } catch { /* The library is still available manually. */ }
         window.location.assign(direct ? "/mina-sidor?bok=kop#bibliotek" : "/logga-in?bok=kop");
@@ -46,7 +50,12 @@ export function OverthinkingBuyButton({ enabled, direct, className, label = "Kö
       if (!response.ok) throw new Error("Checkout unavailable");
       const result = await response.json();
       if (result.kind === "checkout" && new URL(result.url).origin === "https://checkout.stripe.com") {
-        window.location.assign(result.url);
+        if (isLiteAutism) {
+          trackEventBeforeNavigation("begin_checkout", {
+            value: offer.price, currency: "SEK",
+            items: [{ item_id: offer.product, item_name: offer.title, price: offer.price, quantity: 1 }],
+          }, () => window.location.assign(result.url));
+        } else window.location.assign(result.url);
       } else if (result.kind === "guest_return") {
         window.location.assign(offer.path + "/tack");
       } else if (result.kind === "owned" || result.kind === "pending") {
@@ -87,7 +96,7 @@ function LibraryBookCard({ entry, direct }: { entry: CatalogBook; direct: boolea
         return;
       }
       if (!response.ok) throw new Error("PDF unavailable");
-      if (!("api" in entry)) {
+      if (!("api" in entry) || entry.id === LITE_AUTISM_BOOK.id) {
         const { url } = await response.json();
         const signed = new URL(url);
         if (signed.protocol !== "https:" || signed.username || signed.password) throw new Error("Invalid download");
@@ -164,17 +173,21 @@ export function BookLibrary({ direct, returning = false }: { direct: boolean; re
       }
     }
     async function refresh() {
-      const [legacy, thinking, steinler] = await Promise.all([read(LEGACY_BOOK_LIBRARY_API), read(book.api), read(STEINLER_BOOK.api)]);
+      const [legacy, thinking, steinler, liteAutism] = await Promise.all([
+        read(LEGACY_BOOK_LIBRARY_API), read(book.api), read(STEINLER_BOOK.api), read(LITE_AUTISM_BOOK.api),
+      ]);
       const legacyIds: readonly unknown[] = Array.isArray(legacy?.owned) ? legacy.owned : [];
       const state = thinking?.state;
       if (!controller.signal.aborted) setResult({
         owned: BOOK_CATALOG.filter(entry => {
+          if (entry.id === LITE_AUTISM_BOOK.id) return liteAutism?.state === "ready";
           if (entry.id === STEINLER_BOOK.id) return steinler?.state === "ready";
           if (entry.id === THINKING_CATALOG_BOOK.id) return state === "ready";
           return legacyIds.includes(entry.id);
         }),
         pending: state === "pending",
-        unavailable: !Array.isArray(legacy?.owned) || !["none", "pending", "ready"].includes(state) || !["none", "ready"].includes(steinler?.state),
+        unavailable: !Array.isArray(legacy?.owned) || !["none", "pending", "ready"].includes(state) ||
+          !["none", "ready"].includes(steinler?.state) || !["none", "ready"].includes(liteAutism?.state),
       });
     }
     void refresh();

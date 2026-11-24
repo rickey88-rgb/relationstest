@@ -9,6 +9,8 @@ import { revokeAudhdRecoveryGrantsForPaymentIntent } from "../../../_lib/audhdRe
 import { processAudhdCheckoutRevocationEvent } from "../../../_lib/audhdCheckoutRevocation.server";
 import { verifyAudhdCheckoutPayment } from "../../../_lib/audhdCheckoutPayment.server";
 import { sendAutomaticAudhdRecovery } from "../../../_lib/audhdAutomaticRecovery.server";
+import { deliverLiteAutismEmail } from "../../../_lib/liteAutismDelivery.server";
+import { LITE_AUTISM_BOOK } from "../../../_lib/liteAutismBook";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -105,6 +107,9 @@ export async function POST(request: NextRequest) {
       // personal safety email. A duplicate webhook does not send again.
       if (!processed.duplicate && processed.productKey === "audhd_test" && processed.paid) {
         await sendAudhdSafetyEmail(processed.checkoutSessionId);
+      }
+      if (processed.productKey === LITE_AUTISM_BOOK.product && processed.paid) {
+        await deliverLiteAutismEmail(stripe, processed.checkoutSessionId);
       }
     }
     // This is independent from the shadow ledger: signed refund/dispute events

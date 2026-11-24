@@ -2,6 +2,7 @@ import { BOOK_OFFER_PRICES } from "./bookOffers";
 import { ADHD_DELUXE_BOOK, AUDHD_BOOK, AUTISM_BOOK } from "./legacyBookDetails";
 import { OVERTHINKING_BOOK } from "./overthinkingBook";
 import { STEINLER_BOOK } from "./steinlerBook";
+import { LITE_AUTISM_BOOK } from "./liteAutismBook";
 
 export const LEGACY_BOOKS = [
   {
@@ -31,5 +32,5 @@ export const THINKING_CATALOG_BOOK = {
   id: "du-tanker-sonder-dig-sjalv", width: 640, height: 960,
   description: "Praktiska verktyg, åtta ifyllbara skrivblad och en fjortondagarsplan för dig som fastnar i oro och ältande.",
 } as const;
-export const BOOK_CATALOG = [...LEGACY_BOOKS, THINKING_CATALOG_BOOK, STEINLER_BOOK] as const;
+export const BOOK_CATALOG = [LITE_AUTISM_BOOK, ...LEGACY_BOOKS, THINKING_CATALOG_BOOK, STEINLER_BOOK] as const;
 export type CatalogBook = (typeof BOOK_CATALOG)[number];

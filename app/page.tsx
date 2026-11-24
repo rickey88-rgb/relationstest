@@ -9,7 +9,8 @@ import HomeGuideDirectory, { type HomeGuide } from "./_components/HomeGuideDirec
 import HomeScrollLink from "./_components/HomeScrollLink";
 import AudhdBookCard from "./_components/AudhdBookCard";
 import { OVERTHINKING_BOOK as overthinkingBook } from "./_lib/overthinkingBook";
-import { bookCheckoutEnabled } from "./_lib/overthinkingBook.server";
+import { bookCheckoutEnabled, liteAutismEdition } from "./_lib/overthinkingBook.server";
+import { LITE_AUTISM_BOOK } from "./_lib/liteAutismBook";
 
 const pageUrl = "https://www.relationsvarning.se/";
 const title = "Relationsvarning – ADHD, autism, AuDHD och relationer";
@@ -202,9 +203,16 @@ export default function Landing() {
         <div className={styles.booksHeading}>
           <p className={styles.eyebrow}>Böcker och verktyg</p>
           <h2 id="books-heading">För dig som vill använda det du lärt dig</h2>
-          <p>Konkreta och lättlästa böcker för vardagen, när du vill förstå mer och pröva verktyg i din egen takt.</p>
+          <p>Berättelser om livet som det är och guider för dig som vill förstå mer eller pröva något i din egen takt.</p>
         </div>
         <div className={styles.bookGrid}>
+          {bookCheckoutEnabled(liteAutismEdition) && <article className={styles.bookCard}>
+            <Image src={LITE_AUTISM_BOOK.cover} alt={`Omslag till ${LITE_AUTISM_BOOK.title}`} width={LITE_AUTISM_BOOK.width} height={LITE_AUTISM_BOOK.height}
+              sizes="(max-width: 700px) min(100vw - 5rem, 250px), 280px" className={styles.bookMockup} />
+            <p className={styles.eyebrow}>Ny e-bok · 149 kr</p><h3>{LITE_AUTISM_BOOK.title}</h3>
+            <p>Ellie Lind om maskering, vänskap och hur svårt det kan vara att svara på ett sms om efterrätt.</p>
+            <Link href={LITE_AUTISM_BOOK.path} className={styles.bookLink}>Läs mer om boken <span aria-hidden="true">→</span></Link>
+          </article>}
           <AudhdBookCard />
           <article className={styles.bookCard}>
             <Image src="/adhd-deluxe/mockup.png" alt="ADHD DELUXE – Jobba smartare. Inte hårdare. Av Elias Voss" width={1064} height={1479} sizes="(max-width: 700px) min(100vw - 5rem, 250px), 280px" className={styles.bookMockup} />

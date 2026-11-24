@@ -1,5 +1,7 @@
 import postgres from "postgres";
 import type { PaymentProductIdentification } from "./paymentProductCatalog.server";
+import { LITE_AUTISM_BOOK } from "./liteAutismBook";
+import type { BookAttribution } from "./liteAutismProof.server";
 
 type Sql = ReturnType<typeof postgres>;
 
@@ -27,6 +29,7 @@ export type VerifiedStripePayment = {
   paymentStatus: string | null;
   paidAt: Date | null;
   lineItems: StripePaymentLineItem[];
+  bookAttribution?: BookAttribution;
 };
 
 function connectionString() {
@@ -130,6 +133,18 @@ export async function recordVerifiedStripePayment(input: VerifiedStripePayment) 
           and (attempt.stripe_payment_intent_id is null or attempt.stripe_payment_intent_id = ${input.paymentIntentId})
           and attempt.ga4_client_id is not null
           and attempt.ga4_session_id is not null
+        on conflict (stripe_checkout_session_id) do nothing
+      `;
+    }
+
+    if (input.productKey === LITE_AUTISM_BOOK.product && input.bookAttribution &&
+        input.livemode && input.checkoutStatus === "complete" && input.paymentStatus === "paid" &&
+        input.amountTotalOre === LITE_AUTISM_BOOK.amountOre && input.currency === "sek") {
+      const { clientId, sessionId } = input.bookAttribution;
+      await transaction`
+        insert into public.ga4_purchase_deliveries (
+          stripe_checkout_session_id, transaction_id, ga4_client_id, ga4_session_id
+        ) values (${input.checkoutSessionId}, ${input.checkoutSessionId}, ${clientId}, ${sessionId})
         on conflict (stripe_checkout_session_id) do nothing
       `;
     }

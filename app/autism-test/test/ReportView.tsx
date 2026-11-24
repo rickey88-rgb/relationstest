@@ -5,7 +5,7 @@ import { levelTexts, profileTexts } from "./copy";
 const section = "mt-8 space-y-4 rounded-2xl border border-neutral-200 p-5 leading-7 sm:p-6";
 const link = "underline underline-offset-4 decoration-neutral-400 focus-visible:outline-2 focus-visible:outline-offset-4";
 export default function ReportView({ result, heading }: { result: Result; heading?: Ref<HTMLHeadingElement> }) { return <>
-        <section data-flow="card" className={section} aria-labelledby="result-heading"><h2 id="result-heading" ref={heading} tabIndex={-1} className="text-2xl font-semibold outline-none">Din övergripande profil</h2>
+        <section data-flow="card" data-rv-autism-unlocked className={section} aria-labelledby="result-heading"><h2 id="result-heading" ref={heading} tabIndex={-1} className="text-2xl font-semibold outline-none">Din övergripande profil</h2>
           <p className="text-xl font-semibold">{result.level}</p><p className="text-4xl font-semibold tabular-nums">{formatPercent(result.symptomIndex)} / 100</p>
           <p className="text-sm text-neutral-600">Symptomindex för fem områden. Detta är självskattningspoäng, inte sannolikheten att ha autism.</p>
           <p>{levelTexts[result.level]}</p>

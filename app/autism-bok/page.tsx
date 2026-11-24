@@ -6,6 +6,7 @@ import { AUTISM_BOOK } from "../_lib/bookProducts.server";
 import { getAutismBookOffer, type BookOffer } from "../_lib/bookOffers";
 import { AUTISM_BOOK_SALE_ENABLED } from "../_lib/featureFlags";
 import AutismBookPreviewGallery from "./AutismBookPreviewGallery";
+import LiteAutismRecommendation from "../_components/LiteAutismRecommendation";
 import AutismBookStickyCta from "./AutismBookStickyCta";
 import styles from "./page.module.css";
 
@@ -75,5 +76,6 @@ export default async function AutismBookPage({ searchParams }: { searchParams: P
     <section className={`${styles.section} ${styles.finalOffer}`}><p className={styles.eyebrow}>En färgstark guide. Ett litet nästa steg.</p><h2>Du får bygga en vardag<br />med mer plats för dig.</h2><p>Hela boken på 52 sidor + 12 A4-sidor med ifyllbara arbetsblad.<br />Läs på mobil, surfplatta eller dator. Spara filerna och återvänd när du vill.</p><Purchase offer={offer} enabled={enabled} /></section>
     <section className={`${styles.section} ${styles.faq}`}><div><p className={styles.eyebrow}>Bra att veta</p><h2>Innan du köper.</h2><p>Undrar du något mer?<br /><a href="mailto:support@relationsvarning.se">Kontakta oss</a>, så hjälper vi dig.</p></div><div>{faqs.map(([question, answer]) => <details key={question}><summary>{question}<span aria-hidden="true">+</span></summary><p>{answer}</p></details>)}</div></section>
     {enabled && <AutismBookStickyCta price={offer.price} paymentLink={offer.paymentLink} offerType={offer.isAnalysisOffer ? "analysis" : "standard"} />}
+    <LiteAutismRecommendation className="mx-auto mb-9 w-[calc(100%-2.5rem)] max-w-4xl" />
   </main>;
 }

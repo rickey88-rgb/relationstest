@@ -3,6 +3,7 @@ import Link from "next/link";
 import guides from "../../content/autism-guides.json";
 import { ContentGuide, GuideSection, textLink } from "./ContentGuide";
 import GuideNextSteps from "./GuideNextSteps";
+import LiteAutismRecommendation from "./LiteAutismRecommendation";
 
 const sources = {
   masking: { href: "https://www.autismcentral.nhs.uk/guidance/masking-and-identity", label: "NHS Autism Central – maskering och identitet" },
@@ -44,6 +45,7 @@ export default function AutismGuide({ slug }: { slug: string }) {
         return <li key={id}><a href={source.href} className={`inline-flex min-h-11 items-center ${textLink}`}>{source.label}</a></li>;
       })}</ul>
     </GuideSection>
+    {["autism-vuxna", "autism-kvinnor", "autism-kvinnor-symtom", "maskering-autism"].includes(slug) && <LiteAutismRecommendation />}
     <GuideNextSteps sourcePage={`/${slug}`} />
   </ContentGuide>;
 }

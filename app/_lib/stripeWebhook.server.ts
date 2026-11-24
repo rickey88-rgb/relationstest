@@ -1,6 +1,8 @@
 import type Stripe from "stripe";
 import { identifyPaymentProduct } from "./paymentProductCatalog.server";
 import type { StripePaymentLineItem, VerifiedStripePayment } from "./paymentsDb.server";
+import { LITE_AUTISM_BOOK } from "./liteAutismBook";
+import { readBookAttribution } from "./liteAutismProof.server";
 
 const SUPPORTED_EVENT_TYPES = new Set([
   "checkout.session.completed",
@@ -79,6 +81,14 @@ export async function processStripeWebhookEvent(event: Stripe.Event, dependencie
   const paymentLinkId = idOf(session.payment_link);
   const productKey = await atStage("product_map", () => identifyPaymentProduct({ priceIds: lineItems.map((item) => item.priceId), paymentLinkId }));
   const isPaid = session.status === "complete" && session.payment_status === "paid";
+  const bookAttribution = productKey === LITE_AUTISM_BOOK.product && session.livemode && isPaid &&
+    session.mode === "payment" && paymentLinkId === null && session.metadata?.rv_product === LITE_AUTISM_BOOK.product &&
+    session.amount_total === LITE_AUTISM_BOOK.amountOre && session.currency === "sek" &&
+    !stripeLineItems.has_more && stripeLineItems.data.length === 1 &&
+    lineItems[0]?.quantity === 1 && lineItems[0].unitAmountOre === LITE_AUTISM_BOOK.amountOre &&
+    lineItems[0].priceId === session.metadata.rv_book_price &&
+    Boolean(lineItems[0].productId && lineItems[0].productId === process.env.LITE_AUTISM_BOOK_PRODUCT_ID?.trim())
+    ? readBookAttribution(session.metadata.rv_book_ga4) : null;
   const payment = {
     eventId: event.id,
     eventType: event.type,
@@ -94,6 +104,7 @@ export async function processStripeWebhookEvent(event: Stripe.Event, dependencie
     paymentStatus: session.payment_status,
     paidAt: isPaid ? new Date(event.created * 1000) : null,
     lineItems,
+    ...(bookAttribution ? { bookAttribution } : {}),
   } satisfies VerifiedStripePayment;
 
   const recorded = await atStage("database_ledger", () => dependencies.recordPayment(payment));

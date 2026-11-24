@@ -20,6 +20,7 @@ export const PAYMENT_PRODUCT_KEYS = [
   "adhd_deluxe",
   "overthinking_book",
   "steinler_book",
+  "lite_autism_book",
 ] as const;
 
 export type PaymentProductKey = (typeof PAYMENT_PRODUCT_KEYS)[number];
@@ -92,8 +93,9 @@ export function paymentProductCatalog(): Catalog {
   const bookPrices = {
     overthinking_book: process.env.OVERTHINKING_BOOK_PRICE_ID?.trim() ?? "",
     steinler_book: process.env.STEINLER_BOOK_PRICE_ID?.trim() ?? "",
+    lite_autism_book: process.env.LITE_AUTISM_BOOK_PRICE_ID?.trim() ?? "",
   } as const;
-  for (const key of ["overthinking_book", "steinler_book"] as const) {
+  for (const key of ["overthinking_book", "steinler_book", "lite_autism_book"] as const) {
     const bookPrice = bookPrices[key];
     if (!/^price_[A-Za-z0-9]+$/.test(bookPrice) ||
         Object.entries(catalog).some(([product, entry]) => product !== key && entry.priceIds.includes(bookPrice))) continue;

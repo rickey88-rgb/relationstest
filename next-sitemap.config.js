@@ -8,6 +8,7 @@ module.exports = {
   transform: async (_config, path) => {
     if (path === '/du-tanker-sonder-dig-sjalv' && process.env.OVERTHINKING_BOOK_CHECKOUT_ENABLED !== 'true') return null;
     if (path === '/nar-du-borjar-tvivla-pa-dig-sjalv' && process.env.STEINLER_BOOK_CHECKOUT_ENABLED !== 'true') return null;
+    if (path === '/lite-autism-har-val-ingen-dott-av' && process.env.LITE_AUTISM_BOOK_CHECKOUT_ENABLED !== 'true') return null;
     if (path === '/persona' || path.startsWith('/persona-v61') || path.startsWith('/persona/dev-') || path === '/icon.png') return null;
     return { loc: path };
   },
@@ -26,6 +27,8 @@ module.exports = {
     '/autism-bok/tack/*',
     '/du-tanker-sonder-dig-sjalv/tack',
     '/nar-du-borjar-tvivla-pa-dig-sjalv/tack',
+    '/lite-autism-har-val-ingen-dott-av/tack',
+    '/lite-autism-har-val-ingen-dott-av/utdrag',
     '/nyhetsbrev/bekrafta',
     '/nyhetsbrev/avsluta',
     '/angest-test/test',
