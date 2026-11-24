@@ -63,7 +63,7 @@ export default function SteinlerBookPage() {
             <p className={styles.lead}>Du tog upp en obetald räkning. Tio minuter senare bad du om ursäkt. Räkningen var fortfarande obetald.</p>
             <Buy enabled={enabled} />
           </div>
-          <Image src={book.mockup} width={740} height={984} sizes="(max-width: 720px) 66vw, 37vw"
+          <Image src={book.mockup} width={1254} height={1254} sizes="(max-width: 384px) calc(100vw - 40px), (max-width: 720px) 344px, (max-width: 1160px) 37vw, 400px"
             alt={`Bokomslaget till ${book.title} av My Steinler`} preload className={styles.heroBook} />
         </div>
       </section>

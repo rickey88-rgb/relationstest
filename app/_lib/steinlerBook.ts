@@ -10,7 +10,7 @@ export const STEINLER_BOOK = {
   amountOre: 14900,
   filename: "Nar-du-borjar-tvivla-pa-dig-sjalv-My-Steinler.pdf",
   cover: "/nar-du-borjar-tvivla-pa-dig-sjalv/framsida.webp",
-  mockup: "/nar-du-borjar-tvivla-pa-dig-sjalv/bokmockup.webp",
+  mockup: "/nar-du-borjar-tvivla-pa-dig-sjalv/bokmockup-godkand.png",
   width: 900,
   height: 1386,
   description: "Femton kommenterade samtal och tio ifyllningsbara skrivblad om manipulation, gränser och hur du får tillbaka ditt perspektiv.",

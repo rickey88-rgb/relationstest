@@ -1,5 +1,5 @@
 .page { background: #f9f4ed; color: #24212a; }
-.hero { color: #f5ebe1; background: radial-gradient(ellipse at 82% 65%, #3a2937 0, #201924 46%, #15131c 78%); }
+.hero { --rv-text: #f5ebe1; color: var(--rv-text); background: radial-gradient(ellipse at 82% 65%, #3a2937 0, #201924 46%, #15131c 78%); }
 .heroInner { display: grid; grid-template-columns: 1.13fr .87fr; gap: 2rem; max-width: 72rem; margin: auto; padding: clamp(3rem, 7vw, 6.25rem) clamp(1.25rem, 5vw, 4.5rem); align-items: center; }
 .heroText, .twoColumn > *, .cards > * { min-width: 0; }
 .byline { margin: 0 0 1.1rem; color: #e4ad8e; font-size: .83rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
@@ -7,9 +7,9 @@
 .page h1, .page h2 { font-family: Georgia, serif; letter-spacing: -.035em; }
 .page h1 { max-width: 12ch; font-size: clamp(2.9rem, 6.3vw, 5.75rem); line-height: 1; margin: 0; }
 .page h1 em { color: #e9b197; font-weight: inherit; }
-.subtitle { font-family: Georgia, serif; font-size: clamp(1.07rem, 2.2vw, 1.4rem); max-width: 33ch; margin: 1.2rem 0 0; line-height: 1.45; }
+.subtitle { color: #f5ebe1; font-family: Georgia, serif; font-size: clamp(1.07rem, 2.2vw, 1.4rem); max-width: 33ch; margin: 1.2rem 0 0; line-height: 1.45; }
 .lead { max-width: 39ch; line-height: 1.6; color: #dfd4da; margin: .85rem 0 1.4rem; }
-.heroBook { width: min(100%, 25rem); height: auto; justify-self: center; object-fit: contain; filter: drop-shadow(0 1rem 2rem #100d16a0); }
+.heroBook { width: min(100%, 25rem); height: auto; justify-self: center; object-fit: contain; border: 1px solid #5e464e; border-radius: .6rem; box-shadow: 0 1rem 2rem #100d1680; }
 .buyBlock { margin-top: 1.5rem; }
 .buyBlock p { margin: .65rem 0 0; font-size: .86rem; opacity: .89; }
 .cta { min-height: 3.2rem; border: 0; border-radius: .35rem; background: #edb396; color: #221923; padding: .88rem 1.38rem; font-size: 1.04rem; font-weight: 750; cursor: pointer; }
@@ -36,7 +36,7 @@
 .guideLinks { max-width: 72rem; margin: auto; padding: 0 clamp(1.25rem, 5vw, 4.5rem) 3rem; font-size: .94rem; }
 @media(max-width: 720px) {
   .heroInner, .twoColumn, .cards { grid-template-columns: 1fr; }
-  .heroBook { width: min(65vw, 18rem); }
+  .heroBook { width: min(100%, 21.5rem); }
   .heroInner { gap: 1.75rem; }
   .hero h1 { max-width: 14ch; }
   .twoColumn { gap: 1.6rem; }
