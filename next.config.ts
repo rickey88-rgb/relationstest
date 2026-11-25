@@ -45,6 +45,21 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
+        source: "/no/hjernen-i-kryssild/leseprove.pdf",
+        headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }],
+      },
+      {
+        source: "/no/audhd-test/test",
+        headers: [{ key: "Referrer-Policy", value: "no-referrer" }],
+      },
+      {
+        source: "/no/hjernen-i-kryssild/takk",
+        headers: [
+          { key: "Cache-Control", value: "private, no-store" },
+          { key: "Referrer-Policy", value: "no-referrer" },
+        ],
+      },
+      {
         source: "/seo-images/:path*",
         headers: [
           {

@@ -65,5 +65,15 @@ function postRecovery(token) {
   response = await postRecovery(recovery.issueAudhdRecoveryToken());
   assert.equal(new URL(response.headers.get("location")).search, "?recovery=invalid");
   assert.equal(revocations, 1, "a refund revokes a recovery grant before it can be redeemed");
+  grantAvailable = true; verification = { verified: true, checkoutSessionId: "cs_live_paid", paymentIntentId: "pi_paid", priceId: "price_audhd" };
+  const norwegianToken = recovery.issueAudhdRecoveryToken();
+  const norwegianUrl = `https://www.relationsvarning.se/api/audhd-recovery/redeem?market=no&token=${norwegianToken}`;
+  const norwegianPage = await route.GET(new NextRequest(norwegianUrl));
+  assert.match(await norwegianPage.text(), /lang="nb-NO"/);
+  const norwegianReturn = await route.POST(new NextRequest(norwegianUrl, {
+    method: "POST", body: new URLSearchParams({token: norwegianToken}),
+  }));
+  assert.equal(norwegianReturn.headers.get("location"), "https://www.relationsvarning.se/no/audhd-test/test?recovery=success");
+  assert.match(norwegianReturn.headers.get("set-cookie"), /rv_audhd_recovery_v2_no=/);
   console.log("PASS: a GET link preview cannot look up or consume a grant; an explicit POST redeems once, redirects safely to the paid result and rejects reuse.");
 })().catch(error => { console.error(error); process.exitCode = 1; });

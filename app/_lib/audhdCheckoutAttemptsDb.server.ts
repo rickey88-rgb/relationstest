@@ -2,6 +2,8 @@ import { randomBytes, randomUUID } from "node:crypto";
 import postgres from "postgres";
 import { AUDHD_CHECKOUT_ATTEMPT_RETENTION_SECONDS, type EncryptedAudhdCheckoutAnswers } from "./audhdCheckoutAttempt.server";
 import type { AudhdCheckoutAnalyticsAttribution } from "./audhdCheckoutAnalytics.server";
+import type { Market } from "../_content/market";
+import { norwayStripeEnvironment } from "./norwayLaunch.server";
 
 type Sql = ReturnType<typeof postgres>;
 const globalForAudhdCheckoutAttempts = globalThis as typeof globalThis & { audhdCheckoutAttemptsSql?: Sql };
@@ -132,8 +134,10 @@ export async function releaseExpiredAudhdCheckoutSession(input: { attemptId: str
 }
 
 /** Binds only the reservation owned by this browser-secret hash to the Session Stripe just created. */
-export async function bindAudhdCheckoutSession(input: { attemptId: string; browserSecretHash: string; checkoutReferenceId: string; checkoutSessionId: string }) {
-  if (!/^cs_live_[A-Za-z0-9]+$/.test(input.checkoutSessionId)) throw new Error("AuDHD checkout session ID must be a live Stripe Checkout Session");
+export async function bindAudhdCheckoutSession(input: { attemptId: string; browserSecretHash: string; checkoutReferenceId: string; checkoutSessionId: string }, market: Market = "sv") {
+  const sandbox = market === "no" && !norwayStripeEnvironment().live;
+  const sessionPattern = sandbox ? /^cs_test_[A-Za-z0-9]+$/ : /^cs_live_[A-Za-z0-9]+$/;
+  if (!sessionPattern.test(input.checkoutSessionId)) throw new Error("AuDHD checkout session mode mismatch");
   const rows = await database()<{ id: string }[]>`
     update public.audhd_checkout_attempts
     set stripe_checkout_session_id = ${input.checkoutSessionId}, checkout_created_at = now(), updated_at = now()

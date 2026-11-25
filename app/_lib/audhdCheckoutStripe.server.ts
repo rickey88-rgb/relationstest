@@ -79,7 +79,7 @@ export async function createAudhdStripeCheckout(checkoutReferenceId: string, mar
       mode: "payment",
       line_items: [{ price: priceId, quantity: 1 }],
       ...(automaticTax ? { automatic_tax: { enabled: true } } : {}),
-      ...(market === "no" ? { locale: "nb", billing_address_collection: "required", metadata: { rv_product: "audhd_test_no" } } : {}),
+      ...(market === "no" ? { locale: "nb", billing_address_collection: "required", adaptive_pricing: { enabled: false }, metadata: { rv_product: "audhd_test_no" } } : {}),
       client_reference_id: checkoutReferenceId,
       expires_at: Math.floor(Date.now() / 1000) + AUDHD_STRIPE_CHECKOUT_SESSION_SECONDS,
       success_url: `${origin}/api/audhd-checkout/return?session_id={CHECKOUT_SESSION_ID}${stripeReturn}`,

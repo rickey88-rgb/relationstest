@@ -23,6 +23,13 @@ let mail = createLoader()(path.join(__dirname, "audhdRecoveryEmail.server.ts"));
   assert.match(body.text, /https:\/\/www\.relationsvarning\.se\/api\/audhd-recovery\/redeem\?token=test/);
   assert.match(body.text, /giltig i 72 timmar och kan användas en gång/);
   assert.match(body.text, /Öppna mitt resultat/);
+  await mail.sendAudhdRecoveryEmail({ market: "no", to: "buyer@example.test", recoveryUrl: "https://www.relationsvarning.se/api/audhd-recovery/redeem?market=no&token=test" });
+  const norwegianMessage = JSON.parse(request.init.body);
+  assert.equal(norwegianMessage.subject, "Din personlige AuDHD-rapport");
+  assert.match(norwegianMessage.text, /199 NOK/);
+  assert.match(norwegianMessage.text, /Åpne rapporten min/);
+  assert.match(norwegianMessage.text, /market=no&token=test/);
+  assert.match(norwegianMessage.text, /Angrerettskjema/);
 
   global.fetch = async () => ({ ok: false });
   await assert.rejects(

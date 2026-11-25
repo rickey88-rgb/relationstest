@@ -18,7 +18,7 @@ export default function Page() {
     </section>
     <section className="space-y-3"><h2 className="text-2xl font-semibold">Angrerett og reklamasjon</h2>
       <p>Du kan angre kjøpet innen 14 dager fra avtaledagen, også om du åpner rapporten eller laster ned e-boka. Send en tydelig beskjed til <a className="underline" href="mailto:support@relationsvarning.se">support@relationsvarning.se</a>. Oppgi gjerne e-postadressen du betalte med, produktet og kjøpsdatoen for å hjelpe oss å finne betalingen. Vi tilbakebetaler med samme betalingsmiddel innen 14 dager etter at vi mottar beskjeden.</p>
-      <p>Du kan bruke <a className="underline" href="https://www.regjeringen.no/no/dokument/dep/bld/skjema/skjema-2/skjema-om-angrerett/id614564/">det offentlige angrerettskjemaet</a>.</p>
+      <p>Du kan bruke <a className="underline" href={norwegian.withdrawalForm}>det offentlige angrerettskjemaet</a>.</p>
       <p>Kontakt oss hvis leveransen mangler eller har en feil. Dine lovfestede rettigheter ved kjøp av digitale ytelser gjelder. Unngå å legge ved testsvar eller selve rapporten når du skriver til oss.</p>
     </section>
     <Link href="/no/personvern" className="underline">Personvernerklæring</Link>

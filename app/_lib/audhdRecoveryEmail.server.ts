@@ -1,4 +1,4 @@
-import type { Market } from "../_content/market";
+import { norwegian, type Market } from "../_content/market";
 const RESEND_API_URL = "https://api.resend.com/emails";
 const RESEND_REQUEST_TIMEOUT_MS = 8_000;
 
@@ -49,7 +49,15 @@ export async function sendTransactionalRecoveryEmail(input: { to: string; subjec
 export async function sendAudhdRecoveryEmail(input: { market?: Market; to: string; recoveryUrl: string; idempotencyKey?: string }) {
   if (input.market === "no") return sendTransactionalRecoveryEmail({
     to: input.to, idempotencyKey: input.idempotencyKey, subject: "Din personlige AuDHD-rapport",
-    text: ["Hei!", "", "Takk for kjøpet. Åpne AuDHD-rapporten din med lenken nedenfor.", input.recoveryUrl, "", "Lenken er gyldig i 72 timer og kan brukes én gang. Velg «Åpne rapporten min» når du kommer til siden.", "Du kan lagre rapporten som PDF for å beholde den.", "", "Kjøpsvilkår: https://www.relationsvarning.se/no/kjopsvilkar", "Kundestøtte: support@relationsvarning.se", "Relationsvarning.se"].join("\n"),
+    text: [
+      "Hei!", "", `Takk for kjøpet av den fullstendige AuDHD-rapporten for ${norwegian.reportPrice} NOK.`,
+      "Åpne rapporten med lenken nedenfor.", input.recoveryUrl, "",
+      "Lenken er gyldig i 72 timer og kan brukes én gang. Velg «Åpne rapporten min» når du kommer til siden.",
+      "Du kan lagre rapporten som PDF for å beholde den.", "",
+      "Du kan angre innen 14 dager. Kontakt support@relationsvarning.se for angrerett, reklamasjon eller hjelp.",
+      "Angrerettskjema: " + norwegian.withdrawalForm,
+      "Kjøpsvilkår: https://www.relationsvarning.se/no/kjopsvilkar", "Relationsvarning.se",
+    ].join("\n"),
   });
   return sendTransactionalRecoveryEmail({
     to: input.to,

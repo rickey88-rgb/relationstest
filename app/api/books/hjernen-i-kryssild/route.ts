@@ -31,7 +31,12 @@ export async function POST(request: NextRequest) {
         headers: { cookie: request.headers.get("cookie") ?? "" },
       });
       const direct = await restoreCheckout(proofRequest);
-      if (!direct.ok && !(await restoreRecovery(proofRequest)).ok) return json({ error: "offer" }, 403);
+      if (!direct.ok) {
+        const recovered = await restoreRecovery(proofRequest);
+        if (!recovered.ok) return direct.status === 503 || recovered.status === 503
+          ? json({ error: "unavailable" }, 503)
+          : json({ error: "offer" }, 403);
+      }
     }
     const guest = guestBookCookieFrom(request, norwegianBookEdition);
     const { result, cookie } = await startGuestBookCheckout(guest, norwegianBookEdition, parseBookAttribution(data?.analytics), offerPrice);

@@ -26,6 +26,8 @@ Verksamheten har uppgett omsättning under gränsen och Stripe visade ingen akti
 
 Hela PDF-filen ligger i den privata Supabase-hinken `overthinking-book-private`, objekt `v1/Hjernen-i-kryssild.pdf`. Servern verifierar filstorleken 413902 byte och SHA-256 `26d02a8375d47ee697db6cff10e1f4d637f5fe3fc3a3c9418d376433802eea79`. Kundmejlen återanvänder Resend. Testfrågor och rapportinnehåll skickas aldrig i mejlen.
 
+Stripe använder befintlig Supabase-endpoint `customer-tests/stripe-webhook` och dess signerade vidarebefordran till Vercel för dessa betalningar. De norska sessionerna använder metadata för produktmappning och lämnar det svenska direktflödets markör orörd. Stripe Checkout visar bokmål och NOK även om köparens webbläsare föredrar ett annat språk eller en annan valuta.
+
 ## Driftsättning och uppföljning
 
 1. För Stripe-sandbox behövs `NORWAY_CHECKOUT_MODE=test`, `NORWAY_STRIPE_TEST_KEY`, sandboxens separata produkt- och pris-ID:n och en testanslutning till checkout-tabellerna. På preview används dess Vercel-adress. Kör migrationsfilen `202611250001_audhd_checkout_sandbox.sql` på testanslutningen för att kunna binda en sandbox-session. Ingen motsvarande schemaändring behövs för liveköp. Bekräfta checkout, webhook, gästnedladdning, rabatt, rapportåteröppning och mejl före skarp aktivering.

@@ -30,6 +30,8 @@ test("all books deliver once, and verify the entire package again at access time
     AUDHD_BOOK_ALLOWED_PRICE_IDS: "price_audhd,price_audhdAnalysis",
     OVERTHINKING_BOOK_PRICE_ID: "price_overthinking", STEINLER_BOOK_PRICE_ID: "price_steinler",
     LITE_AUTISM_BOOK_PRICE_ID: "price_lite", LITE_AUTISM_BOOK_PRODUCT_ID: "prod_lite",
+    NORWAY_BOOK_PRICE_ID: "price_norwegian", NORWAY_BOOK_OFFER_PRICE_ID: "price_norwegianOffer",
+    NORWAY_BOOK_PRODUCT_ID: "prod_norwegian",
     STRIPE_PAYMENT_PRODUCT_MAP_JSON: "{}",
   });
   const offers = [
@@ -42,6 +44,8 @@ test("all books deliver once, and verify the entire package again at access time
     ["overthinking_book", "du-tanker-sonder-dig-sjalv", "price_overthinking", null, 14900, 1],
     ["steinler_book", "nar-du-borjar-tvivla-pa-dig-sjalv", "price_steinler", null, 14900, 1],
     ["lite_autism_book", "lite-autism-har-val-ingen-dott-av", "price_lite", null, 14900, 1],
+    ["hjernen_i_kryssild", "hjernen-i-kryssild", "price_norwegian", null, 24900, 1],
+    ["hjernen_i_kryssild", "hjernen-i-kryssild", "price_norwegianOffer", null, 14900, 1],
   ];
   let checkoutReads = 0;
   const orders = new Map();
@@ -60,17 +64,19 @@ test("all books deliver once, and verify the entire package again at access time
   };
   function orderFor(offer, sequence) {
     const [product, , price, link, amount] = offer;
+    const norwegian = product === "hjernen_i_kryssild";
+    const currency = norwegian ? "nok" : "sek";
     const id = "cs_live_fixture" + sequence;
     const intentId = "pi_" + id;
-    const session = { id, livemode: true, mode: "payment", status: "complete", payment_status: "paid", currency: "sek",
+    const session = { id, livemode: true, mode: "payment", status: "complete", payment_status: "paid", currency,
       amount_total: amount, payment_intent: intentId, payment_link: link, customer_details: { email: buyer },
-      metadata: { rv_product: product, ...(product === "steinler_book" ? { rv_book_price: price } : {}) } };
-    const item = { price: { id: price, product: product === "lite_autism_book" ? "prod_lite" : "prod_fixture" },
-      quantity: 1, currency: "sek", amount_total: amount };
+      metadata: { rv_product: product, ...(product === "steinler_book" || norwegian ? { rv_book_price: price } : {}) } };
+    const item = { price: { id: price, product: norwegian ? "prod_norwegian" : product === "lite_autism_book" ? "prod_lite" : "prod_fixture" },
+      quantity: 1, currency, amount_total: amount };
     const charge = { paid: true, captured: true, refunded: false, amount_refunded: 0, disputed: false,
-      livemode: true, amount, currency: "sek", payment_intent: intentId };
+      livemode: true, amount, currency, payment_intent: intentId };
     orders.set(id, { session, item, charge, intent: {
-      id: intentId, livemode: true, status: "succeeded", currency: "sek", amount_received: amount, latest_charge: charge,
+      id: intentId, livemode: true, status: "succeeded", currency, amount_received: amount, latest_charge: charge,
     } });
     return { session, charge };
   }
@@ -100,7 +106,8 @@ test("all books deliver once, and verify the entire package again at access time
       } },
       "@supabase/supabase-js": { createClient: () => ({ storage: { from: () => ({
         download: async key => {
-          const source = key.startsWith("v1/Du-tanker") ? process.env.OVERTHINKING_BOOK_TEST_PDF : process.env.STEINLER_BOOK_TEST_PDF;
+          const source = key === "v1/Hjernen-i-kryssild.pdf" ? process.env.NORWAY_BOOK_TEST_PDF :
+            key.startsWith("v1/Du-tanker") ? process.env.OVERTHINKING_BOOK_TEST_PDF : process.env.STEINLER_BOOK_TEST_PDF;
           return { data: source ? new Blob([readFileSync(source)]) : null };
         },
         info: async () => ({ data: { size: 12165871, contentType: "application/pdf" } }),
@@ -144,8 +151,14 @@ test("all books deliver once, and verify the entire package again at access time
       const key = "book-delivery/" + session.id;
       assert.equal(attempts.filter(value => value === key).length, 1);
       const message = messages.get(key);
-      assert.match(message.html, /<img src="https:\/\/books\.example\.test\//);
-      assert.match(message.html, /Tack för ditt köp!|Mitt bibliotek/);
+      if (product === "hjernen_i_kryssild") {
+        assert.equal(message.subject, "Din e-bok – Hjernen i kryssild");
+        assert.match(message.text, new RegExp(offer[4] / 100 + " NOK"));
+        assert.match(message.text, /Angrerettskjema/);
+      } else {
+        assert.match(message.html, /<img src="https:\/\/books\.example\.test\//);
+        assert.match(message.html, /Tack för ditt köp!|Mitt bibliotek/);
+      }
       const urls = message.text.split("\n").flatMap(line => line.includes("/api/books/delivery/") ? [new URL(line.split(": ")[1])] : []);
       assert.equal(urls.length, fileCount);
       for (const url of urls) {
@@ -161,9 +174,11 @@ test("all books deliver once, and verify the entire package again at access time
           charge.disputed = true;
           assert.equal((await delivery.bookPackageDownload(new Request(url), bookId)).status, 403);
           charge.disputed = false;
-        } else if (process.env.OVERTHINKING_BOOK_TEST_PDF && process.env.STEINLER_BOOK_TEST_PDF) {
+        } else {
+          const source = product === "hjernen_i_kryssild" ? process.env.NORWAY_BOOK_TEST_PDF :
+            product === "overthinking_book" ? process.env.OVERTHINKING_BOOK_TEST_PDF : process.env.STEINLER_BOOK_TEST_PDF;
+          if (!source) continue;
           const result = await delivery.bookPackageDownload(new Request(url), bookId);
-          const source = product === "overthinking_book" ? process.env.OVERTHINKING_BOOK_TEST_PDF : process.env.STEINLER_BOOK_TEST_PDF;
           assert.equal(result.status, 200);
           assert.deepEqual(Buffer.from(await result.arrayBuffer()), readFileSync(source));
           charge.refunded = true;

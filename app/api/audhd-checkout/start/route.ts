@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
       stage = "stripe_create";
       const renewedCheckout = await createAudhdStripeCheckout(retry.checkoutReferenceId, market);
       stage = "bind";
-      await bindAudhdCheckoutSession({ attemptId, browserSecretHash, checkoutReferenceId: retry.checkoutReferenceId, checkoutSessionId: renewedCheckout.checkoutSessionId });
+      await bindAudhdCheckoutSession({ attemptId, browserSecretHash, checkoutReferenceId: retry.checkoutReferenceId, checkoutSessionId: renewedCheckout.checkoutSessionId }, market);
       pendingReservation = null;
       return response({ checkoutUrl: renewedCheckout.checkoutUrl }, 201);
     }
@@ -105,7 +105,7 @@ export async function POST(request: NextRequest) {
     stage = "stripe_create";
     const checkout = await createAudhdStripeCheckout(reservation.checkoutReferenceId, market);
     stage = "bind";
-    await bindAudhdCheckoutSession({ attemptId, browserSecretHash, checkoutReferenceId: reservation.checkoutReferenceId, checkoutSessionId: checkout.checkoutSessionId });
+    await bindAudhdCheckoutSession({ attemptId, browserSecretHash, checkoutReferenceId: reservation.checkoutReferenceId, checkoutSessionId: checkout.checkoutSessionId }, market);
     pendingReservation = null;
     return response({ checkoutUrl: checkout.checkoutUrl }, 201);
   } catch (error) {

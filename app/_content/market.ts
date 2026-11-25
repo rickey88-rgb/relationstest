@@ -7,6 +7,7 @@ export const norwegian = {
   reportPrice: 199,
   bookPrice: 249,
   bookOffer: 149,
+  withdrawalForm: "https://www.regjeringen.no/no/dokument/dep/bld/skjema/skjema-2/skjema-om-angrerett/id614564/",
 } as const;
 
 export const swedishToNorwegian: Readonly<Record<string, string>> = {

@@ -290,10 +290,13 @@ async function createBookSession(stripe: Stripe, price: string, live: boolean, o
   }
   if (norwegianBook && (idOf(configuredPrice.product) !== process.env.NORWAY_BOOK_PRODUCT_ID?.trim() ||
       (live && configuredPrice.tax_behavior !== "inclusive"))) throw new Error("Norwegian book product or tax mismatch");
+  const cancelPath = norwegianBook
+    ? book.path + (price === process.env.NORWAY_BOOK_OFFER_PRICE_ID?.trim() ? "?tilbud=1#kjop" : "#kjop")
+    : book.path + "#kop";
   const keyHash = proofHash(context.key);
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
-    ...(norwegianBook ? { locale: "nb", billing_address_collection: "required" } : {}),
+    ...(norwegianBook ? { locale: "nb", billing_address_collection: "required", adaptive_pricing: { enabled: false } } : {}),
     line_items: [{ price, quantity: 1, ...(liteAutism && manualTaxRate ? { tax_rates: [manualTaxRate] } : {}) }],
     ...(liteAutism && !manualTaxRate ? { automatic_tax: { enabled: true } } : {}),
     metadata: {
@@ -302,7 +305,7 @@ async function createBookSession(stripe: Stripe, price: string, live: boolean, o
       ...((liteAutism || norwegianBook) && context.attribution ? { rv_book_ga4: sealBookAttribution(context.attribution) } : {}),
     },
     success_url: origin + context.successPath,
-    cancel_url: `${origin}${book.path}${norwegianBook ? "#kjop" : "#kop"}`,
+    cancel_url: origin + cancelPath,
   }, { idempotencyKey: `${edition.checkoutKey}-${keyHash}` });
   const binding = { sessionId: session.id, priceId: price, live, expiresAt: new Date(session.expires_at * 1000) };
   if (!matchesBookSession(session, binding, edition) || session.status !== "open"
