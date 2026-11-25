@@ -46,7 +46,7 @@ export default function SiteFooter() {
             src="https://climate.stripe.com/badge/7HtcA4?theme=light&size=small&locale=sv-SE"
             width={380}
             height={38}
-            className="block h-[58px] w-full max-w-[380px] border-0 min-[375px]:h-[38px]"
+            className="block h-[4.5rem] w-full max-w-[380px] border-0 sm:h-[38px] sm:pointer-coarse:h-[4.5rem]"
             loading="lazy"
             title="Stripe Climate – Relationsvarnings klimatmärke"
             referrerPolicy="no-referrer"
