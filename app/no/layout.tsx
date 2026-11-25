@@ -27,6 +27,7 @@ export default function NorwegianLayout({ children }: { children: React.ReactNod
           <Link className="underline" href="/no/personvern">Personvern</Link>
           <Link className="underline" href="/no/kjopsvilkar">Kjøpsvilkår</Link>
           <AnalyticsSettings market="no" />
+          <NorwegianLanguageLink placement="footer" />
         </nav>
       </div>
     </footer>
