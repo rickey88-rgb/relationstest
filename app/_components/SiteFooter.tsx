@@ -40,6 +40,26 @@ export default function SiteFooter() {
             support@relationsvarning.se
           </a>
         </div>
+        <div className="mt-2 flex flex-col items-start sm:flex-row sm:items-center sm:gap-4">
+          <iframe
+            {...{ credentialless: "" }}
+            src="https://climate.stripe.com/badge/7HtcA4?theme=light&size=small&locale=sv-SE"
+            width={380}
+            height={38}
+            className="block h-[58px] w-full max-w-[380px] border-0 min-[375px]:h-[38px]"
+            loading="lazy"
+            title="Stripe Climate – Relationsvarnings klimatmärke"
+            referrerPolicy="no-referrer"
+            sandbox=""
+          />
+          <a
+            href="https://climate.stripe.com/pVny59"
+            referrerPolicy="no-referrer"
+            className="inline-flex min-h-11 items-center rounded-sm text-xs underline decoration-neutral-300 underline-offset-4 hover:text-neutral-900 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900"
+          >
+            Vårt klimatåtagande
+          </a>
+        </div>
       </div>
     </footer>
   );
