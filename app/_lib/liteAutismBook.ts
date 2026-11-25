@@ -14,6 +14,11 @@ export const LITE_AUTISM_BOOK = {
   illustrations: 31,
   filename: "lite-autism-har-val-ingen-dott-av.pdf",
   cover: "/lite-autism-har-val-ingen-dott-av/bokmockup.webp",
+  productMockup: {
+    src: "/lite-autism-har-val-ingen-dott-av/bokmockup-spokmaskot.webp",
+    width: 1086,
+    height: 1448,
+  },
   front: "/lite-autism-har-val-ingen-dott-av/framsida.webp",
   social: "/lite-autism-har-val-ingen-dott-av/delningsbild.jpg",
   preview: "/lite-autism-har-val-ingen-dott-av/utdrag",

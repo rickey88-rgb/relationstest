@@ -78,7 +78,7 @@ export default function LiteAutismBookPage() {
             <p className={styles.purchaseNote}>{enabled ? "PDF · Direkt efter köp · Inget konto krävs" : "Gratisutdraget går att läsa redan nu."}</p>
           </div>
           <div className={styles.heroArt}>
-            <Image src={book.cover} alt={`Bokomslag till ${book.title}, med Relationsvarnings spöke`} width={book.width} height={book.height}
+            <Image {...book.productMockup} alt={`Bokomslag till ${book.title}, med Relationsvarnings spöke`}
               preload sizes="(max-width: 640px) 92vw, (max-width: 1024px) 46vw, 510px" />
           </div>
         </div>

@@ -30,7 +30,8 @@ export default function BookstorePage() {
             <li key={book.id}>
               <Link href={book.path} className={styles.card}>
                 <div className={styles.cover}>
-                  <Image src={book.cover} width={book.width} height={book.height} alt=""
+                  <Image {...(book.id === LITE_AUTISM_BOOK.id ? book.productMockup : { src: book.cover, width: book.width, height: book.height })}
+                    alt=""
                     sizes="(max-width: 539px) 78vw, (max-width: 959px) 41vw, 245px" />
                 </div>
                 <div className={styles.details}>

@@ -94,9 +94,8 @@
   position: relative;
   isolation: isolate;
   width: min(100%, 510px);
+  aspect-ratio: 8 / 9;
   margin-inline: auto;
-  display: grid;
-  place-items: center;
 }
 .heroArt::before {
   content: "";
@@ -108,7 +107,7 @@
   background: linear-gradient(150deg, #f9e0e5b3, #c5e3f355 64%, #fff2dcaa);
   transform: rotate(-10deg);
 }
-.heroArt img { display: block; height: auto; width: 100%; }
+.heroArt img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
 
 .actions { display: flex; flex-wrap: wrap; align-items: center; gap: .65rem; scroll-margin-top: 6rem; }
 .primary, .secondary {
@@ -212,7 +211,6 @@
   .hero h1 { max-width: 15ch; font-size: clamp(2.4rem, 10vw, 4.2rem); }
   .hero::before { inset: -22% -30% auto auto; }
   .heroArt { width: min(95%, 360px); }
-  .heroArt img { width: 100%; }
   .byline { margin-bottom: .7rem; font-size: .72rem; }
   .subtitle { margin-top: 1.1rem; }
   .heroLead { font-size: .97rem; margin: .3rem 0 .95rem; }
