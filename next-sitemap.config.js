@@ -13,7 +13,7 @@ module.exports = {
     if (path === '/du-tanker-sonder-dig-sjalv' && process.env.OVERTHINKING_BOOK_CHECKOUT_ENABLED !== 'true') return null;
     if (path === '/nar-du-borjar-tvivla-pa-dig-sjalv' && process.env.STEINLER_BOOK_CHECKOUT_ENABLED !== 'true') return null;
     if (path === '/lite-autism-har-val-ingen-dott-av' && process.env.LITE_AUTISM_BOOK_CHECKOUT_ENABLED !== 'true') return null;
-    if (path === '/persona' || path.startsWith('/persona-v61') || path.startsWith('/persona/dev-') || path === '/icon.png') return null;
+    if (/^\/persona(?:-v[\d.]+)?(?:\/|$)/i.test(path) || path === '/icon.png') return null;
     return { loc: path };
   },
   additionalPaths: async () => [
@@ -25,8 +25,7 @@ module.exports = {
     '/no', '/no/*',
     "/persona-v61", "/persona-v61/*",
     "/persona",
-    "/persona/test",
-    "/persona/dev-report",
+    "/persona/*",
     '/juridisk-information',
     '/autism-bok/tack',
     '/autism-bok/tack/*',

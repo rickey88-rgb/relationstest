@@ -1,10 +1,11 @@
 "use server";
 import { notFound } from "next/navigation";
 import { buildPurchaseReport, parsePurchase } from "../persona/_domain/purchase-v61/index";
+import { personaPublicPaused } from "../_lib/personaAvailability.server";
 
 /** Public response is deliberately a teaser, never the full report or its internal trace. */
 export async function analyzePersonaV61(input: unknown) {
-  if (process.env.TEST_ACCOUNTS_PERSONA_V61_ENABLED !== "true") notFound();
+  if (personaPublicPaused() || process.env.TEST_ACCOUNTS_PERSONA_V61_ENABLED !== "true") notFound();
   const submission = parsePurchase(input, true);
   const missing = submission.answers.filter(a => a === 0).length;
   if (missing) return { state: "insufficient" as const, canPurchase: false,

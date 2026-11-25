@@ -5,6 +5,7 @@ import { accountLaunchUnavailable, accountPortalEnabled, isAccountLaunchPath } f
 import { authorizedCleanupJob } from "./app/_lib/accountCleanupContext.server";
 import { directPortalEnabled } from "./app/_lib/testAccounts/directPublic";
 import { norwayIndexable } from "./app/_lib/norwayLaunch.server";
+import { personaPublicPaused } from "./app/_lib/personaAvailability.server";
 
 // Next's configured redirects are case-insensitive. These exact request paths
 // therefore live here so a misspelled URL cannot catch the real landing page.
@@ -46,6 +47,17 @@ export function proxy(request: NextRequest) {
     pathname = decodeURIComponent(pathname);
   } catch {
     // Keep malformed paths on the normal 404 path.
+  }
+
+  if (personaPublicPaused() && /^\/persona(?:-v[\d.]+)?(?:\/|$)/i.test(pathname)) {
+    return new NextResponse("Sidan finns inte.", {
+      status: 404,
+      headers: {
+        "Cache-Control": "private, no-store",
+        "Content-Type": "text/plain; charset=utf-8",
+        "X-Robots-Tag": "noindex, nofollow",
+      },
+    });
   }
 
   const destination = typoRedirects[pathname];

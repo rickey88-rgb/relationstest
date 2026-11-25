@@ -1,4 +1,6 @@
 "use server";
+import { notFound } from "next/navigation";
+import { personaPublicPaused } from "../../_lib/personaAvailability.server";
 import { questions, ratingLabels } from "../_domain/v3/questions";
 import { VERSIONS } from "../_domain/v3/manifest";
 import { parseSubmission } from "../_domain/v3/submission";
@@ -23,6 +25,7 @@ export type PreviewResult = {
 
 /** The public response contains one teaser and its supporting answers. */
 export async function getPersonaPreview(input: unknown): Promise<PreviewResult> {
+  if (personaPublicPaused()) notFound();
   try {
     if (input && typeof input === "object" && "reportVersion" in input && (input.reportVersion === v5.report || input.reportVersion === v4.report)) {
       const teaser = input.reportVersion === v5.report ? buildV5Teaser(input) : buildTeaser(input);
