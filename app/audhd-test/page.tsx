@@ -4,16 +4,10 @@ import EditorialSurface from "../_components/EditorialSurface";
 import { EditorialArticleJsonLd, getEditorialArticleSchema, getEditorialMetadata } from "../_seo/editorialSeo";
 import { GuideSection, textLink } from "../_components/ContentGuide";
 import AudhdBookCard from "../_components/AudhdBookCard";
-import { norwegian } from "../_content/market";
-import { norwayIndexable } from "../_lib/norwayLaunch.server";
 
 const title = "AuDHD-test för vuxna – ADHD och autism samtidigt | Relationsvarning";
 const description = "Gör ett omfattande AuDHD-test för vuxna med 48 frågor om ADHD-drag, autismdrag och överlappande mönster. Få ett första resultat direkt.";
-const editorialMetadata = getEditorialMetadata({ route: "/audhd-test", title, description, datePublished: "2026-09-26T10:00:00+02:00", dateModified: "2026-09-28T10:00:00+02:00" });
-export const metadata: Metadata = {
-  title, description, ...editorialMetadata,
-  ...(norwayIndexable() ? { alternates: { ...editorialMetadata.alternates, languages: { "sv-SE": "/audhd-test", "nb-NO": norwegian.test } } } : {}),
-};
+export const metadata: Metadata = { title, description, ...getEditorialMetadata({ route: "/audhd-test", title, description, datePublished: "2026-09-26T10:00:00+02:00", dateModified: "2026-09-28T10:00:00+02:00" }) };
 
 const article = getEditorialArticleSchema({ route: "/audhd-test", title, description, datePublished: "2026-09-26T10:00:00+02:00", dateModified: "2026-09-28T10:00:00+02:00" });
 const cta = "inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[#27666A] px-5 py-3 text-center font-semibold text-white transition hover:bg-[#1F5357] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#27666A] sm:w-auto";

@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { swedishToNorwegian } from "../_content/market";
+import { norwayIndexable } from "../_lib/norwayLaunch.server";
 import { getArticleImageMetadata, getArticleImageSchema } from "./articleImages";
 
 const SITE_URL = "https://www.relationsvarning.se";
@@ -13,12 +15,13 @@ type EditorialSeoInput = {
 
 export function getEditorialMetadata({ route, title, description }: EditorialSeoInput): Metadata {
   const url = `${SITE_URL}${route}`;
+  const norwegian = norwayIndexable() && swedishToNorwegian[route];
   const imageMetadata = getArticleImageMetadata(route);
   const openGraphImages = imageMetadata.openGraph?.images;
   const twitterImages = imageMetadata.twitter?.images;
 
   return {
-    alternates: { canonical: url },
+    alternates: { canonical: url, ...(norwegian ? { languages: { "sv-SE": url, "nb-NO": SITE_URL + norwegian } } : {}) },
     openGraph: {
       title,
       description,
