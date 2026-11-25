@@ -1,8 +1,6 @@
 import Link from "next/link";
 import Brand from "./Brand";
 import HeaderAccountLink from "./HeaderAccountLink";
-import NorwegianSwitch from "./NorwegianSwitch";
-import { norwayIndexable } from "../_lib/norwayLaunch.server";
 import styles from "./SiteHeader.module.css";
 
 export default function SiteHeader() {
@@ -18,7 +16,6 @@ export default function SiteHeader() {
         </div>
         <nav aria-label="Huvudnavigation" className={styles.nav}>
           <Link className={styles.booksLink} href="/bocker">Böcker</Link>
-          {norwayIndexable() && <NorwegianSwitch />}
           <HeaderAccountLink />
         </nav>
       </div>
