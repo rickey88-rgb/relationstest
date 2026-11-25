@@ -36,6 +36,7 @@ export default function ADHDGuide({ slug }: { slug: string }) {
       {section.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
       {section.link && <p>{section.link.before}{" "}<Link href={section.link.href} className={textLink}>{section.link.label}</Link>{" "}{section.link.after}</p>}
       {index === 1 && <p>{guide.context}{" "}<Link href="/adhd-test" className={textLink}>{guide.anchor}</Link>.</p>}
+      {index === 1 && (slug === "har-jag-adhd" || slug === "adhd-symtom-vuxna") && <p>Om du överväger en utredning finns en checklista med frågor till mottagningen i vår artikel om <Link href="/uppdrag-granskning-adhd" className={textLink}>SVT:s granskning av ADHD-vården</Link>.</p>}
       {index === 1 && <p>Om frågan främst gäller samspelet med en partner finns också guiden om <Link href="/adhd-och-relationer" className={textLink}>ADHD och relationer</Link>.</p>}
       {index === 1 && audhdRelevant && <p>Om du också känner igen behov av förutsägbarhet, sensorisk känslighet eller mycket anpassning kan <Link href="/audhd-test" className={textLink}>AuDHD-testet för vuxna</Link> ge ett bredare reflektionsunderlag.</p>}
       {index === 1 && procrastinationRelevant && <p>Om det främst är svårt att börja eller du ofta skjuter upp sådant du vill få gjort kan du läsa vår breda guide om <Link href="/prokrastinering" className={textLink}>prokrastinering</Link>.</p>}

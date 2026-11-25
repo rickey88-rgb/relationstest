@@ -78,6 +78,7 @@ export default function ADHDLanding() {
       <p><strong>Exempel på återkoppling</strong><br />Om uppmärksamhet sticker ut i dina svar kan återkopplingen handla om fokus och distraktion. Den beskriver dina svar och kan inte avgöra varför du har svårt att hålla fokus.</p>
       <p>Frågorna och beräkningsreglerna är Relationsvarnings egna och saknar klinisk validering. Det här är inte ASRS. <a href="https://patientenkat.se/nationellpatientenkat/nationellformularsamling/sokformularbeskrivningar/asrs6manaderadhdvuxna.87063.html" className={textLink}>ASRS är en separat symtomchecklista för vuxna</a> med egna frågor och tolkningsregler. Resultaten kan inte jämföras direkt eller använda samma gränsvärden.</p>
       <p>Läs om <Link href="/metodik" className={textLink}>hur vi utformar våra självtester</Link>. Självtestet är till för egen reflektion, inte för att avgöra om en utredning behövs.</p>
+      <p>Fördjupa dig i <Link href="/uppdrag-granskning-adhd" className={textLink}>SVT:s ADHD-granskning och hur du bedömer ett ADHD-test</Link>.</p>
     </GuideSection>
     <GuideSection title="Vad betyder poängen?">
       <p>Varje svar ger 0–4 poäng. De fem frågorna inom varje område summeras och räknas om till en nivå mellan 0 och 100. Testets index är medelvärdet för de fem första områdena. Påverkan i vardagen redovisas separat och används i tolkningen, men höjer eller sänker inte indexet.</p>
