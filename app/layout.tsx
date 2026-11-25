@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Analytics from "./_analytics/AnalyticsProvider";
+import LocalizedDocument from "./_components/LocalizedDocument";
 import SiteFooter from "./_components/SiteFooter";
 import SiteHeader from "./_components/SiteHeader";
 
@@ -31,14 +31,5 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <html lang="sv">
-      <body className="antialiased">
-        <Analytics />
-        <SiteHeader />
-        {children}
-        <SiteFooter />
-      </body>
-    </html>
-  );
+  return <LocalizedDocument header={<SiteHeader />} footer={<SiteFooter />}>{children}</LocalizedDocument>;
 }

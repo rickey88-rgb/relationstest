@@ -6,11 +6,12 @@ import { directRequest, startDirectCheckout } from "../_lib/testAccounts/directC
  * once selected, a checkout error never falls through to a different purchase flow.
  */
 export function useTestAccountCheckout(slug: "audhd" | "iq" | "adhd" | "hsp" | "angest" | "ptsd" | "narcissism-sjalvtest" | "screening" | "autism" | "anknytningstest" | "medberoendetest" | "gaslightingtest" | "narcissist-i-en-relation" | "traumabindningtest" | "psykisk-misshandel-relation", answers: number[], onError: () => void,
-  versions?: { questionVersion: string; reportVersion: string }, onCapabilities?: (enabled: boolean) => void) {
+  versions?: { questionVersion: string; reportVersion: string }, onCapabilities?: (enabled: boolean) => void, useAccountCheckout = true) {
   const [enabled, setEnabled] = useState(false);
   const busy = useRef(false);
   const [directModel, setDirectModel] = useState<{ product: string; questionVersion: string; reportVersion: string; checkout: boolean } | null>(null);
   useEffect(() => {
+    if (!useAccountCheckout) return;
     let mounted = true;
     if (directCustomerEnabled()) {
       directRequest({ action: "capabilities" }).then(value => {
@@ -23,8 +24,9 @@ export function useTestAccountCheckout(slug: "audhd" | "iq" | "adhd" | "hsp" | "
       .then(response => response.ok ? response.json() : null)
       .then(value => { if (mounted) { const active = value?.checkout === true; setEnabled(active); onCapabilities?.(active); } }).catch(() => {});
     return () => { mounted = false; };
-  }, [slug, onCapabilities]);
+  }, [slug, onCapabilities, useAccountCheckout]);
   return () => {
+    if (!useAccountCheckout) return false;
     if (directCustomerEnabled()) {
       if (busy.current) return true;
       if (!directModel?.checkout) { onError(); return true; } // never fall through to an unsavable legacy purchase

@@ -2,6 +2,8 @@ import { randomUUID } from "node:crypto";
 import postgres from "postgres";
 import { GA_MEASUREMENT_ID } from "../_analytics/config";
 import { LITE_AUTISM_BOOK } from "./liteAutismBook";
+import { NORWEGIAN_BOOK } from "./norwegianBook";
+import { norwegian } from "../_content/market";
 
 type Sql = ReturnType<typeof postgres>;
 const globalForGa4PurchaseDelivery = globalThis as typeof globalThis & { ga4PurchaseDeliverySql?: Sql };
@@ -13,6 +15,7 @@ type PendingDelivery = {
   ga4_session_id: string;
   paid_at: Date | null;
   product_key: string;
+  amount_total_ore: number;
 };
 
 // GA4 accepts Measurement Protocol events backdated by at most 72 hours.
@@ -62,7 +65,7 @@ async function claimDelivery(checkoutSessionId: string, leaseToken: string) {
       and delivered_at is null
       and (delivery_lease_expires_at is null or delivery_lease_expires_at < now())
     returning delivery.stripe_checkout_session_id, delivery.transaction_id,
-      delivery.ga4_client_id, delivery.ga4_session_id, payment.paid_at, payment.product_key
+      delivery.ga4_client_id, delivery.ga4_session_id, payment.paid_at, payment.product_key, payment.amount_total_ore
   `;
   return rows[0] ?? null;
 }
@@ -105,8 +108,13 @@ export async function deliverPendingGa4Purchase(checkoutSessionId: string) {
   try {
     const secret = apiSecret();
     const timestampMicros = paidAtTimestampMicros(delivery.paid_at);
+    const norwegianBook = delivery.product_key === NORWEGIAN_BOOK.product;
+    const norwegianTest = delivery.product_key === "audhd_test_no";
     const isBook = delivery.product_key === LITE_AUTISM_BOOK.product;
-    const item = isBook
+    const item = norwegianBook
+      ? { item_id: NORWEGIAN_BOOK.product, item_name: NORWEGIAN_BOOK.title, price: delivery.amount_total_ore / 100, quantity: 1 }
+      : norwegianTest ? { item_id: "audhd_test_no", item_name: "AuDHD-test for voksne", price: norwegian.reportPrice, quantity: 1 }
+      : isBook
       ? { item_id: LITE_AUTISM_BOOK.product, item_name: LITE_AUTISM_BOOK.title, price: LITE_AUTISM_BOOK.price, quantity: 1 }
       : { item_id: "audhd_test", item_name: "AuDHD-test för vuxna", price: 79, quantity: 1 };
     const query = new URLSearchParams({ measurement_id: GA_MEASUREMENT_ID, api_secret: secret });
@@ -127,7 +135,7 @@ export async function deliverPendingGa4Purchase(checkoutSessionId: string) {
               params: {
                 transaction_id: delivery.transaction_id,
                 value: item.price,
-                currency: "SEK",
+                currency: norwegianBook || norwegianTest ? "NOK" : "SEK",
                 session_id: Number(delivery.ga4_session_id),
                 engagement_time_msec: 1,
                 items: [item],
@@ -135,7 +143,7 @@ export async function deliverPendingGa4Purchase(checkoutSessionId: string) {
             },
             // Ads imports this dedicated key event, not the legacy client-side
             // `purchase` population from the older test products.
-            ...(isBook ? [] : [{
+            ...(isBook || norwegianBook || norwegianTest ? [] : [{
               name: "audhd_verified_purchase",
               params: {
                 transaction_id: delivery.transaction_id,

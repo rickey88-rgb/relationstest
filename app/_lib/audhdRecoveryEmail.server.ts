@@ -1,3 +1,4 @@
+import type { Market } from "../_content/market";
 const RESEND_API_URL = "https://api.resend.com/emails";
 const RESEND_REQUEST_TIMEOUT_MS = 8_000;
 
@@ -45,7 +46,11 @@ export async function sendTransactionalRecoveryEmail(input: { to: string; subjec
   if (!response.ok) throw new AudhdRecoveryEmailRejected();
 }
 
-export async function sendAudhdRecoveryEmail(input: { to: string; recoveryUrl: string; idempotencyKey?: string }) {
+export async function sendAudhdRecoveryEmail(input: { market?: Market; to: string; recoveryUrl: string; idempotencyKey?: string }) {
+  if (input.market === "no") return sendTransactionalRecoveryEmail({
+    to: input.to, idempotencyKey: input.idempotencyKey, subject: "Din personlige AuDHD-rapport",
+    text: ["Hei!", "", "Takk for kjøpet. Åpne AuDHD-rapporten din med lenken nedenfor.", input.recoveryUrl, "", "Lenken er gyldig i 72 timer og kan brukes én gang. Velg «Åpne rapporten min» når du kommer til siden.", "Du kan lagre rapporten som PDF for å beholde den.", "", "Kjøpsvilkår: https://www.relationsvarning.se/no/kjopsvilkar", "Kundestøtte: support@relationsvarning.se", "Relationsvarning.se"].join("\n"),
+  });
   return sendTransactionalRecoveryEmail({
     to: input.to,
     idempotencyKey: input.idempotencyKey,

@@ -1,3 +1,5 @@
+import { norwegianReportForSale, norwayStripeEnvironment } from "../../../_lib/norwayLaunch.server";
+import { checkoutMarket, marketCookie } from "../../../_content/market";
 import { NextRequest, NextResponse } from "next/server";
 import { AUDHD_CHECKOUT_ATTEMPT_COOKIE, hashAudhdCheckoutBrowserSecret } from "../../../_lib/audhdCheckoutAttempt.server";
 import { parseAudhdCheckoutAnalyticsAttribution } from "../../../_lib/audhdCheckoutAnalytics.server";
@@ -53,14 +55,19 @@ function logCheckoutStartFailure(stage: CheckoutStartStage, error: unknown) {
  * preparation: one browser-bound draft becomes at most one Stripe Session.
  */
 export async function POST(request: NextRequest) {
-  if (!sameOriginRequest(request)) return response({ error: "Not found." }, 404);
+  const market = checkoutMarket(request);
+  if (market === "no") {
+    if (!norwegianReportForSale()) return response({ error: "Betaling er midlertidig utilgjengelig." }, 503);
+    try { if (request.headers.get("origin") !== norwayStripeEnvironment().origin) return response({ error: "Ugyldig forespørsel." }, 404); }
+    catch { return response({ error: "Betaling er midlertidig utilgjengelig." }, 503); }
+  } else if (!sameOriginRequest(request)) return response({ error: "Not found." }, 404);
   let pendingReservation: { attemptId: string; browserSecretHash: string; checkoutReferenceId: string } | null = null;
   let stage: CheckoutStartStage = "reserve";
   try {
     const body: unknown = await request.json();
     const attemptId = body && typeof body === "object" && !Array.isArray(body) ? (body as { attemptId?: unknown }).attemptId : null;
     const analyticsAttribution = body && typeof body === "object" && !Array.isArray(body) ? parseAudhdCheckoutAnalyticsAttribution((body as { analytics?: unknown }).analytics) : null;
-    const browserSecret = request.cookies.get(AUDHD_CHECKOUT_ATTEMPT_COOKIE)?.value ?? "";
+    const browserSecret = request.cookies.get(marketCookie(AUDHD_CHECKOUT_ATTEMPT_COOKIE, market))?.value ?? "";
     if (!isAttemptId(attemptId) || !/^[A-Za-z0-9_-]{43}$/.test(browserSecret)) return response({ error: "Checkout attempt is unavailable." }, 404);
 
     const browserSecretHash = hashAudhdCheckoutBrowserSecret(browserSecret);
@@ -76,7 +83,7 @@ export async function POST(request: NextRequest) {
     }
     if (reservation.kind === "existing") {
       stage = "stripe_create";
-      const checkout = await existingAudhdStripeCheckout(reservation.checkoutSessionId, reservation.checkoutReferenceId);
+      const checkout = await existingAudhdStripeCheckout(reservation.checkoutSessionId, reservation.checkoutReferenceId, market);
       if (checkout.kind === "open") return response({ checkoutUrl: checkout.checkoutUrl }, 200);
       if (checkout.kind !== "expired") return response({ error: "Checkout is no longer available." }, 409);
 
@@ -87,7 +94,7 @@ export async function POST(request: NextRequest) {
       if (retry.kind !== "reserved") return response({ error: "Checkout is no longer available." }, 409);
       pendingReservation = { attemptId, browserSecretHash, checkoutReferenceId: retry.checkoutReferenceId };
       stage = "stripe_create";
-      const renewedCheckout = await createAudhdStripeCheckout(retry.checkoutReferenceId);
+      const renewedCheckout = await createAudhdStripeCheckout(retry.checkoutReferenceId, market);
       stage = "bind";
       await bindAudhdCheckoutSession({ attemptId, browserSecretHash, checkoutReferenceId: retry.checkoutReferenceId, checkoutSessionId: renewedCheckout.checkoutSessionId });
       pendingReservation = null;
@@ -96,7 +103,7 @@ export async function POST(request: NextRequest) {
 
     pendingReservation = { attemptId, browserSecretHash, checkoutReferenceId: reservation.checkoutReferenceId };
     stage = "stripe_create";
-    const checkout = await createAudhdStripeCheckout(reservation.checkoutReferenceId);
+    const checkout = await createAudhdStripeCheckout(reservation.checkoutReferenceId, market);
     stage = "bind";
     await bindAudhdCheckoutSession({ attemptId, browserSecretHash, checkoutReferenceId: reservation.checkoutReferenceId, checkoutSessionId: checkout.checkoutSessionId });
     pendingReservation = null;

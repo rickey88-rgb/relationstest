@@ -31,7 +31,7 @@ function environment({ query = "", recoveryUnlocked = false, secureRestore = nul
     useEffect: (callback, deps) => { const index = cursor++; const previous = slots[index]; if (!previous || !deps || deps.some((value, i) => !Object.is(value, previous.deps[i]))) { slots[index] = { deps, cleanup: previous?.cleanup }; pending.push(() => { slots[index].cleanup?.(); slots[index].cleanup = callback(); }); } },
   };
   function PaywallCheckoutCTA() { return null; }
-  const load = createLoader({ react, "../../_analytics/useTestAnalytics": { useTestAnalytics: () => standardTracking }, "../../_components/PaywallCheckoutCTA": { default: PaywallCheckoutCTA } });
+  const load = createLoader({ react, "../../_components/MarketProvider": { useMarket: () => "sv" }, "../../_analytics/useTestAnalytics": { useTestAnalytics: () => standardTracking }, "../../_components/PaywallCheckoutCTA": { default: PaywallCheckoutCTA } });
   const Page = load(path.join(__dirname, "page.tsx")).default;
   function renderOnce() { dirty = false; cursor = 0; tree = Page(); }
   async function flush() { for (let loops = 0; loops < 80; loops += 1) { if (dirty) renderOnce(); pending.splice(0).forEach(callback => callback()); for (let tick = 0; tick < 12; tick += 1) await Promise.resolve(); if (!dirty && !pending.length && loops > 1) return; } throw new Error("render loop"); }

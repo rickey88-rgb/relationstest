@@ -29,7 +29,7 @@ const allowedParams = new Set(["test_id", "test_name", "attempt_id", "paywall_ve
 const campaignKeys = ["gclid", "dclid", "gbraid", "wbraid", "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "utm_id"];
 
 export function privateAnalyticsPath(pathname: string) {
-  return ["/mina-sidor", "/auth", "/logga-in", "/logga-ut", "/api/account"].some(path => pathname === path || pathname.startsWith(path + "/"));
+  return ["/mina-sidor", "/auth", "/logga-in", "/logga-ut", "/api/account", "/no/hjernen-i-kryssild/takk"].some(path => pathname === path || pathname.startsWith(path + "/"));
 }
 function privateAnalyticsPage() {
   try { return typeof window !== "undefined" && privateAnalyticsPath(new URL(window.location.href).pathname); } catch { return false; }

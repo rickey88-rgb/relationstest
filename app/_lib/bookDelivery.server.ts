@@ -7,11 +7,13 @@ import { legacyCheckoutState, ownedLegacyBooks, signedLegacyBookDownload } from 
 import { verifyBookEmailLink } from "./liteAutismProof.server";
 import {
   bookAccount, bookLibraryState, guestBookCookieFrom, guestBookPurchaseReady, guestEditionOwned,
-  liteAutismEdition, overthinkingEdition, readBookPdf, signLiteAutismDownload, steinlerEdition,
+  liteAutismEdition, norwegianBookEdition, overthinkingEdition, readBookPdf, signLiteAutismDownload, steinlerEdition,
   verifiedBookPurchase,
 } from "./overthinkingBook.server";
 
-const editions = [liteAutismEdition, overthinkingEdition, steinlerEdition];
+import { NORWEGIAN_BOOK } from "./norwegianBook";
+
+const editions = [liteAutismEdition, overthinkingEdition, steinlerEdition, norwegianBookEdition];
 const cookieNames: Record<LegacyBookId, string> = {
   "audhd-bok": BOOK_ACCESS_COOKIE,
   "autism-bok": AUTISM_BOOK_ACCESS_COOKIE,
@@ -26,7 +28,7 @@ export const bookDeliveryHeaders = {
 };
 
 export function findDeliveryBook(id: string) {
-  return BOOK_CATALOG.find(book => book.id === id);
+  return id === NORWEGIAN_BOOK.id ? NORWEGIAN_BOOK : BOOK_CATALOG.find(book => book.id === id);
 }
 
 function editionFor(book: CatalogBook) {
@@ -125,6 +127,7 @@ export async function bookPackageDownload(request: Request, bookId: string, lega
       }
       if (await bookThankState(book, proof) !== "ready") return responseStatus(403);
     } else {
+      if (book.id === NORWEGIAN_BOOK.id) return responseStatus(401);
       const account = await bookAccount(request);
       if (!account) return responseStatus(401);
       const owned = edition === overthinkingEdition ? await bookLibraryState(account) === "ready" :
@@ -152,6 +155,7 @@ export async function bookPackageDownload(request: Request, bookId: string, lega
 
 export function deliveryBookForProduct(product: string) {
   const edition = editions.find(entry => entry.book.product === product);
+  if (edition === norwegianBookEdition) return NORWEGIAN_BOOK;
   if (edition) return BOOK_CATALOG.find(book => book.path === edition.book.path);
   const legacy = { audhd_bok: "audhd-bok", autism_bok: "autism-bok", adhd_deluxe: "adhd-deluxe" } as const;
   const id: BookId | undefined = legacy[product as keyof typeof legacy];

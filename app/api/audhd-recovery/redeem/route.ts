@@ -1,3 +1,4 @@
+import { checkoutMarket, marketCookie, marketText, norwegian } from "../../../_content/market";
 import { NextRequest, NextResponse } from "next/server";
 import { AUDHD_LEGACY_RECOVERY_COOKIE, AUDHD_RECOVERY_COOKIE, audhdBrowserUnlockMaxAge, hashAudhdRecoveryToken, isAudhdRecoveryToken, issueAudhdBrowserUnlockToken, issueAudhdLegacyBrowserUnlockToken, verifyAudhdLegacySupportRecoveryToken } from "../../../_lib/audhdRecovery.server";
 import { loadAudhdRecoveryGrantForRedemption, redeemAudhdRecoveryGrant, revokeAudhdRecoveryGrantsForPaymentIntent } from "../../../_lib/audhdRecoveryDb.server";
@@ -7,7 +8,7 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 function recoveryDestination(request: NextRequest, state: "success" | "invalid") {
-  const destination = new URL("/audhd-test/test", request.url);
+  const destination = new URL(checkoutMarket(request) === "no" ? norwegian.questionnaire : "/audhd-test/test", request.url);
   destination.searchParams.set("recovery", state);
   return destination;
 }
@@ -17,13 +18,14 @@ function escapeHtmlAttribute(value: string) {
 }
 
 export async function GET(request: NextRequest) {
+  const market = checkoutMarket(request);
   // Link previews, security scanners and mail clients may issue GET requests.
   // Deliberately do not validate, look up, revoke or redeem a grant here.
   const token = request.nextUrl.searchParams.get("token") ?? "";
   return new NextResponse(`<!doctype html>
-<html lang="sv">
+<html lang="${marketText(market, "sv", "nb-NO")}">
   <head>
-    <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Din personliga AuDHD-analys</title>
+    <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${marketText(market, "Din personliga AuDHD-analys", "Din personlige AuDHD-rapport")}</title>
     <style>
       * { box-sizing: border-box; }
       body { margin: 0; background: #f7f5f2; color: #202124; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
@@ -44,14 +46,14 @@ export async function GET(request: NextRequest) {
     <main>
       <div class="card">
       <p class="brand">Relationsvarning.se</p>
-      <p class="eyebrow">Ditt resultat</p>
-      <h1>Din personliga AuDHD-analys</h1>
-      <p class="intro">Din analys är redo att öppnas. Tryck på knappen för att komma till ditt sparade resultat.</p>
-      <form method="post" action="/api/audhd-recovery/redeem">
+      <p class="eyebrow">${marketText(market, "Ditt resultat", "Resultatet ditt")}</p>
+      <h1>${marketText(market, "Din personliga AuDHD-analys", "Din personlige AuDHD-rapport")}</h1>
+      <p class="intro">${marketText(market, "Din analys är redo att öppnas. Tryck på knappen för att komma till ditt sparade resultat.", "Du kan åpne den lagrede rapporten med knappen nedenfor.")}</p>
+      <form method="post" action="/api/audhd-recovery/redeem${market === "no" ? "?market=no" : ""}">
         <input type="hidden" name="token" value="${escapeHtmlAttribute(token)}">
-        <button type="submit">Öppna mitt resultat</button>
+        <button type="submit">${marketText(market, "Öppna mitt resultat", "Åpne rapporten min")}</button>
       </form>
-      <p class="help">Behöver du hjälp med att öppna ditt resultat? <a href="mailto:support@relationsvarning.se">Kontakta oss</a>.</p>
+      <p class="help">${marketText(market, "Behöver du hjälp med att öppna ditt resultat?", "Trenger du hjelp med å åpne rapporten?")} <a href="mailto:support@relationsvarning.se">${marketText(market, "Kontakta oss", "Kontakt oss")}</a>.</p>
       </div>
     </main>
   </body>
@@ -67,10 +69,11 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  const market = checkoutMarket(request);
   const formData = await request.formData();
   const submittedToken = formData.get("token");
   const token = typeof submittedToken === "string" ? submittedToken : null;
-  const legacyToken = verifyAudhdLegacySupportRecoveryToken(token);
+  const legacyToken = market === "sv" && verifyAudhdLegacySupportRecoveryToken(token);
   if (legacyToken) {
     const remainingSeconds = legacyToken.exp - Math.floor(Date.now() / 1000);
     const response = NextResponse.redirect(recoveryDestination(request, "success"), 303);
@@ -90,7 +93,7 @@ export async function POST(request: NextRequest) {
     if (grant) {
       // Recovery is a payment entitlement. Recheck Stripe immediately before
       // consuming the one-time link rather than trusting a past support check.
-      const payment = await inspectAudhdCheckoutSession(grant.checkoutSessionId);
+      const payment = await inspectAudhdCheckoutSession(grant.checkoutSessionId, market);
       if (payment.verified && payment.paymentIntentId === grant.paymentIntentId && payment.priceId === grant.priceId) {
         grantId = await redeemAudhdRecoveryGrant(tokenHash);
       } else if (!payment.verified && (payment.reason === "payment_refunded" || payment.reason === "payment_disputed")) {
@@ -104,6 +107,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.redirect(recoveryDestination(request, "invalid"), 303);
   }
   const response = NextResponse.redirect(recoveryDestination(request, "success"), 303);
-  response.cookies.set(AUDHD_RECOVERY_COOKIE, issueAudhdBrowserUnlockToken(grantId), { httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", path: "/", maxAge: audhdBrowserUnlockMaxAge });
+  response.cookies.set(marketCookie(AUDHD_RECOVERY_COOKIE, market), issueAudhdBrowserUnlockToken(grantId), { httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", path: "/", maxAge: audhdBrowserUnlockMaxAge });
   return response;
 }

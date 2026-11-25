@@ -4,6 +4,7 @@ import { copyResponseCookies, refreshAuthSession } from "./app/_lib/authSession.
 import { accountLaunchUnavailable, accountPortalEnabled, isAccountLaunchPath } from "./app/_lib/accountLaunch.server";
 import { authorizedCleanupJob } from "./app/_lib/accountCleanupContext.server";
 import { directPortalEnabled } from "./app/_lib/testAccounts/directPublic";
+import { norwayIndexable } from "./app/_lib/norwayLaunch.server";
 
 // Next's configured redirects are case-insensitive. These exact request paths
 // therefore live here so a misspelled URL cannot catch the real landing page.
@@ -52,6 +53,14 @@ export function proxy(request: NextRequest) {
     const url = request.nextUrl.clone();
     url.pathname = destination;
     return NextResponse.redirect(url, 308);
+  }
+
+  const isNorwegian = pathname === "/no" || pathname.startsWith("/no/");
+  if (isNorwegian) {
+    const response = NextResponse.next();
+    response.headers.set("Content-Language", "nb-NO");
+    if (!norwayIndexable()) response.headers.set("X-Robots-Tag", "noindex");
+    return response;
   }
 
   // Only the generic direct-client shell is public. Old SSR/API routes retain their gate.

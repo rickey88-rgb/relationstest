@@ -1,6 +1,8 @@
 import postgres from "postgres";
 import type { PaymentProductIdentification } from "./paymentProductCatalog.server";
 import { LITE_AUTISM_BOOK } from "./liteAutismBook";
+import { NORWEGIAN_BOOK, norwegianBookAmount } from "./norwegianBook";
+import { norwegian } from "../_content/market";
 import type { BookAttribution } from "./liteAutismProof.server";
 
 type Sql = ReturnType<typeof postgres>;
@@ -114,11 +116,10 @@ export async function recordVerifiedStripePayment(input: VerifiedStripePayment) 
     // visitor who has not explicitly supplied GA4 attribution after consent.
     if (
       input.livemode
-      && input.productKey === "audhd_test"
       && input.checkoutStatus === "complete"
       && input.paymentStatus === "paid"
-      && input.amountTotalOre === 7900
-      && input.currency?.toLowerCase() === "sek"
+      && ((input.productKey === "audhd_test" && input.amountTotalOre === 7900 && input.currency?.toLowerCase() === "sek") ||
+          (input.productKey === "audhd_test_no" && input.amountTotalOre === norwegian.reportPrice * 100 && input.currency === "nok"))
     ) {
       await transaction`
         insert into public.ga4_purchase_deliveries (
@@ -137,9 +138,10 @@ export async function recordVerifiedStripePayment(input: VerifiedStripePayment) 
       `;
     }
 
-    if (input.productKey === LITE_AUTISM_BOOK.product && input.bookAttribution &&
-        input.livemode && input.checkoutStatus === "complete" && input.paymentStatus === "paid" &&
-        input.amountTotalOre === LITE_AUTISM_BOOK.amountOre && input.currency === "sek") {
+    const norwegianAmount = norwegianBookAmount(input.lineItems[0]?.priceId);
+    if (input.bookAttribution && input.livemode && input.checkoutStatus === "complete" && input.paymentStatus === "paid" &&
+        ((input.productKey === LITE_AUTISM_BOOK.product && input.amountTotalOre === LITE_AUTISM_BOOK.amountOre && input.currency === "sek") ||
+         (input.productKey === NORWEGIAN_BOOK.product && norwegianAmount !== null && input.amountTotalOre === norwegianAmount && input.currency === "nok"))) {
       const { clientId, sessionId } = input.bookAttribution;
       await transaction`
         insert into public.ga4_purchase_deliveries (

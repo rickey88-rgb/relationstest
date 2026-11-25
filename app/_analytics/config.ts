@@ -5,6 +5,7 @@ export const ANALYTICS_RELEASE_ID = process.env.NEXT_PUBLIC_ANALYTICS_RELEASE_ID
 export const testConfig = {
   iq_test: { name: "IQ-test", path: "/iq-test/test", price: 79, currency: "SEK" },
   audhd_test: { name: "AuDHD-test för vuxna", path: "/audhd-test/test", price: 79, currency: "SEK" },
+  audhd_test_no: { name: "AuDHD-test for voksne", path: "/no/audhd-test/test", price: 199, currency: "NOK" },
   hsp_test: { name: "HSP-test för vuxna", path: "/hsp-test/test", price: 49, currency: "SEK" },
   ptsd_test: { name: "PTSD-test", path: "/ptsd-test/test", price: 39, currency: "SEK" },
   autism_test: { name: "Autismtest för vuxna", path: "/autism-test/test", price: 39, currency: "SEK" },

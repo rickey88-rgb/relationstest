@@ -1,3 +1,4 @@
+import { NORWEGIAN_BOOK } from "./norwegianBook";
 import { BOOK_OFFER_PRICES } from "./bookOffers";
 import { ADHD_DELUXE_BOOK, AUDHD_BOOK, AUTISM_BOOK } from "./legacyBookDetails";
 import { OVERTHINKING_BOOK } from "./overthinkingBook";
@@ -33,7 +34,7 @@ export const THINKING_CATALOG_BOOK = {
   description: "Praktiska verktyg, åtta ifyllbara skrivblad och en fjortondagarsplan för dig som fastnar i oro och ältande.",
 } as const;
 export const BOOK_CATALOG = [LITE_AUTISM_BOOK, ...LEGACY_BOOKS, THINKING_CATALOG_BOOK, STEINLER_BOOK] as const;
-export type CatalogBook = (typeof BOOK_CATALOG)[number];
+export type CatalogBook = (typeof BOOK_CATALOG)[number] | typeof NORWEGIAN_BOOK;
 export type BookId = CatalogBook["id"];
 export const BOOK_LIBRARY_PATH = "/mina-sidor?bok=bibliotek#bibliotek";
 

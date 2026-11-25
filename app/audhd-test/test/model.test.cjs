@@ -33,3 +33,19 @@ assert.equal(m.generateTeaser({A:0,B:0,C:0,D:0,E:0,F:0,G:60,H:0}, {adhdIndex:0,a
 assert.equal(m.parseState(JSON.stringify({reportVersion:"audhd-v1",answers:Array(48).fill(2),contextAnswers:Array(6).fill(2),questionIndex:99,contextIndex:99,unlocked:true})).questionIndex, 47);
 for (const invalid of [Array(47).fill(0), Array(48).fill(-1), Array(48).fill(5)]) assert.throws(() => m.calculateDimensions(invalid));
 console.log('PASS: AuDHD questions, weights, index isolation, context isolation, boundaries, outliers, teaser and persistence validation.');
+
+const norwegianQuestions = load(path.join(__dirname, "questions.nb.ts"));
+assert.deepEqual(norwegianQuestions.questionsNb.map(({ id, dimension }) => [id, dimension]), m.questions.map(({ id, dimension }) => [id, dimension]));
+assert(norwegianQuestions.questionsNb.every(question => question.text.startsWith("Hvor ofte")));
+assert.deepEqual(norwegianQuestions.contextQuestionsNb.map(({ options }) => options.length), m.contextQuestions.map(({ options }) => options.length));
+for (let scenario = 0; scenario < 20; scenario++) {
+  const answers = m.questions.map(({ dimension }, index) => (scenario + index * (scenario % 4) + dimension.charCodeAt(0)) % 5);
+  const context = [scenario % 5, 2, 3, 1, 3, scenario % 4];
+  const sv = m.calculateReport(answers, context);
+  const nb = m.calculateReport(answers, context, "no");
+  assert.deepEqual(nb.scores, sv.scores);
+  assert.deepEqual(nb.indices, sv.indices);
+  assert.equal(nb.impact.combined, sv.impact.combined);
+  assert.equal(nb.teaser.type, sv.teaser.type);
+  assert.notEqual(nb.profileType, sv.profileType);
+}

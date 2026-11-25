@@ -2,6 +2,10 @@
 module.exports = {
   siteUrl: 'https://www.relationsvarning.se',
   generateRobotsTxt: true,
+  robotsTxtOptions: {
+    additionalSitemaps: process.env.NORWAY_INDEXABLE === 'true' && process.env.VERCEL_ENV !== 'preview'
+      ? ['https://www.relationsvarning.se/no/sitemap.xml'] : [],
+  },
   sitemapSize: 5000,
   autoLastmod: false,
   changefreq: undefined,
@@ -18,6 +22,7 @@ module.exports = {
     { loc: '/adhd-deluxe' },
   ],
   exclude: [
+    '/no', '/no/*',
     "/persona-v61", "/persona-v61/*",
     "/persona",
     "/persona/test",

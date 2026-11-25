@@ -5,6 +5,8 @@ import GuideNextSteps from "./GuideNextSteps";
 import { guideRecommendations } from "./guideRecommendations";
 import { getArticleImageMetadata, getArticleImageSchema } from "../_seo/articleImages";
 import { NewsletterArticleSignup } from "./NewsletterSignup";
+import { swedishToNorwegian } from "../_content/market";
+import { norwayIndexable } from "../_lib/norwayLaunch.server";
 
 type LinkedParagraph = { before: string; href: string; label: string; after: string };
 export type ClusterSection = { heading: string; paragraphs: Array<string | LinkedParagraph>; bullets?: string[]; links?: Array<Pick<ClusterLink, "href" | "label">> };
@@ -29,10 +31,11 @@ const host = "https://www.relationsvarning.se";
 const textLink = "font-medium underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-700";
 
 export function clusterMetadata(data: ClusterGuideData): Metadata {
+  const alternate = norwayIndexable() && swedishToNorwegian[`/${data.slug}`];
   return {
     title: data.title,
     description: data.description,
-    alternates: { canonical: `${host}/${data.slug}` },
+    alternates: { canonical: `${host}/${data.slug}`, ...(alternate ? { languages: { "sv-SE": `${host}/${data.slug}`, "nb-NO": host + alternate } } : {}) },
     ...getArticleImageMetadata(`/${data.slug}`),
   };
 }

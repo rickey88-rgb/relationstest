@@ -1,4 +1,6 @@
 export const PAYMENT_PRODUCT_KEYS = [
+  "audhd_test_no",
+  "hjernen_i_kryssild",
   "persona_test",
   "adhd_test",
   "autism_test",
@@ -111,6 +113,8 @@ export function paymentProductCatalog(): Catalog {
 export function identifyPaymentProduct(input: { priceIds: string[]; paymentLinkId: string | null }): PaymentProductIdentification {
   const catalog = paymentProductCatalog();
   const matches = new Set<PaymentProductKey>();
+  if (input.priceIds.some(id => id === process.env.NORWAY_REPORT_PRICE_ID?.trim())) matches.add("audhd_test_no");
+  if (input.priceIds.some(id => id === process.env.NORWAY_BOOK_PRICE_ID?.trim() || id === process.env.NORWAY_BOOK_OFFER_PRICE_ID?.trim())) matches.add("hjernen_i_kryssild");
 
   for (const product of PAYMENT_PRODUCT_KEYS) {
     const entry = catalog[product];

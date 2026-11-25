@@ -1,3 +1,4 @@
+import { checkoutMarket, marketCookie } from "../../../_content/market";
 import { NextRequest, NextResponse } from "next/server";
 import { decryptAudhdCheckoutAnswers } from "../../../_lib/audhdCheckoutAttempt.server";
 import { AUDHD_RECOVERY_COOKIE, verifyAudhdBrowserUnlockToken } from "../../../_lib/audhdRecovery.server";
@@ -22,7 +23,8 @@ function logRestoreFailure(reason: "record_missing" | "stripe_verification_faile
 
 /** A redeemed recovery link can restore only its own server-encrypted attempt. */
 export async function GET(request: NextRequest) {
-  const access = verifyAudhdBrowserUnlockToken(request.cookies.get(AUDHD_RECOVERY_COOKIE)?.value ?? null);
+  const market = checkoutMarket(request);
+  const access = verifyAudhdBrowserUnlockToken(request.cookies.get(marketCookie(AUDHD_RECOVERY_COOKIE, market))?.value ?? null);
   if (!access) return unavailable();
   try {
     const record = await loadAudhdRecoveryRestoreRecord(access.grantId);
@@ -30,7 +32,7 @@ export async function GET(request: NextRequest) {
       logRestoreFailure("record_missing");
       return unavailable();
     }
-    const payment = await inspectAudhdCheckoutSession(record.checkoutSessionId);
+    const payment = await inspectAudhdCheckoutSession(record.checkoutSessionId, market);
     if (!payment.verified || payment.paymentIntentId !== record.paymentIntentId || payment.priceId !== record.priceId) {
     if (!payment.verified && payment.reason === "stripe_request_failed") {
       logRestoreFailure("stripe_temporarily_unavailable");

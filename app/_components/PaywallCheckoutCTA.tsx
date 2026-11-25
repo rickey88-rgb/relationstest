@@ -2,11 +2,14 @@
 import Image from "next/image";
 import { useRef, type ReactNode } from "react";
 import SwishPaymentMark from "./SwishPaymentMark";
+import { useMarket } from "./MarketProvider";
+import { marketText } from "../_content/market";
 
 type PaywallCheckoutCTAProps = { onClick: () => void; separated?: boolean; label?: ReactNode; belowCta?: ReactNode; trustText?: ReactNode; trustClassName?: string };
 
 export default function PaywallCheckoutCTA({ onClick, separated = false, label = "Lås upp mitt resultat · 39 kr", belowCta, trustText = "Säker betalning · Ingen prenumeration", trustClassName = "text-xs leading-5" }: PaywallCheckoutCTAProps) {
   const consent = useRef<HTMLInputElement>(null);
+  const market = useMarket();
   return <form className="w-full" onSubmit={event => {
     event.preventDefault();
     if (!consent.current?.checked) { consent.current?.reportValidity(); return; }
@@ -15,9 +18,9 @@ export default function PaywallCheckoutCTA({ onClick, separated = false, label =
     <div data-checkout-consent className="mb-3 text-left text-sm leading-6 text-inherit">
       <label className="flex min-h-11 cursor-pointer items-start gap-3 py-1">
         <input ref={consent} type="checkbox" name="guest-processing-consent" required className="mt-1 size-5 shrink-0 accent-[#27666A]" />
-        <span>Jag samtycker till att mina testsvar, inklusive eventuella hälsouppgifter, behandlas för att skapa och leverera min analys.</span>
+        <span>{marketText(market, "Jag samtycker till att mina testsvar, inklusive eventuella hälsouppgifter, behandlas för att skapa och leverera min analys.", "Jeg samtykker til at svarene mine, inkludert eventuelle helseopplysninger, behandles for å lage og levere rapporten min.")}</span>
       </label>
-      <p className="mt-1 text-xs leading-5"><a href="/integritet" target="_blank" rel="noopener noreferrer" className="underline underline-offset-4">Läs fullständig integritetsinformation</a>.</p>
+      <p className="mt-1 text-xs leading-5"><a href={market === "no" ? "/no/personvern" : "/integritet"} target="_blank" rel="noopener noreferrer" className="underline underline-offset-4">{marketText(market, "Läs fullständig integritetsinformation", "Les personvernerklæringen")}</a>.</p>
     </div>
     <button data-flow="cta"
       type="submit"
@@ -27,15 +30,15 @@ export default function PaywallCheckoutCTA({ onClick, separated = false, label =
     </button>
     <p data-paywall-return-notice className="mt-2 flex items-start justify-center gap-2 text-center text-xs leading-5 text-neutral-300">
       <span aria-hidden="true" className="mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-full border border-current text-[10px] font-bold leading-none">i</span>
-      <span>Stanna kvar efter betalningen. Det kan ta några sekunder innan du skickas vidare till din analys.</span>
+      <span>{marketText(market, "Stanna kvar efter betalningen. Det kan ta några sekunder innan du skickas vidare till din analys.", "Hold betalingsvinduet åpent. Det kan ta noen sekunder før du kommer tilbake til rapporten.")}</span>
     </p>
     {belowCta}
     <p className={`mt-2 text-center text-neutral-300 ${trustClassName}`}><span data-flow="lock" aria-hidden="true">🔒</span> {trustText}</p>
-    <div className="mt-1.5 flex items-center justify-center gap-2.5" aria-label="Betalningsalternativ: Swish, Klarna, Visa och Mastercard">
+    {market === "sv" && <div className="mt-1.5 flex items-center justify-center gap-2.5" aria-label="Betalningsalternativ: Swish, Klarna, Visa och Mastercard">
       <SwishPaymentMark />
       <Image src="/payment-methods/klarna.svg" alt="Klarna" width={20} height={20} />
       <Image src="/payment-methods/visa.svg" alt="Visa" width={30} height={20} />
       <Image src="/payment-methods/mastercard.svg" alt="Mastercard" width={30} height={20} />
-    </div>
+    </div>}
   </form>;
 }

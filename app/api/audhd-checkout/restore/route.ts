@@ -1,3 +1,4 @@
+import { checkoutMarket, marketCookie } from "../../../_content/market";
 import { NextRequest, NextResponse } from "next/server";
 import { AUDHD_CHECKOUT_ACCESS_COOKIE, AUDHD_CHECKOUT_ATTEMPT_COOKIE, decryptAudhdCheckoutAnswers, hashAudhdCheckoutBrowserSecret, verifyAudhdCheckoutAccessToken } from "../../../_lib/audhdCheckoutAttempt.server";
 import { loadAudhdCheckoutRestoreRecord, revokeAudhdCheckoutAccessForPaymentIntent } from "../../../_lib/audhdCheckoutAttemptsDb.server";
@@ -16,8 +17,9 @@ function temporarilyUnavailable() {
 
 /** Returns only answer values, never payment identifiers, when both cookies and DB entitlement match. */
 export async function GET(request: NextRequest) {
-  const access = verifyAudhdCheckoutAccessToken(request.cookies.get(AUDHD_CHECKOUT_ACCESS_COOKIE)?.value ?? null);
-  const browserSecret = request.cookies.get(AUDHD_CHECKOUT_ATTEMPT_COOKIE)?.value ?? "";
+  const market = checkoutMarket(request);
+  const access = verifyAudhdCheckoutAccessToken(request.cookies.get(marketCookie(AUDHD_CHECKOUT_ACCESS_COOKIE, market))?.value ?? null);
+  const browserSecret = request.cookies.get(marketCookie(AUDHD_CHECKOUT_ATTEMPT_COOKIE, market))?.value ?? "";
   if (!access || !/^[A-Za-z0-9_-]{43}$/.test(browserSecret)) return unavailable();
   try {
     const browserSecretHash = hashAudhdCheckoutBrowserSecret(browserSecret);
@@ -26,7 +28,7 @@ export async function GET(request: NextRequest) {
 
     // Webhooks make revocation durable, but every restore independently checks
     // Stripe and fails closed if Stripe is unavailable or the payment changed.
-    const payment = await verifyAudhdCheckoutPayment(record.checkoutSessionId);
+    const payment = await verifyAudhdCheckoutPayment(record.checkoutSessionId, market);
     if (!payment.verified && payment.reason === "stripe_request_failed") return temporarilyUnavailable();
     if (!payment.verified || payment.paymentIntentId !== record.paymentIntentId) {
       if (!payment.verified && (payment.reason === "payment_refunded" || payment.reason === "payment_disputed")) {

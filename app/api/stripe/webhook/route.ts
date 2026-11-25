@@ -1,3 +1,4 @@
+import type { Market } from "../../../_content/market";
 import Stripe from "stripe";
 import { NextRequest, NextResponse } from "next/server";
 import { recordVerifiedStripePayment } from "../../../_lib/paymentsDb.server";
@@ -60,16 +61,16 @@ function logProcessingFailure(error: unknown) {
  * The durable grant's unique Checkout Session constraint makes distinct
  * Stripe event deliveries idempotent without replacing another active link.
  */
-async function sendAudhdSafetyEmail(checkoutSessionId: string) {
+async function sendAudhdSafetyEmail(checkoutSessionId: string, market: Market) {
   try {
-    const payment = await verifyAudhdCheckoutPayment(checkoutSessionId);
+    const payment = await verifyAudhdCheckoutPayment(checkoutSessionId, market);
     if (!payment.verified) return;
     const encryptedAttempt = await loadAudhdRecoveryCandidateAnswers({
       checkoutReferenceId: payment.checkoutReferenceId,
       checkoutSessionId: payment.checkoutSessionId,
     });
     if (!encryptedAttempt || !decryptAudhdCheckoutAnswers(encryptedAttempt)) return;
-    const result = await sendAutomaticAudhdRecovery(payment);
+    const result = await sendAutomaticAudhdRecovery(payment, market);
     console.info(JSON.stringify({ event: "audhd_safety_email_processed", outcome: result.kind }));
   } catch (error) {
     console.error(JSON.stringify({ event: "audhd_safety_email_failed", error_class: safeErrorClass(error) }));
@@ -104,8 +105,8 @@ export async function POST(request: NextRequest) {
       catch (error) { logProcessingFailure(error); }
       // Only a newly-ledgered, live verified AuDHD purchase can request the
       // personal safety email. A duplicate webhook does not send again.
-      if (!processed.duplicate && processed.productKey === "audhd_test" && processed.paid) {
-        await sendAudhdSafetyEmail(processed.checkoutSessionId);
+      if (!processed.duplicate && (processed.productKey === "audhd_test" || processed.productKey === "audhd_test_no") && processed.paid) {
+        await sendAudhdSafetyEmail(processed.checkoutSessionId, processed.productKey === "audhd_test_no" ? "no" : "sv");
       }
       if (processed.paid) await deliverBookEmail(stripe, event, processed.productKey);
     }

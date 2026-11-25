@@ -1,3 +1,4 @@
+import { checkoutMarket } from "../../../_content/market";
 import { timingSafeEqual } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { hashAudhdRecoveryToken, issueAudhdRecoveryToken } from "../../../_lib/audhdRecovery.server";
@@ -38,6 +39,7 @@ function response(body: Record<string, string>, status: number) {
 }
 
 export async function POST(request: NextRequest) {
+  const market = checkoutMarket(request);
   if (!isAuthorized(request)) return response({ error: "Not found." }, 404);
 
   try {
@@ -45,7 +47,7 @@ export async function POST(request: NextRequest) {
     const checkoutSessionId = body && typeof body === "object" && !Array.isArray(body) && typeof (body as { checkoutSessionId?: unknown }).checkoutSessionId === "string"
       ? (body as { checkoutSessionId: string }).checkoutSessionId.trim()
       : "";
-    const verification = await inspectAudhdCheckoutSession(checkoutSessionId);
+    const verification = await inspectAudhdCheckoutSession(checkoutSessionId, market);
     if (!verification.verified) {
       const allowedReasons = ["invalid_session_id", "price_not_configured", "session_not_paid", "payment_not_captured", "payment_refunded", "payment_disputed", "wrong_product", "stripe_request_failed"];
       const reason = allowedReasons.includes(verification.reason) ? verification.reason : "unexpected";
@@ -62,6 +64,7 @@ export async function POST(request: NextRequest) {
     });
     const recoveryUrl = new URL("/api/audhd-recovery/redeem", RECOVERY_ORIGIN);
     recoveryUrl.searchParams.set("token", token);
+    if (market === "no") recoveryUrl.searchParams.set("market", "no");
     return response({ recoveryUrl: recoveryUrl.toString() }, 200);
   } catch {
     // Do not reveal recovery-secret configuration or signing details.

@@ -18,7 +18,7 @@ assert.match(css, /#audhd-print-report\s*>\s*section\s*>\s*\.grid\s*\{\s*display
 assert.match(css, /#audhd-print-report\s*>\s*section\s*>\s*\.grid\s*>\s*div,[\s\S]*?break-inside:\s*avoid;\s*page-break-inside:\s*avoid/);
 assert.match(css, /#audhd-print-report\s*>\s*section\s*>\s*\.space-y-3,[\s\S]*?break-inside:\s*avoid/);
 const reportSections = page.split('function ReportView(')[1].split('<section className={card}>').slice(1);
-assert.match(reportSections[10], /^<h2>Det som gör bilden mindre självklar<\/h2>/, "the targeted card remains the eleventh report section");
+assert.match(reportSections[10], /^<h2>\{marketText\(market, "Det som gör bilden mindre självklar", "Det som nyanserer bildet"\)\}<\/h2>/, "the targeted card remains the eleventh report section");
 assert.match(css, /#audhd-print-report\s*>\s*section:nth-of-type\(11\)\s*\{\s*break-inside:\s*avoid;\s*page-break-inside:\s*avoid/);
 assert.match(css, /#audhd-print-report h2,[\s\S]*?break-after:\s*avoid;\s*page-break-after:\s*avoid/);
 assert.match(css, /\.audhd-print-actions\s*\{\s*display:\s*none/);

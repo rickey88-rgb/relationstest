@@ -1,3 +1,5 @@
+import { norwegianReportForSale, norwayStripeEnvironment } from "../../../_lib/norwayLaunch.server";
+import { checkoutMarket, marketCookie } from "../../../_content/market";
 import { NextRequest, NextResponse } from "next/server";
 import { AUDHD_CHECKOUT_ATTEMPT_COOKIE, audhdCheckoutAttemptCookieMaxAge, encryptAudhdCheckoutAnswers, hashAudhdCheckoutBrowserSecret, issueAudhdCheckoutBrowserSecret, parseAudhdCheckoutAnswers } from "../../../_lib/audhdCheckoutAttempt.server";
 import { createAudhdCheckoutAttempt } from "../../../_lib/audhdCheckoutAttemptsDb.server";
@@ -26,9 +28,16 @@ function response(body: Record<string, string>, status: number) {
  * not create a Stripe Session, alter a Payment Link, or grant report access.
  */
 export async function POST(request: NextRequest) {
-  if (!sameOriginRequest(request)) return response({ error: "Not found." }, 404);
+  const market = checkoutMarket(request);
+  if (market === "no") {
+    if (!norwegianReportForSale()) return response({ error: "Betaling er midlertidig utilgjengelig." }, 503);
+    try { if (request.headers.get("origin") !== norwayStripeEnvironment().origin) return response({ error: "Ugyldig forespørsel." }, 404); }
+    catch { return response({ error: "Betaling er midlertidig utilgjengelig." }, 503); }
+  } else if (!sameOriginRequest(request)) return response({ error: "Not found." }, 404);
   try {
-    const answers = parseAudhdCheckoutAnswers(await request.json());
+    const payload: unknown = await request.json();
+    if (market === "no" && (!payload || typeof payload !== "object" || (payload as { processingConsent?: unknown }).processingConsent !== true)) return response({ error: "Samtykke kreves for levering av rapporten." }, 400);
+    const answers = parseAudhdCheckoutAnswers(payload);
     if (!answers) return response({ error: "Invalid test answers." }, 400);
 
     const browserSecret = issueAudhdCheckoutBrowserSecret();
@@ -38,7 +47,7 @@ export async function POST(request: NextRequest) {
       reportVersion: answers.reportVersion,
     });
     const result = response({ attemptId: attempt.id }, 201);
-    result.cookies.set(AUDHD_CHECKOUT_ATTEMPT_COOKIE, browserSecret, {
+    result.cookies.set(marketCookie(AUDHD_CHECKOUT_ATTEMPT_COOKIE, market), browserSecret, {
       httpOnly: true,
       sameSite: "lax",
       secure: process.env.NODE_ENV === "production",

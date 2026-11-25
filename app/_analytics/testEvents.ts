@@ -10,6 +10,7 @@ const paywallVersion: Partial<Record<TestId, string>> = {
   adhd_test: "personal-finding-v3",
   autism_test: "personal-finding-v2",
   audhd_test: "personal-finding-v2",
+  audhd_test_no: "personal-finding-v2",
 };
 function fresh(): Attempt {
   return {version:1,updatedAt:Date.now(),id:typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`,startedAt:null,completedAt:null,started:false,milestones:[],complete:false,paywall:false,purchase:false};

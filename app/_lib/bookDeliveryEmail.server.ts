@@ -7,12 +7,21 @@ import { bookEmailLifetime, isLiveBookSession, issueBookDeliveryToken } from "./
 import { legacyCheckoutBook } from "./legacyBookLibrary.server";
 import { paymentDatabase } from "./paymentsDb.server";
 
+import { NORWEGIAN_BOOK } from "./norwegianBook";
+
 function escapeHtml(value: string) {
   return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
 
 function deliveryMessage(book: CatalogBook, token: string) {
   const origin = applicationOrigin();
+  if (book.id === NORWEGIAN_BOOK.id) {
+    const url = new URL(bookFilePath(book, bookFiles(book)[0], { email: token }), origin).href;
+    return {
+      subject: `Din e-bok – ${book.title}`,
+      text: ["Takk for kjøpet!", `${book.title} av ${book.author}`, "", "Last ned e-boka (PDF)", url, "", "Lenken er gyldig i 30 dager. Lagre gjerne PDF-en på enheten din.", "Kjøpsvilkår: https://www.relationsvarning.se/no/kjopsvilkar", "Kundestøtte: support@relationsvarning.se"].join("\n"),
+    };
+  }
   const files = bookFiles(book).map(file => ({
     label: file.id === "book" ? "Hämta din e-bok (PDF)" : file.label,
     url: new URL(bookFilePath(book, file, { email: token }), origin).href,

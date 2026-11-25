@@ -2,6 +2,7 @@ import type Stripe from "stripe";
 import { identifyPaymentProduct } from "./paymentProductCatalog.server";
 import type { StripePaymentLineItem, VerifiedStripePayment } from "./paymentsDb.server";
 import { LITE_AUTISM_BOOK } from "./liteAutismBook";
+import { NORWEGIAN_BOOK, norwegianBookAmount } from "./norwegianBook";
 import { readBookAttribution } from "./liteAutismProof.server";
 
 const SUPPORTED_EVENT_TYPES = new Set([
@@ -81,13 +82,16 @@ export async function processStripeWebhookEvent(event: Stripe.Event, dependencie
   const paymentLinkId = idOf(session.payment_link);
   const productKey = await atStage("product_map", () => identifyPaymentProduct({ priceIds: lineItems.map((item) => item.priceId), paymentLinkId }));
   const isPaid = session.status === "complete" && session.payment_status === "paid";
-  const bookAttribution = productKey === LITE_AUTISM_BOOK.product && session.livemode && isPaid &&
-    session.mode === "payment" && paymentLinkId === null && session.metadata?.rv_product === LITE_AUTISM_BOOK.product &&
-    session.amount_total === LITE_AUTISM_BOOK.amountOre && session.currency === "sek" &&
+  const norwegianBook = productKey === NORWEGIAN_BOOK.product;
+  const expectedBookAmount = norwegianBook ? norwegianBookAmount(lineItems[0]?.priceId) : LITE_AUTISM_BOOK.amountOre;
+  const expectedProductId = (norwegianBook ? process.env.NORWAY_BOOK_PRODUCT_ID : process.env.LITE_AUTISM_BOOK_PRODUCT_ID)?.trim();
+  const bookAttribution = (norwegianBook || productKey === LITE_AUTISM_BOOK.product) && session.livemode && isPaid &&
+    session.mode === "payment" && paymentLinkId === null && session.metadata?.rv_product === productKey &&
+    expectedBookAmount !== null && session.amount_total === expectedBookAmount && session.currency === (norwegianBook ? "nok" : "sek") &&
     !stripeLineItems.has_more && stripeLineItems.data.length === 1 &&
-    lineItems[0]?.quantity === 1 && lineItems[0].unitAmountOre === LITE_AUTISM_BOOK.amountOre &&
+    lineItems[0]?.quantity === 1 && lineItems[0].unitAmountOre === expectedBookAmount &&
     lineItems[0].priceId === session.metadata.rv_book_price &&
-    Boolean(lineItems[0].productId && lineItems[0].productId === process.env.LITE_AUTISM_BOOK_PRODUCT_ID?.trim())
+    Boolean(lineItems[0].productId && lineItems[0].productId === expectedProductId)
     ? readBookAttribution(session.metadata.rv_book_ga4) : null;
   const payment = {
     eventId: event.id,

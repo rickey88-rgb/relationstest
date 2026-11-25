@@ -1,3 +1,5 @@
+import type { Market } from "../_content/market";
+import { verifyAudhdCheckoutPayment } from "./audhdCheckoutPayment.server";
 import Stripe from "stripe";
 import { configuredPriceIdsForProduct, identifyPaymentProduct } from "./paymentProductCatalog.server";
 
@@ -25,7 +27,13 @@ export type AudhdCheckoutVerification =
  * Verification deliberately uses Stripe as the source of truth rather than a
  * browser value or the asynchronously populated shadow ledger.
  */
-export async function inspectAudhdCheckoutSession(sessionId: string): Promise<AudhdCheckoutVerification> {
+export async function inspectAudhdCheckoutSession(sessionId: string, market: Market = "sv"): Promise<AudhdCheckoutVerification> {
+  if (market === "no") {
+    const payment = await verifyAudhdCheckoutPayment(sessionId, market);
+    if (payment.verified) return payment;
+    const reason = payment.reason;
+    return { verified: false, reason: reason === "wrong_reference" || reason === "wrong_price_or_amount" ? "wrong_product" : reason };
+  }
   if (!isCheckoutSessionId(sessionId)) return { verified: false, reason: "invalid_session_id" };
   const allowedPriceIds = new Set(configuredPriceIdsForProduct("audhd_test"));
   if (allowedPriceIds.size === 0) return { verified: false, reason: "price_not_configured" };

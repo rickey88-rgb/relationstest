@@ -9,7 +9,9 @@ import { hasPaidReturn } from "./usePaymentRecovery";
 import { productCatalog, resolveCrossSellOffers, type ProductId, type ResolvedOffer } from "./crossSellConfig";
 
 const storageKeys: Record<TestId, string> = {
-  iq_test: "relationsvarning_iq_state_v1", audhd_test: "relationsvarning_audhd_state_v1", hsp_test: "relationsvarning_hsp_state_v1", ptsd_test: "relationsvarning_ptsd_state_v1", screening_test: "relationstest_screening_state_v2", psychological_abuse_test: "psykiskt_vald_test_state_v1", attachment_test: "anknytningstest_state_v1", codependency_test: "medberoendetest_state_v1", gaslighting_test: "gaslightingtest_state_v1", trauma_bond_test: "traumabindningtest_state_v1", narcissist_partner: "narcissist_relation_test_state_v1", adhd_test: "relationsvarning_adhd_state_v1", angest_test: "relationsvarning_angest_state_v1", autism_test: "relationsvarning_autism_state_v1", narcissism_selftest: "relationsvarning_narcissism_self_v1",
+  iq_test: "relationsvarning_iq_state_v1", audhd_test: "relationsvarning_audhd_state_v1",
+  audhd_test_no: "relationsvarning_audhd_state_v1_no",
+  hsp_test: "relationsvarning_hsp_state_v1", ptsd_test: "relationsvarning_ptsd_state_v1", screening_test: "relationstest_screening_state_v2", psychological_abuse_test: "psykiskt_vald_test_state_v1", attachment_test: "anknytningstest_state_v1", codependency_test: "medberoendetest_state_v1", gaslighting_test: "gaslightingtest_state_v1", trauma_bond_test: "traumabindningtest_state_v1", narcissist_partner: "narcissist_relation_test_state_v1", adhd_test: "relationsvarning_adhd_state_v1", angest_test: "relationsvarning_angest_state_v1", autism_test: "relationsvarning_autism_state_v1", narcissism_selftest: "relationsvarning_narcissism_self_v1",
 };
 
 type Props = {

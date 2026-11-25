@@ -1,3 +1,4 @@
+import type { Market } from "../_content/market";
 import { createHash } from "node:crypto";
 import { createAutomaticAudhdRecoveryGrant, discardUndeliveredAutomaticAudhdRecoveryGrant } from "./audhdRecoveryDb.server";
 import { hashAudhdRecoveryToken, issueAudhdRecoveryToken } from "./audhdRecovery.server";
@@ -8,7 +9,7 @@ type VerifiedPayment = { checkoutSessionId: string; paymentIntentId: string; pri
 export type AudhdAutomaticRecoveryResult = { kind: "unavailable" | "existing" | "database_failed" | "delivery_failed" | "delivery_unknown" } | { kind: "accepted" };
 
 /** A Stripe Session URL can request mail, but can never return a report itself. */
-export async function sendAutomaticAudhdRecovery(payment: VerifiedPayment): Promise<AudhdAutomaticRecoveryResult> {
+export async function sendAutomaticAudhdRecovery(payment: VerifiedPayment, market: Market = "sv"): Promise<AudhdAutomaticRecoveryResult> {
   if (!payment.customerEmail || !isAudhdRecoveryEmailConfigured()) return { kind: "unavailable" as const };
   const token = issueAudhdRecoveryToken();
   let grant;
@@ -20,9 +21,11 @@ export async function sendAutomaticAudhdRecovery(payment: VerifiedPayment): Prom
   if (grant.kind !== "created") return { kind: "existing" as const };
   const recoveryUrl = new URL("/api/audhd-recovery/redeem", RECOVERY_ORIGIN);
   recoveryUrl.searchParams.set("token", token);
+  if (market === "no") recoveryUrl.searchParams.set("market", "no");
   try {
     await sendAudhdRecoveryEmail({
       to: payment.customerEmail,
+      market,
       recoveryUrl: recoveryUrl.toString(),
       // Resend keeps this deduplication key for 24h. The database uniqueness
       // constraint remains the durable cross-job protection after that.
