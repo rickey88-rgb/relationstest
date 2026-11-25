@@ -6,7 +6,7 @@ import { captureGa4CheckoutAttribution, trackEvent, trackEventBeforeNavigation }
 import { directAuthClient } from "../_lib/testAccounts/directClient";
 import { OVERTHINKING_BOOK as book } from "../_lib/overthinkingBook";
 import { STEINLER_BOOK } from "../_lib/steinlerBook";
-import { LITE_AUTISM_BOOK } from "../_lib/liteAutismBook";
+import { LITE_AUTISM_ANALYSIS_PRICE, LITE_AUTISM_BOOK } from "../_lib/liteAutismBook";
 import { BOOK_CATALOG, LEGACY_BOOK_LIBRARY_API, THINKING_CATALOG_BOOK, bookFilePath, bookFiles, type BookFile, type CatalogBook } from "../_lib/bookCatalog";
 
 const pendingBookKey = "rv-pending-book-v1";
@@ -22,26 +22,32 @@ async function bookRequest(path: string, direct: boolean, method = "GET", signal
   return fetch(path, { method, headers, signal, body, cache: "no-store", referrerPolicy: "no-referrer" });
 }
 
-export function OverthinkingBuyButton({ enabled, direct, className, label = "Köp e-boken · 149 kr", offer = book }: {
+export function OverthinkingBuyButton({ enabled, direct, className, label = "Köp e-boken · 149 kr", offer = book, offerType = "standard", onCheckoutClick }: {
   enabled: boolean;
   direct: boolean;
   className: string;
   label?: string;
   offer?: typeof book | typeof STEINLER_BOOK | typeof LITE_AUTISM_BOOK;
+  offerType?: "standard" | "analysis";
+  onCheckoutClick?: () => void;
 }) {
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
+  const isLiteAutism = offer.product === LITE_AUTISM_BOOK.product;
+  const analysisOffer = isLiteAutism && offerType === "analysis";
+  const price = analysisOffer ? LITE_AUTISM_ANALYSIS_PRICE : offer.price;
   async function buy() {
     setBusy(true);
     setMessage("");
+    onCheckoutClick?.();
     trackEvent("book_checkout_click", {
-      product_id: offer.product, product_name: offer.title, price: offer.price, currency: "SEK", offer_type: "standard",
+      product_id: offer.product, product_name: offer.title, price, currency: "SEK", offer_type: analysisOffer ? "analysis" : "standard",
     });
 
     try {
-      const isLiteAutism = offer.product === LITE_AUTISM_BOOK.product;
       const attribution = isLiteAutism ? await captureGa4CheckoutAttribution() : null;
-      const response = await bookRequest(offer.api + "?guest=1", direct, "POST", undefined, true, attribution ? JSON.stringify(attribution) : undefined);
+      const checkoutPath = offer.api + (analysisOffer ? "?guest=1&offer=analysis" : "?guest=1");
+      const response = await bookRequest(checkoutPath, direct, "POST", undefined, true, attribution ? JSON.stringify(attribution) : undefined);
       if (response.status === 401) {
         try { localStorage.setItem(pendingBookKey, String(Date.now())); } catch { /* The library is still available manually. */ }
         window.location.assign(direct ? "/mina-sidor?bok=kop#bibliotek" : "/logga-in?bok=kop");
@@ -52,8 +58,8 @@ export function OverthinkingBuyButton({ enabled, direct, className, label = "Kö
       if (result.kind === "checkout" && new URL(result.url).origin === "https://checkout.stripe.com") {
         if (isLiteAutism) {
           trackEventBeforeNavigation("begin_checkout", {
-            value: offer.price, currency: "SEK",
-            items: [{ item_id: offer.product, item_name: offer.title, price: offer.price, quantity: 1 }],
+            value: price, currency: "SEK",
+            items: [{ item_id: offer.product, item_name: offer.title, price, quantity: 1 }],
           }, () => window.location.assign(result.url));
         } else window.location.assign(result.url);
       } else if (result.kind === "guest_return") {
@@ -68,7 +74,7 @@ export function OverthinkingBuyButton({ enabled, direct, className, label = "Kö
     }
   }
   return <>
-    <button type="button" className={className} disabled={!enabled || busy} onClick={() => void buy()}>
+    <button type="button" data-flow={analysisOffer ? "cta" : undefined} className={className} disabled={!enabled || busy} onClick={() => void buy()}>
       {busy ? "Öppnar kassan…" : label}
     </button>
     {message && <p role="status" className="mt-2 text-sm">{message}</p>}

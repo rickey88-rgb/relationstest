@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { trackEvent } from "../_analytics/analytics";
 import type { TestId } from "../_analytics/config";
+import { LITE_AUTISM_BOOK } from "../_lib/liteAutismBook";
+import { OverthinkingBuyButton } from "./OverthinkingBookActions";
 import { hasPaidReturn } from "./usePaymentRecovery";
 import { productCatalog, resolveCrossSellOffers, type ProductId, type ResolvedOffer } from "./crossSellConfig";
 
@@ -13,6 +15,8 @@ const storageKeys: Record<TestId, string> = {
   audhd_test_no: "relationsvarning_audhd_state_v1_no",
   hsp_test: "relationsvarning_hsp_state_v1", ptsd_test: "relationsvarning_ptsd_state_v1", screening_test: "relationstest_screening_state_v2", psychological_abuse_test: "psykiskt_vald_test_state_v1", attachment_test: "anknytningstest_state_v1", codependency_test: "medberoendetest_state_v1", gaslighting_test: "gaslightingtest_state_v1", trauma_bond_test: "traumabindningtest_state_v1", narcissist_partner: "narcissist_relation_test_state_v1", adhd_test: "relationsvarning_adhd_state_v1", angest_test: "relationsvarning_angest_state_v1", autism_test: "relationsvarning_autism_state_v1", narcissism_selftest: "relationsvarning_narcissism_self_v1",
 };
+
+const ctaClassName = "mt-4 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[#27666A] px-4 py-3 text-center font-semibold text-white transition-colors hover:bg-[#1F5357] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#27666A]";
 
 type Props = {
   sourceProduct?: ProductId;
@@ -101,7 +105,10 @@ export default function PostPurchaseRecommendation({ sourceProduct: sourceProduc
         <div className="mt-auto pt-5">
           <p className="text-sm text-neutral-600">{offer.product.type === "test" ? "Fullständig analys" : "Digital bok (PDF)"}</p>
           <p className="mt-1 text-xl font-semibold">{offer.product.ordinaryPrice && <span className="mr-2 text-sm font-normal text-neutral-500 line-through">{offer.product.ordinaryPrice} kr</span>}{offer.product.price} kr</p>
-          <Link data-flow="cta" href={offer.product.purchasePath ?? destination(offer)} onClick={() => trackEvent("cross_sell_click", productEventParams(sourceProduct, offer))} className="mt-4 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[#27666A] px-4 py-3 text-center font-semibold text-white transition-colors hover:bg-[#1F5357] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#27666A]">{offer.product.type === "book" ? "Köp boken" : offer.label}</Link>
+          {offer.productId === LITE_AUTISM_BOOK.product
+            ? <OverthinkingBuyButton enabled direct={false} offer={LITE_AUTISM_BOOK} offerType="analysis" label="Köp boken" className={ctaClassName}
+                onCheckoutClick={() => trackEvent("cross_sell_click", productEventParams(sourceProduct, offer))} />
+            : <Link data-flow="cta" href={offer.product.purchasePath ?? destination(offer)} onClick={() => trackEvent("cross_sell_click", productEventParams(sourceProduct, offer))} className={ctaClassName}>{offer.product.type === "book" ? "Köp boken" : offer.label}</Link>}
           {offer.product.type === "book" && <Link href={destination(offer)} className="mt-3 inline-flex min-h-11 items-center text-sm text-[#27666A] underline underline-offset-4">Läs mer om boken</Link>}
         </div>
       </article>)}

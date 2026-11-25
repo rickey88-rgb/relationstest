@@ -92,13 +92,13 @@ export function paymentProductCatalog(): Catalog {
 
   // Keep the shared map intact. A conflicting or invalid new price must not
   // stop webhooks or change access for any existing product.
-  const bookPrices = {
-    overthinking_book: process.env.OVERTHINKING_BOOK_PRICE_ID?.trim() ?? "",
-    steinler_book: process.env.STEINLER_BOOK_PRICE_ID?.trim() ?? "",
-    lite_autism_book: process.env.LITE_AUTISM_BOOK_PRICE_ID?.trim() ?? "",
-  } as const;
-  for (const key of ["overthinking_book", "steinler_book", "lite_autism_book"] as const) {
-    const bookPrice = bookPrices[key];
+  const bookPrices = [
+    ["overthinking_book", process.env.OVERTHINKING_BOOK_PRICE_ID?.trim() ?? ""],
+    ["steinler_book", process.env.STEINLER_BOOK_PRICE_ID?.trim() ?? ""],
+    ["lite_autism_book", process.env.LITE_AUTISM_BOOK_PRICE_ID?.trim() ?? ""],
+    ["lite_autism_book", process.env.NEXT_PUBLIC_LITE_AUTISM_BOOK_OFFER_PRICE_ID?.trim() ?? ""],
+  ] as const;
+  for (const [key, bookPrice] of bookPrices) {
     if (!/^price_[A-Za-z0-9]+$/.test(bookPrice) ||
         Object.entries(catalog).some(([product, entry]) => product !== key && entry.priceIds.includes(bookPrice))) continue;
     const prior = catalog[key];

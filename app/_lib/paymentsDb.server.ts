@@ -1,6 +1,6 @@
 import postgres from "postgres";
 import type { PaymentProductIdentification } from "./paymentProductCatalog.server";
-import { LITE_AUTISM_BOOK } from "./liteAutismBook";
+import { LITE_AUTISM_BOOK, liteAutismBookAmount } from "./liteAutismBook";
 import { NORWEGIAN_BOOK, norwegianBookAmount } from "./norwegianBook";
 import { norwegian } from "../_content/market";
 import type { BookAttribution } from "./liteAutismProof.server";
@@ -140,7 +140,7 @@ export async function recordVerifiedStripePayment(input: VerifiedStripePayment) 
 
     const norwegianAmount = norwegianBookAmount(input.lineItems[0]?.priceId);
     if (input.bookAttribution && input.livemode && input.checkoutStatus === "complete" && input.paymentStatus === "paid" &&
-        ((input.productKey === LITE_AUTISM_BOOK.product && input.amountTotalOre === LITE_AUTISM_BOOK.amountOre && input.currency === "sek") ||
+        ((input.productKey === LITE_AUTISM_BOOK.product && input.amountTotalOre === liteAutismBookAmount(input.lineItems[0]?.priceId) && input.currency === "sek") ||
          (input.productKey === NORWEGIAN_BOOK.product && norwegianAmount !== null && input.amountTotalOre === norwegianAmount && input.currency === "nok"))) {
       const { clientId, sessionId } = input.bookAttribution;
       await transaction`

@@ -32,8 +32,5 @@ function loadPage(sale) {
     assert(html.includes("72 ifyllbara fält")); assert(html.includes('"numberOfPages":52'));
     assert(!/href="[^"]+\.pdf/.test(html));
   }
-  const config = createLoader({ "../_lib/featureFlags": { AUTISM_BOOK_SALE_ENABLED: true, ADHD_DELUXE_SALE_ENABLED: false } })(path.resolve(__dirname, "../_components/crossSellConfig.ts"));
-  const recommendations = config.resolveCrossSellOffers("autism_test", { hasTestAccess: () => false });
-  assert.equal(recommendations[0].productId, "autism_book"); assert.equal(recommendations[0].product.price, 99); assert.equal(recommendations[0].product.path, "/autism-bok?offer=analysis"); assert.equal(recommendations[0].product.name, "AUTISM ALL INCLUSIVE");
-  console.log("PASS: two rendered offers, six previews, no public PDFs, production preview bypass blocked, recommendation ready behind sale gate.");
+  console.log("PASS: two rendered offers, six previews, no public PDFs and production preview bypass blocked.");
 })().catch(error => { console.error(error); process.exitCode = 1; });

@@ -3,7 +3,8 @@ const assert = require("node:assert/strict");
 const path = require("node:path");
 const createLoader = require("../autism-test/test/test-loader.cjs");
 
-// Production has both books enabled; also exercise the paused configuration below.
+process.env.NEXT_PUBLIC_LITE_AUTISM_BOOK_OFFER_PRICE_ID = "price_ellie99";
+// Exercise both the configured and unconfigured offer.
 const crossSell = createLoader({ "../_lib/featureFlags": { AUTISM_BOOK_SALE_ENABLED: true, ADHD_DELUXE_SALE_ENABLED: true } })(path.join(__dirname, "crossSellConfig.ts"));
 const noExistingUnlocks = () => false;
 
@@ -15,7 +16,11 @@ assert.deepEqual(
 );
 
 const autismOffers = crossSell.resolveCrossSellOffers("autism_test", { hasTestAccess: noExistingUnlocks });
-assert.deepEqual(autismOffers.map((offer) => [offer.productId, offer.displayPosition]), [["audhd_test", "primary"], ["autism_book", "secondary"]]);
+assert.deepEqual(autismOffers.map((offer) => [offer.productId, offer.displayPosition]), [["audhd_test", "primary"], ["lite_autism_book", "secondary"]]);
+assert.equal(autismOffers[1].product.price, 99);
+assert.equal(autismOffers[1].product.ordinaryPrice, 149);
+assert.equal(autismOffers[1].product.path, "/lite-autism-har-val-ingen-dott-av");
+assert.match(autismOffers[1].product.image.src, /bokmockup-spokmaskot\.webp$/);
 
 const audhdOffers = crossSell.resolveCrossSellOffers("audhd_test", {
   preferredProductIds: ["autism_test", "adhd_test"],
@@ -56,12 +61,13 @@ assert.deepEqual(
   ["adhd_test"],
 );
 
-const paused = createLoader({ "../_lib/featureFlags": { AUTISM_BOOK_SALE_ENABLED: false, ADHD_DELUXE_SALE_ENABLED: false } })(path.join(__dirname, "crossSellConfig.ts"));
+delete process.env.NEXT_PUBLIC_LITE_AUTISM_BOOK_OFFER_PRICE_ID;
+const paused = createLoader({ "../_lib/featureFlags": { AUTISM_BOOK_SALE_ENABLED: true, ADHD_DELUXE_SALE_ENABLED: false } })(path.join(__dirname, "crossSellConfig.ts"));
 assert.deepEqual(paused.resolveCrossSellOffers("autism_test").map(offer => offer.productId), ["audhd_test"]);
 assert.deepEqual(paused.resolveCrossSellOffers("adhd_test").map(offer => offer.productId), ["audhd_test"]);
 const bookOffers = createLoader()(path.join(__dirname, "../_lib/bookOffers.ts"));
 const testConfig = createLoader()(path.join(__dirname, "../_analytics/config.ts")).testConfig;
-for (const [source, book, getter] of [["adhd_test", "adhd_deluxe", "getAdhdDeluxeBookOffer"], ["autism_test", "autism_book", "getAutismBookOffer"], ["audhd_test", "audhd_book", "getAudhdBookOffer"]]) {
+for (const [source, book, getter] of [["adhd_test", "adhd_deluxe", "getAdhdDeluxeBookOffer"], ["audhd_test", "audhd_book", "getAudhdBookOffer"]]) {
   const offers = crossSell.resolveCrossSellOffers(source);
   assert.equal(offers.length, 2);
   assert.equal(offers[0].product.type, "test");

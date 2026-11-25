@@ -1,7 +1,7 @@
 import type Stripe from "stripe";
 import { identifyPaymentProduct } from "./paymentProductCatalog.server";
 import type { StripePaymentLineItem, VerifiedStripePayment } from "./paymentsDb.server";
-import { LITE_AUTISM_BOOK } from "./liteAutismBook";
+import { LITE_AUTISM_BOOK, liteAutismBookAmount } from "./liteAutismBook";
 import { NORWEGIAN_BOOK, norwegianBookAmount } from "./norwegianBook";
 import { readBookAttribution } from "./liteAutismProof.server";
 
@@ -83,7 +83,7 @@ export async function processStripeWebhookEvent(event: Stripe.Event, dependencie
   const productKey = await atStage("product_map", () => identifyPaymentProduct({ priceIds: lineItems.map((item) => item.priceId), paymentLinkId }));
   const isPaid = session.status === "complete" && session.payment_status === "paid";
   const norwegianBook = productKey === NORWEGIAN_BOOK.product;
-  const expectedBookAmount = norwegianBook ? norwegianBookAmount(lineItems[0]?.priceId) : LITE_AUTISM_BOOK.amountOre;
+  const expectedBookAmount = norwegianBook ? norwegianBookAmount(lineItems[0]?.priceId) : liteAutismBookAmount(lineItems[0]?.priceId);
   const expectedProductId = (norwegianBook ? process.env.NORWAY_BOOK_PRODUCT_ID : process.env.LITE_AUTISM_BOOK_PRODUCT_ID)?.trim();
   const bookAttribution = (norwegianBook || productKey === LITE_AUTISM_BOOK.product) && session.livemode && isPaid &&
     session.mode === "payment" && paymentLinkId === null && session.metadata?.rv_product === productKey &&

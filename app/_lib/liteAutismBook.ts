@@ -28,6 +28,15 @@ export const LITE_AUTISM_BOOK = {
   description: "En illustrerad vardagsskildring om maskering, vänskap och livet med autism, med självironi och stark igenkänning.",
 } as const;
 
+export const LITE_AUTISM_ANALYSIS_PRICE = 99;
+
+export function liteAutismBookAmount(priceId?: string) {
+  const offerPrice = process.env.NEXT_PUBLIC_LITE_AUTISM_BOOK_OFFER_PRICE_ID?.trim();
+  return offerPrice && offerPrice === priceId && offerPrice !== process.env.LITE_AUTISM_BOOK_PRICE_ID?.trim()
+    ? LITE_AUTISM_ANALYSIS_PRICE * 100
+    : LITE_AUTISM_BOOK.amountOre;
+}
+
 export const LITE_AUTISM_SAMPLE = [
   { page: 1, title: "Omslaget", caption: "Relationsvarnings spöke" },
   { page: 10, title: "Min personlighet är ett grupparbete", caption: "Första dagen bakom lånedisken" },

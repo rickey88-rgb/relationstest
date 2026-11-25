@@ -30,6 +30,7 @@ test("all books deliver once, and verify the entire package again at access time
     AUDHD_BOOK_ALLOWED_PRICE_IDS: "price_audhd,price_audhdAnalysis",
     OVERTHINKING_BOOK_PRICE_ID: "price_overthinking", STEINLER_BOOK_PRICE_ID: "price_steinler",
     LITE_AUTISM_BOOK_PRICE_ID: "price_lite", LITE_AUTISM_BOOK_PRODUCT_ID: "prod_lite",
+    NEXT_PUBLIC_LITE_AUTISM_BOOK_OFFER_PRICE_ID: "price_liteOffer",
     NORWAY_BOOK_PRICE_ID: "price_norwegian", NORWAY_BOOK_OFFER_PRICE_ID: "price_norwegianOffer",
     NORWAY_BOOK_PRODUCT_ID: "prod_norwegian",
     STRIPE_PAYMENT_PRODUCT_MAP_JSON: "{}",
@@ -44,6 +45,7 @@ test("all books deliver once, and verify the entire package again at access time
     ["overthinking_book", "du-tanker-sonder-dig-sjalv", "price_overthinking", null, 14900, 1],
     ["steinler_book", "nar-du-borjar-tvivla-pa-dig-sjalv", "price_steinler", null, 14900, 1],
     ["lite_autism_book", "lite-autism-har-val-ingen-dott-av", "price_lite", null, 14900, 1],
+    ["lite_autism_book", "lite-autism-har-val-ingen-dott-av", "price_liteOffer", null, 9900, 1],
     ["hjernen_i_kryssild", "hjernen-i-kryssild", "price_norwegian", null, 24900, 1],
     ["hjernen_i_kryssild", "hjernen-i-kryssild", "price_norwegianOffer", null, 14900, 1],
   ];
@@ -70,7 +72,7 @@ test("all books deliver once, and verify the entire package again at access time
     const intentId = "pi_" + id;
     const session = { id, livemode: true, mode: "payment", status: "complete", payment_status: "paid", currency,
       amount_total: amount, payment_intent: intentId, payment_link: link, customer_details: { email: buyer },
-      metadata: { rv_product: product, ...(product === "steinler_book" || norwegian ? { rv_book_price: price } : {}) } };
+      metadata: { rv_product: product, ...(product === "steinler_book" || product === "lite_autism_book" || norwegian ? { rv_book_price: price } : {}) } };
     const item = { price: { id: price, product: norwegian ? "prod_norwegian" : product === "lite_autism_book" ? "prod_lite" : "prod_fixture" },
       quantity: 1, currency, amount_total: amount };
     const charge = { paid: true, captured: true, refunded: false, amount_refunded: 0, disputed: false,
@@ -111,8 +113,10 @@ test("all books deliver once, and verify the entire package again at access time
           return { data: source ? new Blob([readFileSync(source)]) : null };
         },
         info: async () => ({ data: { size: 12165871, contentType: "application/pdf" } }),
-        createSignedUrl: async (_, seconds) => {
+        createSignedUrl: async (key, seconds, options) => {
+          assert.equal(key, "v1/lite-autism-har-val-ingen-dott-av.pdf");
           assert.equal(seconds, 180);
+          assert.equal(options.download, "lite-autism-har-val-ingen-dott-av.pdf");
           return { data: { signedUrl: "https://fixture.supabase.co/storage/v1/object/sign/book?token=fixture" } };
         },
       }) } }) },
@@ -151,6 +155,10 @@ test("all books deliver once, and verify the entire package again at access time
       const key = "book-delivery/" + session.id;
       assert.equal(attempts.filter(value => value === key).length, 1);
       const message = messages.get(key);
+      if (product === "lite_autism_book") {
+        assert.equal(message.subject, "Din e-bok: Lite autism har väl ingen dött av");
+        assert.match(message.text, /Ellie Lind/);
+      }
       if (product === "hjernen_i_kryssild") {
         assert.equal(message.subject, "Din e-bok – Hjernen i kryssild");
         assert.match(message.text, new RegExp(offer[4] / 100 + " NOK"));

@@ -115,7 +115,7 @@ export async function deliverPendingGa4Purchase(checkoutSessionId: string) {
       ? { item_id: NORWEGIAN_BOOK.product, item_name: NORWEGIAN_BOOK.title, price: delivery.amount_total_ore / 100, quantity: 1 }
       : norwegianTest ? { item_id: "audhd_test_no", item_name: "AuDHD-test for voksne", price: norwegian.reportPrice, quantity: 1 }
       : isBook
-      ? { item_id: LITE_AUTISM_BOOK.product, item_name: LITE_AUTISM_BOOK.title, price: LITE_AUTISM_BOOK.price, quantity: 1 }
+      ? { item_id: LITE_AUTISM_BOOK.product, item_name: LITE_AUTISM_BOOK.title, price: delivery.amount_total_ore / 100, quantity: 1 }
       : { item_id: "audhd_test", item_name: "AuDHD-test för vuxna", price: 79, quantity: 1 };
     const query = new URLSearchParams({ measurement_id: GA_MEASUREMENT_ID, api_secret: secret });
     const controller = new AbortController();

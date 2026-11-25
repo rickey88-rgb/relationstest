@@ -1,9 +1,10 @@
 import { testConfig, type TestId } from "../_analytics/config";
 import { BOOK_OFFER_PRICES, getAdhdDeluxeBookOffer, getAudhdBookOffer, getAutismBookOffer } from "../_lib/bookOffers";
 import { ADHD_DELUXE_SALE_ENABLED, AUTISM_BOOK_SALE_ENABLED } from "../_lib/featureFlags";
+import { LITE_AUTISM_ANALYSIS_PRICE, LITE_AUTISM_BOOK } from "../_lib/liteAutismBook";
 
 export type ProductType = "test" | "book";
-export type BookProductId = "audhd_book" | "autism_book" | "adhd_deluxe";
+export type BookProductId = "audhd_book" | "autism_book" | "adhd_deluxe" | "lite_autism_book";
 export type ProductId = TestId | BookProductId;
 export type OfferPosition = "primary" | "secondary";
 
@@ -81,6 +82,18 @@ export const productCatalog = {
     analyticsId: "autism_book",
     image: { src: "/autism-all-inclusive-mockup.png", alt: "AUTISM ALL INCLUSIVE av Elias Voss", width: 1205, height: 1305 },
   },
+  lite_autism_book: {
+    id: LITE_AUTISM_BOOK.product,
+    type: "book",
+    name: LITE_AUTISM_BOOK.title,
+    path: LITE_AUTISM_BOOK.path,
+    price: LITE_AUTISM_ANALYSIS_PRICE,
+    ordinaryPrice: LITE_AUTISM_BOOK.price,
+    currency: "SEK",
+    enabled: /^price_[A-Za-z0-9]+$/.test(process.env.NEXT_PUBLIC_LITE_AUTISM_BOOK_OFFER_PRICE_ID?.trim() ?? ""),
+    analyticsId: LITE_AUTISM_BOOK.product,
+    image: { ...LITE_AUTISM_BOOK.productMockup, alt: `${LITE_AUTISM_BOOK.title} av ${LITE_AUTISM_BOOK.author}` },
+  },
   adhd_deluxe: {
     id: "adhd_deluxe",
     type: "book",
@@ -134,6 +147,7 @@ function bookOffer(productId: BookProductId, position: OfferPosition, priority: 
   const product = productCatalog[productId];
   const descriptions: Record<BookProductId, string> = {
     autism_book: "52 sidor om sinnesintryck, energi, tydlighet och en vardag med mer utrymme. Dessutom 12 A4-sidor med digitalt ifyllbara arbetsblad.",
+    lite_autism_book: `Av ${LITE_AUTISM_BOOK.author}. Följ Ellie genom jobbtelefoner, vänskap och oväntade planändringar i en varm, illustrerad berättelse om maskering och livet med autism.`,
     audhd_book: "10 konkreta sätt att få livet att fungera när ADHD och autism drar åt varsitt håll.",
     adhd_deluxe: "En konkret bok om att förstå var vardagen fastnar och bygga smartare runt det.",
   };
@@ -147,7 +161,7 @@ export const crossSellOffers: Partial<Record<ProductId, readonly ConfiguredOffer
   ],
   autism_test: [
     testOffer("autism_test", "audhd_test", "primary", 10, { path: "/audhd-test" }),
-    bookOffer("autism_book", "secondary", 20),
+    bookOffer("lite_autism_book", "secondary", 20),
   ],
   audhd_test: [
     testOffer("audhd_test", "adhd_test", "primary", 10, { selectionGroup: "audhd-focus", path: "/adhd-test" }),

@@ -5,12 +5,13 @@ const React = require("react");
 const { renderToStaticMarkup } = require("react-dom/server");
 const createLoader = require("../autism-test/test/test-loader.cjs");
 
+process.env.NEXT_PUBLIC_LITE_AUTISM_BOOK_OFFER_PRICE_ID = "price_ellie99";
 const loadCatalog = () => createLoader({ "../_lib/featureFlags": { AUTISM_BOOK_SALE_ENABLED: true, ADHD_DELUXE_SALE_ENABLED: true } })(path.join(__dirname, "crossSellConfig.ts"));
 function render(sourceProduct, options = {}) {
   const catalog = loadCatalog();
   const offers = catalog.resolveCrossSellOffers(sourceProduct, options);
   const Component = createLoader({
-    react: { ...React, useState: () => [offers, () => {}], useEffect: () => {}, useMemo: fn => fn(), useRef: value => ({ current: value }) },
+    react: { ...React, useState: value => [Array.isArray(value) ? offers : value, () => {}], useEffect: () => {}, useMemo: fn => fn(), useRef: value => ({ current: value }) },
     "next/link": { default: ({ children, ...props }) => React.createElement("a", props, children) },
     "next/image": { default: props => React.createElement("img", props) },
     "../_analytics/analytics": { trackEvent: () => false },
@@ -33,6 +34,13 @@ for (const source of ["adhd_test", "autism_test", "audhd_test"]) {
   }
   assert(html.includes("Fullständig analys"));
   assert(html.includes("Köp boken"));
+  if (source === "autism_test") {
+    assert.match(html, /<button[^>]*data-flow="cta"[^>]*>Köp boken<\/button>/);
+    assert.match(html, /Lite autism har väl ingen dött av/);
+    assert.match(html, /Ellie Lind/);
+    assert.match(html, /bokmockup-spokmaskot\.webp/);
+    assert.doesNotMatch(html, /autism-bok\?offer=analysis|AUTISM ALL INCLUSIVE/);
+  }
 }
 const single = render("gaslighting_test");
 assert.equal((single.html.match(/<article/g) || []).length, 1);
