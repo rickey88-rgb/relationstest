@@ -86,12 +86,13 @@ global.fetch = async (url, options) => {
     }
     global.testAccountsSql = sql(pg);
     const adapters = load(path.join(__dirname,"adapter.ts")).registeredAdapters();
+    const { products: npf } = require("../../../deploy/pricing79.json");
     assert.equal(adapters.length,15);
     const catalog = {};
     for (const model of adapters) {
       process.env[model.flagPrefix+"_CHECKOUT_ENABLED"]="true";
       process.env[model.flagPrefix+"_SAVE_ENABLED"]="true"; process.env[model.flagPrefix+"_READ_ENABLED"]="true";
-      const id="price_synthetic"+model.slug.replaceAll("-","");
+      const id=npf[model.product]?.priceId ?? "price_synthetic"+model.slug.replaceAll("-","");
       process.env[model.priceEnv]=id; catalog[model.product]={priceIds:[id],paymentLinkIds:[]};
       prices.set(id,{id,active:true,livemode:true,type:"one_time",unit_amount:model.amount,currency:"sek"});
     }
@@ -124,7 +125,11 @@ global.fetch = async (url, options) => {
       for(let n=1;n<=100;n++) { try { const value=Array(n).fill(0); model.parse({answers:value,questionVersion:model.questionVersion,reportVersion:model.reportVersion}); answers=value; break; } catch {} }
       assert(answers);
       const payload={answers,questionVersion:model.questionVersion,reportVersion:model.reportVersion};
-      const checkoutBody={action:"checkout",product:model.product,payload,consent:"test-guest-processing-v1"};
+      const checkoutBody={action:"checkout",product:model.product,payload,consent:"test-guest-processing-v1",...(npf[model.product] ? {expectedAmount:7900} : {})};
+      if (npf[model.product]) {
+        assert.equal((await request({...checkoutBody,expectedAmount:3900})).status,409);
+        assert.equal((await request({...checkoutBody,expectedAmount:undefined})).status,409);
+      }
       assert.equal((await request({...checkoutBody,consent:""})).status,400);
       const checkout=await request(checkoutBody); assert.equal(checkout.status,201);
       const receipt=await checkout.json(), id=receipt.id, secret=receipt.secret; ids.push({id,product:model.product});
@@ -133,6 +138,7 @@ global.fetch = async (url, options) => {
       assert((attempt.expires_at-new Date())/86400000<=7);
       assert.equal((await request({action:"guest",id,product:model.product},null,secret)).status,503,"unpaid must not open");
       const session=sessions.get(attempt.session_id); session.status="complete"; session.payment_status="paid";
+      if (npf[model.product]) assert.equal(session.amount_total,7900);
       const guest=await ok({action:"guest",id,product:model.product},null,secret);
       assert.deepEqual(guest.result,model.calculate(answers));
       assert.equal(guest.answers.length,answers.length); assert(guest.answers.every(item=>item.question && typeof item.answer==="string"));

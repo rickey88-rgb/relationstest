@@ -1,3 +1,4 @@
+import { NpfPremiumHero, NpfQualityCards, npfTests, premiumShell, premiumEditorial } from "../_components/NpfPremium";
 import type { Metadata } from "next";
 import Link from "next/link";
 import EditorialSurface from "../_components/EditorialSurface";
@@ -50,20 +51,13 @@ const structuredData = [
 ];
 
 export default function AudhdLanding() {
-  return <EditorialSurface><main data-rv="container" className="mx-auto max-w-4xl px-4 py-8 text-neutral-900 sm:px-6 sm:py-14">
+  return <EditorialSurface><main className={premiumShell}>
     <EditorialArticleJsonLd data={article} />
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData.slice(1)).replace(/</g, "\\u003c") }} />
     <nav aria-label="Brödsmulor" className="text-sm text-neutral-600"><Link href="/" className={textLink}>Relationsvarning</Link> / <span aria-current="page">AuDHD-test</span></nav>
     <article>
-      <header className="mt-6 rounded-[28px] border border-[#D6E1DD] bg-[#FFFEFC] px-5 py-8 shadow-sm sm:px-9 sm:py-12">
-        <p className="text-sm font-semibold uppercase tracking-[.16em] text-[#27666A]">Självtest för vuxna</p>
-        <h1 className="mt-3 max-w-3xl">AuDHD-test för vuxna</h1>
-        <p className="mt-4 text-xl font-semibold leading-8 text-[#364A4B]">Ett av Sveriges första och mest omfattande AuDHD-självtest för vuxna</p>
-        <p className="mt-5 max-w-2xl text-lg leading-8 text-neutral-700">48 frågor som kartlägger ADHD-relaterade drag, autismrelaterade drag och hur de kan överlappa i vardagen. Testet är utvecklat för vuxna som känner igen sig i båda områdena och vill förstå sitt mönster bättre.</p>
-        <div className="mt-7"><Link data-rv="button" href="/audhd-test/test" className={cta}>Starta AuDHD-testet</Link></div>
-        <p className="mt-3 text-sm font-semibold text-neutral-700">48 frågor · cirka 8 minuter · första resultatet direkt</p>
-        <p className="mt-5 max-w-2xl text-sm leading-6 text-neutral-600">AuDHD är ett informellt begrepp för samtidig ADHD och autism. Självtestet ersätter inte en neuropsykiatrisk utredning.</p>
-      </header>
+      <NpfPremiumHero test="audhd" /><NpfQualityCards />
+    <div className={premiumEditorial}>
 
       <GuideSection title="Varför ett kombinerat AuDHD-test?"><div className="max-w-3xl space-y-4"><p>ADHD och autism är separata tillstånd som kan förekomma samtidigt. Ett vanligt ADHD-test fokuserar främst på ADHD-relaterade drag, medan ett autismtest fokuserar på autismrelaterade drag.</p><p>Det här testet låter båda områdena få plats och tittar också på hur svarsmönstret mellan dem kan se ut. <Link href="/audhd" className={textLink}>Läs mer om vad AuDHD innebär</Link>.</p></div></GuideSection>
 
@@ -82,7 +76,7 @@ export default function AudhdLanding() {
 
       <GuideSection title="Fördjupa dig med konkreta verktyg"><p className="max-w-3xl">Vill du ha praktiskt stöd för vardagen finns en bok med tio konkreta sätt att hantera när ADHD och autism drar åt olika håll.</p><div className="max-w-[370px]"><AudhdBookCard /></div></GuideSection>
 
-      <section data-rv="panel" className="mt-12 rounded-[28px] border border-[#D6E1DD] bg-[#FFFEFC] px-5 py-8 text-center sm:px-9 sm:py-10"><h2 className="text-3xl font-semibold tracking-tight text-neutral-950">Redo att se hur ditt mönster ser ut?</h2><p className="mx-auto mt-3 max-w-xl leading-7 text-neutral-700">Svara på 48 frågor och få ett första resultat direkt i webbläsaren.</p><div className="mt-6"><Link data-rv="button" href="/audhd-test/test" className={cta}>Starta AuDHD-testet</Link></div><p className="mt-3 text-sm font-semibold text-neutral-700">48 frågor · första resultatet direkt</p><p className="mx-auto mt-5 max-w-2xl text-sm leading-6 text-neutral-600"><strong className="font-semibold text-neutral-700">Bra att veta:</strong> Du kan göra AuDHD-testet och se ett första fynd i dina svar utan kostnad. Vill du låsa upp din personliga fördjupade analys kostar det 79 kr. Du väljer själv om du vill köpa den.</p></section>
-    </article>
+      <section data-rv="panel" className="mt-12 rounded-[28px] border border-[#D6E1DD] bg-[#FFFEFC] px-5 py-8 text-center sm:px-9 sm:py-10"><h2 className="text-3xl font-semibold tracking-tight text-neutral-950">Redo att se hur ditt mönster ser ut?</h2><p className="mx-auto mt-3 max-w-xl leading-7 text-neutral-700">Svara på 48 huvudfrågor och sex följdfrågor och få ett första resultat direkt i webbläsaren.</p><div className="mt-6"><Link data-rv="button" href="/audhd-test/test" className={cta}>Starta AuDHD-testet</Link></div><p className="mt-3 text-sm font-semibold text-neutral-700">48 huvudfrågor + 6 följdfrågor · första återkopplingen direkt</p><p className="mx-auto mt-5 max-w-2xl text-sm leading-6 text-neutral-600"><strong className="font-semibold text-neutral-700">Bra att veta:</strong> Du kan göra AuDHD-testet och se ett första fynd i dina svar utan kostnad. Vill du låsa upp din personliga fördjupade analys kostar det {npfTests.audhd.price} kr. Du väljer själv om du vill köpa den.</p></section>
+    </div></article>
   </main></EditorialSurface>;
 }

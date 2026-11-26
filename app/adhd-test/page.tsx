@@ -1,3 +1,4 @@
+import { NpfPremiumHero, NpfQualityCards, npfTests, premiumShell, premiumEditorial } from "../_components/NpfPremium";
 import EditorialSurface from "../_components/EditorialSurface";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -63,16 +64,11 @@ const faq = [
 ];
 const cta = "inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-neutral-900 px-5 py-3 text-center font-semibold text-white hover:bg-neutral-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900 sm:w-auto";
 export default function ADHDLanding() {
-  return <EditorialSurface><main data-rv="container" className="mx-auto max-w-3xl px-4 py-10 text-neutral-900 [overflow-wrap:anywhere] sm:px-6 sm:py-14">
+  return <EditorialSurface><main className={premiumShell}>
     <EditorialArticleJsonLd data={articleJsonLd} />
     <nav aria-label="Brödsmulor" className="text-sm text-neutral-600"><Link href="/" className={textLink + " inline-flex min-h-11 items-center"}>Relationsvarning</Link><span aria-hidden="true"> / </span><span aria-current="page">ADHD-test</span></nav>
-    <article><header className="mt-5"><h1 className="text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">ADHD-test för vuxna</h1>
-      <p className="mt-5 text-lg leading-8 text-neutral-700">30 frågor om fokus, planering, rastlöshet och vardag. Räkna med ungefär fem minuter.</p>
-      <div className="mt-6"><Link data-rv="button" href="/adhd-test/test" className={cta}>Starta ADHD-testet</Link></div><p className="mt-3 text-sm text-neutral-600">Ingen registrering krävs för att starta. Självtestet kan varken bekräfta eller utesluta ADHD.</p>
-    </header>
-    <figure className="mt-8 overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50">
-      <Image src="/seo-images/adhd-test-discover.png" alt="Illustration för ADHD-test för vuxna" width={1672} height={941} sizes="(max-width: 768px) calc(100vw - 2rem), 768px" className="h-auto w-full" />
-    </figure>
+    <article><NpfPremiumHero test="adhd" /><NpfQualityCards />
+    <div className={premiumEditorial}>
     <GuideSection title="Så fungerar självskattningen">
       <p id="metodik">Med 30 frågor om vuxenlivet får du en profil som visar hur fokus, organisering, impulser, rastlöshet och igångsättning ser ut i dina egna svar. Du utgår från de senaste sex månaderna, med en avslutande fråga om tidigare i livet. Den fullständiga analysen jämför områdena och hjälper dig att sätta dem i ett vardagssammanhang.</p>
       <p><strong>Exempel på återkoppling</strong><br />Om uppmärksamhet sticker ut i dina svar kan återkopplingen handla om fokus och distraktion. Den beskriver dina svar och kan inte avgöra varför du har svårt att hålla fokus.</p>
@@ -81,6 +77,10 @@ export default function ADHDLanding() {
       <p>Självskattningen ger underlag för egen reflektion. Läs mer om <Link href="/metodik#kvalitetsarbete-npf" className={textLink}>hur vi granskar och testar våra självskattningar</Link>.</p>
       <p>Fördjupa dig i <Link href="/uppdrag-granskning-adhd" className={textLink}>SVT:s ADHD-granskning och hur du bedömer ett ADHD-test</Link>.</p>
     </GuideSection>
+
+    <figure className="mt-8 overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50">
+      <Image src="/seo-images/adhd-test-discover.png" alt="Illustration för ADHD-test för vuxna" width={1672} height={941} sizes="(max-width: 768px) calc(100vw - 2rem), 768px" className="h-auto w-full" />
+    </figure>
     <GuideSection title="Vad betyder poängen?">
       <p>Varje svar ger 0–4 poäng. De fem frågorna inom varje område summeras och räknas om till en nivå mellan 0 och 100. Testets index är medelvärdet för de fem första områdena. Påverkan i vardagen redovisas separat och används i tolkningen, men höjer eller sänker inte indexet.</p>
       <p>En nivå på exempelvis 60 av 100 betyder inte 60 procents sannolikhet för ADHD. Värdena beskriver dina svar i vår modell, inte hur du ligger till jämfört med befolkningen. Ett högt värde fastställer ingen diagnos, och ett lågt värde utesluter den inte. Ta därför fasta på konkreta situationer du känner igen och hur de påverkar dig, snarare än en enskild siffra.</p>
@@ -104,9 +104,9 @@ export default function ADHDLanding() {
       <p>Funderar du på både ADHD och autism? Läs om <Link href="/adhd-autism" className={textLink}>skillnader och överlapp mellan ADHD och autism</Link> eller om <Link href="/audhd-test" className={textLink}>självtestet för kombinerade drag</Link>.</p>
       <p>Läs också om <Link href="/hogkanslig-eller-adhd" className={textLink}>högkänslighet och ADHD</Link> om du undrar vad starka intryck kan betyda i olika sammanhang.</p>
     </GuideSection>
-    <GuideSection title="Vanliga frågor om ADHD-testet">{faq.map(([question,answer]) => <div key={question} className="space-y-2 border-t border-neutral-200 pt-4"><h3 className="text-lg font-semibold text-neutral-900">{question}</h3><p>{answer}</p></div>)}<div className="space-y-2 border-t border-neutral-200 pt-4"><h3 className="text-lg font-semibold text-neutral-900">Vad kostar testet?</h3><p>Testet är gratis att genomföra och du får ett personligt fynd från dina svar utan kostnad. Den fullständiga personliga analysen kostar 39 kr.</p></div></GuideSection>
+    <GuideSection title="Vanliga frågor om ADHD-testet">{faq.map(([question,answer]) => <div key={question} className="space-y-2 border-t border-neutral-200 pt-4"><h3 className="text-lg font-semibold text-neutral-900">{question}</h3><p>{answer}</p></div>)}<div className="space-y-2 border-t border-neutral-200 pt-4"><h3 className="text-lg font-semibold text-neutral-900">Vad kostar testet?</h3><p>Testet är gratis att genomföra och du får ett personligt fynd från dina svar utan kostnad. Den fullständiga personliga analysen kostar {npfTests.adhd.price} kr.</p></div></GuideSection>
     <GuideSection title="Nyfiken på vad dina egna svar visar?"><p>30 frågor. Sex områden. En samlad analys av ditt svarsmönster.</p><Link data-rv="button" href="/adhd-test/test" className={cta}>Starta ADHD-testet</Link></GuideSection>
     <GuideSection title="Läs mer om ADHD"><p>Utforska symtom, olika uttryck och situationer i vuxenlivet.</p><GuideLinks links={adhdGuides.map((guide) => ({ href: `/${guide.slug}`, label: guide.label }))} /></GuideSection>
-    </article>
+    </div></article>
   </main></EditorialSurface>;
 }

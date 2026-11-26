@@ -1,3 +1,4 @@
+import { NpfPremiumHero, NpfQualityCards, npfTests, premiumShell, premiumEditorial } from "../_components/NpfPremium";
 import EditorialSurface from "../_components/EditorialSurface";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -35,16 +36,11 @@ const faq = [
   ["Kan ADHD och autism förekomma samtidigt?", "Ja. Vissa upplevelser kan överlappa, men det är olika tillstånd som också kan förekomma tillsammans. Ett webbaserat självtest kan inte avgöra diagnos."],
 ];
 export default function AutismLanding() {
-  return <EditorialSurface><main data-rv="container" className="mx-auto max-w-3xl px-4 py-10 text-neutral-900 [overflow-wrap:anywhere] sm:px-6 sm:py-14">
+  return <EditorialSurface><main className={premiumShell}>
     <EditorialArticleJsonLd data={articleJsonLd} />
     <nav aria-label="Brödsmulor" className="text-sm text-neutral-600"><Link href="/" className={textLink + " inline-flex min-h-11 items-center"}>Relationsvarning</Link><span aria-hidden="true"> / </span><span aria-current="page">Autismtest</span></nav>
-    <article><header className="mt-5"><h1 className="text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">Autismtest för vuxna</h1>
-      <p className="mt-5 text-lg leading-8 text-neutral-700">30 frågor om samspel, rutiner och sinnesintryck. Räkna med ungefär fem minuter.</p>
-      <div className="mt-6"><Link data-rv="button" href="/autism-test/test" className={cta}>Starta autismtestet</Link></div><p className="mt-3 text-sm text-neutral-600">Ingen registrering krävs för att starta. Självtestet kan varken bekräfta eller utesluta autism.</p>
-    </header>
-    <figure className="mt-8 overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50">
-      <Image src="/seo-images/autism-test-discover.png" alt="Illustration för autismtest för vuxna" width={1672} height={941} sizes="(max-width: 768px) calc(100vw - 2rem), 768px" className="h-auto w-full" />
-    </figure>
+    <article><NpfPremiumHero test="autism" /><NpfQualityCards />
+    <div className={premiumEditorial}>
     <GuideSection title="Så fungerar självskattningen">
       <p id="metodik">Med 30 frågor får du en profil över hur du upplever socialt samspel, kommunikation, förändringar, sinnesintryck och intressen över tid. Ett sjätte område sätter svaren i sammanhang med vardagspåverkan och långvarighet. Du får se vilka delar som sticker ut i dina egna svar, även när du känner igen få mönster i helheten.</p>
       <p><strong>Exempel på återkoppling</strong><br />Om sinnesintryck sticker ut i dina svar kan återkopplingen handla om hur du upplever ljud, ljus eller andra intryck. Den beskriver dina svar och kan inte avgöra vad upplevelsen beror på.</p>
@@ -52,6 +48,10 @@ export default function AutismLanding() {
       <p>Frågorna och beräkningsreglerna är Relationsvarnings egna och saknar klinisk validering. Det här är inte <a href="https://www.autismresearchcentre.com/tests/autism-spectrum-quotient-aq-adult/" className={textLink}>Autism Spectrum Quotient (AQ)</a> eller <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3907126/" className={textLink}>RAADS-14 Screen</a>. Det är andra formulär med egna frågor och tolkningsregler. Deras forskningsstöd eller gränsvärden kan inte överföras till vårt självtest.</p>
       <p>Självskattningen ger underlag för egen reflektion. Läs mer om <Link href="/metodik#kvalitetsarbete-npf" className={textLink}>hur vi granskar och testar våra självskattningar</Link>.</p>
     </GuideSection>
+
+    <figure className="mt-8 overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50">
+      <Image src="/seo-images/autism-test-discover.png" alt="Illustration för autismtest för vuxna" width={1672} height={941} sizes="(max-width: 768px) calc(100vw - 2rem), 768px" className="h-auto w-full" />
+    </figure>
     <GuideSection title="Vad betyder poängen?">
       <p>Varje svar ger 0–4 poäng. De fem frågorna inom varje område summeras och räknas om till en nivå mellan 0 och 100. Testets index är medelvärdet för de fem första områdena. Vardagspåverkan och långvarighet redovisas separat och används i tolkningen, men räknas inte in i indexet.</p>
       <p>En nivå på exempelvis 60 av 100 betyder inte 60 procents sannolikhet för autism. Värdena beskriver dina svar i vår modell, inte hur du ligger till jämfört med befolkningen. Ett högt värde fastställer ingen diagnos, och ett lågt värde utesluter den inte. Ta därför fasta på konkreta situationer du känner igen och hur de påverkar dig, snarare än en enskild siffra.</p>
@@ -61,7 +61,7 @@ export default function AutismLanding() {
     <GuideSection title="Hur kan autism märkas i vuxenlivet?"><p>Sociala situationer kan kräva mycket aktiv analys, särskilt när förväntningar eller signaler inte sägs rakt ut. Behov av förutsägbarhet, obehag vid plötsliga förändringar och sensorisk överbelastning kan också vara delar av bilden.</p><p>Vissa beskriver starkt fokus på intressen, behov av återhämtning efter social belastning eller mycket arbete med att kompensera för sådant som andra verkar göra automatiskt. Varje punkt kan även ha andra förklaringar. Det är ett långvarigt mönster och dess betydelse för vardagen som behöver undersökas.</p><p>Läs mer om <Link href="/autism-vuxna" className={textLink}>autism i vuxenlivet</Link> eller frågan <Link href="/har-jag-autism" className={textLink}>hur man kan känna igen ett sammanhängande mönster</Link>.</p></GuideSection>
     <GuideSection title="Autism upptäcks inte alltid på samma sätt hos alla"><p>I en <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5509825/" className={textLink}>studie om maskering</a> beskrev vuxna med autism strategier som att öva på samtal eller dölja vissa beteenden. Upplevelserna varierade mellan deltagarna.</p><p>Läs om <Link href="/autism-kvinnor" className={textLink}>autism hos kvinnor</Link> och <Link href="/maskering-autism" className={textLink}>maskering och social anpassning</Link>.</p></GuideSection>
     <GuideSection title="Ett självtest kan inte ställa en autismdiagnos"><p>En professionell bedömning behöver väga in utvecklingshistoria, mönster över tid, funktion i flera miljöer och alternativa förklaringar. Syftet här är att ge en strukturerad bild av dina egna svar.</p><p>Relationsvarnings modell är inte kliniskt validerad. Produktprofilerna är inte diagnostiska subtyper, och ett resultat kan inte bekräfta eller utesluta autism.</p><p>Om något påverkar din vardag kan du ta med konkreta exempel till en vårdkontakt. Läs om hur en <a href="https://www.1177.se/stockholm/undersokning-behandling/undersokningar-och-provtagning/psykiatriska-utredningar/neuropsykiatrisk-utredning/" className={textLink}>neuropsykiatrisk utredning går till hos 1177</a>. För mer bakgrund, se <a href="https://www.1177.se/sjukdomar--besvar/hjarna-och-nerver/neuropsykiatriska-funktionsnedsattningar/autism/" className={textLink}>1177 om autism</a>. Läs också <a href="https://www.nimh.nih.gov/health/publications/autism-spectrum-disorder" className={textLink}>NIMH:s översikt om autism och bedömning</a>.</p></GuideSection>
-    <GuideSection title="Vanliga frågor om autismtestet">{faq.map(([question, answer]) => <div key={question} className="space-y-2 border-t border-neutral-200 pt-4"><h3 className="text-lg font-semibold text-neutral-900">{question}</h3><p>{answer}</p></div>)}<div className="space-y-2 border-t border-neutral-200 pt-4"><h3 className="text-lg font-semibold text-neutral-900">Vad kostar testet?</h3><p>Testet är gratis att genomföra och du får ett första fynd från dina svar utan kostnad. Den fullständiga personliga analysen kostar 39 kr.</p></div><p>Om du känner igen både ADHD- och autismdrag kan du läsa om <Link href="/audhd-test" className={textLink}>självtestet för kombinerade drag</Link>.</p><p>Du kan också <Link href="/hsp-test" className={textLink}>reflektera separat över känslighet och återhämtning</Link>. Det självtestet är inte en bedömning av autism.</p><p>Fördjupning: <Link href="/asperger-test" className={textLink}>Asperger-begreppet och självskattning</Link> samt <Link href="/adhd-autism" className={textLink}>skillnader och överlapp mellan ADHD och autism</Link>.</p></GuideSection>
+    <GuideSection title="Vanliga frågor om autismtestet">{faq.map(([question, answer]) => <div key={question} className="space-y-2 border-t border-neutral-200 pt-4"><h3 className="text-lg font-semibold text-neutral-900">{question}</h3><p>{answer}</p></div>)}<div className="space-y-2 border-t border-neutral-200 pt-4"><h3 className="text-lg font-semibold text-neutral-900">Vad kostar testet?</h3><p>Testet är gratis att genomföra och du får ett första fynd från dina svar utan kostnad. Den fullständiga personliga analysen kostar {npfTests.autism.price} kr.</p></div><p>Om du känner igen både ADHD- och autismdrag kan du läsa om <Link href="/audhd-test" className={textLink}>självtestet för kombinerade drag</Link>.</p><p>Du kan också <Link href="/hsp-test" className={textLink}>reflektera separat över känslighet och återhämtning</Link>. Det självtestet är inte en bedömning av autism.</p><p>Fördjupning: <Link href="/asperger-test" className={textLink}>Asperger-begreppet och självskattning</Link> samt <Link href="/adhd-autism" className={textLink}>skillnader och överlapp mellan ADHD och autism</Link>.</p></GuideSection>
     <GuideSection title="Nyfiken på vad dina egna svar visar?"><p>30 frågor. Flera områden. En samlad analys av ditt svarsmönster.</p><Link data-rv="button" href="/autism-test/test" className={cta}>Starta autismtestet</Link></GuideSection>
     <GuideSection title="Läs mer om autism"><GuideLinks links={guides.map(guide => ({ href: `/${guide.slug}`, label: guide.label }))} /></GuideSection>
     <GuideSection title="Fördjupningar om vardagen"><GuideLinks links={[
@@ -71,6 +71,6 @@ export default function AutismLanding() {
       { href: "/autism-bok", label: "AUTISM ALL INCLUSIVE – e-bok med arbetsblad" },
     ]} /></GuideSection>
     <LiteAutismRecommendation sourcePage="/autism-test" />
-    </article>
+    </div></article>
   </main></EditorialSurface>;
 }

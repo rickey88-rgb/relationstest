@@ -13,6 +13,7 @@ import { purchaseEvent } from "../../_analytics/testEvents";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { answerLabels, calculate, emptyAnswers, parseState, paywallFinding, questions, PRICE_SEK, STATE_VERSION, STORAGE_KEY } from "./model";
 import { AUTISM_STRIPE_URL } from "./payment";
+import { npfLocalPreview, showNpfPreview } from "../../_content/npfLocalPreview";
 
 
 const button = "inline-flex min-h-12 items-center justify-center rounded-xl px-5 py-3 text-center font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-900";
@@ -38,6 +39,7 @@ export default function AutismSelfTestPage() {
   const [analysisStep, setAnalysisStep] = useState<number | null>(null);
   const analyzing = analysisStep !== null;
   useEffect(() => {
+    if (showNpfPreview()) { setAnswers(questions.map((_, i) => i < 5 ? 4 : 0)); setHydrated(true); return; }
     if (!analyzing) return;
     const second = setTimeout(() => setAnalysisStep(1), 1000);
     const third = setTimeout(() => setAnalysisStep(2), 2000);
@@ -66,6 +68,7 @@ export default function AutismSelfTestPage() {
   // It intentionally does not use the public paid-return query parameter.
   useEffect(() => {
     let cancelled = false;
+    if (npfLocalPreview) return;
 
     async function restoreSupportRecovery() {
       const recovery = new URLSearchParams(window.location.search).get("recovery");
@@ -100,13 +103,13 @@ export default function AutismSelfTestPage() {
   }, []);
 
   useEffect(() => {
-    if (!hydrated) return;
+    if (!hydrated || showNpfPreview()) return;
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ version: STATE_VERSION, index, answers, unlocked })); }
     catch { setStorageUnavailable(true); }
   }, [index, answers, unlocked, hydrated]);
   /* eslint-enable react-hooks/set-state-in-effect */
 
-  const payment = usePaymentRecovery(STORAGE_KEY, unlocked, setUnlocked);
+  const payment = usePaymentRecovery(STORAGE_KEY, unlocked, setUnlocked, !npfLocalPreview);
 
   const complete = answers.every((answer) => answer >= 0);
   const showResult = complete && !editing;
@@ -144,7 +147,7 @@ export default function AutismSelfTestPage() {
     try { localStorage.removeItem(STORAGE_KEY); } catch { setStorageUnavailable(true); }
   }
   const accountCheckout = useTestAccountCheckout("autism", answers, () => setCheckoutUnavailable(true));
-  function checkout() { if (accountCheckout()) return;
+  function checkout() { if (npfLocalPreview || accountCheckout()) return;
     if (!payment.prepareCheckout({ version: STATE_VERSION, index, answers, unlocked })) return;
     if (!AUTISM_STRIPE_URL.startsWith("https://buy.stripe.com/")) { setCheckoutUnavailable(true); return; }
     tracking.checkout(() => { window.location.assign(AUTISM_STRIPE_URL); });
@@ -152,6 +155,7 @@ export default function AutismSelfTestPage() {
 
   if (!hydrated) return <p className="mt-6" role="status">Laddar testet...</p>;
   return <>
+      {npfLocalPreview && <p className="mt-5 rounded-xl border border-neutral-300 bg-neutral-50 p-3 text-sm">Lokal förhandsvisning. Betalning är avstängd.</p>}
       {unlocked && <div data-flow="inset" role="status" style={{ margin: "20px 0", padding: 16, border: "1px solid #ddd", borderRadius: 12, lineHeight: 1.6 }}><strong>Ditt test är upplåst – du behöver inte betala igen.</strong>{answers.every(answer => answer >= 0) ? <p>Din fullständiga analys visas nedan.</p> : <p>Tidigare svar saknas eller är ofullständiga i den här webbläsaren. Öppna testet i samma webbläsare som före betalningen, eller svara på frågorna här utan att köpa igen. Behöver du hjälp? Kontakta <a href="mailto:support@relationsvarning.se">support@relationsvarning.se</a>.</p>}</div>}
       {recoveryLinkInvalid && <p role="alert" style={{ margin: "20px 0", lineHeight: 1.6 }}>Recovery-länken är ogiltig eller har gått ut. Inget har låsts upp. Kontakta <a href="mailto:support@relationsvarning.se">support@relationsvarning.se</a> om du behöver hjälp.</p>}
       {payment.checkoutError && <p role="alert" style={{ margin: "20px 0", lineHeight: 1.6 }}>{payment.checkoutError}</p>}

@@ -3,6 +3,8 @@ import { accountPortalEnabled } from "../accountGate.server";
 import { runCleanupScope } from "../accountCleanupScope.server";
 import { adapter, registeredAdapters, flags, consentVersion } from "./adapter";
 import { paymentConfig, stripeClient } from "./payment.server";
+import { npfCurrentPrice } from "../../_content/npfPricing";
+import { npfCheckoutAnalyticsMetadata } from "./npfPurchaseAnalytics.server";
 import * as store from "./store.server";
 import * as service from "./service.server";
 import { cleanup, health } from "./operations.server";
@@ -66,14 +68,24 @@ export function directCustomerHandler(overrides: Partial<typeof defaults> = {}) 
     try {
       const body = await boundedJson(request);
       const action = body.action;
-      if (action === "capabilities") return respond({ tests: d.registeredAdapters().map(model => ({
+      if (action === "capabilities") return respond({ tests: d.registeredAdapters().map(model => {
+        const price = npfCurrentPrice(model.product);
+        const enabled = d.flags(model.product);
+        let checkout = enabled.checkout && enabled.save && enabled.read;
+        if (price && checkout) {
+          try { checkout = d.paymentConfig(model.product).price === price.priceId; }
+          catch { checkout = false; }
+        }
+        return {
         product: model.product, slug: model.slug, title: model.title, questionVersion: model.questionVersion, reportVersion: model.reportVersion,
+          ...(price ? { amount: model.amount } : {}),
         ...(model.product === "persona_test" && process.env.TEST_ACCOUNTS_PERSONA_V61_ENABLED === "true" ? { additionalReportVersions: ["persona-report-v61-release1","persona-report-v61-release2"] } : {}),
         ...(model.product === "persona_test" && process.env.TEST_ACCOUNTS_PERSONA_V61_ONLY === "true" ? {
           checkoutReportVersions: process.env.TEST_ACCOUNTS_PERSONA_V61_ENABLED === "true" ? ["persona-report-v61-release1","persona-report-v61-release2"] : [],
         } : {}),
-        checkout: d.flags(model.product).checkout && d.flags(model.product).save && d.flags(model.product).read,
-      })), consentVersion, guestRecovery: guestRecoveryEnabled() });
+          checkout,
+        };
+      }), consentVersion, guestRecovery: guestRecoveryEnabled() });
       if (action === "recovery-request") {
         if (!guestRecoveryEnabled()) return respond(neutral, 503);
         try { await requestGuestRecovery(body.email); }
@@ -91,6 +103,7 @@ export function directCustomerHandler(overrides: Partial<typeof defaults> = {}) 
       const enabled = d.flags(product);
       if (action === "checkout") {
         if (!enabled.checkout || !enabled.save || !enabled.read) return respond(neutral, 503);
+        if (npfCurrentPrice(product) && body.expectedAmount !== model.amount) return respond(neutral, 409);
         if (body.consent !== guestProcessingConsentVersion) return respond(neutral, 400);
         if (!await d.health()) return respond(neutral, 503); // do not sell a new account-saving flow during a known cleanup outage
         const isV61 = product === "persona_test" && ["persona-report-v61-release1","persona-report-v61-release2"].includes(String((body.payload as { reportVersion?: unknown } | null)?.reportVersion));
@@ -105,7 +118,7 @@ export function directCustomerHandler(overrides: Partial<typeof defaults> = {}) 
         const id = await d.store.createAttempt(product, body.payload, secret, config.price, guestProcessingConsentVersion);
         // Identifiers are in a fragment: the Vercel HTTP request never receives them.
         const session = await stripe.checkout.sessions.create({ mode: "payment", client_reference_id: "ta:" + id,
-          metadata: { rv_flow: "direct_customer_v1" }, payment_intent_data: { metadata: { rv_flow: "direct_customer_v1" } },
+          metadata: { rv_flow: "direct_customer_v1", ...npfCheckoutAnalyticsMetadata(product, body.analytics) }, payment_intent_data: { metadata: { rv_flow: "direct_customer_v1" } },
           line_items: [{ price: config.price, quantity: 1 }], allow_promotion_codes: false,
           success_url: allowed + "/mina-sidor#attempt=" + id, cancel_url: allowed + (isV61 ? "/persona-v61" : model.testPath ?? "/" + model.slug + "-test/test"),
           expires_at: Math.floor(Date.now() / 1000) + 1800,

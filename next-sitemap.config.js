@@ -20,6 +20,7 @@ module.exports = {
     { loc: '/audhd-bok' },
     { loc: '/autism-bok' },
     { loc: '/adhd-deluxe' },
+    { loc: '/varfor-relationsvarning' },
   ],
   exclude: [
     '/no', '/no/*',

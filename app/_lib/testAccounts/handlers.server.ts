@@ -1,6 +1,7 @@
 import { randomBytes } from "node:crypto";
 import { NextRequest } from "next/server";
 import { accountLaunchUnavailable, accountPortalEnabled } from "../accountLaunch.server";
+import { npfCurrentPrice } from "../../_content/npfPricing";
 import { accountIdentity, accountResponse, accountRedirect, sameAccountOrigin, readAccountForm } from "../accountHttp.server";
 import { adapter, assertFlag, flags } from "./adapter";
 import { browserCookie, siteOrigin } from "./http.server";
@@ -15,7 +16,7 @@ type Context = { params: Promise<{ action: string }> };
 async function GET(_request: NextRequest, { params }: Context) {
   if (!accountPortalEnabled()) return accountLaunchUnavailable();
   if ((await params).action !== "capabilities") return accountResponse({ error: "Not found" }, 404);
-  return accountResponse({ checkout: flags(product).checkout }, 200);
+  return accountResponse({ checkout: flags(product).checkout, ...(npfCurrentPrice(product) ? { amount: adapter(product).amount } : {}) }, 200);
 }
 async function POST(request: NextRequest, { params }: Context) {
   if (!accountPortalEnabled()) return accountLaunchUnavailable();
@@ -28,6 +29,7 @@ async function POST(request: NextRequest, { params }: Context) {
     if (!form) return accountResponse({ error: "Invalid request" }, 400);
     if (action === "checkout") {
       const origin = siteOrigin(request), model = adapter(product), config = paymentConfig(model.product);
+      if (npfCurrentPrice(product) && form.get("expectedAmount") !== String(model.amount)) return accountResponse({ error: "Priset har ändrats. Ladda om testsidan." }, 409);
       const input: unknown = JSON.parse(form.get("payload") ?? "null"); model.parse(input);
       const stripe = stripeClient();
       const price = await stripe.prices.retrieve(config.price);

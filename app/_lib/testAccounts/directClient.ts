@@ -2,6 +2,8 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { directEndpoint } from "./directPublic";
 import { guestProcessingConsentVersion } from "./consent";
+import { captureGa4CheckoutAttribution } from "../../_analytics/analytics";
+import { checkoutEvent } from "../../_analytics/testEvents";
 let client: SupabaseClient | undefined;
 export function directAuthClient() {
   if (typeof window === "undefined") throw new Error("Browser required");
@@ -87,13 +89,16 @@ export async function directRequest(body: Record<string, unknown>, options: { au
   if (!response.ok) throw new Error("Åtgärden kunde inte genomföras. Försök igen från Mina sidor.");
   return response.json();
 }
-export async function startDirectCheckout(product: string, payload: unknown) {
-  const value = await directRequest({ action: "checkout", product, payload, consent: guestProcessingConsentVersion }, { possession: true, createPossession: true });
+export async function startDirectCheckout(product: string, payload: unknown, expectedAmount?: number) {
+  const npf = product === "adhd_test" || product === "autism_test";
+  const analytics = npf ? await captureGa4CheckoutAttribution() : null;
+  const value = await directRequest({ action: "checkout", product, payload, expectedAmount, ...(analytics ? { analytics } : {}), consent: guestProcessingConsentVersion }, { possession: true, createPossession: true });
   if (typeof value.id !== "string" || !/^[A-Za-z0-9_-]{43}$/.test(value.secret) || typeof value.url !== "string" || new URL(value.url).origin !== "https://checkout.stripe.com") throw new Error("Checkout unavailable");
   localStorage.setItem(secretKey, value.secret);
   localStorage.setItem(pendingKey, JSON.stringify({ id: value.id, product }));
   localStorage.setItem(pendingListKey, JSON.stringify([...pendingPurchases().filter(item => item.id !== value.id), { id: value.id, product }]));
-  window.location.assign(value.url);
+  if (npf) checkoutEvent(product, () => window.location.assign(value.url), "direct");
+  else window.location.assign(value.url);
 }
 /** Existing Auth email template appends ?token_hash after RedirectTo. Keep it in the fragment. */
 export function directLoginRedirect(origin: string) { return new URL("/mina-sidor#login", origin).href; }

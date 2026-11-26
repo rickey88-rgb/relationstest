@@ -1,3 +1,5 @@
+import { adhdReportPrice, autismReportPrice } from "../_content/npfPricing";
+
 export const GA_MEASUREMENT_ID = "G-XWVSHHNY7G";
 // Set this explicitly for each production deployment when a funnel-affecting
 // release needs to be compared in GA4. It is intentionally build-stable.
@@ -8,8 +10,8 @@ export const testConfig = {
   audhd_test_no: { name: "AuDHD-test for voksne", path: "/no/audhd-test/test", price: 199, currency: "NOK" },
   hsp_test: { name: "HSP-test för vuxna", path: "/hsp-test/test", price: 49, currency: "SEK" },
   ptsd_test: { name: "PTSD-test", path: "/ptsd-test/test", price: 39, currency: "SEK" },
-  autism_test: { name: "Autismtest för vuxna", path: "/autism-test/test", price: 39, currency: "SEK" },
-  adhd_test: { name: "ADHD-test för vuxna", path: "/adhd-test/test", price: 39, currency: "SEK" },
+  autism_test: { name: "Autismtest för vuxna", path: "/autism-test/test", price: autismReportPrice, currency: "SEK" },
+  adhd_test: { name: "ADHD-test för vuxna", path: "/adhd-test/test", price: adhdReportPrice, currency: "SEK" },
   angest_test: { name: "Ångesttest för vuxna", path: "/angest-test/test", price: 39, currency: "SEK" },
   screening_test: { name: "Screeningtest för relationen", path: "/test", price: 39, currency: "SEK" },
   psychological_abuse_test: { name: "Test om psykisk misshandel och psykiskt våld", path: "/psykisk-misshandel-relation/test", price: 39, currency: "SEK" },

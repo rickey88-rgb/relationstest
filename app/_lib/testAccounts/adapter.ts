@@ -5,7 +5,7 @@ import { audhd } from "./adapters/audhd";
 import { partner } from "./adapters/partner";
 import { traumaBond } from "./adapters/traumaBond";
 import { psychologicalAbuse } from "./adapters/psychologicalAbuse";
-import { calculate, type Result } from "../../adhd-test/test/model";
+import { calculate, PRICE_SEK as adhdPrice, type Result } from "../../adhd-test/test/model";
 import type { PaymentProductKey } from "../paymentProductCatalog.server";
 import { hsp } from "./adapters/hsp";
 import { angest } from "./adapters/angest";
@@ -22,7 +22,7 @@ export type Adapter<Report = unknown> = { product: PaymentProductKey; questionVe
 
 // Only registered adapters can reach storage or checkout. Never accept a client-supplied calculator/version.
 const adhd: Adapter<Result> = {
-  product: "adhd_test", questionVersion: "adhd-questions-v1", reportVersion: "adhd-report-v1", amount: 3900,
+  product: "adhd_test", questionVersion: "adhd-questions-v1", reportVersion: "adhd-report-v1", amount: adhdPrice * 100,
   slug: "adhd", title: "ADHD",
   flagPrefix: "TEST_ACCOUNTS_ADHD", priceEnv: "TEST_ACCOUNTS_ADHD_PRICE_ID",
   parse(input) {

@@ -11,6 +11,7 @@ import { useTestAnalytics } from "../../_analytics/useTestAnalytics";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { answerLabels, calculate, emptyAnswers, parseState, questions, PRICE_SEK, STATE_VERSION, STORAGE_KEY } from "./model";
 import { ADHD_STRIPE_URL } from "./payment";
+import { npfLocalPreview, showNpfPreview } from "../../_content/npfLocalPreview";
 
 import { personalFinding } from "./interpretation";
 import AdhdReport from "./AdhdReport";
@@ -60,6 +61,7 @@ export default function ADHDSelfTestPage() {
   }, [analyzing]);
 
   useEffect(() => {
+    if (showNpfPreview()) { setAnswers(questions.map((_, i) => i < 10 ? 4 : 1)); setHydrated(true); return; }
     try {
       const saved = parseState(localStorage.getItem(STORAGE_KEY));
       if (saved) { setAnswers(saved.answers); setIndex(saved.index); setUnlocked(saved.unlocked); }
@@ -75,12 +77,12 @@ export default function ADHDSelfTestPage() {
   }, []);
 
   useEffect(() => {
-    if (!hydrated) return;
+    if (!hydrated || showNpfPreview()) return;
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ version: STATE_VERSION, index, answers, unlocked })); }
     catch { setStorageUnavailable(true); }
   }, [index, answers, unlocked, hydrated]);
 
-  const payment = usePaymentRecovery(STORAGE_KEY, unlocked, setUnlocked);
+  const payment = usePaymentRecovery(STORAGE_KEY, unlocked, setUnlocked, !npfLocalPreview);
 
   const complete = answers.every((answer) => answer >= 0);
   const showResult = complete && !editing;
@@ -119,6 +121,7 @@ export default function ADHDSelfTestPage() {
   }
   const accountCheckout = useAccountCheckout(answers, () => setCheckoutUnavailable(true));
   function checkout() {
+    if (npfLocalPreview) return;
     if (accountCheckout()) return;
     // Save before redirect; don't lose a purchased result when storage is blocked.
     try {
@@ -132,6 +135,7 @@ export default function ADHDSelfTestPage() {
 
   if (!hydrated) return <p className="mt-6" role="status">Laddar testet...</p>;
   return <>
+      {npfLocalPreview && <p className="mt-5 rounded-xl border border-neutral-300 bg-neutral-50 p-3 text-sm">Lokal förhandsvisning. Betalning är avstängd.</p>}
       {unlocked && <div data-flow="inset" role="status" style={{ margin: "20px 0", padding: 16, border: "1px solid #ddd", borderRadius: 12, lineHeight: 1.6 }}><strong>Ditt test är upplåst – du behöver inte betala igen.</strong>{answers.every(answer => answer >= 0) ? <p>Din fullständiga analys visas nedan.</p> : <p>Tidigare svar saknas eller är ofullständiga i den här webbläsaren. Öppna testet i samma webbläsare som före betalningen, eller svara på frågorna här utan att köpa igen. Behöver du hjälp? Kontakta <a href="mailto:support@relationsvarning.se">support@relationsvarning.se</a>.</p>}</div>}
       {payment.checkoutError && <p role="alert" style={{ margin: "20px 0", lineHeight: 1.6 }}>{payment.checkoutError}</p>}
 

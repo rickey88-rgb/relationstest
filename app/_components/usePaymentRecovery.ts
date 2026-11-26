@@ -8,11 +8,12 @@ export function hasPaidReturn(key: string) {
   catch { return false; }
 }
 
-export function usePaymentRecovery(key: string, unlocked: boolean, setUnlocked: (value: boolean) => void) {
-  const returnedPaid = useRef(typeof window !== "undefined" && new URLSearchParams(window.location.search).get("paid") === "true");
+export function usePaymentRecovery(key: string, unlocked: boolean, setUnlocked: (value: boolean) => void, enabled = true) {
+  const returnedPaid = useRef(enabled && typeof window !== "undefined" && new URLSearchParams(window.location.search).get("paid") === "true");
   const checkoutPending = useRef(false);
   const [checkoutError, setCheckoutError] = useState("");
   useEffect(() => {
+    if (!enabled) return;
     const reconcile = () => {
       checkoutPending.current = false;
       if (!returnedPaid.current && !hasPaidReturn(key)) return;
@@ -31,7 +32,7 @@ export function usePaymentRecovery(key: string, unlocked: boolean, setUnlocked: 
     window.addEventListener("pageshow", reconcile);
     window.addEventListener("focus", reconcile);
     return () => { window.removeEventListener("storage", onStorage); window.removeEventListener("pageshow", reconcile); window.removeEventListener("focus", reconcile); };
-  }, [key, setUnlocked]);
+  }, [enabled, key, setUnlocked]);
 
   function prepareCheckout(state: { answers: number[]; index: number; unlocked: boolean; version?: number }) {
     if (unlocked || returnedPaid.current || hasPaidReturn(key)) { setUnlocked(true); return false; }

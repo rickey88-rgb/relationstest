@@ -8,7 +8,8 @@ Object.defineProperty(global,"crypto",{value:webcrypto,configurable:true});
 const navigations=[],calls=[];let sequence=0,fail=false;
 Object.assign(process.env,{NEXT_PUBLIC_SUPABASE_URL:"https://synthetic.supabase.co",NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:"synthetic-public",NEXT_PUBLIC_DIRECT_TEST_ACCOUNTS_ENABLED:"true"});
 const token="synthetic-session-not-a-real-token";
-const load=createLoader({"@supabase/supabase-js":{createClient:(_url,_key,config)=>{
+const checkoutEvents=[];
+const load=createLoader({"../../_analytics/testEvents":{checkoutEvent:(product,navigate,kind)=>{checkoutEvents.push({product,kind});navigate();}},"@supabase/supabase-js":{createClient:(_url,_key,config)=>{
   assert.equal(config.auth.storage,window.sessionStorage);assert.equal(config.auth.detectSessionInUrl,false);
   return {auth:{getSession:async()=>({data:{session:{access_token:token}}})}};
 }}});
@@ -22,8 +23,10 @@ global.fetch=async(url,options)=>{
 (async()=>{
   assert.equal(config.directCustomerEnabled(),true);
   const sensitive={answers:Array(30).fill(2),questionVersion:"adhd-questions-v1",reportVersion:"adhd-report-v1"};
-  await client.startDirectCheckout("adhd_test",sensitive);
-  await client.startDirectCheckout("autism_test",sensitive);
+  await client.startDirectCheckout("adhd_test",sensitive,7900);
+  await client.startDirectCheckout("autism_test",sensitive,7900);
+  assert.deepEqual(checkoutEvents,[{product:"adhd_test",kind:"direct"},{product:"autism_test",kind:"direct"}]);
+  assert(calls.every(({options})=>JSON.parse(options.body).expectedAmount===7900));
   assert.equal(client.pendingPurchases().length,2,"two unclaimed purchases are preserved independently");
   await client.directRequest({action:"open",id:"private-purchase",product:"adhd_test"},{authenticated:true});
   for(const {url,options} of calls){

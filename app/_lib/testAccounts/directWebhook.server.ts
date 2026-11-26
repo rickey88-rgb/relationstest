@@ -1,11 +1,12 @@
 import type Stripe from "stripe";
 import { guestRecoveryEnabled, indexGuestRecovery } from "./guestRecovery.server";
+import { relayNpfDirectPurchase } from "./npfPurchaseAnalytics.server";
 type ObjectReference = string | { id: string } | null | undefined;
 type WebhookObject = { metadata?: Record<string, string> | null; client_reference_id?: string | null; payment_intent?: ObjectReference; charge?: ObjectReference };
 const idOf = (value: ObjectReference) => typeof value === "string" ? value : value?.id;
 const direct = (value: WebhookObject) => value.metadata?.rv_flow === "direct_customer_v1";
 /** Same existing endpoint signing secret: verified old events retain their original signature/body.
- * New events never reach Vercel. This is notification routing, not a payment entitlement.
+ * For direct NPF purchases only the signed, minimal analytics receipt reaches Vercel.
  */
 export async function directStripeWebhook(request: Request, stripe: Stripe, relay: typeof fetch = fetch) {
   const respond = (ok: boolean, status: number) => Response.json({ received: ok }, { status, headers: { "Cache-Control": "no-store" } });
@@ -36,9 +37,12 @@ export async function directStripeWebhook(request: Request, stripe: Stripe, rela
       if (intentId) isDirect = direct(await stripe.paymentIntents.retrieve(intentId));
     }
     if (isDirect) {
-      if (guestRecoveryEnabled() && ["checkout.session.completed","checkout.session.async_payment_succeeded"].includes(event.type)) {
+      if (["checkout.session.completed","checkout.session.async_payment_succeeded"].includes(event.type)) {
         const session = event.data.object as Stripe.Checkout.Session;
-        if (session.payment_status === "paid") await indexGuestRecovery(session.id);
+        if (session.payment_status === "paid") {
+          if (guestRecoveryEnabled()) await indexGuestRecovery(session.id);
+          await relayNpfDirectPurchase(session, secret, relay);
+        }
       }
       return respond(true, 200); // guest/save/open independently verify Stripe and refunds
     }

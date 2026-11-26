@@ -1,3 +1,5 @@
+import { npfPrices } from "../_content/npfPricing";
+
 export const PAYMENT_PRODUCT_KEYS = [
   "audhd_test_no",
   "hjernen_i_kryssild",
@@ -106,6 +108,16 @@ export function paymentProductCatalog(): Catalog {
       priceIds: Array.from(new Set([...(prior?.priceIds ?? []), bookPrice])),
       paymentLinkIds: prior?.paymentLinkIds ?? [],
     };
+  }
+  for (const key of ["adhd_test", "autism_test"] as const) {
+    const entry = catalog[key] ??= { priceIds: [], paymentLinkIds: [] };
+    for (const { priceId, paymentLinkId } of Object.values(npfPrices[key])) {
+      const conflicts = Object.entries(catalog).some(([other, values]) => other !== key &&
+        (values.priceIds.includes(priceId) || values.paymentLinkIds.includes(paymentLinkId)));
+      if (conflicts) continue;
+      if (!entry.priceIds.includes(priceId)) entry.priceIds.push(priceId);
+      if (!entry.paymentLinkIds.includes(paymentLinkId)) entry.paymentLinkIds.push(paymentLinkId);
+    }
   }
   return catalog;
 }

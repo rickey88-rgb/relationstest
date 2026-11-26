@@ -1,7 +1,8 @@
 import { ATTEMPT_PREFIX, consent, trackEvent, trackEventBeforeNavigation, type EcommerceItem } from "./analytics";
 import { ANALYTICS_RELEASE_ID, testConfig, type TestId } from "./config";
+import { npfPrices } from "../_content/npfPricing";
 
-type Attempt = { version: 1; updatedAt: number; id: string; startedAt: number | null; completedAt: number | null; started: boolean; milestones: number[]; complete: boolean; teaser?: boolean; paywall: boolean; purchase: boolean };
+type Attempt = { version: 1; updatedAt: number; id: string; startedAt: number | null; completedAt: number | null; started: boolean; milestones: number[]; complete: boolean; teaser?: boolean; paywall: boolean; purchase: boolean; checkoutPrice?: number };
 const memory = new Map<TestId, Attempt>();
 let checkoutNavigationInFlight = false;
 // Bump a test's value only when its pre-purchase presentation changes. These labels
@@ -32,11 +33,11 @@ function save(id: TestId, attempt: Attempt) {
   }
 }
 const identity = (id: TestId, attempt: Attempt) => ({ test_id:id, test_name:testConfig[id].name, attempt_id:attempt.id, paywall_version:paywallVersion[id] ?? "default", release_id:ANALYTICS_RELEASE_ID });
-const commerce = (id: TestId, attempt: Attempt) => ({
+const commerce = (id: TestId, attempt: Attempt, price = testConfig[id].price) => ({
   ...identity(id, attempt),
-  value: testConfig[id].price,
+  value: price,
   currency: testConfig[id].currency,
-  items: [{ item_id: id, item_name: testConfig[id].name, price: testConfig[id].price, quantity: 1 }] satisfies EcommerceItem[],
+  items: [{ item_id: id, item_name: testConfig[id].name, price, quantity: 1 }] satisfies EcommerceItem[],
 });
 // Counts only; answers and result data are deliberately never accepted here.
 export function answerEvent(id: TestId, answered: number, currentQuestion: number, total: number) {
@@ -72,7 +73,7 @@ export function diagnosticEvent(id: TestId, name: "analysis_view" | "result_view
   try { if (consent() === "granted") { const attempt = read(id); trackEvent(name, identity(id, attempt)); save(id, attempt); } }
   catch { /* Optional diagnostics never change the test flow. */ }
 }
-export function checkoutEvent(id: TestId, navigate?: () => void) {
+export function checkoutEvent(id: TestId, navigate?: () => void, checkoutKind: "payment_link" | "direct" = "payment_link") {
   if (checkoutNavigationInFlight) return false;
   checkoutNavigationInFlight = true;
   const finish = () => {
@@ -81,7 +82,9 @@ export function checkoutEvent(id: TestId, navigate?: () => void) {
   };
   try {
     if (consent() !== "granted") { finish(); return false; }
-    const attempt=read(id); save(id,attempt);
+    const attempt=read(id);
+    if (navigate && checkoutKind === "payment_link" && (id === "adhd_test" || id === "autism_test")) attempt.checkoutPrice=testConfig[id].price;
+    save(id,attempt);
     const params = commerce(id,attempt);
     if (navigate) return trackEventBeforeNavigation("begin_checkout",params,finish);
     const tracked = trackEvent("begin_checkout",params);
@@ -93,7 +96,8 @@ export function purchaseEvent(id: TestId) {
   try { if (consent() !== "granted") return; const attempt=read(id); if (attempt.purchase) return;
     // This is a paid=true return, not a Stripe-verified transaction. Stripe Dashboard/webhooks
     // remain the source of truth for actual purchases; this stable ID only enables GA4 deduplication.
-    attempt.purchase=trackEvent("purchase",{...commerce(id,attempt),transaction_id:`rv-${id}-${attempt.id}`}); save(id,attempt);
+    if ((id === "adhd_test" || id === "autism_test") && attempt.checkoutPrice !== npfPrices[id].previous.amount / 100 && attempt.checkoutPrice !== testConfig[id].price) return;
+    attempt.purchase=trackEvent("purchase",{...commerce(id,attempt,attempt.checkoutPrice),transaction_id:`rv-${id}-${attempt.id}`}); save(id,attempt);
   } catch { /* Never affect unlock. */ }
 }
 export function restartEvents(id: TestId) {
