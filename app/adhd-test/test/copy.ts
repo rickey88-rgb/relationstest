@@ -35,6 +35,6 @@ export const areaTexts = [
   },
   {
     "low": "De svårigheter du beskriver verkar påverka vardagen i begränsad omfattning.",
-    "high": "Problemen verkar återkomma i flera delar av livet och påverka vardagsfunktionen tydligt."
+    "high": "Dina samlade svar inom det här området ligger högt. De beskriver hur svårigheterna märks i vardagen och över tid."
   }
 ] as const;

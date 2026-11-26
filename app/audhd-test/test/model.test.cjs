@@ -49,3 +49,47 @@ for (let scenario = 0; scenario < 20; scenario++) {
   assert.equal(nb.teaser.type, sv.teaser.type);
   assert.notEqual(nb.profileType, sv.profileType);
 }
+
+const highAnswers = Array(48).fill(4);
+const highWithLowImpact = m.questions.map(question => question.dimension === "H" ? 0 : 4);
+for (const [market, known, uncertain, recent, combinedProfile, boundary, limited, substantial, discrepancy, handlingEnergy, followup] of [
+  ["sv", "Profilen är konsekvent", "Uppgifter om utvecklingsmönstret är osäkra", "Profilen är svår att tolka", "Mycket framträdande kombinationsmönster", "Gränsnära/ojämn profil", "Begränsad påverkan", "Stor påverkan", /Huvudfrågorna.*I följdfrågorna/, /energin det tar att hantera svårigheterna/, /följdfrågorna/i],
+  ["no", "Et gjennomgående mønster", "Opplysninger om utviklingsmønsteret er usikre", "Et mønster som er vanskelig å tolke", "Svært fremtredende kombinasjon av trekk", "Sammensatt profil nær en grense", "Begrenset påvirkning", "Stor påvirkning", /Hovedspørsmålene.*I oppfølgingsspørsmålene/, /energien det krever å håndtere vanskene/, /oppfølgingsspørsmålene/i],
+]) {
+  const knownContext = [3, 3, 4, 4, 4, 0];
+  assert.equal(m.calculateReport(highAnswers, knownContext, market).development.title, known);
+  assert.equal(m.calculateReport(highAnswers, [0, 3, 4, 4, 4, 2], market).development.title, recent);
+  for (const contextAnswers of [[4,3,4,4,4,0], [3,4,4,4,4,0], [4,4,4,4,4,0], [0,3,4,4,4,3]]) {
+    const stored = m.parseState(JSON.stringify({
+      reportVersion: "audhd-v1", answers: highAnswers, contextAnswers,
+      questionIndex: 47, contextIndex: 5, unlocked: true, report: { development: { title: known } },
+    }));
+    assert.deepEqual(stored.contextAnswers, contextAnswers);
+    assert.equal(stored.unlocked, true);
+    const restored = m.calculateReport(stored.answers, stored.contextAnswers, market);
+    assert.equal(restored.development.title, uncertain);
+    assert.deepEqual(restored.indices, full.indices);
+    assert.equal(restored.profileType, combinedProfile);
+  }
+  assert.equal(m.determineMainProfile(75, 75, full.scores, market), combinedProfile);
+  assert.equal(m.determineMainProfile(90, 89, full.scores, market), combinedProfile);
+  assert.equal(m.determineMainProfile(75, 74, full.scores, market), boundary);
+
+  const impactDiffers = m.calculateReport(highWithLowImpact, knownContext, market);
+  assert.equal(impactDiffers.impact.combined, 75);
+  assert.equal(impactDiffers.impact.title, substantial);
+  assert(impactDiffers.contradicting.some(text => discrepancy.test(text)));
+  assert(!impactDiffers.contradicting.some(text => /sammantaget begränsad|samlet sett begrenset|vardagspåverkan är låg|påvirker hverdagen i liten grad/.test(text)));
+  const impactLow = m.calculateReport(highWithLowImpact, [3,3,0,0,0,0], market);
+  assert.equal(impactLow.impact.title, limited);
+  assert(impactLow.contradicting.some(text => /sammantaget begränsad|samlet sett begrenset/.test(text)));
+
+  const energyOnly = m.calculateReport(highAnswers, [3,3,0,0,4,0], market);
+  assert.equal(energyOnly.impact.combined, 50);
+  assert.match(energyOnly.impact.text, handlingEnergy);
+  assert(energyOnly.keyFindings.some(text => handlingEnergy.test(text)));
+  const lowFollowup = m.calculateReport(highAnswers, [3,3,1,1,0,0], market);
+  assert.equal(lowFollowup.impact.combined, 37.5);
+  assert.equal(lowFollowup.impact.largest, null);
+  assert.doesNotMatch(lowFollowup.impact.text, followup);
+}

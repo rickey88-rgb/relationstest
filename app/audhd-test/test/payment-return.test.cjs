@@ -8,15 +8,21 @@ const answers = Array(48).fill(2), contextAnswers = Array(6).fill(2);
 const completeState = unlocked => ({ reportVersion: "audhd-v1", answers, contextAnswers, questionIndex: 47, contextIndex: 5, unlocked, report: undefined });
 const restored = { restored: true, answers: { reportVersion: "audhd-v1", answers, contextAnswers } };
 
-function environment({ query = "", recoveryUnlocked = false, secureRestore = null, stored = null, checkoutFailure = false, runEffects = true } = {}) {
-  const data = new Map(stored ? [[key, stored]] : []), slots = [], pending = [], requests = [];
+function environment({ query = "", recoveryUnlocked = false, secureRestore = null, stored = null, checkoutFailure = false, runEffects = true, market = "sv" } = {}) {
+  const storageKey = market === "no" ? key + "_no" : key;
+  const pathname = market === "no" ? "/no/audhd-test/test" : "/audhd-test/test";
+  const data = new Map(stored ? [[storageKey, stored]] : []), slots = [], pending = [], requests = [];
   let cursor = 0, dirty = true, tree;
   const checkoutNavigations = [];
   const standardTracking = { paywallRef: () => {}, answer: () => {}, checkout: navigate => checkoutNavigations.push(navigate), restart: () => {}, analysisView: () => {}, resultView: () => {}, purchase: () => {} };
   global.localStorage = { getItem: item => data.get(item) ?? null, setItem: (item, value) => data.set(item, value), removeItem: item => data.delete(item) };
-  global.window = { location: { href: `https://relationsvarning.se/audhd-test/test${query}`, pathname: "/audhd-test/test", search: query, assign: url => { window.location.href = url; } }, history: { replaceState: (_state, _title, url) => { const next = new URL(url, "https://relationsvarning.se"); window.location.href = next.href; window.location.pathname = next.pathname; window.location.search = next.search; } } };
+  global.window = { location: { href: `https://relationsvarning.se${pathname}${query}`, pathname, search: query, assign: url => { window.location.href = url; } }, history: { replaceState: (_state, _title, url) => { const next = new URL(url, "https://relationsvarning.se"); window.location.href = next.href; window.location.pathname = next.pathname; window.location.search = next.search; } } };
   global.fetch = async (url, options = {}) => {
     requests.push({ url, options });
+    if (market === "no") {
+      assert(url.endsWith("?market=no"));
+      url = url.slice(0, -"?market=no".length);
+    }
     if (url === "/api/audhd-checkout/restore") return secureRestore ? { ok: true, json: async () => secureRestore } : { ok: false, json: async () => ({ restored: false }) };
     if (url === "/api/audhd-recovery/restore") return { ok: false, json: async () => ({ restored: false }) };
     if (url === "/api/audhd-recovery/status") return { ok: true, json: async () => ({ unlocked: recoveryUnlocked }) };
@@ -31,7 +37,7 @@ function environment({ query = "", recoveryUnlocked = false, secureRestore = nul
     useEffect: (callback, deps) => { const index = cursor++; const previous = slots[index]; if (!previous || !deps || deps.some((value, i) => !Object.is(value, previous.deps[i]))) { slots[index] = { deps, cleanup: previous?.cleanup }; pending.push(() => { slots[index].cleanup?.(); slots[index].cleanup = callback(); }); } },
   };
   function PaywallCheckoutCTA() { return null; }
-  const load = createLoader({ react, "../../_components/MarketProvider": { useMarket: () => "sv" }, "../../_analytics/useTestAnalytics": { useTestAnalytics: () => standardTracking }, "../../_components/PaywallCheckoutCTA": { default: PaywallCheckoutCTA } });
+  const load = createLoader({ react, "../../_components/MarketProvider": { useMarket: () => market }, "../../_analytics/useTestAnalytics": { useTestAnalytics: () => standardTracking }, "../../_components/PaywallCheckoutCTA": { default: PaywallCheckoutCTA } });
   const Page = load(path.join(__dirname, "page.tsx")).default;
   function renderOnce() { dirty = false; cursor = 0; tree = Page(); }
   async function flush() { for (let loops = 0; loops < 80; loops += 1) { if (dirty) renderOnce(); pending.splice(0).forEach(callback => callback()); for (let tick = 0; tick < 12; tick += 1) await Promise.resolve(); if (!dirty && !pending.length && loops > 1) return; } throw new Error("render loop"); }
@@ -103,6 +109,18 @@ const isReportView = test => test.nodes().some(node => node.type?.name === "Repo
   assert(isReportView(test));
   assert.equal(test.nodes().some(node => node.type === test.PaywallCheckoutCTA), false);
   assert.equal(JSON.parse(test.data.get(key)).unlocked, false, "local cache is never an entitlement");
+
+  const previousAnswers = { reportVersion: "audhd-v1", answers: Array(48).fill(4), contextAnswers: [4,4,4,4,4,0] };
+  for (const [market, storageKey, development, profile] of [
+    ["sv", key, "Uppgifter om utvecklingsmönstret är osäkra", "Mycket framträdande kombinationsmönster"],
+    ["no", key + "_no", "Opplysninger om utviklingsmønsteret er usikre", "Svært fremtredende kombinasjon av trekk"],
+  ]) {
+    test = await ready({ market, secureRestore: { restored: true, answers: previousAnswers } });
+    const restoredReport = test.nodes().find(node => node.type?.name === "ReportView")?.props.report;
+    assert.equal(restoredReport.development.title, development);
+    assert.equal(restoredReport.profileType, profile);
+    assert.deepEqual(JSON.parse(test.data.get(storageKey)).contextAnswers, previousAnswers.contextAnswers);
+  }
 
   test = await ready({ query: "?paid=true", stored: JSON.stringify(completeState(true)) });
   assert(test.text(test.tree).includes("Betala inte igen"));

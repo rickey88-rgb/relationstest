@@ -58,7 +58,7 @@ export function calculate(answers: number[]) {
   if (symptomAreas.filter(a => scores[a] < 25).length >= 3) lessClear.push("Flera symptomområden ligger relativt lågt.");
   if (answers[29] <= 1) lessClear.push("Ditt svar om tidigare delar av livet ger begränsat stöd för ett långvarigt mönster.");
   if (answers[28] <= 1) lessClear.push("Du beskriver sällan att svårigheterna återkommer i flera delar av livet.");
-  return { raw, scores, symptomIndex, ranked, leadingGap: scores[ranked[0]] - scores[ranked[1]], level: overallLevel(symptomIndex), profileType, impactModifier, supporting: supporting.slice(0,4), lessClear: lessClear.slice(0,4) };
+  return { raw, scores, symptomIndex, ranked, leadingGap: scores[ranked[0]] - scores[ranked[1]], level: overallLevel(symptomIndex), profileType, impactModifier, supporting: supporting.slice(0,4), lessClear: lessClear.slice(0,4), settingsAnswer: answers[28] };
 }
 export type Result = ReturnType<typeof calculate>;
 export function parseState(raw: string | null): { version: number; answers: number[]; index: number; unlocked: boolean } | null {

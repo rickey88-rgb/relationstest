@@ -74,10 +74,11 @@ export default function ADHDLanding() {
       <Image src="/seo-images/adhd-test-discover.png" alt="Illustration för ADHD-test för vuxna" width={1672} height={941} sizes="(max-width: 768px) calc(100vw - 2rem), 768px" className="h-auto w-full" />
     </figure>
     <GuideSection title="Så fungerar självskattningen">
-      <p>Du beskriver hur ofta du känner igen olika situationer. Testet sammanfattar svaren inom sex områden och tar upp vardagspåverkan. Den första återkopplingen bygger på dina svar. Den fullständiga analysen jämför områdena med varandra.</p>
+      <p id="metodik">Med 30 frågor om vuxenlivet får du en profil som visar hur fokus, organisering, impulser, rastlöshet och igångsättning ser ut i dina egna svar. Du utgår från de senaste sex månaderna, med en avslutande fråga om tidigare i livet. Den fullständiga analysen jämför områdena och hjälper dig att sätta dem i ett vardagssammanhang.</p>
       <p><strong>Exempel på återkoppling</strong><br />Om uppmärksamhet sticker ut i dina svar kan återkopplingen handla om fokus och distraktion. Den beskriver dina svar och kan inte avgöra varför du har svårt att hålla fokus.</p>
+      <p>I vår interna granskning gick vi igenom frågornas relevans, täckning och begriplighet med stöd av COSMIN:s metodik. Vi kontrollerade med automatiserade testfall att uppgifter om svårigheter i flera delar av livet följer ditt svar på just den frågan, även när andra svar om vardagen ligger högt.</p>
       <p>Frågorna och beräkningsreglerna är Relationsvarnings egna och saknar klinisk validering. Det här är inte ASRS. <a href="https://patientenkat.se/nationellpatientenkat/nationellformularsamling/sokformularbeskrivningar/asrs6manaderadhdvuxna.87063.html" className={textLink}>ASRS är en separat symtomchecklista för vuxna</a> med egna frågor och tolkningsregler. Resultaten kan inte jämföras direkt eller använda samma gränsvärden.</p>
-      <p>Läs om <Link href="/metodik" className={textLink}>hur vi utformar våra självtester</Link>. Självtestet är till för egen reflektion, inte för att avgöra om en utredning behövs.</p>
+      <p>Självskattningen ger underlag för egen reflektion. Läs mer om <Link href="/metodik#kvalitetsarbete-npf" className={textLink}>hur vi granskar och testar våra självskattningar</Link>.</p>
       <p>Fördjupa dig i <Link href="/uppdrag-granskning-adhd" className={textLink}>SVT:s ADHD-granskning och hur du bedömer ett ADHD-test</Link>.</p>
     </GuideSection>
     <GuideSection title="Vad betyder poängen?">

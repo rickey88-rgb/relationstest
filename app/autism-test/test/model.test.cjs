@@ -51,6 +51,19 @@ assert.equal(mixedFinding.variant, 'mixed');
 assert(mixedFinding.body.includes('tydligaste spåren'));
 const lowFinding = m.paywallFinding(score([8,1,0,0,0,0]));
 assert.equal(lowFinding.variant, 'low');
+assert.doesNotMatch(lowFinding.body, /påverkar resultatet mer/);
+for (const [totals, area] of [
+  [[20,0,0,0,0,20], /sociala situationer/],
+  [[0,0,0,13,0,0], /sinnesintryck och återhämtning/],
+]) {
+  const result = score(totals);
+  const finding = m.paywallFinding(result);
+  assert(result.symptomIndex < 25);
+  assert.equal(finding.variant, 'single');
+  assert.match(finding.body, /Helheten ligger lågt/);
+  assert.match(finding.body, area);
+}
+assert.equal(m.paywallFinding(score([0,0,0,12,0,20])).variant, 'low');
 const tiedFinding = m.paywallFinding(score([14,14,13,5,5,0]));
 assert.equal(tiedFinding.variant, 'mixed');
 assert(tiedFinding.body.includes('Bland de högsta'));

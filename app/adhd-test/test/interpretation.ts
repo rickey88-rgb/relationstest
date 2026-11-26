@@ -14,7 +14,13 @@ export function describeArea(area: Area, score: number) {
 }
 export function impactText(result: Result) {
   if (result.impactModifier === "limited") return { title: "Tydliga drag, men begränsad påverkan i vardagen", text: "Du känner igen flera ADHD-relaterade mönster, men dina svar tyder på att de i nuläget påverkar vardagen relativt lite. Det gör helhetsbilden mindre entydig." };
-  if (result.impactModifier === "marked") return { title: "Tydligt mönster med märkbar vardagspåverkan", text: "Svårigheterna verkar inte bara finnas som enskilda drag utan påverkar också flera delar av vardagen. Det stärker betydelsen av helhetsmönstret." };
+  if (result.impactModifier === "marked") {
+    const text = "Dina svar visar både ett tydligt mönster och en hög samlad skattning av vardagspåverkan.";
+    return {
+      title: "Tydligt mönster med märkbar vardagspåverkan",
+      text: result.settingsAnswer >= 3 ? text + " Du beskriver att liknande svårigheter ofta återkommer i flera delar av livet." : text,
+    };
+  }
   return { title: "Så påverkas din vardag", text: describeArea("impact", result.scores.impact) + " Vardagspåverkan hålls separat från symptomindex och kan inte i sig fastställa orsaken till svårigheterna." };
 }
 export function standoutText(result: Result) {

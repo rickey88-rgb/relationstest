@@ -88,6 +88,10 @@ export default function AudhdMethodologyPage() {
     <GuideSection title="Den regelstyrda resultatprofilen">
       <p>Resultattexterna följer förutbestämda regler i Relationsvarnings egen modell. Profilen sammanställer de två huvudindexen, de åtta områdena, relativa toppar och kontraster samt uppgifter om masking, friktion, vardagspåverkan och utvecklingskontext.</p>
       <p>Resultatet lyfter också sådant som gör bilden mindre självklar. Det kan till exempel handla om att aktuella svar och uppgifter om tid eller vardagspåverkan inte pekar åt samma håll. En sådan nyansering är inte en differentialdiagnos och ersätter inte professionell bedömning.</p>
+      <h3 className="text-xl font-semibold tracking-tight text-neutral-900">Intern metodgranskning och teknisk kvalitetssäkring</h3>
+      <p>Två huvudindex visar vilka ADHD- och autismrelaterade mönster som framträder sida vid sida. De åtta delområdena och följdfrågorna kan hjälpa dig att sätta ord på hur sådana mönster samspelar i din vardag.</p>
+      <p>Den 26 november 2026 granskade vi den svenska självskattningens relevans, täckning och begriplighet med stöd av COSMIN:s metodik. Automatiserade testfall för svenska och norska kontrollerar att rapporten hanterar osäkra svar om tidigare liv och olika miljöer som okänd information, beskriver två höga huvudindex tydligt och skiljer på vardagspåverkan i huvudfrågorna och följdfrågorna när de ger olika besked.</p>
+      <p>Granskningen och de tekniska kontrollerna gjordes internt. En bedömning av klinisk träffsäkerhet kräver egna studier med deltagare ur målgruppen. Läs om <Link href="/metodik#kvalitetsarbete-npf" className={textLink}>vårt kvalitetsarbete för de tre självskattningarna</Link>.</p>
     </GuideSection>
 
     <GuideSection title="Vad resultatet kan och inte kan säga">

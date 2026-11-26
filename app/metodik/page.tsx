@@ -90,6 +90,16 @@ export default function MethodologyPage() {
         </ul>
       </section>
     </GuideSection>
+    <GuideSection title="Så kvalitetssäkrar vi ADHD-, autism- och AuDHD-testen">
+      <p id="kvalitetsarbete-npf"><strong>Vi säljer självinsikt. Inte diagnoser.</strong> Våra självskattningar hjälper dig att se vilka mönster du känner igen, vilka områden som sticker ut och hur upplevelserna märks i vardagen.</p>
+      <p>Den 26 november 2026 genomförde vi en intern metodgranskning av de tre svenska självskattningarna. Med stöd av COSMIN:s metodik gick vi igenom frågornas relevans, täckning och begriplighet. Vi provade låga, medelhöga, höga och blandade svarsmönster för att se hur poäng och återkoppling följer svaren. Automatiserade tester kontrollerar de ändrade rapportreglerna och hur sparade svar läses. <a className={textLink} href="https://www.cosmin.nl/wp-content/uploads/COSMIN-manual-V2_final.pdf">COSMIN:s metodhandbok om innehållsvaliditet</a></p>
+      <p>Relationsvarning säljer fördjupade rapporter. Svaren styr poängen. Betalningen ger tillgång till en utförligare presentation av resultatet. Det här kvalitetsarbetet omfattade intern innehållsgranskning och teknisk kontroll. Oberoende bedömning och klinisk validering kräver separat underlag.</p>
+      <ul className="list-disc space-y-2 pl-6">
+        <li><Link className={textLink} href="/adhd-test#metodik">Metodik för ADHD-testet</Link></li>
+        <li><Link className={textLink} href="/autism-test#metodik">Metodik för autismtestet</Link></li>
+        <li><Link className={textLink} href="/audhd-metodik">Metodik för AuDHD-testet</Link></li>
+      </ul>
+    </GuideSection>
     <GuideSection title="Vad resultatet inte kan avgöra">
       <p>Poäng, profiler och benämningar som ”förhöjd” eller ”hög risk” är testets egna orienteringsverktyg. Nivågränserna är inte redovisade som kliniskt validerade gränsvärden. Resultat mellan olika tester ska därför inte jämföras som om de mätte samma sak.</p>
       <p>Testerna ger inte en medicinsk eller psykologisk bedömning, en diagnos på dig eller partnern, en juridisk slutsats eller bevis på att ett brott har begåtts. De kan inte känna till sådant som inte fångas av frågorna, kontrollera uppgifterna eller bedöma en akut situation. Även en mer utförlig betald resultattext har dessa begränsningar.</p>

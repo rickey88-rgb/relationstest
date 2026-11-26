@@ -10,6 +10,7 @@ function load(file) {
   return module.exports;
 }
 const m = load(path.join(__dirname, 'model.ts'));
+const { describeArea, impactText } = load(path.join(__dirname, 'interpretation.ts'));
 const values = totals => totals.flatMap(total => Array.from({ length: 5 }, (_, i) => Math.max(0, Math.min(4, total - i * 4))));
 const score = totals => m.calculate(values(totals));
 assert.equal(m.questions.length, 30);
@@ -36,6 +37,17 @@ assert.equal(score([20,20,20,20,20,20]).lessClear.length, 0);
 const earlier = Array(30).fill(0); earlier[29] = 3;
 assert(m.calculate(earlier).supporting.some(p => p.includes('tidigare delar')));
 assert(!m.calculate(earlier).supporting.some(p => p.includes('flera delar av vardagen')));
+// Identical aggregate scores, opposite answers about recurrence across settings.
+const singleSetting = m.calculate([...Array(28).fill(4), 0, 3]);
+const severalSettings = m.calculate([...Array(28).fill(4), 3, 0]);
+assert.equal(singleSetting.scores.impact, severalSettings.scores.impact);
+assert.equal(singleSetting.impactModifier, 'marked');
+assert.match(singleSetting.lessClear.join(' '), /sällan.*flera delar av livet/);
+assert.doesNotMatch(impactText(singleSetting).text, /flera delar/);
+assert.match(impactText(severalSettings).text, /ofta återkommer i flera delar av livet/);
+assert.doesNotMatch(describeArea('impact', singleSetting.scores.impact), /flera delar/);
+const sometimes = m.calculate([...Array(28).fill(4), 2, 1]);
+assert.doesNotMatch(impactText(sometimes).text, /flera delar/);
 assert.throws(() => m.calculate(Array(29).fill(0)));
 assert.throws(() => m.calculate(Array(30).fill(-1)));
 assert.throws(() => m.calculate(Array(30).fill(5)));

@@ -93,12 +93,20 @@ export function paywallFinding(result: Result): PaywallFinding {
   const firstScore = result.scores[first];
   const secondScore = result.scores[second];
 
-  if (result.symptomIndex < 25) return {
-    variant: "low",
-    title: "Dina svar pekar inte tydligt åt ett enda håll.",
-    body: result.leadingGap >= 15 ? "Några av dina svar påverkar resultatet mer än andra." : "Dina svar visar ingen tydlig enskild topp.",
-    curiosity: "Den fullständiga analysen visar hur resultatet har räknats fram.",
-  };
+  if (result.symptomIndex < 25) {
+    if (firstScore >= 65) return {
+      variant: "single",
+      title: "Ett område sticker ut i dina svar.",
+      body: `Helheten ligger lågt. ${paywallAreaCopy[first].subject} ligger däremot högt.`,
+      curiosity: "Den fullständiga analysen visar hur områdena förhåller sig till varandra.",
+    };
+    return {
+      variant: "low",
+      title: "Dina svar pekar inte tydligt åt ett enda håll.",
+      body: result.leadingGap >= 15 ? "Ett område ligger högre än de andra, inom en låg helhet." : "Dina svar visar ingen tydlig enskild topp.",
+      curiosity: "Den fullständiga analysen visar hur resultatet har räknats fram.",
+    };
+  }
 
   if (firstScore >= 65 && secondScore >= 65 && secondScore - result.scores[third] >= 15) return {
     variant: "pair",

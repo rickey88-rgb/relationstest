@@ -38,9 +38,9 @@ const inZone = (value: number, boundary: number) => Math.abs(value - boundary) <
 export function determineMainProfile(adhd: number, autism: number, scores: Record<DimensionKey, number>, market: Market = "sv") {
   const highest = Math.max(adhd, autism);
   const gap = Math.abs(adhd - autism);
+  if (adhd >= 75 && autism >= 75) return marketText(market, "Mycket framträdande kombinationsmönster", "Svært fremtredende kombinasjon av trekk");
   if (inZone(adhd, 50) || inZone(autism, 50) || inZone(adhd, 75) || inZone(autism, 75) || (highest >= 45 && gap <= 5)) return marketText(market, "Gränsnära/ojämn profil", "Sammensatt profil nær en grense");
   if (adhd < 25 && autism < 25) return marketText(market, "Inget tydligt kombinerat mönster", "Ingen tydelig kombinasjon av trekk");
-  if (adhd >= 75 && autism >= 75) return marketText(market, "Mycket framträdande kombinationsmönster", "Svært fremtredende kombinasjon av trekk");
   if (adhd >= 50 && autism >= 50) return gap <= 12 ? marketText(market, "Kombinerat dragmönster", "Kombinasjon av trekk fra begge områder") : adhd > autism ? marketText(market, "ADHD-dominerat kombinationsmönster", "Kombinert profil med mest ADHD-relaterte trekk") : marketText(market, "Autismdominerat kombinationsmönster", "Kombinert profil med mest autismerelaterte trekk");
   if (adhd >= 50) return marketText(market, "Främst ADHD-liknande profil", "Hovedsakelig ADHD-relatert profil");
   if (autism >= 50) return marketText(market, "Främst autismrelaterad profil", "Hovedsakelig autismerelatert profil");
@@ -97,23 +97,35 @@ export function analyzeFunctionalImpact(scores: Record<DimensionKey, number>, co
   const [,, work = 0, relations = 0, energy = 0] = context;
   const combined = (scores.H + work * 25 + relations * 25 + energy * 25) / 4;
   const title = combined >= 65 ? marketText(market, "Stor påverkan", "Stor påvirkning") : combined >= 35 ? marketText(market, "Tydlig påverkan", "Tydelig påvirkning") : marketText(market, "Begränsad påverkan", "Begrenset påvirkning");
-  const largest = work > relations ? marketText(market, "arbete, studier eller andra krav", "jobb, studier eller andre krav") : relations > work ? marketText(market, "relationer eller socialt liv", "relasjoner eller det sosiale livet") : work >= 2 ? marketText(market, "flera delar av vardagen", "flere deler av hverdagen") : marketText(market, "vardagen i begränsad grad", "hverdagen i begrenset grad");
-  return { title, combined, largest, text: marketText(market, `${title} framträder i dina svar, särskilt inom ${largest}.`, `Svarene dine viser ${title.toLowerCase()}, særlig når det gjelder ${largest}.`) };
+  const highestContext = Math.max(work, relations, energy);
+  const contextAreas = [
+    { value: work, label: marketText(market, "arbete, studier eller andra krav", "jobb, studier eller andre krav") },
+    { value: relations, label: marketText(market, "relationer eller socialt liv", "relasjoner eller det sosiale livet") },
+    { value: energy, label: marketText(market, "energin det tar att hantera svårigheterna", "energien det krever å håndtere vanskene") },
+  ];
+  const largest = combined >= 35 && highestContext >= 2
+    ? new Intl.ListFormat(marketText(market, "sv-SE", "nb-NO")).format(contextAreas.filter(area => area.value === highestContext).map(area => area.label))
+    : null;
+  const summary = marketText(market, `${title} framträder sammantaget i dina svar.`, `Samlet viser svarene dine ${title.toLowerCase()}.`);
+  return { title, combined, largest, text: largest ? summary + marketText(market, ` Bland följdfrågorna skattar du högst när det gäller ${largest}.`, ` Blant oppfølgingsspørsmålene skårer du høyest når det gjelder ${largest}.`) : summary };
 }
 
 export function analyzeDevelopmentContext(context: number[], core: number, market: Market = "sv") {
-  const [childhood = 4, settings = 4,,,, recent = 3] = context;
-  if (core >= 50 && childhood >= 3 && settings >= 2 && recent <= 1) return { title: marketText(market, "Profilen är konsekvent", "Et gjennomgående mønster"), text: marketText(market, "Dina svar är förenliga med ett mer långvarigt mönster i flera miljöer. Det fastställer inte en utvecklingshistoria.", "Svarene tyder på et mer langvarig mønster i flere miljøer. De kan være et utgangspunkt for å utforske historien din nærmere.") };
-  if (core >= 50 && childhood <= 1 && recent >= 2) return { title: marketText(market, "Profilen är svår att tolka", "Et mønster som er vanskelig å tolke"), text: marketText(market, "Höga aktuella svar kombineras med begränsad barndomshistorik och ett i huvudsak nyare mönster. Därför behöver helhetsbilden tolkas mycket försiktigt.", "Du rapporterer tydelige trekk nå og kjenner dem i liten grad igjen fra barndommen. Et relativt nytt mønster bør tolkes varsomt.") };
+  const [childhood, settings,,,, recent] = context;
+  // Preserve the stored option indexes. K1/K2 index 4 and K6 index 3 mean uncertainty.
+  if (core >= 50 && childhood === 3 && (settings === 2 || settings === 3) && (recent === 0 || recent === 1)) return { title: marketText(market, "Profilen är konsekvent", "Et gjennomgående mønster"), text: marketText(market, "Dina svar är förenliga med ett mer långvarigt mönster i flera miljöer. Det fastställer inte en utvecklingshistoria.", "Svarene tyder på et mer langvarig mønster i flere miljøer. De kan være et utgangspunkt for å utforske historien din nærmere.") };
+  if (core >= 50 && childhood <= 1 && recent === 2) return { title: marketText(market, "Profilen är svår att tolka", "Et mønster som er vanskelig å tolke"), text: marketText(market, "Höga aktuella svar kombineras med begränsad barndomshistorik och ett i huvudsak nyare mönster. Därför behöver helhetsbilden tolkas mycket försiktigt.", "Du rapporterer tydelige trekk nå og kjenner dem i liten grad igjen fra barndommen. Et relativt nytt mønster bør tolkes varsomt.") };
+  if (childhood === 4 || settings === 4 || recent >= 3) return { title: marketText(market, "Uppgifter om utvecklingsmönstret är osäkra", "Opplysninger om utviklingsmønsteret er usikre"), text: marketText(market, "Minst en uppgift om barndom, miljöer eller när svårigheterna blev tydliga är osäker. Där räcker svaren inte till för en slutsats.", "Minst én opplysning om barndom, situasjoner eller når vanskene ble tydelige, er usikker. På det punktet gir svarene ikke grunnlag for en konklusjon.") };
   return { title: marketText(market, "Profilen behöver tolkas försiktigt", "Mønsteret bør tolkes varsomt"), text: marketText(market, "Svaren om tid, miljöer eller när mönstret blev tydligt ger inte en helt entydig utvecklingsbild.", "Svarene om tid, miljøer og når trekkene ble tydelige, gir et sammensatt bilde.") };
 }
 
-export function findContradictingEvidence(scores: Record<DimensionKey, number>, indices: ReturnType<typeof calculatePrimaryIndices>, context: number[], market: Market = "sv") {
+export function findContradictingEvidence(scores: Record<DimensionKey, number>, indices: ReturnType<typeof calculatePrimaryIndices>, context: number[], impact: ReturnType<typeof analyzeFunctionalImpact>, market: Market = "sv") {
   const evidence: string[] = [];
   if (indices.adhdIndex >= 50 && scores.B < 25) evidence.push(marketText(market, "ADHD-relaterade drag är tydliga, men impulsivitet och rastlöshet är låga.", "Du rapporterer tydelige ADHD-relaterte trekk og lite impulsivitet og uro."));
   if ((scores.D >= 50 || scores.E >= 50) && scores.C < 25) evidence.push(marketText(market, "Rutiner/flexibilitet eller sensorik framträder mer än social kommunikation.", "Rutiner, fleksibilitet eller sanseinntrykk er mer fremtredende enn sosial kommunikasjon."));
   if (Math.max(indices.adhdIndex, indices.autismIndex) >= 50 && context[0] <= 1) evidence.push(marketText(market, "Aktuella drag är tydliga, men barndomshistoriken är mindre tydlig.", "Trekkene er tydelige nå og mindre tydelige i det du husker fra barndommen."));
-  if (Math.max(indices.adhdIndex, indices.autismIndex) >= 65 && scores.H < 25) evidence.push(marketText(market, "Flera drag är höga, men den rapporterade vardagspåverkan är låg.", "Flere trekk er fremtredende, og du oppgir at de påvirker hverdagen i liten grad."));
+  if (scores.H < 25 && impact.combined >= 35) evidence.push(marketText(market, "Huvudfrågorna om vardagspåverkan ligger lågt. I följdfrågorna anger du mer påverkan eller att det tar energi att hantera svårigheterna.", "Hovedspørsmålene om hverdagspåvirkning gir en lav skår. I oppfølgingsspørsmålene oppgir du større påvirkning eller at det krever energi å håndtere vanskene."));
+  if (Math.max(indices.adhdIndex, indices.autismIndex) >= 65 && scores.H < 25 && impact.combined < 35) evidence.push(marketText(market, "Flera drag är högt skattade och svaren om vardagspåverkan visar sammantaget begränsad påverkan.", "Flere trekk er fremtredende, og svarene om hverdagspåvirkning viser samlet sett begrenset påvirkning."));
   return evidence;
 }
 
@@ -123,7 +135,8 @@ export function generateKeyInsights(scores: Record<DimensionKey, number>, indice
   const peak = outliers.find(item => item.kind !== "tydlig dal");
   if (peak) candidates.push(marketText(market, `${dimensionNames[peak.key]} är en ${peak.kind} jämfört med resten av din profil.`, `${localizedDimensionNames(market)[peak.key]} er en ${peak.kind === "stark topp" ? "markant topp" : "tydelig topp"} sammenlignet med resten av profilen din.`));
   if (indices.maskingIndex >= 60) candidates.push(marketText(market, "Dina svar visar att aktiv anpassning kan ta mycket energi.", "Svarene dine tyder på at aktiv tilpasning kan kreve mye energi."));
-  if (impact.combined >= 35) candidates.push(marketText(market, `Vardagspåverkan framträder särskilt inom ${impact.largest}.`, `Hverdagen påvirkes særlig når det gjelder ${impact.largest}.`));
+  if (impact.largest) candidates.push(marketText(market, `I följdfrågorna skattar du högst när det gäller ${impact.largest}.`, `I oppfølgingsspørsmålene skårer du høyest når det gjelder ${impact.largest}.`));
+  else if (impact.combined >= 35) candidates.push(impact.text);
   if (Math.abs(indices.adhdIndex - indices.autismIndex) >= 15) candidates.push(marketText(market, "De ADHD- och autismrelaterade indexen är tydligt olika höga i din profil.", "Du skårer tydelig forskjellig på den ADHD-relaterte og den autismerelaterte indeksen."));
   return candidates.slice(0, 3).concat(candidates.length < 3 ? [marketText(market, "Profilen behöver läsas som flera områden tillsammans, inte som en enda etikett.", "Du får det beste bildet ved å se flere områder av profilen i sammenheng.")] : []).slice(0, 3);
 }
@@ -143,7 +156,7 @@ export function calculateReport(answers: number[], contextAnswers: number[], mar
   if (contextAnswers.length !== contextQuestions.length || !contextAnswers.every(value => Number.isInteger(value) && value >= 0 && value <= 4)) throw new Error("Expected 6 complete context answers");
   const scores = calculateDimensions(answers); const indices = calculatePrimaryIndices(scores); const core = (indices.adhdIndex + indices.autismIndex) / 2;
   const outliers = findDimensionOutliers(scores); const friction = analyzeFriction(answers, market); const impact = analyzeFunctionalImpact(scores, contextAnswers, market); const development = analyzeDevelopmentContext(contextAnswers, core, market);
-  return { reportVersion: REPORT_VERSION, scores, indices, profileType: determineMainProfile(indices.adhdIndex, indices.autismIndex, scores, market), outliers, adhd: analyzeAdhdPattern(scores, market), autism: analyzeAutismPattern(scores, market), friction, masking: analyzeMasking(indices.maskingIndex, indices.autismIndex, market), impact, development, contradicting: findContradictingEvidence(scores, indices, contextAnswers, market), keyFindings: generateKeyInsights(scores, indices, friction, outliers, impact, market), teaser: generateTeaser(scores, indices, outliers, contextAnswers, market) };
+  return { reportVersion: REPORT_VERSION, scores, indices, profileType: determineMainProfile(indices.adhdIndex, indices.autismIndex, scores, market), outliers, adhd: analyzeAdhdPattern(scores, market), autism: analyzeAutismPattern(scores, market), friction, masking: analyzeMasking(indices.maskingIndex, indices.autismIndex, market), impact, development, contradicting: findContradictingEvidence(scores, indices, contextAnswers, impact, market), keyFindings: generateKeyInsights(scores, indices, friction, outliers, impact, market), teaser: generateTeaser(scores, indices, outliers, contextAnswers, market) };
 }
 export type Report = ReturnType<typeof calculateReport>;
 
